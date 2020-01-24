@@ -3,7 +3,7 @@ package frc.team3130.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -13,10 +13,10 @@ import frc.team3130.robot.util.Util;
 public class Chassis implements Subsystem {
 
     //Create necessary objects
-    private static WPI_TalonSRX m_leftMotorFront;
-    private static WPI_TalonSRX m_leftMotorRear;
-    private static WPI_TalonSRX m_rightMotorFront;
-    private static WPI_TalonSRX m_rightMotorRear;
+    private static WPI_TalonFX m_leftMotorFront;
+    private static WPI_TalonFX m_leftMotorRear;
+    private static WPI_TalonFX m_rightMotorFront;
+    private static WPI_TalonFX m_rightMotorRear;
 
     private static Solenoid m_shifter;
 
@@ -41,10 +41,10 @@ public class Chassis implements Subsystem {
 
     private Chassis() {
 
-        m_leftMotorFront = new WPI_TalonSRX(RobotMap.CAN_LEFTMOTORFRONT);
-        m_leftMotorRear = new WPI_TalonSRX(RobotMap.CAN_LEFTMOTORREAR);
-        m_rightMotorFront = new WPI_TalonSRX(RobotMap.CAN_RIGHTMOTORFRONT);
-        m_rightMotorRear = new WPI_TalonSRX(RobotMap.CAN_RIGHTMOTORREAR);
+        m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
+        m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
+        m_rightMotorFront = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORFRONT);
+        m_rightMotorRear = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORREAR);
 
         m_leftMotorFront.configFactoryDefault();
         m_leftMotorRear.configFactoryDefault();
@@ -294,14 +294,14 @@ public class Chassis implements Subsystem {
     /**
      * @return Returns the left main drive Talon
      */
-    public static WPI_TalonSRX getFrontL() {
+    public static WPI_TalonFX getFrontL() {
         return m_leftMotorFront;
     }
 
     /**
      * @return Returns the right main drive Talon
      */
-    public static WPI_TalonSRX getFrontR() {
+    public static WPI_TalonFX getFrontR() {
         return m_rightMotorFront;
     }
 

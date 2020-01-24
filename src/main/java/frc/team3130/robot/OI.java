@@ -7,12 +7,9 @@ import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
-import frc.team3130.robot.commands.Shooter.SpinShooter;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
-import frc.team3130.robot.commands.WheelOfFortune.SpinWheel;
 import frc.team3130.robot.commands.WheelOfFortune.TestHSB;
 import frc.team3130.robot.commands.WheelOfFortune.TripleSpinFinish;
-import frc.team3130.robot.commands.WheelOfFortune.DeployWheelOfFortune;
 
 
 public class OI {
