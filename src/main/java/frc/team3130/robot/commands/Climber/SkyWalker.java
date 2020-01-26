@@ -2,7 +2,6 @@ package frc.team3130.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
 import frc.team3130.robot.subsystems.Climber;
 
 import java.util.Set;

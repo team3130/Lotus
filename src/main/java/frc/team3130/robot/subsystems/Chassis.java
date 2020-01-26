@@ -20,20 +20,18 @@ public class Chassis implements Subsystem {
 
     private static Solenoid m_shifter;
 
-    private static ChassisControlState mChassisState = ChassisControlState.PERCENT_OUTPUT;
-
-    //Create and define all standard data types needed
+    // Create and define all standard data types needed
 
     /**
-     * The Singleton instance of this Chassis. External classes should
-     * use the {@link #getInstance()} method to get the instance.
+     * The Singleton instance of this Chassis. External classes should use the
+     * {@link #getInstance()} method to get the instance.
      */
     private final static Chassis INSTANCE = new Chassis();
 
     /**
-     * Returns the Singleton instance of this Chassis. This static method
-     * should be used -- {@code Chassis.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
+     * Returns the Singleton instance of this Chassis. This static method should be
+     * used -- {@code Chassis.getInstance();} -- by external classes, rather than
+     * the constructor to get the instance of this class.
      */
     public static Chassis getInstance() {
         return INSTANCE;
@@ -56,14 +54,12 @@ public class Chassis implements Subsystem {
         m_leftMotorRear.setNeutralMode(NeutralMode.Brake);
         m_rightMotorRear.setNeutralMode(NeutralMode.Brake);
 
-
         m_leftMotorRear.set(ControlMode.Follower, RobotMap.CAN_LEFTMOTORFRONT);
         m_rightMotorRear.set(ControlMode.Follower, RobotMap.CAN_RIGHTMOTORFRONT);
 
         m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
 
         m_shifter.set(false);
-
 
         /**
          * For all motors, forward is the positive direction
@@ -102,7 +98,6 @@ public class Chassis implements Subsystem {
             moveR = Math.copySign(moveR * moveR, moveR);
         }
 
-
         m_leftMotorFront.set(ControlMode.PercentOutput, moveL);
         m_rightMotorFront.set(ControlMode.PercentOutput, moveR);
 
@@ -111,7 +106,8 @@ public class Chassis implements Subsystem {
     /**
      * Drive the robot using arcade mode
      *
-     * @param moveThrottle  Base forward and backward speed to move at. Positive is forward
+     * @param moveThrottle  Base forward and backward speed to move at. Positive is
+     *                      forward
      * @param turnThrottle  Turning velocity
      * @param squaredInputs Whether or not to use squared inputs
      */
@@ -149,7 +145,7 @@ public class Chassis implements Subsystem {
      * @param angle angle to hold in degrees
      */
     public static void holdAngle(double angle) {
-        //TODO: Rework
+        // TODO: Rework
     }
 
     /**
@@ -174,12 +170,9 @@ public class Chassis implements Subsystem {
         }
     }
 
-
     public synchronized void setControlState(int state) {
         if (state == 0) {
-            mChassisState = ChassisControlState.MOTION_PROFILE;
         } else {
-            mChassisState = ChassisControlState.PERCENT_OUTPUT;
         }
 
     }
@@ -357,11 +350,6 @@ public class Chassis implements Subsystem {
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
-    }
-
-    private enum ChassisControlState {
-        PERCENT_OUTPUT,
-        MOTION_PROFILE
     }
 
 }
