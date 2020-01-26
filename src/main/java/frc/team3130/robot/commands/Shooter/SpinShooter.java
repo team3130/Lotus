@@ -31,7 +31,7 @@ public class SpinShooter implements Command {
     @Override
     public void execute() {
         Shooter.shooterSpin(.7);
-        Shooter.shooterTopSpin(.5);
+        Shooter.shooterTopSpin(1);
     }
 
     /**
@@ -50,8 +50,8 @@ public class SpinShooter implements Command {
      */
     @Override
     public boolean isFinished() {
-        if (!OI.driverGamepad.getRawButton(RobotMap.LST_BTN_RBUMPER)) //TODO: move button dependency to higher abstraction point
-            return true;
+        //if (!OI.driverGamepad.getRawButton(RobotMap.LST_BTN_RBUMPER)) //TODO: move button dependency to higher abstraction point
+        //    return true;
         return false;
     }
 

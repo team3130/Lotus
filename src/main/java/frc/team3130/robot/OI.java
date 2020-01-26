@@ -6,6 +6,7 @@ import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
+import frc.team3130.robot.commands.Shooter.SpinShooter;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
 import frc.team3130.robot.commands.WheelOfFortune.TestHSB;
 import frc.team3130.robot.commands.WheelOfFortune.TripleSpinFinish;
@@ -40,7 +41,7 @@ public class OI {
     private static JoystickButton spinShooter = new JoystickButton(driverGamepad, RobotMap.LST_BTN_X);
     private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
     private static JoystickButton testTripleSpinFinish = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
-    private static JoystickTrigger intakeIn = new JoystickTrigger(driverGamepad, RobotMap.LST_BTN_RBUMPER);
+    private static JoystickTrigger intakeIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
     private static JoystickButton intakeOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER);
     private static JoystickTrigger hopperIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER);
@@ -69,6 +70,7 @@ public class OI {
         testTripleSpinFinish.whenPressed(new TripleSpinFinish());
         testColorAlignment.whenPressed(new ColorAlignment());
         testTestHSB.whenActive(new TestHSB());
+        spinShooter.whenHeld(new SpinShooter());
     }
 }
 

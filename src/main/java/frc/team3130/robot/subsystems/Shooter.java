@@ -7,8 +7,8 @@ import frc.team3130.robot.RobotMap;
 public class Shooter implements Subsystem {
 
     //Create necessary objects
-    private static WPI_TalonFX m_shooterLeft;
-    private static WPI_TalonFX m_shooterRight;
+    //private static WPI_TalonFX m_shooterLeft;
+    //private static WPI_TalonFX m_shooterRight;
     private static WPI_TalonFX m_shooterTop;
 
 
@@ -30,12 +30,12 @@ public class Shooter implements Subsystem {
     }
 
     private Shooter() {
-        m_shooterLeft = new WPI_TalonFX(RobotMap.CAN_SHOOTERLEFT);
-        m_shooterRight = new WPI_TalonFX(RobotMap.CAN_SHOOTERRIGHT);
+        //m_shooterLeft = new WPI_TalonFX(RobotMap.CAN_SHOOTERLEFT);
+        //m_shooterRight = new WPI_TalonFX(RobotMap.CAN_SHOOTERRIGHT);
         m_shooterTop = new WPI_TalonFX(RobotMap.CAN_SHOOTERTOP);
 
-        m_shooterLeft.configFactoryDefault();
-        m_shooterRight.configFactoryDefault();
+        //m_shooterLeft.configFactoryDefault();
+        //m_shooterRight.configFactoryDefault();
         m_shooterTop.configFactoryDefault();
         /**
          * Constructor:
@@ -54,8 +54,8 @@ public class Shooter implements Subsystem {
     }
 
     public static void shooterSpin(double spin) {
-        m_shooterLeft.set(spin);
-        m_shooterRight.set(spin);
+        //m_shooterLeft.set(spin);
+        //m_shooterRight.set(spin);
     }
 
 
