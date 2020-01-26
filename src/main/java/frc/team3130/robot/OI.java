@@ -47,29 +47,15 @@ public class OI {
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER);
     private static JoystickButton testTestHSB = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
 
-    public void checkTriggers() {
-        //Driver
-        if (Math.abs(OI.driverGamepad.getRawAxis(RobotMap.LST_AXS_LTRIGGER)) >= RobotMap.kIntakeTriggerDeadband) {
-
-        } else {
-
-        }
-        if (Math.abs(OI.driverGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER)) >= RobotMap.kIntakeTriggerDeadband) {
-
-        } else {
-
-        }
-    }
-
-    //Settings for gamepad
+    // Binding the buttons and triggers that are defined above to respective commands
     private OI() {
-        intakeIn.whenActive(new IntakeIn());
-        intakeOut.whileHeld(new IntakeOut());
-        hopperIn.whenActive(new HopperIn());
-        hopperOut.whileHeld(new HopperOut());
+        intakeIn.whenHeld(new IntakeIn());
+        intakeOut.whenHeld(new IntakeOut());
+        hopperIn.whenHeld(new HopperIn());
+        hopperOut.whenHeld(new HopperOut());
         testTripleSpinFinish.whenPressed(new TripleSpinFinish());
         testColorAlignment.whenPressed(new ColorAlignment());
-        testTestHSB.whenActive(new TestHSB());
+        testTestHSB.whenHeld(new TestHSB());
         spinShooter.whenHeld(new SpinShooter());
     }
 }
