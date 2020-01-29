@@ -9,6 +9,8 @@ import java.util.Set;
 public class HopperIn implements Command {
     private final Set<Subsystem> subsystems;
 
+    int counter; //should this be in hopper subsystem? it gave errors when created there so it is in here
+
     public HopperIn() {
         this.subsystems = Set.of(Hopper.getInstance());
     }
@@ -26,7 +28,18 @@ public class HopperIn implements Command {
      * (That is, it is called repeatedly until {@link #isFinished()}) returns true.)
      */
     @Override
-    public void execute() { Hopper.runHopper(0.2); }
+    public void execute() {
+        if(0==1){   //statement should essentially be 'if hopper limit switch is pressed', 0==1 is temporary
+            counter = counter + 1; //there's a more efficient way to write this I think but I forget
+        }
+
+        Hopper.runHopper(0.2); //speed is a temporary arbitrary number
+
+        if(0==1){   //statement should be 'if shooter limit switch has been pressed 'counter - 1' times'
+            Hopper.runHopper(0.0);  //not sure if this needs to be put here, but it's here because I'm not sure
+            Hopper.runHopperOneBall(0.2);
+        }
+    }
 
     /**
      * <p>
