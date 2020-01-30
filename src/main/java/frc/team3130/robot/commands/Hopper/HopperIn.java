@@ -2,6 +2,8 @@ package frc.team3130.robot.commands.Hopper;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.OI;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Hopper;
 
 import java.util.Set;
@@ -26,7 +28,10 @@ public class HopperIn implements Command {
      * (That is, it is called repeatedly until {@link #isFinished()}) returns true.)
      */
     @Override
-    public void execute() { Hopper.runHopper(0.2); }
+    public void execute() {
+        Hopper.runHopperLeft(0.2);
+        Hopper.runHopperRight(0.4);
+        Hopper.runHopperTop(0.6); }
 
     /**
      * <p>
@@ -45,7 +50,13 @@ public class HopperIn implements Command {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        if (OI.driverGamepad.getRawAxis(3) >= 0) {
+            return false;
+        }
+        else{
+            return true;
+        }
+
     }
 
     /**
@@ -57,7 +68,8 @@ public class HopperIn implements Command {
      * @param interrupted whether the command was interrupted/canceled
      */
     @Override
-    public void end(boolean interrupted) { Hopper.runHopper(0.0); }
+    public void end(boolean interrupted) { Hopper.runHopperLeft(0.0);
+        Hopper.runHopperRight(0.0); }
 
     /**
      * <p>

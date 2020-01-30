@@ -40,11 +40,19 @@ public class Hopper implements Subsystem {
         m_hopperMotorL.setNeutralMode(NeutralMode.Brake);
         m_hopperMotorR.setNeutralMode(NeutralMode.Brake);
         m_hopperMotorTop.setNeutralMode(NeutralMode.Brake);
+
+        m_hopperMotorL.setInverted(false);
     }
 
-    public static void runHopper(double speed) {
-        m_hopperMotorL.set(speed);
+    public static void runHopperRight(double speed) {
         m_hopperMotorR.set(speed);
+    }
+
+    public static void runHopperLeft(double speed) {
+        m_hopperMotorL.set(speed);
+    }
+
+    public static void runHopperTop(double speed) {
         m_hopperMotorTop.set(speed);
     }
     /**

@@ -87,10 +87,10 @@ public class Chassis implements Subsystem {
      * @param squaredInputs Whether or not to use squared inputs
      */
     public static void driveTank(double moveL, double moveR, boolean squaredInputs) {
-        moveL = Util.limit(moveL, .80);
+        moveL = Util.limit(moveL, 1.0);
         moveL = Util.applyDeadband(moveL, RobotMap.kDriveDeadband);
 
-        moveR = Util.limit(moveR, .80);
+        moveR = Util.limit(moveR, 1.0);
         moveR = Util.applyDeadband(moveR, RobotMap.kDriveDeadband);
 
         if (squaredInputs) {
@@ -126,8 +126,8 @@ public class Chassis implements Subsystem {
         double leftMotorOutput = moveThrottle + turnThrottle;
         double rightMotorOutput = moveThrottle - turnThrottle;
 
-        m_leftMotorFront.set(ControlMode.PercentOutput, Util.limit(leftMotorOutput, .80));
-        m_rightMotorFront.set(ControlMode.PercentOutput, Util.limit(rightMotorOutput, .80));
+        m_leftMotorFront.set(ControlMode.PercentOutput, Util.limit(leftMotorOutput, 1.0));
+        m_rightMotorFront.set(ControlMode.PercentOutput, Util.limit(rightMotorOutput, 1.0));
     }
 
     /**
