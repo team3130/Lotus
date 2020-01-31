@@ -3,6 +3,7 @@ package frc.team3130.robot.commands.Chassis;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.OI;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.Set;
@@ -30,8 +31,8 @@ public class DefaultDrive implements Command {
     @Override
     public void execute() {
 
-        double moveSpeed = -OI.driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        double turnSpeed = OI.driverGamepad.getRawAxis(4); //arcade drive has left as positive, but we want right to be positive
+        double moveSpeed = -OI.driverGamepad.getRawAxis(1) * RobotMap.kMaxDriveSpeed; //joystick's y axis is inverted
+        double turnSpeed = OI.driverGamepad.getRawAxis(4) * RobotMap.kMaxDriveSpeed; //arcade drive has left as positive, but we want right to be positive
 
 
         double turnThrottle = (0.70);

@@ -49,10 +49,10 @@ public class Chassis implements Subsystem {
         m_rightMotorFront.configFactoryDefault();
         m_rightMotorRear.configFactoryDefault();
 
-        m_leftMotorFront.setNeutralMode(NeutralMode.Brake);
-        m_rightMotorFront.setNeutralMode(NeutralMode.Brake);
-        m_leftMotorRear.setNeutralMode(NeutralMode.Brake);
-        m_rightMotorRear.setNeutralMode(NeutralMode.Brake);
+        m_leftMotorFront.setNeutralMode(NeutralMode.Coast);
+        m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
+        m_leftMotorRear.setNeutralMode(NeutralMode.Coast);
+        m_rightMotorRear.setNeutralMode(NeutralMode.Coast);
 
         m_leftMotorRear.set(ControlMode.Follower, RobotMap.CAN_LEFTMOTORFRONT);
         m_rightMotorRear.set(ControlMode.Follower, RobotMap.CAN_RIGHTMOTORFRONT);
@@ -67,12 +67,13 @@ public class Chassis implements Subsystem {
          * Shift false is low gear
          */
 
-        m_rightMotorFront.setInverted(false);
-        m_leftMotorFront.setInverted(true);
-        m_rightMotorRear.setInverted(false);
-        m_leftMotorRear.setInverted(true);
+        m_rightMotorFront.setInverted(true);
+        m_leftMotorFront.setInverted(false);
+        m_rightMotorRear.setInverted(true);
+        m_leftMotorRear.setInverted(false);
 
-        m_rightMotorFront.setSensorPhase(false);
+        m_rightMotorFront.setSensorPhase(true);
+        m_leftMotorFront.setSensorPhase(true);
 
         m_leftMotorFront.overrideLimitSwitchesEnable(false);
         m_rightMotorFront.overrideLimitSwitchesEnable(false);
@@ -112,10 +113,10 @@ public class Chassis implements Subsystem {
      * @param squaredInputs Whether or not to use squared inputs
      */
     public static void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
-        moveThrottle = Util.limit(moveThrottle, .80);
+        moveThrottle = Util.limit(moveThrottle, 1.0);
         moveThrottle = Util.applyDeadband(moveThrottle, RobotMap.kDriveDeadband);
 
-        turnThrottle = Util.limit(turnThrottle, .80);
+        turnThrottle = Util.limit(turnThrottle, 1.0);
         turnThrottle = Util.applyDeadband(turnThrottle, RobotMap.kDriveDeadband);
 
         if (squaredInputs) {
@@ -126,8 +127,8 @@ public class Chassis implements Subsystem {
         double leftMotorOutput = moveThrottle + turnThrottle;
         double rightMotorOutput = moveThrottle - turnThrottle;
 
-        m_leftMotorFront.set(ControlMode.PercentOutput, Util.limit(leftMotorOutput, .80));
-        m_rightMotorFront.set(ControlMode.PercentOutput, Util.limit(rightMotorOutput, .80));
+        m_leftMotorFront.set(ControlMode.PercentOutput, Util.limit(leftMotorOutput, 1.0));
+        m_rightMotorFront.set(ControlMode.PercentOutput, Util.limit(rightMotorOutput, 1.0));
     }
 
     /**

@@ -18,6 +18,8 @@ public class RobotMap<ClimberArm> {
     public static double kLWheelDiameter = 5.9; //Center wheel
     public static double kRWheelDiameter = 5.9; //Center wheel
 
+    public static double kMaxDriveSpeed = 0.8;
+
     public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter);
     public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter);
 
