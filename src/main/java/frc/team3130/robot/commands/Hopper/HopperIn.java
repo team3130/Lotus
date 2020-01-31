@@ -20,7 +20,9 @@ public class HopperIn implements Command {
      */
     @Override
     public void initialize() {
-
+        Hopper.runHopperLeft(0.4);
+        Hopper.runHopperRight(0.4);
+        Hopper.runHopperTop(0.6);
     }
 
     /**
@@ -29,9 +31,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
-        Hopper.runHopperLeft(0.2);
-        Hopper.runHopperRight(0.4);
-        Hopper.runHopperTop(0.6); }
+    }
 
     /**
      * <p>
@@ -50,12 +50,8 @@ public class HopperIn implements Command {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        if (OI.driverGamepad.getRawAxis(3) >= 0) {
             return false;
-        }
-        else{
-            return true;
-        }
+
 
     }
 
@@ -69,7 +65,8 @@ public class HopperIn implements Command {
      */
     @Override
     public void end(boolean interrupted) { Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0); }
+        Hopper.runHopperRight(0.0);
+        Hopper.runHopperTop(0.0);}
 
     /**
      * <p>

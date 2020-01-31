@@ -20,6 +20,10 @@ public class HopperOut implements Command {
      */
     @Override
     public void initialize() {
+        Hopper.runHopperLeft(-0.5);
+        Hopper.runHopperRight(0.25);
+        Hopper.runHopperTop(0.9);
+
 
     }
 
@@ -29,9 +33,6 @@ public class HopperOut implements Command {
      */
     @Override
     public void execute() {
-        Hopper.runHopperLeft(-0.7);
-        Hopper.runHopperRight(0.4);
-        Hopper.runHopperTop(0.9);
     }
     /**
      * <p>
@@ -49,12 +50,8 @@ public class HopperOut implements Command {
      */
     @Override
     public boolean isFinished() {
-        if (!OI.driverGamepad.getRawButton(RobotMap.LST_BTN_RBUMPER)) {
-            return true;
-        }
-        else{
             return false;
-        }
+
 
     }
 
