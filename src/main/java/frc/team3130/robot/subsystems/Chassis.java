@@ -88,10 +88,10 @@ public class Chassis implements Subsystem {
      * @param squaredInputs Whether or not to use squared inputs
      */
     public static void driveTank(double moveL, double moveR, boolean squaredInputs) {
-        moveL = Util.limit(moveL, .80);
+        moveL = Util.limit(moveL, 1.0);
         moveL = Util.applyDeadband(moveL, RobotMap.kDriveDeadband);
 
-        moveR = Util.limit(moveR, .80);
+        moveR = Util.limit(moveR, 1.0);
         moveR = Util.applyDeadband(moveR, RobotMap.kDriveDeadband);
 
         if (squaredInputs) {
