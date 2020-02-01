@@ -6,17 +6,17 @@ package frc.team3130.robot;
  * the wiring easier and significantly reduces the number of magic numbers
  * floating around.
  */
-public class RobotMap<ClimberArm> {
+public class RobotMap {
 
     /**
      * Constants
      */
 
     //Chassis
-    public static double kChassisWidth = 23.0; //Checked 3/23 Distance between the left and right middle wheels
-    public static double kChassisLengthBumpers = 39.0; //Checked 3/23
-    public static double kLWheelDiameter = 5.9; //Center wheel
-    public static double kRWheelDiameter = 5.9; //Center wheel
+    public static double kChassisWidth = 23.0; //FIXME
+    public static double kChassisLengthBumpers = 39.0; //FIXME
+    public static double kLWheelDiameter = 6.0; //Center wheel
+    public static double kRWheelDiameter = 6.0; //Center wheel
 
     public static double kMaxDriveSpeed = 0.8;
 
