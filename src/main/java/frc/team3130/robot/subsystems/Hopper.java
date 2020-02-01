@@ -18,13 +18,22 @@ public class Hopper implements Subsystem {
     //Create and define all standard data types needed
 
     /**
-     * The Singleton instance of this ExampleSubsystem. External classes should
+     * The Singleton instance of this Hopper. External classes should
      * use the {@link #getInstance()} method to get the instance.
      */
     private final static Hopper INSTANCE = new Hopper();
 
     /**
-     * Creates a new instance of this ExampleSubsystem.
+     * Returns the Singleton instance of this Hopper. This static method
+     * should be used -- {@code Hopper.getInstance();} -- by external
+     * classes, rather than the constructor to get the instance of this class.
+     */
+    public static Hopper getInstance() {
+        return INSTANCE;
+    }
+    
+    /**
+     * Creates a new instance of this Hopper.
      * This constructor is private since this class is a Singleton. External classes
      * should use the {@link #getInstance()} method to get the instance.
      */
@@ -54,14 +63,6 @@ public class Hopper implements Subsystem {
 
     public static void runHopperTop(double speed) {
         m_hopperMotorTop.set(speed);
-    }
-    /**
-     * Returns the Singleton instance of this ExampleSubsystem. This static method
-     * should be used -- {@code ExampleSubsystem.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Hopper getInstance() {
-        return INSTANCE;
     }
 
 }
