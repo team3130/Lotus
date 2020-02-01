@@ -6,7 +6,6 @@ import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
-import frc.team3130.robot.commands.Shooter.SpinShooter;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
 import frc.team3130.robot.commands.WheelOfFortune.TestHSB;
 import frc.team3130.robot.commands.WheelOfFortune.TripleSpinFinish;
@@ -38,7 +37,7 @@ public class OI {
     /**
      * Definitions for joystick buttons start
      */
-    private static JoystickButton spinShooter = new JoystickButton(driverGamepad, RobotMap.LST_BTN_X);
+    private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_X);
     private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
     private static JoystickButton testTripleSpinFinish = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
     private static JoystickTrigger intakeIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
@@ -56,7 +55,7 @@ public class OI {
         testTripleSpinFinish.whenPressed(new TripleSpinFinish());
         testColorAlignment.whenPressed(new ColorAlignment());
         testTestHSB.whenHeld(new TestHSB());
-        spinShooter.whenHeld(new SpinShooter());
+
     }
 }
 

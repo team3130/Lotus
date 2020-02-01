@@ -28,9 +28,9 @@ public class RobotMap {
     public static double kChassisMPOutputDeadband = 0.01;
     public static int kChassisMPDefaultFireRate = 20;
 
-    public static double kMPChassisP = 5.47; //Checked 3/23
-    public static double kMPChassisI = 0.0; //Checked 3/23
-    public static double kMPChassisD = 0.0; //Checked 3/23
+    public static double kMPChassisP = 5.47;
+    public static double kMPChassisI = 0.0;
+    public static double kMPChassisD = 0.0;
     public static double kMPChassisF = 1023.0 / (92.0 * (kLChassisTicksPerInch + kRChassisTicksPerInch) / 2.0); //Checked 3/23
 
     public static double kMPMaxVel = 115.0; //maximum achievable velocity of the drivetrain in in/s NOTE: the actual motion profile should be generated at 80% of this
@@ -41,15 +41,17 @@ public class RobotMap {
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
-    public static double kChassisHighP = 0.02; //0.018
-    public static double kChassisHighI = 0;
-    public static double kChassisHighD = 0.09; //0.062
-
-    public static double kChassisLowP = 0.03;
-    public static double kChassisLowI = 0;
-    public static double kChassisLowD = 0.11;
 
     public static double kDriveDeadband = 0.02;
+
+    //Turret
+    public static double kTurretP = 1.0; //TODO: tune
+    public static double kTurretI = 0;
+    public static double kTurretD = 60.0;
+    public static double kTurretF = 0;
+
+    public static double kTurretTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // checked 1/31
+    public static double kTurretOnTargetTolerance = 0.5;
 
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;
@@ -67,14 +69,15 @@ public class RobotMap {
 
     public static final int CAN_WHEELOFFORTUNE = 7;
 
-    public static final int CAN_SKYWALKER = 106; //TODO: map these two
+    public static final int CAN_SKYWALKER = 106; //TODO: map this
 
-    public static final int CAN_SHOOTERTOP = 50;
-    public static final int CAN_SHOOTERRIGHT = 8;
-    public static final int CAN_SHOOTERLEFT = 11;
+    public static final int CAN_TURRETANGLE = 10;
+    public static final int CAN_FLYWHEEL1 = 11;
+    public static final int CAN_FLYWHEEL2 = 12;
 
 
-    public static final int CAN_INTAKE1 = 101; //TODO: map these
+    public static final int CAN_INTAKE1 = 101; //TODO: map this
+
     public static final int CAN_HOPPERL = 8;
     public static final int CAN_HOPPERR = 6;
     public static final int CAN_HOPPERTOP = 9;
