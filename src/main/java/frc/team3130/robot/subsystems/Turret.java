@@ -61,6 +61,8 @@ public class Turret implements Subsystem {
         m_turret.set(ControlMode.Position, 0);
         m_flywheelSlave.follow(m_flywheelMaster);
 
+        m_flywheelSlave.setInverted(true);
+
         m_turret.enableVoltageCompensation(true);
         m_flywheelMaster.enableVoltageCompensation(true);
 
