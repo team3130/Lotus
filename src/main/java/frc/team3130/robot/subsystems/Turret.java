@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 
@@ -86,13 +87,12 @@ public class Turret implements Subsystem {
     }
 
 
-
     // Turret Angle
 
     /**
      * Set the desired angle of the turret (and put it into position control mode if it isn't already).
      *
-     * @param angle_deg absolute angle of the turret, in degrees
+     * @param angle_deg Absolute angle of the turret, in degrees
      */
     public synchronized static void setAngle(double angle_deg) {
         // In Position mode, outputValue set is in rotations of the motor
@@ -101,20 +101,50 @@ public class Turret implements Subsystem {
     }
 
     /**
-     * Get the absolute angle of the turret in degrees
+     * Gets the absolute angle of the turret in degrees
      *
-     * @return angle of the turret in degrees
+     * @return Angle of the turret in degrees
      */
     public static double getAngleDegrees() {
         return m_turret.getSelectedSensorPosition() / RobotMap.kTurretTicksPerDegree;
     }
 
+    /**
+     * Gets the latest angle setpoint of the closed loop controller
+     *
+     * @return Angle setpoint in degrees
+     */
+    public static double getAngleSetpoint() {
+        return m_turret.getClosedLoopTarget() / RobotMap.kTurretTicksPerDegree;
+    }
+
+    /**
+     * Gets the current error of the turret angle
+     *
+     * @return Error of angle in degrees
+     */
+    private static double getAngleError() {
+        return getAngleDegrees() - getAngleSetpoint();
+    }
+
+
+    /**
+     * Turret is "OnTarget" if it is in position mode and its angle is within
+     * {@code RobotMap.kTurretOnTargetTolerance} deadband angle to the setpoint.
+     *
+     * @return If the turret is aimed on target
+     */
+    public synchronized static boolean isOnTarget() {
+        return (m_turret.getControlMode() == m_turret.getControlMode().Position
+                && Math.abs(getAngleError()) < RobotMap.kTurretOnTargetTolerance);
+    }
+
 
     public static void outputToSmartDashboard() {
-//        SmartDashboard.putNumber("turret_angle", getAngleDegrees());
-//        SmartDashboard.putNumber("turret_error", getError());
-//        //SmartDashboard.putNumber("turret_setpoint", getSetpoint());
-//        SmartDashboard.putBoolean("turret_on_target", isOnTarget());
+        SmartDashboard.putNumber("turret_angle", getAngleDegrees());
+        SmartDashboard.putNumber("turret_error", getAngleError());
+        SmartDashboard.putNumber("turret_setpoint", getAngleSetpoint());
+        SmartDashboard.putBoolean("turret_on_target", isOnTarget());
     }
 
     public static void configPIDF(WPI_TalonSRX _talon, double kP, double kI, double kD, double kF) {
