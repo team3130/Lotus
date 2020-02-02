@@ -1,16 +1,17 @@
-package frc.team3130.robot.commands.Shooter;
+package frc.team3130.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Shooter;
+import frc.team3130.robot.subsystems.Intake;
+import frc.team3130.robot.subsystems.Turret;
 
 import java.util.Set;
 
-public class SpinShooter implements Command {
+public class SpinFlywheel implements Command {
     private final Set<Subsystem> subsystems;
 
-    public SpinShooter() {
-        this.subsystems = Set.of(Shooter.getInstance());
+    public SpinFlywheel() {
+        this.subsystems = Set.of(Turret.getInstance());
     }
 
     /**
@@ -27,8 +28,7 @@ public class SpinShooter implements Command {
      */
     @Override
     public void execute() {
-        Shooter.shooterSpin(.7);
-        Shooter.shooterTopSpin(1);
+        Turret.spinFlywheel(0.5);
     }
 
     /**
@@ -47,8 +47,6 @@ public class SpinShooter implements Command {
      */
     @Override
     public boolean isFinished() {
-        //if (!OI.driverGamepad.getRawButton(RobotMap.LST_BTN_RBUMPER)) //TODO: move button dependency to higher abstraction point
-        //    return true;
         return false;
     }
 
@@ -62,8 +60,7 @@ public class SpinShooter implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Shooter.shooterSpin(0);
-        Shooter.shooterTopSpin(0);
+        Turret.spinFlywheel(0.0);
     }
 
     /**

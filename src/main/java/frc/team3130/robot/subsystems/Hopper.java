@@ -18,13 +18,22 @@ public class Hopper implements Subsystem {
     //Create and define all standard data types needed
 
     /**
-     * The Singleton instance of this ExampleSubsystem. External classes should
+     * The Singleton instance of this Hopper. External classes should
      * use the {@link #getInstance()} method to get the instance.
      */
     private final static Hopper INSTANCE = new Hopper();
 
     /**
-     * Creates a new instance of this ExampleSubsystem.
+     * Returns the Singleton instance of this Hopper. This static method
+     * should be used -- {@code Hopper.getInstance();} -- by external
+     * classes, rather than the constructor to get the instance of this class.
+     */
+    public static Hopper getInstance() {
+        return INSTANCE;
+    }
+    
+    /**
+     * Creates a new instance of this Hopper.
      * This constructor is private since this class is a Singleton. External classes
      * should use the {@link #getInstance()} method to get the instance.
      */
@@ -40,20 +49,20 @@ public class Hopper implements Subsystem {
         m_hopperMotorL.setNeutralMode(NeutralMode.Brake);
         m_hopperMotorR.setNeutralMode(NeutralMode.Brake);
         m_hopperMotorTop.setNeutralMode(NeutralMode.Brake);
+
+        m_hopperMotorL.setInverted(false);
     }
 
-    public static void runHopper(double speed) {
-        m_hopperMotorL.set(speed);
-        m_hopperMotorR.set(speed*2);
-        m_hopperMotorTop.set(speed);
+    public static void runHopperRight(double speed) {
+        m_hopperMotorR.set(speed);
     }
-    /**
-     * Returns the Singleton instance of this ExampleSubsystem. This static method
-     * should be used -- {@code ExampleSubsystem.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Hopper getInstance() {
-        return INSTANCE;
+
+    public static void runHopperLeft(double speed) {
+        m_hopperMotorL.set(speed);
+    }
+
+    public static void runHopperTop(double speed) {
+        m_hopperMotorTop.set(speed);
     }
 
 }

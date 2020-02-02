@@ -1,20 +1,17 @@
-package frc.team3130.robot.commands.Chassis;
+package frc.team3130.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Chassis;
+import frc.team3130.robot.subsystems.Turret;
 
 import java.util.Set;
 
-public class DefaultDrive implements Command {
+public class AimTurret implements Command {
     private final Set<Subsystem> subsystems;
 
-    public DefaultDrive() {
-        this.subsystems = Set.of(Chassis.getInstance());
+    public AimTurret() {
+        this.subsystems = Set.of(Turret.getInstance());
     }
-
 
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
@@ -30,13 +27,13 @@ public class DefaultDrive implements Command {
      */
     @Override
     public void execute() {
+        double offset = 4.0; //Limelight.GetInstance().getDegHorizontalOffset();
+        double turretAngle = Turret.getAngleDegrees();
 
-        double moveSpeed = -OI.driverGamepad.getRawAxis(1) * RobotMap.kMaxDriveSpeed; //joystick's y axis is inverted
-        double turnSpeed = OI.driverGamepad.getRawAxis(4) * RobotMap.kMaxDriveSpeed; //arcade drive has left as positive, but we want right to be positive
+        System.out.println("ANGLE OFFSET: " + offset);
 
+        Turret.setAngle(turretAngle - offset);
 
-        double turnThrottle = (0.70);
-        Chassis.driveArcade(moveSpeed, turnSpeed * turnThrottle, true);
     }
 
     /**

@@ -34,11 +34,9 @@ public class Robot extends TimedRobot {
         scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
         scheduler.setDefaultCommand(Climber.getInstance(), new SkyWalker());
         scheduler.registerSubsystem(Intake.getInstance());
-        scheduler.registerSubsystem(Shooter.getInstance());
+        scheduler.registerSubsystem(Hopper.getInstance());
+        scheduler.registerSubsystem(Turret.getInstance());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
-
-        scheduler.registerSubsystem(ExampleSubsystem.getInstance()); //TODO: check if this is even needed
-
 
 
         //Smartdash output thread
@@ -119,6 +117,7 @@ public class Robot extends TimedRobot {
     public void outputToSmartDashboard() {
         WheelOfFortune.detectColor();
         Chassis.outputToSmartDashboard();
+        Turret.outputToSmartDashboard();
     }
 
     public void writePeriodicOutputs() {
