@@ -21,7 +21,7 @@ public class HopperIn implements Command {
     @Override
     public void initialize() {
         Hopper.runHopperLeft(0.4);
-        Hopper.runHopperRight(0.4);
+        Hopper.runHopperRight(0.9);
         Hopper.runHopperTop(0.6);
     }
 
