@@ -2,6 +2,9 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 
@@ -14,6 +17,7 @@ public class Hopper implements Subsystem {
     private static WPI_TalonSRX m_hopperMotorL;
     private static WPI_TalonSRX m_hopperMotorR;
     private static WPI_TalonSRX m_hopperMotorTop;
+    private static DigitalInput m_beam;
 
     //Create and define all standard data types needed
 
@@ -38,6 +42,7 @@ public class Hopper implements Subsystem {
      * should use the {@link #getInstance()} method to get the instance.
      */
     private Hopper() {
+        m_beam = new DigitalInput(RobotMap.DIO_FEEDERBEAM);
         m_hopperMotorL = new WPI_TalonSRX(RobotMap.CAN_HOPPERL);
         m_hopperMotorR = new WPI_TalonSRX(RobotMap.CAN_HOPPERR);
         m_hopperMotorTop = new WPI_TalonSRX(RobotMap.CAN_HOPPERTOP);
@@ -53,6 +58,10 @@ public class Hopper implements Subsystem {
         m_hopperMotorL.setInverted(false);
     }
 
+    public static boolean isEmpty() {
+        return m_beam.get();
+    }
+
     public static void runHopperRight(double speed) {
         m_hopperMotorR.set(speed);
     }
@@ -65,5 +74,8 @@ public class Hopper implements Subsystem {
         m_hopperMotorTop.set(speed);
     }
 
+    public static void outputToSmartDashboard() {
+        SmartDashboard.putBoolean("Loader Empty", isEmpty());
+    }
 }
 

@@ -56,6 +56,10 @@ public class RobotMap {
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;
 
+    /**
+     * Digital I/O ports
+     */
+    public static final int DIO_FEEDERBEAM = 0;
 
     /**
      * CAN IDs

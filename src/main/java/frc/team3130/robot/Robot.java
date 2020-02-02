@@ -37,20 +37,6 @@ public class Robot extends TimedRobot {
         scheduler.registerSubsystem(Hopper.getInstance());
         scheduler.registerSubsystem(Turret.getInstance());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
-
-
-        //Smartdash output thread
-        Thread t = new Thread(() -> {
-            while (!Thread.interrupted()) {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                outputToSmartDashboard();
-            }
-        });
-        t.start();
     }
 
     /**
@@ -73,6 +59,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+        outputToSmartDashboard();
     }
 
     /**
@@ -118,6 +105,7 @@ public class Robot extends TimedRobot {
         WheelOfFortune.detectColor();
         Chassis.outputToSmartDashboard();
         Turret.outputToSmartDashboard();
+        Hopper.outputToSmartDashboard();
     }
 
     public void writePeriodicOutputs() {

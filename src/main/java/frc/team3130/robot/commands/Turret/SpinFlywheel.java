@@ -2,7 +2,6 @@ package frc.team3130.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Intake;
 import frc.team3130.robot.subsystems.Turret;
 
 import java.util.Set;
@@ -19,7 +18,7 @@ public class SpinFlywheel implements Command {
      */
     @Override
     public void initialize() {
-
+        Turret.spinFlywheel(0.5);
     }
 
     /**
@@ -28,7 +27,6 @@ public class SpinFlywheel implements Command {
      */
     @Override
     public void execute() {
-        Turret.spinFlywheel(0.5);
     }
 
     /**

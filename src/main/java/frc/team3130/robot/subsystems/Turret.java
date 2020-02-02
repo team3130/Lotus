@@ -88,6 +88,15 @@ public class Turret implements Subsystem {
         m_flywheelMaster.set(ControlMode.PercentOutput, spin);
     }
 
+    /**
+     * Get the status of the flywheel if it's ready to shoot
+     */
+    public static boolean canShoot() {
+        getInstance();
+        // Check the velocity and return true when it is within the
+        // velocity target. Bogus for now. Change the comment later. TBD
+        return (Math.abs(m_flywheelMaster.getSelectedSensorVelocity()) > 1);
+    }
 
     // Turret Angle
 

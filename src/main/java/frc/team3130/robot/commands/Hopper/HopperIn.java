@@ -1,12 +1,11 @@
 package frc.team3130.robot.commands.Hopper;
 
+import java.util.Set;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Hopper;
-
-import java.util.Set;
+import frc.team3130.robot.subsystems.Turret;
 
 public class HopperIn implements Command {
     private final Set<Subsystem> subsystems;
@@ -20,9 +19,8 @@ public class HopperIn implements Command {
      */
     @Override
     public void initialize() {
-        Hopper.runHopperLeft(0.4);
-        Hopper.runHopperRight(0.9);
-        Hopper.runHopperTop(0.6);
+        Hopper.runHopperLeft(0.33);
+        Hopper.runHopperRight(0.33);
     }
 
     /**
@@ -31,6 +29,16 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
+        if (Turret.canShoot()) {
+            Hopper.runHopperTop(0.6);
+        }
+        else if (Hopper.isEmpty()) {
+            Hopper.runHopperTop(0.45);
+        }
+        else {
+            Hopper.runHopperTop(0.0);
+            // Tactile feedback to the driver's control maybe?
+        }
     }
 
     /**

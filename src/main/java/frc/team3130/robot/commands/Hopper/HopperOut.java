@@ -20,11 +20,9 @@ public class HopperOut implements Command {
      */
     @Override
     public void initialize() {
-        Hopper.runHopperLeft(-0.5);
+        Hopper.runHopperLeft(-0.25);
         Hopper.runHopperRight(0.25);
-        Hopper.runHopperTop(0.9);
-
-
+        Hopper.runHopperTop(-0.33);
     }
 
     /**
