@@ -44,7 +44,7 @@ public class Hopper implements Subsystem {
 
     public static void runHopper(double speed) {
         m_hopperMotorL.set(speed);
-        m_hopperMotorR.set(speed);
+        m_hopperMotorR.set(speed*2);
         m_hopperMotorTop.set(speed);
     }
     /**
