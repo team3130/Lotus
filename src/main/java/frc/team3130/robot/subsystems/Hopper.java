@@ -2,7 +2,6 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -35,7 +34,7 @@ public class Hopper implements Subsystem {
     public static Hopper getInstance() {
         return INSTANCE;
     }
-    
+
     /**
      * Creates a new instance of this Hopper.
      * This constructor is private since this class is a Singleton. External classes
@@ -55,6 +54,7 @@ public class Hopper implements Subsystem {
         m_hopperMotorR.setNeutralMode(NeutralMode.Brake);
         m_hopperMotorTop.setNeutralMode(NeutralMode.Brake);
 
+        m_hopperMotorTop.setInverted(true);
         m_hopperMotorL.setInverted(false);
     }
 

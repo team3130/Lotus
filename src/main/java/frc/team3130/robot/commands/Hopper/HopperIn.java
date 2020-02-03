@@ -31,11 +31,9 @@ public class HopperIn implements Command {
     public void execute() {
         if (Turret.canShoot()) {
             Hopper.runHopperTop(0.6);
-        }
-        else if (Hopper.isEmpty()) {
+        } else if (Hopper.isEmpty()) {
             Hopper.runHopperTop(0.45);
-        }
-        else {
+        } else {
             Hopper.runHopperTop(0.0);
             // Tactile feedback to the driver's control maybe?
         }
@@ -58,7 +56,7 @@ public class HopperIn implements Command {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-            return false;
+        return false;
 
 
     }
@@ -72,9 +70,11 @@ public class HopperIn implements Command {
      * @param interrupted whether the command was interrupted/canceled
      */
     @Override
-    public void end(boolean interrupted) { Hopper.runHopperLeft(0.0);
+    public void end(boolean interrupted) {
+        Hopper.runHopperLeft(0.0);
         Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);}
+        Hopper.runHopperTop(0.0);
+    }
 
     /**
      * <p>
