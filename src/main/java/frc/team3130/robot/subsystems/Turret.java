@@ -145,7 +145,7 @@ public class Turret implements Subsystem {
      * @return If the turret is aimed on target
      */
     public synchronized static boolean isOnTarget() {
-        return (m_turret.getControlMode() == m_turret.getControlMode().Position
+        return (m_turret.getControlMode() == ControlMode.Position
                 && Math.abs(getAngleError()) < RobotMap.kTurretOnTargetTolerance);
     }
 
