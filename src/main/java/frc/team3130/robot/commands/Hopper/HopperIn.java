@@ -29,7 +29,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
-        if (Turret.canShoot()) {
+        if (Turret.getInstance().canShoot()) {
             Hopper.runHopperTop(0.6);
         } else if (Hopper.isEmpty()) {
             Hopper.runHopperTop(0.45);
