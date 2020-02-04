@@ -46,7 +46,6 @@ public class Limelight {
         if (tv.getDouble(0.0) == 1.0) {
             x_targetOffsetAngle = tx.getDouble(0.0);
             y_targetOffsetAngle = ty.getDouble(0.0);
-            SmartDashboard.putNumber("Lime Angle", x_targetOffsetAngle);
             area = ta.getDouble(0.0);
             skew = ts.getDouble(0.0);
         } else {
@@ -123,8 +122,8 @@ public class Limelight {
 
 
     public static void outputToSmartDashboard() {
-        SmartDashboard.putNumber("LimelightX", x_targetOffsetAngle);
-        SmartDashboard.putNumber("LimelightY", y_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight X Angle", x_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Y Angle", y_targetOffsetAngle);
         SmartDashboard.putNumber("LimelightArea", area);
     }
 
