@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -18,9 +20,11 @@ public class Chassis implements Subsystem {
     private static WPI_TalonFX m_rightMotorFront;
     private static WPI_TalonFX m_rightMotorRear;
 
+    private static DifferentialDrive m_drive;
+
     private static Solenoid m_shifter;
 
-    // Create and define all standard data types needed
+    //Create and define all standard data types needed
 
     /**
      * The Singleton instance of this Chassis. External classes should use the
@@ -38,7 +42,6 @@ public class Chassis implements Subsystem {
     }
 
     private Chassis() {
-
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
         m_rightMotorFront = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORFRONT);
@@ -49,23 +52,20 @@ public class Chassis implements Subsystem {
         m_rightMotorFront.configFactoryDefault();
         m_rightMotorRear.configFactoryDefault();
 
-        m_leftMotorFront.setNeutralMode(NeutralMode.Coast);
-        m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
-        m_leftMotorRear.setNeutralMode(NeutralMode.Coast);
-        m_rightMotorRear.setNeutralMode(NeutralMode.Coast);
+        talonsToCoast(true);
 
         m_leftMotorRear.set(ControlMode.Follower, RobotMap.CAN_LEFTMOTORFRONT);
         m_rightMotorRear.set(ControlMode.Follower, RobotMap.CAN_RIGHTMOTORFRONT);
-
-        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
-
-        m_shifter.set(false);
 
         /**
          * For all motors, forward is the positive direction
          *
          * Shift false is low gear
          */
+
+        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
+
+        m_shifter.set(false);
 
         m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
@@ -78,6 +78,12 @@ public class Chassis implements Subsystem {
         m_leftMotorFront.overrideLimitSwitchesEnable(false);
         m_rightMotorFront.overrideLimitSwitchesEnable(false);
 
+        SpeedControllerGroup m_left = new SpeedControllerGroup(m_leftMotorFront, m_leftMotorRear);
+        SpeedControllerGroup m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
+
+        m_drive = new DifferentialDrive(m_left, m_right);
+        m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
+        m_drive.setDeadband(RobotMap.kDriveDeadband);
     }
 
     /**
@@ -157,6 +163,10 @@ public class Chassis implements Subsystem {
         m_rightMotorFront.setSelectedSensorPosition(0);
     }
 
+    /**
+     * Set the drive talons to either Coast or Brake mode
+     * @param coast true for Coast mode, false for Brake mode
+     */
     public static void talonsToCoast(boolean coast) {
         if (coast) {
             m_leftMotorFront.setNeutralMode(NeutralMode.Coast);
@@ -170,14 +180,6 @@ public class Chassis implements Subsystem {
             m_rightMotorRear.setNeutralMode(NeutralMode.Brake);
         }
     }
-
-    public synchronized void setControlState(int state) {
-        if (state == 0) {
-        } else {
-        }
-
-    }
-
 
     /**
      * Returns the shift state of the Chassis
