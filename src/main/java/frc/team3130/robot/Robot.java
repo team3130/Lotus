@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Climber.SkyWalker;
 import frc.team3130.robot.subsystems.*;
+import frc.team3130.robot.vision.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +29,9 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         //Instantiate operator interface
         OI.GetInstance();
+
+        //Instantiate Limelight interface
+        Limelight.GetInstance();
 
         //Register and instantiate subsystems (optionally with default commands)
         //Note: registerSubsystem is NOT needed if setDefaultCommand is used
@@ -84,6 +88,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         scheduler.run();
+        Limelight.GetInstance().updateData();
     }
 
     /**
@@ -92,6 +97,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         scheduler.run();
+        Limelight.GetInstance().updateData();
     }
 
     /**
@@ -106,6 +112,7 @@ public class Robot extends TimedRobot {
         Chassis.outputToSmartDashboard();
         Turret.outputToSmartDashboard();
         Hopper.outputToSmartDashboard();
+        Limelight.GetInstance().outputToSmartDashboard();
     }
 
     public void writePeriodicOutputs() {

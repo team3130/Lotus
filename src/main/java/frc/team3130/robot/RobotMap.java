@@ -23,6 +23,8 @@ public class RobotMap {
     public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter);
     public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter);
 
+    public static double kDriveDeadband = 0.02;
+
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
     public static double kChassisMPOutputDeadband = 0.01;
@@ -41,8 +43,11 @@ public class RobotMap {
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
+    //Limelight
+    public static double kLimelightTiltAngle = -19.76; // Tilting backwards is negative FIXME: calibrate
+    public static double kLimelightHeight = 38.875; // Height of camera aperture from the ground FIXME
+    public static double kLimelightCalibrationDist = 36.0; // Exact horizontal distance between target and lens FIXME
 
-    public static double kDriveDeadband = 0.02;
 
     //Turret
     public static double kTurretP = 1.0; //TODO: tune
@@ -55,6 +60,11 @@ public class RobotMap {
 
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;
+
+    /**
+     * Field parameters
+     */
+    public static final double VISIONTARGETHEIGHT = 31.25; // Height of vision target center FIXME
 
     /**
      * Digital I/O ports
