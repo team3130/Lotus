@@ -32,11 +32,9 @@ public class DefaultDrive implements Command {
     public void execute() {
 
         double moveSpeed = -OI.driverGamepad.getRawAxis(1) * RobotMap.kMaxDriveSpeed; //joystick's y axis is inverted
-        double turnSpeed = OI.driverGamepad.getRawAxis(4) * RobotMap.kMaxDriveSpeed; //arcade drive has left as positive, but we want right to be positive
+        double turnSpeed = OI.driverGamepad.getRawAxis(4) * RobotMap.kMaxDriveSpeed;
 
-
-        double turnThrottle = (0.70);
-        Chassis.driveArcade(moveSpeed, turnSpeed * turnThrottle, true);
+        Chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**

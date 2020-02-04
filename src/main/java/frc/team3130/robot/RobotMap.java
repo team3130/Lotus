@@ -19,9 +19,10 @@ public class RobotMap {
     public static double kRWheelDiameter = 6.0; //Center wheel
 
     public static double kMaxDriveSpeed = 0.8;
+    public static double kMaxTurnThrottle = 0.7; //Applied on top of max drive speed
 
-    public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter);
-    public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter);
+    public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter); //FIXME
+    public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter); //FIXME
 
     public static double kDriveDeadband = 0.02;
 
@@ -47,7 +48,6 @@ public class RobotMap {
     public static double kLimelightTiltAngle = -19.76; // Tilting backwards is negative FIXME: calibrate
     public static double kLimelightHeight = 38.875; // Height of camera aperture from the ground FIXME
     public static double kLimelightCalibrationDist = 36.0; // Exact horizontal distance between target and lens FIXME
-
 
     //Turret
     public static double kTurretP = 1.0; //TODO: tune
