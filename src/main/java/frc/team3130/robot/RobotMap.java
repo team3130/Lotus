@@ -84,6 +84,8 @@ public class RobotMap {
     public static final int CAN_WHEELOFFORTUNE = 7;
 
     public static final int CAN_SKYWALKER = 106; //TODO: map this
+    public static final int CAN_CLIMBER1 = 108; //TODO: map this because I just put a random number in
+    public static final int CAN_CLIMBER2 = 109; //TODO: also map this because I put a random number in
 
     public static final int CAN_TURRETANGLE = 10;
     public static final int CAN_FLYWHEEL1 = 11;
@@ -99,8 +101,8 @@ public class RobotMap {
      * Pneumatics ports
      */
     public static final int PNM_SHIFT = 0;
-    public static final int PNM_CLIMBERARM = 1; //TODO: assign a button to this
-    public static final int PNM_WHEELARM = 2; //TODO: assign a button, Maybe y with a delay before spin)
+    public static final int PNM_CLIMBERARM = 1;
+    public static final int PNM_WHEELARM = 2;
 
 
     /**
