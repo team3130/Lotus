@@ -3,6 +3,7 @@ package frc.team3130.robot.commands.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.vision.Limelight;
 
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class AimTurret implements Command {
      */
     @Override
     public void execute() {
-        double offset = 4.0; //Limelight.GetInstance().getDegHorizontalOffset();
+        double offset = Limelight.GetInstance().getDegHorizontalError();
         double turretAngle = Turret.getAngleDegrees();
 
         System.out.println("ANGLE OFFSET: " + offset);
