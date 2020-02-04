@@ -1,10 +1,9 @@
 package frc.team3130.robot.commands.Climber;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Climber;
+import frc.team3130.robot.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
@@ -18,20 +17,19 @@ public class ClimberPull implements Command {
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
-
     @Override
     public void initialize() {
-        Climber.getInstance().deployClimber(false);
+        Climber.getInstance().climbPole(0.6);
+        Climber.getInstance().flier(0.6);
     }
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
      * (That is, it is called repeatedly until {@link #isFinished()}) returns true.)
      */
-
     @Override
     public void execute() {
-//    m_climberArm(false); <-- wut dis?
+
     }
 
     /**
@@ -42,19 +40,16 @@ public class ClimberPull implements Command {
      * Returning false will result in the command never ending automatically. It may still be
      * cancelled manually or interrupted by another command. Hard coding this command to always
      * return true will result in the command executing once and finishing immediately. It is
-     * recommended to use * {@link InstantCommand InstantCommand}
+     * recommended to use * {@link edu.wpi.first.wpilibj2.command.InstantCommand InstantCommand}
      * for such an operation.
      * </p>
      *
      * @return whether this command has finished.
      */
-
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
-
-
 
     /**
      * The action to take when the command ends. Called when either the command
@@ -64,14 +59,11 @@ public class ClimberPull implements Command {
      *
      * @param interrupted whether the command was interrupted/canceled
      */
-
-
     @Override
     public void end(boolean interrupted) {
-
+        Climber.getInstance().climbPole(0);
+        Climber.getInstance().flier(0);
     }
-
-
 
     /**
      * <p>
@@ -86,8 +78,6 @@ public class ClimberPull implements Command {
      *
      * @return the set of subsystems that are required
      */
-
-
     @Override
     public Set<Subsystem> getRequirements() {
         return this.subsystems;
