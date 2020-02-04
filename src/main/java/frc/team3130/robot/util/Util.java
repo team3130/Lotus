@@ -13,7 +13,9 @@ public class Util {
      */
     public static double limit(double v, double maxMagnitude) { return limit(v, -maxMagnitude, maxMagnitude);
     }
-
+    /**
+     * Limits the given input between the given minimum and maximum.
+     */
     public static double limit(double v, double min, double max) {
         return Math.min(max, Math.max(min, v));
     }

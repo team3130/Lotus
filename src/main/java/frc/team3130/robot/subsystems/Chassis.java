@@ -84,6 +84,7 @@ public class Chassis implements Subsystem {
         m_drive = new DifferentialDrive(m_left, m_right);
         m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
         m_drive.setDeadband(RobotMap.kDriveDeadband);
+        m_drive.setSafetyEnabled(true); //feed() must be called to prevent motor disable TODO: check me
     }
 
     /**
@@ -94,20 +95,8 @@ public class Chassis implements Subsystem {
      * @param squaredInputs Whether or not to use squared inputs
      */
     public static void driveTank(double moveL, double moveR, boolean squaredInputs) {
-        moveL = Util.limit(moveL, 1.0);
-        moveL = Util.applyDeadband(moveL, RobotMap.kDriveDeadband);
-
-        moveR = Util.limit(moveR, 1.0);
-        moveR = Util.applyDeadband(moveR, RobotMap.kDriveDeadband);
-
-        if (squaredInputs) {
-            moveL = Math.copySign(moveL * moveL, moveL);
-            moveR = Math.copySign(moveR * moveR, moveR);
-        }
-
-        m_leftMotorFront.set(ControlMode.PercentOutput, moveL);
-        m_rightMotorFront.set(ControlMode.PercentOutput, moveR);
-
+        //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
+        m_drive.tankDrive(moveL, moveR, squaredInputs);
     }
 
     /**
@@ -119,22 +108,8 @@ public class Chassis implements Subsystem {
      * @param squaredInputs Whether or not to use squared inputs
      */
     public static void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
-        moveThrottle = Util.limit(moveThrottle, 1.0);
-        moveThrottle = Util.applyDeadband(moveThrottle, RobotMap.kDriveDeadband);
-
-        turnThrottle = Util.limit(turnThrottle, 1.0);
-        turnThrottle = Util.applyDeadband(turnThrottle, RobotMap.kDriveDeadband);
-
-        if (squaredInputs) {
-            moveThrottle = Math.copySign(moveThrottle * moveThrottle, moveThrottle);
-            turnThrottle = Math.copySign(turnThrottle * turnThrottle, turnThrottle);
-        }
-
-        double leftMotorOutput = moveThrottle + turnThrottle;
-        double rightMotorOutput = moveThrottle - turnThrottle;
-
-        m_leftMotorFront.set(ControlMode.PercentOutput, Util.limit(leftMotorOutput, 1.0));
-        m_rightMotorFront.set(ControlMode.PercentOutput, Util.limit(rightMotorOutput, 1.0));
+        //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
+        m_drive.arcadeDrive(moveThrottle, turnThrottle, squaredInputs);
     }
 
     /**
@@ -165,6 +140,7 @@ public class Chassis implements Subsystem {
 
     /**
      * Set the drive talons to either Coast or Brake mode
+     *
      * @param coast true for Coast mode, false for Brake mode
      */
     public static void talonsToCoast(boolean coast) {
@@ -182,18 +158,9 @@ public class Chassis implements Subsystem {
     }
 
     /**
-     * Returns the shift state of the Chassis
-     *
-     * @return
-     */
-    public static boolean getShift() {
-        return m_shifter.get();
-    }
-
-    /**
      * Returns if robot is in low gear
      *
-     * @return true means robot is in low gear, false if it's in high gear
+     * @return true means the robot is in low gear, false if it's in high gear
      */
     public static boolean isLowGear() {
         return !m_shifter.get();
@@ -288,14 +255,14 @@ public class Chassis implements Subsystem {
     }
 
     /**
-     * @return Returns the left main drive Talon
+     * @return Returns the left master drive Talon
      */
     public static WPI_TalonFX getFrontL() {
         return m_leftMotorFront;
     }
 
     /**
-     * @return Returns the right main drive Talon
+     * @return Returns the right master drive Talon
      */
     public static WPI_TalonFX getFrontR() {
         return m_rightMotorFront;
