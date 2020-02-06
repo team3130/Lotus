@@ -40,8 +40,8 @@ public class OI {
      */
     private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_X);
     private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
-    private static JoystickButton testTripleSpinFinish = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
-    private static JoystickTrigger intakeIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
+//    private static JoystickButton testTripleSpinFinish = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
+    private static JoystickTrigger intakeIn = new JoystickTrigger(driverGamepad, RobotMap.LST_BTN_B);
     private static JoystickButton intakeOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER);
     private static JoystickTrigger hopperIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER);
@@ -55,7 +55,7 @@ public class OI {
         hopperIn.whenHeld(new HopperIn());
         hopperOut.whenHeld(new HopperOut());
 
-        testTripleSpinFinish.whenPressed(new TripleSpinFinish());
+//        testTripleSpinFinish.whenPressed(new TripleSpinFinish());
         testColorAlignment.whenPressed(new ColorAlignment());
         testTestHSB.whenHeld(new TestHSB());
 

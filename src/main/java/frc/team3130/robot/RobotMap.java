@@ -90,7 +90,7 @@ public class RobotMap {
     public static final int CAN_FLYWHEEL2 = 13;
 
 
-    public static final int CAN_INTAKE1 = 101; //TODO: map this
+    public static final int CAN_INTAKE1 = 10;
 
     public static final int CAN_HOPPERL = 8;
     public static final int CAN_HOPPERR = 9;
