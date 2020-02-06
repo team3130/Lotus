@@ -81,20 +81,20 @@ public class RobotMap {
     public static final int CAN_LEFTMOTORFRONT = 4;
     public static final int CAN_LEFTMOTORREAR = 5;
 
-    public static final int CAN_WHEELOFFORTUNE = 7;
+    public static final int CAN_WHEELOFFORTUNE = 107; //TODO: This is wrong
 
     public static final int CAN_SKYWALKER = 106; //TODO: map this
 
-    public static final int CAN_TURRETANGLE = 10;
-    public static final int CAN_FLYWHEEL1 = 11;
-    public static final int CAN_FLYWHEEL2 = 12;
+    public static final int CAN_TURRETANGLE = 6;
+    public static final int CAN_FLYWHEEL1 = 14;
+    public static final int CAN_FLYWHEEL2 = 13;
 
 
     public static final int CAN_INTAKE1 = 101; //TODO: map this
 
     public static final int CAN_HOPPERL = 8;
-    public static final int CAN_HOPPERR = 6;
-    public static final int CAN_HOPPERTOP = 9;
+    public static final int CAN_HOPPERR = 9;
+    public static final int CAN_HOPPERTOP = 12;
     /**
      * Pneumatics ports
      */
