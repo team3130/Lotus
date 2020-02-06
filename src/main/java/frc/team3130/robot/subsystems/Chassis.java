@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -18,9 +20,11 @@ public class Chassis implements Subsystem {
     private static WPI_TalonFX m_rightMotorFront;
     private static WPI_TalonFX m_rightMotorRear;
 
+    private static DifferentialDrive m_drive;
+
     private static Solenoid m_shifter;
 
-    // Create and define all standard data types needed
+    //Create and define all standard data types needed
 
     /**
      * The Singleton instance of this Chassis. External classes should use the
@@ -38,7 +42,6 @@ public class Chassis implements Subsystem {
     }
 
     private Chassis() {
-
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
         m_rightMotorFront = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORFRONT);
@@ -49,23 +52,20 @@ public class Chassis implements Subsystem {
         m_rightMotorFront.configFactoryDefault();
         m_rightMotorRear.configFactoryDefault();
 
-        m_leftMotorFront.setNeutralMode(NeutralMode.Coast);
-        m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
-        m_leftMotorRear.setNeutralMode(NeutralMode.Coast);
-        m_rightMotorRear.setNeutralMode(NeutralMode.Coast);
+        talonsToCoast(true);
 
         m_leftMotorRear.set(ControlMode.Follower, RobotMap.CAN_LEFTMOTORFRONT);
         m_rightMotorRear.set(ControlMode.Follower, RobotMap.CAN_RIGHTMOTORFRONT);
-
-        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
-
-        m_shifter.set(false);
 
         /**
          * For all motors, forward is the positive direction
          *
          * Shift false is low gear
          */
+
+        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
+
+        m_shifter.set(false);
 
         m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
@@ -78,6 +78,13 @@ public class Chassis implements Subsystem {
         m_leftMotorFront.overrideLimitSwitchesEnable(false);
         m_rightMotorFront.overrideLimitSwitchesEnable(false);
 
+        SpeedControllerGroup m_left = new SpeedControllerGroup(m_leftMotorFront, m_leftMotorRear);
+        SpeedControllerGroup m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
+
+        m_drive = new DifferentialDrive(m_left, m_right);
+        m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
+        m_drive.setDeadband(RobotMap.kDriveDeadband);
+        m_drive.setSafetyEnabled(true); //feed() must be called to prevent motor disable TODO: check me
     }
 
     /**
@@ -88,20 +95,8 @@ public class Chassis implements Subsystem {
      * @param squaredInputs Whether or not to use squared inputs
      */
     public static void driveTank(double moveL, double moveR, boolean squaredInputs) {
-        moveL = Util.limit(moveL, 1.0);
-        moveL = Util.applyDeadband(moveL, RobotMap.kDriveDeadband);
-
-        moveR = Util.limit(moveR, 1.0);
-        moveR = Util.applyDeadband(moveR, RobotMap.kDriveDeadband);
-
-        if (squaredInputs) {
-            moveL = Math.copySign(moveL * moveL, moveL);
-            moveR = Math.copySign(moveR * moveR, moveR);
-        }
-
-        m_leftMotorFront.set(ControlMode.PercentOutput, moveL);
-        m_rightMotorFront.set(ControlMode.PercentOutput, moveR);
-
+        //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
+        m_drive.tankDrive(moveL, moveR, squaredInputs);
     }
 
     /**
@@ -113,22 +108,8 @@ public class Chassis implements Subsystem {
      * @param squaredInputs Whether or not to use squared inputs
      */
     public static void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
-        moveThrottle = Util.limit(moveThrottle, 1.0);
-        moveThrottle = Util.applyDeadband(moveThrottle, RobotMap.kDriveDeadband);
-
-        turnThrottle = Util.limit(turnThrottle, 1.0);
-        turnThrottle = Util.applyDeadband(turnThrottle, RobotMap.kDriveDeadband);
-
-        if (squaredInputs) {
-            moveThrottle = Math.copySign(moveThrottle * moveThrottle, moveThrottle);
-            turnThrottle = Math.copySign(turnThrottle * turnThrottle, turnThrottle);
-        }
-
-        double leftMotorOutput = moveThrottle + turnThrottle;
-        double rightMotorOutput = moveThrottle - turnThrottle;
-
-        m_leftMotorFront.set(ControlMode.PercentOutput, Util.limit(leftMotorOutput, 1.0));
-        m_rightMotorFront.set(ControlMode.PercentOutput, Util.limit(rightMotorOutput, 1.0));
+        //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
+        m_drive.arcadeDrive(moveThrottle, turnThrottle, squaredInputs);
     }
 
     /**
@@ -157,6 +138,11 @@ public class Chassis implements Subsystem {
         m_rightMotorFront.setSelectedSensorPosition(0);
     }
 
+    /**
+     * Set the drive talons to either Coast or Brake mode
+     *
+     * @param coast true for Coast mode, false for Brake mode
+     */
     public static void talonsToCoast(boolean coast) {
         if (coast) {
             m_leftMotorFront.setNeutralMode(NeutralMode.Coast);
@@ -171,27 +157,10 @@ public class Chassis implements Subsystem {
         }
     }
 
-    public synchronized void setControlState(int state) {
-        if (state == 0) {
-        } else {
-        }
-
-    }
-
-
-    /**
-     * Returns the shift state of the Chassis
-     *
-     * @return
-     */
-    public static boolean getShift() {
-        return m_shifter.get();
-    }
-
     /**
      * Returns if robot is in low gear
      *
-     * @return true means robot is in low gear, false if it's in high gear
+     * @return true means the robot is in low gear, false if it's in high gear
      */
     public static boolean isLowGear() {
         return !m_shifter.get();
@@ -286,14 +255,14 @@ public class Chassis implements Subsystem {
     }
 
     /**
-     * @return Returns the left main drive Talon
+     * @return Returns the left master drive Talon
      */
     public static WPI_TalonFX getFrontL() {
         return m_leftMotorFront;
     }
 
     /**
-     * @return Returns the right main drive Talon
+     * @return Returns the right master drive Talon
      */
     public static WPI_TalonFX getFrontR() {
         return m_rightMotorFront;

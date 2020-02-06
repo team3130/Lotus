@@ -19,9 +19,10 @@ public class RobotMap {
     public static double kRWheelDiameter = 6.0; //Center wheel
 
     public static double kMaxDriveSpeed = 0.8;
+    public static double kMaxTurnThrottle = 0.7; //Applied on top of max drive speed
 
-    public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter);
-    public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter);
+    public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter); //FIXME
+    public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter); //FIXME
 
     public static double kDriveDeadband = 0.02;
 
@@ -47,7 +48,6 @@ public class RobotMap {
     public static double kLimelightTiltAngle = -19.76; // Tilting backwards is negative FIXME: calibrate
     public static double kLimelightHeight = 38.875; // Height of camera aperture from the ground FIXME
     public static double kLimelightCalibrationDist = 36.0; // Exact horizontal distance between target and lens FIXME
-
 
     //Turret
     public static double kTurretP = 1.0; //TODO: tune
@@ -81,20 +81,20 @@ public class RobotMap {
     public static final int CAN_LEFTMOTORFRONT = 4;
     public static final int CAN_LEFTMOTORREAR = 5;
 
-    public static final int CAN_WHEELOFFORTUNE = 7;
+    public static final int CAN_WHEELOFFORTUNE = 107; //TODO: This is wrong
 
     public static final int CAN_SKYWALKER = 106; //TODO: map this
 
-    public static final int CAN_TURRETANGLE = 10;
-    public static final int CAN_FLYWHEEL1 = 11;
-    public static final int CAN_FLYWHEEL2 = 12;
+    public static final int CAN_TURRETANGLE = 6;
+    public static final int CAN_FLYWHEEL1 = 14;
+    public static final int CAN_FLYWHEEL2 = 13;
 
 
-    public static final int CAN_INTAKE1 = 101; //TODO: map this
+    public static final int CAN_INTAKE1 = 10;
 
     public static final int CAN_HOPPERL = 8;
-    public static final int CAN_HOPPERR = 6;
-    public static final int CAN_HOPPERTOP = 9;
+    public static final int CAN_HOPPERR = 9;
+    public static final int CAN_HOPPERTOP = 12;
     /**
      * Pneumatics ports
      */
