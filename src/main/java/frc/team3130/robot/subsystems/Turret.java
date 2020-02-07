@@ -47,20 +47,21 @@ public class Turret implements Subsystem {
         m_turret.overrideLimitSwitchesEnable(false);
         m_turret.overrideSoftLimitsEnable(false);
         m_flywheelMaster.overrideLimitSwitchesEnable(false);
-        m_flywheelSlave.overrideLimitSwitchesEnable(false);
         m_flywheelMaster.overrideSoftLimitsEnable(false);
+        m_flywheelSlave.overrideLimitSwitchesEnable(false);
         m_flywheelSlave.overrideSoftLimitsEnable(false);
 
         m_turret.setNeutralMode(NeutralMode.Brake);
         m_flywheelMaster.setNeutralMode(NeutralMode.Coast);
         m_flywheelSlave.setNeutralMode(NeutralMode.Coast);
 
+        m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
+
         // configure Talons
         m_turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
-        m_turret.set(ControlMode.Position, 0);
         m_flywheelSlave.follow(m_flywheelMaster);
 
+        
         m_flywheelSlave.setInverted(true);
 
         m_turret.enableVoltageCompensation(true);
@@ -71,7 +72,6 @@ public class Turret implements Subsystem {
                 RobotMap.kTurretI,
                 RobotMap.kTurretD,
                 0.0);
-
 
         m_turret.clearStickyFaults();
         m_flywheelMaster.clearStickyFaults();
