@@ -1,11 +1,11 @@
 package frc.team3130.robot.commands.WheelOfFortune;
 
-import java.util.Set;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.WheelOfFortune;
+
+import java.util.Set;
 
 public class TestHSB implements Command {
     private final Set<Subsystem> subsystems;
@@ -31,9 +31,11 @@ public class TestHSB implements Command {
      */
     @Override
     public void execute() {
-        String color = WheelOfFortune.detectHSB();
+        String color = WheelOfFortune.determineColor();
+        SmartDashboard.putString("God Color Detection", color);
         System.out.print(color);
-        SmartDashboard.putString("HSB Detected color", color);
+
+
     }
 
     /**

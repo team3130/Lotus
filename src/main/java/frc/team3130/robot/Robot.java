@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToSmartDashboard() {
-        WheelOfFortune.detectColor();
+        WheelOfFortune.outputToSmartDashboard();
         Chassis.outputToSmartDashboard();
         Turret.outputToSmartDashboard();
         Hopper.outputToSmartDashboard();

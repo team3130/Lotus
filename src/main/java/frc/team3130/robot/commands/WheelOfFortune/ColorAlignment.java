@@ -1,10 +1,11 @@
 package frc.team3130.robot.commands.WheelOfFortune;
 
-import java.util.Set;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.subsystems.ExampleSubsystem;
 import frc.team3130.robot.subsystems.WheelOfFortune;
+
+import java.util.Set;
 
 public class ColorAlignment implements Command {
     private final Set<Subsystem> subsystems;
@@ -32,6 +33,9 @@ public class ColorAlignment implements Command {
         colorFound = false;
         fieldColor = "Red";
         targetColor = WheelOfFortune.getTargetColor(fieldColor);
+
+        WheelOfFortune.deployWheel();
+
         System.out.println("Initialized");
     }
 
@@ -41,7 +45,7 @@ public class ColorAlignment implements Command {
      */
     @Override
     public void execute() {
-        String color = WheelOfFortune.detectColor();
+        String color = WheelOfFortune.determineColor();
 
         if (color.equals(targetColor)){
             WheelOfFortune.motorSpin(0);
@@ -119,10 +123,11 @@ public class ColorAlignment implements Command {
      */
     @Override
     public boolean isFinished() {
-        String color = WheelOfFortune.detectColor();
+        String color = WheelOfFortune.determineColor();
         //Code should turn off now
         if (color.equals(targetColor)) {
             WheelOfFortune.motorSpin(0);
+            WheelOfFortune.retractWheel();
             return true;
         }
         return false;
