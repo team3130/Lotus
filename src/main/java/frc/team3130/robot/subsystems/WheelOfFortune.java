@@ -18,7 +18,6 @@ public class WheelOfFortune implements Subsystem {
 
     //Create necessary objects
     private static ColorSensorV3 m_colorSensor;
-    private static ColorMatch m_colorMatcher;
     private static WPI_TalonSRX m_spinWheel;
     private static Map<String, String> fieldToTargetColorMap = new HashMap<String, String>();
 
@@ -78,10 +77,6 @@ public class WheelOfFortune implements Subsystem {
 
     public static String getTargetColor(String sourceColor) {
         return fieldToTargetColorMap.get(sourceColor);
-    }
-
-    public static int proximityCheck() {
-        return m_colorSensor.getProximity();
     }
 
     public static String determineColor() { //TODO: check with motor
@@ -152,8 +147,6 @@ public class WheelOfFortune implements Subsystem {
      * wheelArm(false) is when it is not deployed
      * wheelArm(true) is when it is deployed
      */
-
-
     //method for deploying wheel to be called in a command
     public static void deployWheel() {
         System.out.println("Wheel has deployed");
@@ -165,7 +158,6 @@ public class WheelOfFortune implements Subsystem {
         System.out.println("Wheel has retracted");
         m_wheelArm.set(false);
     }
-
 
     public static void motorSpin(double spin) {
         m_spinWheel.set(spin);
