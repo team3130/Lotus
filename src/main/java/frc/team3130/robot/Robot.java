@@ -98,6 +98,7 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         scheduler.run();
         Limelight.GetInstance().updateData();
+        writePeriodicOutputs();
     }
 
     /**
@@ -116,6 +117,7 @@ public class Robot extends TimedRobot {
     }
 
     public void writePeriodicOutputs() {
+        Turret.writePeriodicOutputs();
     }
 
     public void resetSubsystems() {

@@ -7,10 +7,10 @@ import frc.team3130.robot.vision.Limelight;
 
 import java.util.Set;
 
-public class AimTurret implements Command {
+public class ToggleTurretAim implements Command {
     private final Set<Subsystem> subsystems;
 
-    public AimTurret() {
+    public ToggleTurretAim() {
         this.subsystems = Set.of(Turret.getInstance());
     }
 
@@ -19,7 +19,8 @@ public class AimTurret implements Command {
      */
     @Override
     public void initialize() {
-
+        System.out.println("toggling.........");
+        Turret.toggleAimState();
     }
 
     /**
@@ -28,12 +29,6 @@ public class AimTurret implements Command {
      */
     @Override
     public void execute() {
-        double offset = Limelight.GetInstance().getDegHorizontalError();
-        double turretAngle = Turret.getAngleDegrees();
-
-//        System.out.println("ANGLE OFFSET: " + offset);
-
-        Turret.setAngle(turretAngle + offset);
 
     }
 

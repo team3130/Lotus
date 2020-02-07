@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.vision.Limelight;
 
 public class Turret implements Subsystem {
 
@@ -17,6 +18,7 @@ public class Turret implements Subsystem {
     private static WPI_TalonFX m_flywheelSlave;
 
     //Create and define all standard data types needed
+    private static boolean isAiming;
 
     /**
      * The Singleton instance of this Turret. External classes should
@@ -79,6 +81,8 @@ public class Turret implements Subsystem {
         m_flywheelMaster.clearStickyFaults();
         m_flywheelSlave.clearStickyFaults();
 
+        isAiming = false;
+
     }
 
     /**
@@ -108,7 +112,6 @@ public class Turret implements Subsystem {
      */
     public synchronized static void setAngle(double angle_deg) {
         // In Position mode, outputValue set is in rotations of the motor
-//        System.out.println("Set value:  " + (angle_deg * RobotMap.kTurretTicksPerDegree) + " -------------"); //DEBUG
         m_turret.set(ControlMode.Position, angle_deg * RobotMap.kTurretTicksPerDegree);
     }
 
@@ -151,6 +154,10 @@ public class Turret implements Subsystem {
                 && Math.abs(getAngleError()) < RobotMap.kTurretOnTargetTolerance);
     }
 
+    public static void toggleAimState(){
+        isAiming = !isAiming;
+    }
+
 
     public static void outputToSmartDashboard() {
         SmartDashboard.putNumber("turret_angle", getAngleDegrees());
@@ -165,4 +172,14 @@ public class Turret implements Subsystem {
         _talon.config_kD(0, kD, 0);
         _talon.config_kF(0, kF, 0);
     }
+
+    public static synchronized void writePeriodicOutputs() {
+        if(isAiming){
+            double offset = Limelight.GetInstance().getDegHorizontalError();
+            double turretAngle = getAngleDegrees();
+            Turret.setAngle(turretAngle + offset);
+        }
+
+    }
+
 }
