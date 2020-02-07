@@ -10,7 +10,8 @@ public class Climber implements Subsystem {
     //Create necessary objects
     private static WPI_TalonSRX m_skyWalker;
     private static WPI_TalonSRX m_climberElevator;
-    private static WPI_TalonSRX m_climberClimb;
+    private static WPI_TalonSRX m_climberWinchMaster;
+    private static WPI_TalonSRX m_climberWinchSlave;
 
     private static Solenoid m_climberArm;
 
@@ -33,8 +34,9 @@ public class Climber implements Subsystem {
 
     private Climber() {
         m_skyWalker = new WPI_TalonSRX(RobotMap.CAN_SKYWALKER);
-        m_climberElevator = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
-        m_climberClimb = new WPI_TalonSRX(RobotMap.CAN_CLIMBER2);
+        m_climberElevator = new WPI_TalonSRX(RobotMap.CLIMBER_ELEVATOR);
+        m_climberWinchMaster = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
+        m_climberWinchSlave = new WPI_TalonSRX(RobotMap.CAN_CLIMBER2);
 
         m_climberArm = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM);
 
@@ -48,7 +50,8 @@ public class Climber implements Subsystem {
         m_climberElevator.set(spin);
     }
     public static void flier(double spin) {
-        m_climberClimb.set(spin);
+        m_climberWinchMaster.set(spin);
+        m_climberWinchSlave.set(spin);
     }
 
     //method for deploying wheel to be called in a command
