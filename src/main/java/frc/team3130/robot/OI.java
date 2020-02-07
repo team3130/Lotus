@@ -6,6 +6,7 @@ import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
+import frc.team3130.robot.commands.Turret.AimTurret;
 import frc.team3130.robot.commands.Turret.SpinFlywheel;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
 import frc.team3130.robot.commands.WheelOfFortune.TestHSB;
@@ -59,7 +60,7 @@ public class OI {
         testColorAlignment.whenPressed(new ColorAlignment());
         testTestHSB.whenHeld(new TestHSB());
 
-        testTurret.whenHeld(new SpinFlywheel());
+        testTurret.whenHeld(new AimTurret());
     }
 }
 

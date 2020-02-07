@@ -44,7 +44,7 @@ public class Limelight {
     public static void updateData() {
         //Check if limelight sees a target
         if (tv.getDouble(0.0) == 1.0) {
-            x_targetOffsetAngle = tx.getDouble(0.0);
+            x_targetOffsetAngle = -tx.getDouble(0.0);
             y_targetOffsetAngle = ty.getDouble(0.0);
             area = ta.getDouble(0.0);
             skew = ts.getDouble(0.0);

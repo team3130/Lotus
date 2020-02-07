@@ -31,9 +31,9 @@ public class AimTurret implements Command {
         double offset = Limelight.GetInstance().getDegHorizontalError();
         double turretAngle = Turret.getAngleDegrees();
 
-        System.out.println("ANGLE OFFSET: " + offset);
+//        System.out.println("ANGLE OFFSET: " + offset);
 
-        Turret.setAngle(turretAngle - offset);
+        Turret.setAngle(turretAngle + offset);
 
     }
 

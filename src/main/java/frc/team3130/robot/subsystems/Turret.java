@@ -61,7 +61,9 @@ public class Turret implements Subsystem {
         m_turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         m_flywheelSlave.follow(m_flywheelMaster);
 
-        
+        m_turret.setInverted(true);
+        m_turret.setSensorPhase(true);
+
         m_flywheelSlave.setInverted(true);
 
         m_turret.enableVoltageCompensation(true);
