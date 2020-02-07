@@ -1,7 +1,6 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -9,6 +8,7 @@ import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Climber.SkyWalker;
 import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
+import edu.wpi.first.wpilibj.Timer;
 
 import static frc.team3130.robot.OI.driverGamepad;
 
@@ -23,6 +23,9 @@ public class Robot extends TimedRobot {
     CommandScheduler scheduler = CommandScheduler.getInstance();
     CommandBase autonomousCommand = null;
     private SendableChooser<String> chooser = new SendableChooser<String>();
+    private static Timer timer;
+    private static double lastTimestamp;
+
 
     /**
      * This function is run when the robot is first started up and should be
@@ -44,6 +47,10 @@ public class Robot extends TimedRobot {
         scheduler.registerSubsystem(Hopper.getInstance());
         scheduler.registerSubsystem(Turret.getInstance());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
+
+        timer = new Timer();
+
+        timer.start();
     }
 
     /**
@@ -67,6 +74,32 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         outputToSmartDashboard();
+
+        boolean gettime = true;
+        boolean checkif = true;
+
+
+
+        if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
+            if (gettime == true){
+                lastTimestamp = Timer.getFPGATimestamp();
+                gettime = false;
+            }
+            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+            if(Timer.getFPGATimestamp() - lastTimestamp > .3){
+                checkif = false;
+            }
+        }
+        else{
+            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+            gettime = true;
+            if (Turret.isOnTarget() == false) {
+                checkif = true;
+            }
+        }
+
     }
 
     /**
