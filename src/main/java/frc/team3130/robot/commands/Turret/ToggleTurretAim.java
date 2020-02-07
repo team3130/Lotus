@@ -48,7 +48,7 @@ public class ToggleTurretAim implements Command {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     /**
