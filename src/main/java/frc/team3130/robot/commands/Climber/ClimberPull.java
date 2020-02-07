@@ -3,7 +3,6 @@ package frc.team3130.robot.commands.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Climber;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
@@ -19,8 +18,8 @@ public class ClimberPull implements Command {
      */
     @Override
     public void initialize() {
-        Climber.getInstance().climbPole(0.6);
-        Climber.getInstance().flier(0.6);
+        Climber.climbPole(0.6);
+        Climber.flier(0.6);
     }
 
     /**
@@ -61,8 +60,8 @@ public class ClimberPull implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.getInstance().climbPole(0);
-        Climber.getInstance().flier(0);
+        Climber.climbPole(0);
+        Climber.flier(0);
     }
 
     /**

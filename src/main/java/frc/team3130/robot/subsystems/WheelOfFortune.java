@@ -128,7 +128,7 @@ public class WheelOfFortune implements Subsystem {
             float sat = hsb[1];
             float brightness = hsb[2];
 
-            SmartDashboard.putNumber("Hue Degree", deg);
+            SmartDashboard.putNumber("Hue Degree", deg); //TODO: remove these
             SmartDashboard.putNumber("Saturation", sat);
             SmartDashboard.putNumber("Brightness", brightness);
 
@@ -149,19 +149,19 @@ public class WheelOfFortune implements Subsystem {
     }
 
     /**
-     wheelArm(false) is when it is not deployed
-     wheelArm(true) is when it is deployed
+     * wheelArm(false) is when it is not deployed
+     * wheelArm(true) is when it is deployed
      */
 
 
     //method for deploying wheel to be called in a command
-    public static void deployWheel(){
+    public static void deployWheel() {
         System.out.println("Wheel has deployed");
         m_wheelArm.set(true);
     }
 
     //method for retracting wheel to be called in a command
-    public static void retractWheel(){
+    public static void retractWheel() {
         System.out.println("Wheel has retracted");
         m_wheelArm.set(false);
     }
@@ -172,6 +172,6 @@ public class WheelOfFortune implements Subsystem {
     }
 
     public static void outputToSmartDashboard() {
-
+        SmartDashboard.putString("HSB Detected color", detectHSB());
     }
 }
