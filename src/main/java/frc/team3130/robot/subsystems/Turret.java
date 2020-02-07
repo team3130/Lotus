@@ -5,10 +5,13 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.vision.Limelight;
+
+import static frc.team3130.robot.OI.driverGamepad;
 
 public class Turret implements Subsystem {
 
@@ -149,7 +152,7 @@ public class Turret implements Subsystem {
      *
      * @return If the turret is aimed on target
      */
-    public synchronized static boolean isOnTarget() {
+    public static boolean isOnTarget() {
         return (m_turret.getControlMode() == ControlMode.Position
                 && Math.abs(getAngleError()) < RobotMap.kTurretOnTargetTolerance);
     }
@@ -178,6 +181,8 @@ public class Turret implements Subsystem {
             double offset = Limelight.GetInstance().getDegHorizontalError();
             double turretAngle = getAngleDegrees();
             Turret.setAngle(turretAngle + offset);
+
+
         }
 
     }

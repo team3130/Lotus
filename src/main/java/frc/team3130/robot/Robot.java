@@ -1,5 +1,6 @@
 package frc.team3130.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -8,6 +9,8 @@ import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Climber.SkyWalker;
 import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
+
+import static frc.team3130.robot.OI.driverGamepad;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -114,6 +117,16 @@ public class Robot extends TimedRobot {
         Turret.outputToSmartDashboard();
         Hopper.outputToSmartDashboard();
         Limelight.GetInstance().outputToSmartDashboard();
+
+        if (isEnabled() && Turret.isOnTarget()) {
+            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        }
+        else{
+
+            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        }
     }
 
     public void writePeriodicOutputs() {
