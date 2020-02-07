@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         scheduler.run();
-        Limelight.GetInstance().updateData();
+        Limelight.updateData();
     }
 
     /**
@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         scheduler.run();
-        Limelight.GetInstance().updateData();
+        Limelight.updateData();
         writePeriodicOutputs();
     }
 
@@ -116,14 +116,13 @@ public class Robot extends TimedRobot {
         Chassis.outputToSmartDashboard();
         Turret.outputToSmartDashboard();
         Hopper.outputToSmartDashboard();
-        Limelight.GetInstance().outputToSmartDashboard();
+        Limelight.outputToSmartDashboard();
 
-        if (isEnabled() && Turret.isOnTarget()) {
+        if (isEnabled() && Turret.isOnTarget() && Turret.isTurretAiming()) {
             driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
             driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
         }
         else{
-
             driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
             driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
         }

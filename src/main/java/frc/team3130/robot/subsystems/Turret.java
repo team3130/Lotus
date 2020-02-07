@@ -157,16 +157,32 @@ public class Turret implements Subsystem {
                 && Math.abs(getAngleError()) < RobotMap.kTurretOnTargetTolerance);
     }
 
-    public static void toggleAimState(){
+    /**
+     * Flip the aiming state of the turret
+     */
+    public static void toggleAimState() {
         isAiming = !isAiming;
+        if (isAiming) {
+            Limelight.setLedState(true);
+        } else {
+            Limelight.setLedState(false);
+        }
     }
 
+    /**
+     * Whether the turret is in Limelight-assisted aiming mode
+     *
+     * @return
+     */
+    public static boolean isTurretAiming() {
+        return isAiming;
+    }
 
     public static void outputToSmartDashboard() {
-        SmartDashboard.putNumber("turret_angle", getAngleDegrees());
-        SmartDashboard.putNumber("turret_error", getAngleError());
-        SmartDashboard.putNumber("turret_setpoint", getAngleSetpoint());
-        SmartDashboard.putBoolean("turret_on_target", isOnTarget());
+        SmartDashboard.putNumber("Turret Angle", getAngleDegrees());
+        SmartDashboard.putNumber("Turret Setpoint", getAngleSetpoint());
+        SmartDashboard.putBoolean("Turret onTarget", isOnTarget());
+        SmartDashboard.putBoolean("Turret isAiming", isTurretAiming());
     }
 
     public static void configPIDF(WPI_TalonSRX _talon, double kP, double kI, double kD, double kF) {
@@ -177,14 +193,11 @@ public class Turret implements Subsystem {
     }
 
     public static synchronized void writePeriodicOutputs() {
-        if(isAiming){
-            double offset = Limelight.GetInstance().getDegHorizontalError();
+        if (isAiming && Limelight.hasTrack()) {
+            double offset = Limelight.getDegHorizontalError();
             double turretAngle = getAngleDegrees();
             Turret.setAngle(turretAngle + offset);
-
-
         }
-
     }
 
 }
