@@ -1,6 +1,9 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -9,7 +12,6 @@ import frc.team3130.robot.commands.Climber.SkyWalker;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
 import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
-import edu.wpi.first.wpilibj.Timer;
 
 import static frc.team3130.robot.OI.driverGamepad;
 

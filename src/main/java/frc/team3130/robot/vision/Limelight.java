@@ -22,7 +22,6 @@ public class Limelight {
     private static NetworkTableEntry ta; // area of contour bounding box
     private static NetworkTableEntry ts; // Skew or rotation (-90 degrees to 0 degrees)
 
-    private static boolean hasTarget;
     private static double x_targetOffsetAngle = 0.0;
     private static double y_targetOffsetAngle = 0.0;
     private static double area = 0.0;
@@ -36,8 +35,6 @@ public class Limelight {
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
 
-        hasTarget = false;
-
         setLedState(false); //Turn vision tracking off when robot boots up
     }
 
@@ -46,11 +43,6 @@ public class Limelight {
      */
     public static void updateData() {
         //Check if limelight sees a target
-        if (tv.getDouble(0.0) == 1.0) {
-            hasTarget = true;
-        } else {
-            hasTarget = false;
-        }
         x_targetOffsetAngle = -tx.getDouble(0.0);
         y_targetOffsetAngle = ty.getDouble(0.0);
         area = ta.getDouble(0.0);
@@ -63,7 +55,7 @@ public class Limelight {
      * @return true if Limelight has targets
      */
     public static boolean hasTrack() {
-        return hasTarget;
+        return tv.getDouble(0.0) == 1.0;
     }
 
     public static double getTargetRotationTan() {
@@ -151,6 +143,7 @@ public class Limelight {
         SmartDashboard.putNumber("Limelight X Angle", x_targetOffsetAngle);
         SmartDashboard.putNumber("Limelight Y Angle", y_targetOffsetAngle);
         SmartDashboard.putNumber("LimelightArea", area);
+        SmartDashboard.putBoolean("Limelight Has Target", hasTrack());
     }
 
 }
