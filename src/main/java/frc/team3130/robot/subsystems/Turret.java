@@ -211,7 +211,7 @@ public class Turret implements Subsystem {
     }
 
     public static synchronized void writePeriodicOutputs() {
-        if (isAiming && Limelight.hasTrack()) {
+        if (Limelight.GetInstance().hasTrack() && isAiming) {
             double offset = Limelight.getDegHorizontalError();
             double turretAngle = getAngleDegrees();
             Turret.setAngle(turretAngle + offset);
