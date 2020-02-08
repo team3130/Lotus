@@ -36,7 +36,6 @@ public class WheelOfFortune implements Subsystem {
     }
 
     private static double lastTimestamp;
-    private static Timer timer;
 
     private static boolean isChanged;
     private static boolean isCounted;
@@ -65,13 +64,10 @@ public class WheelOfFortune implements Subsystem {
         m_spinWheel.configFactoryDefault();
 
         isChanged = false;
-        timer = new Timer();
 
         m_wheelArm = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_WHEELARM);
 
         m_wheelArm.set(false);
-
-        timer.start();
 
     }
 

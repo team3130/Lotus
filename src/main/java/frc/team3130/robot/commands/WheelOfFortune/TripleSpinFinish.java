@@ -2,25 +2,17 @@ package frc.team3130.robot.commands.WheelOfFortune;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
 import frc.team3130.robot.subsystems.WheelOfFortune;
-import edu.wpi.first.wpilibj.Timer;
-
 
 import java.util.Set;
 
 public class TripleSpinFinish implements Command {
     private final Set<Subsystem> subsystems;
-    Timer timer = new Timer();
 
     private static int cyanCounter;
-    private static boolean isChanged;
-    private static boolean isCounted;
-    private static double lastTimestamp;
 
     public TripleSpinFinish() {
         this.subsystems = Set.of(WheelOfFortune.getInstance());
-        isChanged = false;
     }
 
     /**
@@ -28,16 +20,11 @@ public class TripleSpinFinish implements Command {
      */
     @Override
     public void initialize() {
-        timer.reset();
-        timer.start();
         cyanCounter = 0;
         WheelOfFortune.motorSpin(0.5);
 
         WheelOfFortune.deployWheel();
-
-        System.out.println("Initialized");
     }
-
 
 
     /**
@@ -49,7 +36,7 @@ public class TripleSpinFinish implements Command {
         //store returned color into local variable
         String color = WheelOfFortune.determineColor();
 
-        if (color.equals("Cyan")){
+        if (color.equals("Cyan")) {
             cyanCounter++;
         }
         System.out.println("lmao the cyanCounter is " + cyanCounter);
@@ -89,7 +76,6 @@ public class TripleSpinFinish implements Command {
     public void end(boolean interrupted) {
         WheelOfFortune.motorSpin(0.0);
         WheelOfFortune.retractWheel();
-        timer.stop();
     }
 
     /**

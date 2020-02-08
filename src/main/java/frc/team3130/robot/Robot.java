@@ -39,6 +39,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        timer = new Timer();
+        timer.reset();
+        timer.start();
+
         //Instantiate operator interface
         OI.GetInstance();
 
@@ -54,9 +58,7 @@ public class Robot extends TimedRobot {
         scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
 
-        timer = new Timer();
 
-        timer.start();
     }
 
     /**
@@ -133,17 +135,16 @@ public class Robot extends TimedRobot {
         Limelight.outputToSmartDashboard();
 
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
-            if (gettime == true){
+            if (gettime == true) {
                 lastTimestamp = Timer.getFPGATimestamp();
                 gettime = false;
             }
             driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
             driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-            if(Timer.getFPGATimestamp() - lastTimestamp > .3){
+            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
                 checkif = false;
             }
-        }
-        else{
+        } else {
             driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
             driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
             gettime = true;
