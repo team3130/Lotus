@@ -90,7 +90,7 @@ public class RobotMap {
     public static final int CAN_SKYWALKER = 106; //TODO: map this
     public static final int CLIMBER_ELEVATOR = 108; //TODO: map this because I just put a random number in
     public static final int CAN_CLIMBER1 = 109; //TODO: also map this because I put a random number in
-    public static final int CAN_CLIMBER2 = 110;
+    public static final int CAN_CLIMBER2 = 11;
 
     public static final int CAN_TURRETANGLE = 6;
     public static final int CAN_FLYWHEEL1 = 14;

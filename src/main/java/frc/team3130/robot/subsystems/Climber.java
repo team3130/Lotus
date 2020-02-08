@@ -1,6 +1,7 @@
 package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -11,7 +12,7 @@ public class Climber implements Subsystem {
     private static WPI_TalonSRX m_skyWalker;
     private static WPI_TalonSRX m_climberElevator;
     private static WPI_TalonSRX m_climberWinchMaster;
-    private static WPI_TalonSRX m_climberWinchSlave;
+    private static WPI_VictorSPX m_climberWinchSlave;
 
     private static Solenoid m_climberArm;
 
@@ -36,7 +37,7 @@ public class Climber implements Subsystem {
         m_skyWalker = new WPI_TalonSRX(RobotMap.CAN_SKYWALKER);
         m_climberElevator = new WPI_TalonSRX(RobotMap.CLIMBER_ELEVATOR);
         m_climberWinchMaster = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
-        m_climberWinchSlave = new WPI_TalonSRX(RobotMap.CAN_CLIMBER2);
+        m_climberWinchSlave = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
 
         m_climberArm = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM);
 

@@ -2,6 +2,7 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -13,9 +14,9 @@ public class Hopper implements Subsystem {
 // so that they are initialized before the constructor is called.
 
     //Create necessary objects
-    private static WPI_TalonSRX m_hopperMotorL;
-    private static WPI_TalonSRX m_hopperMotorR;
-    private static WPI_TalonSRX m_hopperMotorTop;
+    private static WPI_VictorSPX m_hopperMotorL;
+    private static WPI_VictorSPX m_hopperMotorR;
+    private static WPI_VictorSPX m_hopperMotorTop;
     private static DigitalInput m_beam;
 
     //Create and define all standard data types needed
@@ -42,9 +43,9 @@ public class Hopper implements Subsystem {
      */
     private Hopper() {
         m_beam = new DigitalInput(RobotMap.DIO_FEEDERBEAM);
-        m_hopperMotorL = new WPI_TalonSRX(RobotMap.CAN_HOPPERL);
-        m_hopperMotorR = new WPI_TalonSRX(RobotMap.CAN_HOPPERR);
-        m_hopperMotorTop = new WPI_TalonSRX(RobotMap.CAN_HOPPERTOP);
+        m_hopperMotorL = new WPI_VictorSPX(RobotMap.CAN_HOPPERL);
+        m_hopperMotorR = new WPI_VictorSPX(RobotMap.CAN_HOPPERR);
+        m_hopperMotorTop = new WPI_VictorSPX(RobotMap.CAN_HOPPERTOP);
 
         m_hopperMotorL.configFactoryDefault();
         m_hopperMotorR.configFactoryDefault();
