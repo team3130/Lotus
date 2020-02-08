@@ -35,7 +35,6 @@ public class Limelight {
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
 
-        setLedState(false); //Turn vision tracking off when robot boots up
     }
 
     /**

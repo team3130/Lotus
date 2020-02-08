@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
         scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
 
+        Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
     }
 
