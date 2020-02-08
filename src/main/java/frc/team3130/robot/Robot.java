@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
         scheduler.setDefaultCommand(Climber.getInstance(), new SkyWalker());
         scheduler.registerSubsystem(Intake.getInstance());
         scheduler.registerSubsystem(Hopper.getInstance());
-        scheduler.registerSubsystem(Turret.getInstance());
+        scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
 
         timer = new Timer();

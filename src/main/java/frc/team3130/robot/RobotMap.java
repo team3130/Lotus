@@ -50,6 +50,10 @@ public class RobotMap {
     public static double kLimelightCalibrationDist = 36.0; // Exact horizontal distance between target and lens FIXME
 
     //Turret
+    public static double kTurretManualDeadband = 0.09;
+    public static double kTurretManualMultipler = 0.15;
+
+
     public static double kTurretP = 1.4; //PID checked 2/6
     public static double kTurretI = 0;
     public static double kTurretD = 210.0;

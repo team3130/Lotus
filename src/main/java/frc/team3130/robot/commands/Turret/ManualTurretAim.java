@@ -2,24 +2,31 @@ package frc.team3130.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Turret;
-import frc.team3130.robot.vision.Limelight;
+import frc.team3130.robot.util.Util;
 
 import java.util.Set;
 
-public class ToggleTurretAim implements Command {
+import static frc.team3130.robot.OI.weaponsGamepad;
+
+public class ManualTurretAim implements Command {
     private final Set<Subsystem> subsystems;
 
-    public ToggleTurretAim() {
+    private boolean manualChanged = false;
+    private boolean lastState = false;
+
+    public ManualTurretAim() {
         this.subsystems = Set.of(Turret.getInstance());
     }
+
 
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
     public void initialize() {
-        Turret.toggleAimState();
+
     }
 
     /**
@@ -28,6 +35,21 @@ public class ToggleTurretAim implements Command {
      */
     @Override
     public void execute() {
+        double turnSpeed = -weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RJOYSTICKX); //returns value from -1 to 1 of R X axis of gamepad.
+
+        if (Math.abs(turnSpeed) >= RobotMap.kTurretManualDeadband){
+            if(!manualChanged){
+                lastState = Turret.isTurretAiming();
+            }
+            Turret.setAimState(false);
+            double moveSpeed = RobotMap.kTurretManualMultipler * Util.applyDeadband(turnSpeed, RobotMap.kTurretManualDeadband);
+            Turret.setOpenLoop(moveSpeed);
+            manualChanged = true;
+        } else if (manualChanged){
+            Turret.setOpenLoop(0);
+            Turret.setAimState(lastState);
+            manualChanged = false;
+        }
 
     }
 
@@ -47,7 +69,7 @@ public class ToggleTurretAim implements Command {
      */
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     /**
@@ -60,7 +82,6 @@ public class ToggleTurretAim implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
     }
 
     /**

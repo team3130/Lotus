@@ -119,6 +119,15 @@ public class Turret implements Subsystem {
     }
 
     /**
+     * Manually move the turret (and put it into vbus mode if it isn't already).
+     *
+     * @param speed Input range -1.0 to 1.0
+     */
+    public synchronized static void setOpenLoop(double speed) {
+        m_turret.set(ControlMode.PercentOutput, speed);
+    }
+
+    /**
      * Gets the absolute angle of the turret in degrees
      *
      * @return Angle of the turret in degrees
@@ -158,15 +167,24 @@ public class Turret implements Subsystem {
     }
 
     /**
-     * Flip the aiming state of the turret
+     * Set the aiming state of the turret
+     *
+     * @param aimState true if the turret should be in Limelight-assisted aiming mode
      */
-    public static void toggleAimState() {
-        isAiming = !isAiming;
+    public static void setAimState(boolean aimState) {
+        isAiming = aimState;
         if (isAiming) {
             Limelight.setLedState(true);
         } else {
             Limelight.setLedState(false);
         }
+    }
+
+    /**
+     * Flip the aiming state of the turret
+     */
+    public static void toggleAimState() {
+        setAimState(!isTurretAiming());
     }
 
     /**
