@@ -17,7 +17,7 @@ class Algebra {
      * @return 3x3 Matrix that can be used to rotate vectors around rvec
      */
     public static Matrix<N3,N3> Rodrigues(Matrix<N3,N1> rvec) {
-        if (rvec.getNumRows() != 1 || rvec.getNumCols() != 3) {
+        if (rvec.getNumRows() != 3 || rvec.getNumCols() != 1) {
             throw new IllegalArgumentException(
                 "Rotation vector must be 3-dimensional but nRows = "
                  + rvec.getNumRows() + ", nCols = " + rvec.getNumCols());
