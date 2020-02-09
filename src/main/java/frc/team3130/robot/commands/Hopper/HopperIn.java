@@ -32,7 +32,7 @@ public class HopperIn implements Command {
         if (Turret.getInstance().canShoot()) {
             Hopper.runHopperTop(0.6);
         } else if (Hopper.isEmpty()) {
-            Hopper.runHopperTop(0.45);
+            Hopper.runHopperTop(0.3);
         } else {
             Hopper.runHopperTop(0.0);
             // Tactile feedback to the driver's control maybe?

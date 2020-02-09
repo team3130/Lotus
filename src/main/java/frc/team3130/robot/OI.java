@@ -62,7 +62,7 @@ public class OI {
         testTestHSB.whenHeld(new TestHSB());
 
         testTurret.whenPressed(new ToggleTurretAim());
-//        testFlywheel.whenHeld(new SpinFlywheel());
+        testFlywheel.whenHeld(new SpinFlywheel());
     }
 }
 
