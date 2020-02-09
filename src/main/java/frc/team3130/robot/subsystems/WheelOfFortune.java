@@ -42,6 +42,11 @@ public class WheelOfFortune implements Subsystem {
 
     private static String actualColor = "No Color Yet";
 
+    private float deg = 0;
+    private float sat = 0;
+    private float brightness = 0;
+
+
     /**
      * The Singleton instance of this WheelOfFortune. External classes should
      * use the {@link #getInstance()} method to get the instance.
@@ -77,7 +82,7 @@ public class WheelOfFortune implements Subsystem {
 
     public static String determineColor() { //TODO: check with motor
 
-        String possibleColor = detectHSB();
+        String possibleColor = getInstance().detectHSB();
 
         if (!possibleColor.equals(actualColor)) {
             if (!isChanged) {
@@ -102,7 +107,7 @@ public class WheelOfFortune implements Subsystem {
      *
      * @return String name of the most likely color
      */
-    public static String detectHSB() {
+    public String detectHSB() {
         int r = m_colorSensor.getRed();
         int g = m_colorSensor.getGreen();
         int b = m_colorSensor.getBlue();
@@ -115,15 +120,6 @@ public class WheelOfFortune implements Subsystem {
         } else if (hsb[2] < 0.1) {
             return "Black";
         } else {
-            float deg = hsb[0] * 360;
-            float sat = hsb[1];
-            float brightness = hsb[2];
-
-            SmartDashboard.putNumber("Hue Degree", deg); //TODO: remove these
-            SmartDashboard.putNumber("Saturation", sat);
-            SmartDashboard.putNumber("Brightness", brightness);
-
-
             if ((deg >= 0 && deg < 80) || (deg > 310 && deg <= 360)) {
                 return "Red";
             } else if (deg >= 110 && deg < 140) {
@@ -160,6 +156,9 @@ public class WheelOfFortune implements Subsystem {
     }
 
     public static void outputToSmartDashboard() {
-        SmartDashboard.putString("HSB Detected color", detectHSB());
+        SmartDashboard.putString("HSB Detected color", getInstance().detectHSB());
+        SmartDashboard.putNumber("Hue Degree", getInstance().deg); //TODO: remove these
+        SmartDashboard.putNumber("Saturation", getInstance().sat);
+        SmartDashboard.putNumber("Brightness", getInstance().brightness);
     }
 }
