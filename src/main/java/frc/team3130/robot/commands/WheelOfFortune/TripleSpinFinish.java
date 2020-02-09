@@ -34,7 +34,7 @@ public class TripleSpinFinish implements Command {
     @Override
     public void execute() {
         //store returned color into local variable
-        String color = WheelOfFortune.determineColor();
+        String color = WheelOfFortune.getInstance().determineColor();
 
         if (color.equals("Cyan")) {
             cyanCounter++;

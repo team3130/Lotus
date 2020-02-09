@@ -1,8 +1,11 @@
 package frc.team3130.robot.subsystems;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -10,37 +13,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class WheelOfFortune implements Subsystem {
 
     //Create necessary objects
     private static ColorSensorV3 m_colorSensor;
     private static WPI_TalonSRX m_spinWheel;
-    private static Map<String, String> fieldToTargetColorMap = new HashMap<String, String>();
-
     private static Solenoid m_wheelArm;
 
+    private Map<String, String> fieldToTargetColorMap = new HashMap<String, String>();
 
-    //Create and define all standard data types needed
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+    private double lastTimestamp;
 
-    //This is the Map for converting the fieldColor into targetColor, which can be used to clear a lot of confusion while making the algorithm
-    static {
-        fieldToTargetColorMap.put("Cyan", "Red");
-        fieldToTargetColorMap.put("Green", "Yellow");
-        fieldToTargetColorMap.put("Red", "Cyan");
-        fieldToTargetColorMap.put("Yellow", "Green");
-    }
+    private boolean isChanged;
+    private boolean isCounted;
 
-    private static double lastTimestamp;
-
-    private static boolean isChanged;
-    private static boolean isCounted;
-
-    private static String actualColor = "No Color Yet";
+    private String actualColor = "No Color Yet";
 
     private float deg = 0;
     private float sat = 0;
@@ -63,7 +51,7 @@ public class WheelOfFortune implements Subsystem {
     }
 
     private WheelOfFortune() {
-        m_colorSensor = new ColorSensorV3(i2cPort);
+        m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
         m_spinWheel = new WPI_TalonSRX(RobotMap.CAN_WHEELOFFORTUNE);
         m_spinWheel.configFactoryDefault();
@@ -74,13 +62,18 @@ public class WheelOfFortune implements Subsystem {
 
         m_wheelArm.set(false);
 
+        //This is the Map for converting the fieldColor into targetColor, which can be used to clear a lot of confusion while making the algorithm
+        fieldToTargetColorMap.put("Cyan", "Red");
+        fieldToTargetColorMap.put("Green", "Yellow");
+        fieldToTargetColorMap.put("Red", "Cyan");
+        fieldToTargetColorMap.put("Yellow", "Green");
     }
 
     public static String getTargetColor(String sourceColor) {
-        return fieldToTargetColorMap.get(sourceColor);
+        return getInstance().fieldToTargetColorMap.get(sourceColor);
     }
 
-    public static String determineColor() { //TODO: check with motor
+    public String determineColor() { //TODO: check with motor
 
         String possibleColor = getInstance().detectHSB();
 
@@ -113,23 +106,25 @@ public class WheelOfFortune implements Subsystem {
         int b = m_colorSensor.getBlue();
 
         float hsb[] = java.awt.Color.RGBtoHSB(r, g, b, null);
-
+        deg = hsb[0] * 360;
+        sat = hsb[1];
+        brightness = hsb[2];
         //Potential algorithm for rgb to hsb
-        if (hsb[1] < 0.1 && hsb[2] > 0.9) {
+        if (sat < 0.3 && brightness > 0.9) {
             return "White";
-        } else if (hsb[2] < 0.1) {
+        } else if (brightness < 0.02) {
             return "Black";
         } else {
-            if ((deg >= 0 && deg < 80) || (deg > 310 && deg <= 360)) {
+            if (deg < 60 || deg > 310) {
                 return "Red";
-            } else if (deg >= 110 && deg < 140) {
-                return "Green";
-            } else if (deg >= 135 && deg < 250) {
-                return "Cyan";
-            } else if (deg >= 83 && deg < 100) {
+            } else if (deg < 100) {
                 return "Yellow";
+            } else if (deg < 130) {
+                return "Green";
+            } else if (deg < 250) {
+                return "Cyan";
             } else {
-                System.out.println("bruh what color is this");
+                //System.out.println("bruh what color is this");
                 return "Bruh";
             }
         }

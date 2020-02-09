@@ -45,7 +45,7 @@ public class ColorAlignment implements Command {
      */
     @Override
     public void execute() {
-        String color = WheelOfFortune.determineColor();
+        String color = WheelOfFortune.getInstance().determineColor();
 
         if (color.equals(targetColor)){
             WheelOfFortune.motorSpin(0);
@@ -123,7 +123,7 @@ public class ColorAlignment implements Command {
      */
     @Override
     public boolean isFinished() {
-        String color = WheelOfFortune.determineColor();
+        String color = WheelOfFortune.getInstance().determineColor();
         //Code should turn off now
         if (color.equals(targetColor)) {
             WheelOfFortune.motorSpin(0);
