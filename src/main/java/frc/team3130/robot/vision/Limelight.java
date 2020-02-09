@@ -4,6 +4,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpiutil.math.MatBuilder;
+import edu.wpi.first.wpiutil.math.Matrix;
+import edu.wpi.first.wpiutil.math.Nat;
+import edu.wpi.first.wpiutil.math.VecBuilder;
+import edu.wpi.first.wpiutil.math.numbers.N1;
+import edu.wpi.first.wpiutil.math.numbers.N3;
 import frc.team3130.robot.RobotMap;
 
 
@@ -27,7 +33,10 @@ public class Limelight {
     private static double area = 0.0;
     private static double skew = 0.0;
 
-    public Limelight() {
+    private static Matrix<N3,N3> rotation;      // Own rotation
+    private static Matrix<N3,N1> translation;   // Own translation
+
+    protected Limelight() {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         tv = table.getEntry("tv");
         tx = table.getEntry("tx");
@@ -35,6 +44,17 @@ public class Limelight {
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
 
+        Matrix<N3,N1> rVec = new VecBuilder<>(Nat.N3()).fill(
+            Math.toRadians(RobotMap.kLimeLightPitch),
+            Math.toRadians(RobotMap.kLimeLightYaw),
+            Math.toRadians(RobotMap.kLimeLightRoll)
+        );
+        rotation = Algebra.Rodrigues(rVec);
+        translation = new VecBuilder<>(Nat.N3()).fill(
+            RobotMap.kLimeLightOffset,
+            RobotMap.kLimelightHeight,
+            -RobotMap.kLimeLightLength
+        );
     }
 
     /**
@@ -66,7 +86,7 @@ public class Limelight {
         // TAN(new) = COS(ty)*TAN(skew)/SIN(cam+ty)
         double tx = Math.toRadians(x_targetOffsetAngle);
         double ty = Math.toRadians(y_targetOffsetAngle);
-        double cam = Math.toRadians(RobotMap.kLimelightTiltAngle);
+        double cam = Math.toRadians(RobotMap.kLimeLightPitch);
         double sinTilt = Math.sin(cam + ty);
         double tanRot = Math.cos(ty) * Math.tan(realSkew) / sinTilt + 10.0 * (1.0 - Math.cos(tx)) * sinTilt;
         System.out.format("Real skew:%8.3f, rot:%8.3f ty:%8.3f %n", realSkew, tanRot, ty);
@@ -90,7 +110,7 @@ public class Limelight {
     public static double getDistanceToTarget() {
         if (area == 0.0) return 0.0; // we have no target to track, return 0.0
 
-        double angle = y_targetOffsetAngle + RobotMap.kLimelightTiltAngle;
+        double angle = y_targetOffsetAngle + RobotMap.kLimeLightPitch;
         double hLimelight = RobotMap.kLimelightHeight;
         double hTarget = RobotMap.VISIONTARGETHEIGHT;
 
@@ -105,7 +125,7 @@ public class Limelight {
         updateData();
 
         double height = RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight;
-        double distance = RobotMap.kLimelightCalibrationDist;
+        double distance = RobotMap.kLimeLightCalibrationDist;
 
         double tiltAngle = Math.toDegrees(Math.atan2(height, distance)) - y_targetOffsetAngle;
         System.out.format("Limelight Tilt angle: %f %n", tiltAngle);
