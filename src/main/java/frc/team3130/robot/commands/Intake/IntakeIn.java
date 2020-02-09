@@ -59,7 +59,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Intake.runIntake(0.0);
+        Intake.runIntake(0.3);
     }
 
     /**

@@ -72,7 +72,13 @@ public class Robot extends TimedRobot {
      */
 
     @Override
+    public void teleopInit() {
+
+    }
+
+    @Override
     public void disabledInit() {
+        Intake.retakeIntake();
     }
 
     @Override
@@ -119,6 +125,10 @@ public class Robot extends TimedRobot {
         scheduler.run();
         Limelight.updateData();
         writePeriodicOutputs();
+
+
+
+
     }
 
     /**
@@ -153,6 +163,8 @@ public class Robot extends TimedRobot {
                 checkif = true;
             }
         }
+
+
     }
 
     public void writePeriodicOutputs() {

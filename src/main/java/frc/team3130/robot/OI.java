@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
+import frc.team3130.robot.commands.Intake.DeployIntake;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
+import frc.team3130.robot.commands.Intake.RetakeIntake;
 import frc.team3130.robot.commands.Turret.SpinFlywheel;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
@@ -48,6 +50,8 @@ public class OI {
     private static JoystickTrigger hopperIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER);
     private static JoystickButton testTestHSB = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
+    private static JoystickButton deployIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
+    private static JoystickButton retakeIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_WINDOW);
 
     // Binding the buttons and triggers that are defined above to respective commands
     private OI() {
@@ -63,6 +67,9 @@ public class OI {
 
         testTurret.whenPressed(new ToggleTurretAim());
         testFlywheel.whenHeld(new SpinFlywheel());
+
+        deployIntake.whenPressed(new DeployIntake());
+        retakeIntake.whenPressed(new RetakeIntake());
     }
 }
 

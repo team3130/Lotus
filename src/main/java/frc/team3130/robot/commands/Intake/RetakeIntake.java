@@ -1,17 +1,17 @@
-package frc.team3130.robot.commands.Hopper;
-
-import java.util.Set;
+package frc.team3130.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Hopper;
-import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.subsystems.ExampleSubsystem;
+import frc.team3130.robot.subsystems.Intake;
 
-public class HopperIn implements Command {
+import java.util.Set;
+
+public class RetakeIntake implements Command {
     private final Set<Subsystem> subsystems;
 
-    public HopperIn() {
-        this.subsystems = Set.of(Hopper.getInstance());
+    public RetakeIntake() {
+        this.subsystems = Set.of(ExampleSubsystem.getInstance());
     }
 
     /**
@@ -19,8 +19,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void initialize() {
-        Hopper.runHopperLeft(0.33);
-        Hopper.runHopperRight(0.33);
+        Intake.retakeIntake();
     }
 
     /**
@@ -29,14 +28,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
-        if (Turret.getInstance().canShoot()) {
-            Hopper.runHopperTop(0.5);
-        } else if (Hopper.isEmpty()) {
-            Hopper.runHopperTop(0.3);
-        } else {
-            Hopper.runHopperTop(0.0);
-            // Tactile feedback to the driver's control maybe?
-        }
+
     }
 
     /**
@@ -57,8 +49,6 @@ public class HopperIn implements Command {
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
-
-
     }
 
     /**
@@ -71,9 +61,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);
+
     }
 
     /**

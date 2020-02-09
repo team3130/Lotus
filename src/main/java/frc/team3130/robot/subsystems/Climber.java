@@ -35,7 +35,6 @@ public class Climber implements Subsystem {
 
     private Climber() {
         m_skyWalker = new WPI_TalonSRX(RobotMap.CAN_SKYWALKER);
-        m_climberElevator = new WPI_TalonSRX(RobotMap.CLIMBER_ELEVATOR);
         m_climberWinchMaster = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
         m_climberWinchSlave = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
 
@@ -46,9 +45,6 @@ public class Climber implements Subsystem {
 
     public static void motorSpin(double spin) {
         m_skyWalker.set(spin);
-    }
-    public static void climbPole(double spin) {
-        m_climberElevator.set(spin);
     }
     public static void flier(double spin) {
         m_climberWinchMaster.set(spin);

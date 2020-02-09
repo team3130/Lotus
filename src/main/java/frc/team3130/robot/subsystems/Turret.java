@@ -100,7 +100,7 @@ public class Turret implements Subsystem {
     public static boolean canShoot() {
         // Check the velocity and return true when it is within the
         // velocity target. Bogus for now. Change the comment later. TBD
-        return (Math.abs(m_flywheelMaster.getSelectedSensorVelocity()) > 1);
+        return true;
     }
 
     // Turret Angle
