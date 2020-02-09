@@ -18,7 +18,6 @@ public class ClimberPull implements Command {
      */
     @Override
     public void initialize() {
-        Climber.climbPole(- 0.6);
         Climber.flier(0.6);
     }
 
@@ -60,7 +59,6 @@ public class ClimberPull implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.climbPole(0);
         Climber.flier(0);
     }
 

@@ -19,7 +19,6 @@ public class DeployClimber implements Command {
     @Override
     public void initialize() {
         Climber.deployClimb();
-        Climber.climbPole(0.6);
     }
 
     /**
@@ -61,7 +60,6 @@ public class DeployClimber implements Command {
     @Override
     public void end(boolean interrupted) {
         Climber.retractClimb();
-        Climber.climbPole(0);
     }
 
     /**
