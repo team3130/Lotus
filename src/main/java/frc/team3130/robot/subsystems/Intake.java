@@ -2,7 +2,6 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -38,7 +37,7 @@ public class Intake implements Subsystem {
         m_intakeMotor.configFactoryDefault();
         m_intakeMotor.setNeutralMode(NeutralMode.Coast);
 
-        m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNW_INTAKE);
+        m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
     }
 
     public static void runIntake(double speed){
