@@ -13,6 +13,8 @@ public class RobotMap {
      */
 
     //Chassis
+    public static double kChassisMaxVoltage = 12.0;
+
     public static double kChassisWidth = 23.0; //FIXME
     public static double kChassisLengthBumpers = 39.0; //FIXME
     public static double kLWheelDiameter = 6.0; //Center wheel
@@ -57,7 +59,6 @@ public class RobotMap {
     public static double kTurretManualDeadband = 0.09;
     public static double kTurretManualMultipler = 0.15;
 
-
     public static double kTurretP = 1.4; //PID checked 2/6
     public static double kTurretI = 0;
     public static double kTurretD = 210.0;
@@ -68,12 +69,17 @@ public class RobotMap {
 
 
     //Flywheel
+    public static double kFlywheelMaxVoltage = 12.0;
+
     public static double kFlywheelP = 1.0; //FIXME
     public static double kFlywheelI = 0.0;
     public static double kFlywheelD = 0.0;
     public static double kFlywheelF = 0.0;
 
     public static double kFlywheelTicksPerRevolution = 1.0; //FIXME
+
+    //Hopper
+    public static double kHopperMaxVoltage = 12.0;
 
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;

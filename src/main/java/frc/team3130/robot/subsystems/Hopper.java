@@ -54,6 +54,9 @@ public class Hopper implements Subsystem {
         m_hopperMotorR.setNeutralMode(NeutralMode.Brake);
         m_hopperMotorTop.setNeutralMode(NeutralMode.Brake);
 
+        m_hopperMotorTop.configVoltageCompSaturation(RobotMap.kHopperMaxVoltage);
+        m_hopperMotorTop.enableVoltageCompensation(true);
+
         m_hopperMotorTop.setInverted(true);
         m_hopperMotorL.setInverted(false);
     }

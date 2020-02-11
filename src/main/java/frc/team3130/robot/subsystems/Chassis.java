@@ -66,6 +66,11 @@ public class Chassis implements Subsystem {
 
         m_shifter.set(false);
 
+        m_rightMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
+        m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
+        m_rightMotorFront.enableVoltageCompensation(true);
+        m_leftMotorFront.enableVoltageCompensation(true);
+
         m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
         m_rightMotorRear.setInverted(true);

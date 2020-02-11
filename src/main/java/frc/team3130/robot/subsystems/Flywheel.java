@@ -54,17 +54,14 @@ public class Flywheel implements Subsystem {
         m_flywheelMaster.setNeutralMode(NeutralMode.Coast);
         m_flywheelSlave.setNeutralMode(NeutralMode.Coast);
 
-        m_flywheelMaster.set(ControlMode.PercentOutput, 0.0); //Reset flywheel master talon to simple percent output mode
-
         // configure Talons
         m_flywheelMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         m_flywheelSlave.follow(m_flywheelMaster);
 
-
         m_flywheelSlave.setInverted(true);
 
+        m_flywheelMaster.configVoltageCompSaturation(RobotMap.kFlywheelMaxVoltage);
         m_flywheelMaster.enableVoltageCompensation(true);
-        m_flywheelSlave.enableVoltageCompensation(true);
 
         configPIDF(m_flywheelMaster,
                 RobotMap.kFlywheelP,
@@ -74,6 +71,9 @@ public class Flywheel implements Subsystem {
 
         m_flywheelMaster.clearStickyFaults();
         m_flywheelSlave.clearStickyFaults();
+
+        m_flywheelMaster.set(ControlMode.PercentOutput, 0.0); //Reset flywheel master talon to simple percent output mode
+
     }
 
 
