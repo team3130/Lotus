@@ -44,13 +44,13 @@ public class Limelight {
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
 
-        Matrix<N3,N1> rVec = new VecBuilder<>(Nat.N3()).fill(
+        Matrix<N3,N1> rVec = Algebra.buildVector(
             Math.toRadians(RobotMap.kLimeLightPitch),
             Math.toRadians(RobotMap.kLimeLightYaw),
             Math.toRadians(RobotMap.kLimeLightRoll)
         );
         rotation = Algebra.Rodrigues(rVec);
-        translation = new VecBuilder<>(Nat.N3()).fill(
+        translation = Algebra.buildVector(
             RobotMap.kLimeLightOffset,
             RobotMap.kLimelightHeight,
             -RobotMap.kLimeLightLength
@@ -68,6 +68,26 @@ public class Limelight {
         skew = ts.getDouble(0.0);
     }
 
+    public Matrix<N3,N1> calcPosition(double ax, double ay) {
+        // Convert degrees from the vision to coordinates of unknown units
+        double ux = Math.tan(Math.toRadians(ax));
+        double uy = Math.tan(Math.toRadians(ay));
+
+        // Build a "unit" vector in 3-D and rotate it from camera's
+        // coordinates to real (robot's (turret's)) coordinates
+        Matrix<N3,N1> v0 = rotation.times(Algebra.buildVector(ux, uy, 1));
+
+        // Scaling ratio based on the known height of the vision target
+        double c = RobotMap.VISIONTARGETHEIGHT / v0.get(1, 0);
+
+        // Find the real vector from camera to target
+        Matrix<N3,N1> v = v0.times(c);
+
+        // Add the offset of the camera from the turret's origin
+        Matrix<N3,N1> a = translation.plus(v);
+        // That's the droid we're looking for
+        return a;
+    }
     /**
      * If the Limelight has a target track
      *

@@ -5,10 +5,23 @@ import org.ejml.simple.SimpleMatrix;
 import edu.wpi.first.wpiutil.math.MatBuilder;
 import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.Nat;
+import edu.wpi.first.wpiutil.math.VecBuilder;
 import edu.wpi.first.wpiutil.math.numbers.N1;
 import edu.wpi.first.wpiutil.math.numbers.N3;
 
 class Algebra {
+
+    /**
+     * Shortcut helper to build 3-D vectors from three values.
+     * @param x
+     * @param y
+     * @param z
+     * @return 3x1 Matrix witch is the vector
+     */
+    public static Matrix<N3,N1> buildVector(double x, double y, double z) {
+        return new VecBuilder<>(Nat.N3()).fill(x,y,z);
+    }
+
     /**
      * Calculate the rotation matrix based on a rotation vector
      * using the Rodrigues formula
