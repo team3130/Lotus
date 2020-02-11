@@ -18,6 +18,15 @@ public class ExampleSubsystem implements Subsystem {
     private final static ExampleSubsystem INSTANCE = new ExampleSubsystem();
 
     /**
+     * Returns the Singleton instance of this ExampleSubsystem. This static method
+     * should be used -- {@code ExampleSubsystem.getInstance();} -- by external
+     * classes, rather than the constructor to get the instance of this class.
+     */
+    public static ExampleSubsystem getInstance() {
+        return INSTANCE;
+    }
+
+    /**
      * Creates a new instance of this ExampleSubsystem.
      * This constructor is private since this class is a Singleton. External classes
      * should use the {@link #getInstance()} method to get the instance.
@@ -25,15 +34,6 @@ public class ExampleSubsystem implements Subsystem {
     private ExampleSubsystem() {
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
         //       in the constructor or in the robot coordination class, such as RobotContainer.
-    }
-
-    /**
-     * Returns the Singleton instance of this ExampleSubsystem. This static method
-     * should be used -- {@code ExampleSubsystem.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static ExampleSubsystem getInstance() {
-        return INSTANCE;
     }
 
 }
