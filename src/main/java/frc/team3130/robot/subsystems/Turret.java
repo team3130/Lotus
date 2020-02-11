@@ -3,7 +3,6 @@ package frc.team3130.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -14,8 +13,6 @@ public class Turret implements Subsystem {
 
     //Create necessary objects
     private static WPI_TalonSRX m_turret;
-    private static WPI_TalonFX m_flywheelMaster;
-    private static WPI_TalonFX m_flywheelSlave;
 
     //Create and define all standard data types needed
     private static boolean isAiming;
@@ -38,38 +35,24 @@ public class Turret implements Subsystem {
     private Turret() {
         // Map CAN devices
         m_turret = new WPI_TalonSRX(RobotMap.CAN_TURRETANGLE);
-        m_flywheelMaster = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL1);
-        m_flywheelSlave = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL2);
 
         // Reset Talons
         m_turret.configFactoryDefault();
-        m_flywheelMaster.configFactoryDefault();
-        m_flywheelSlave.configFactoryDefault();
 
         m_turret.overrideLimitSwitchesEnable(false);
         m_turret.overrideSoftLimitsEnable(false);
-        m_flywheelMaster.overrideLimitSwitchesEnable(false);
-        m_flywheelMaster.overrideSoftLimitsEnable(false);
-        m_flywheelSlave.overrideLimitSwitchesEnable(false);
-        m_flywheelSlave.overrideSoftLimitsEnable(false);
 
         m_turret.setNeutralMode(NeutralMode.Brake);
-        m_flywheelMaster.setNeutralMode(NeutralMode.Coast);
-        m_flywheelSlave.setNeutralMode(NeutralMode.Coast);
 
         m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
 
         // configure Talons
         m_turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-        m_flywheelSlave.follow(m_flywheelMaster);
 
         m_turret.setInverted(true);
         m_turret.setSensorPhase(true);
 
-        m_flywheelSlave.setInverted(true);
-
         m_turret.enableVoltageCompensation(true);
-        m_flywheelMaster.enableVoltageCompensation(true);
 
         configPIDF(m_turret,
                 RobotMap.kTurretP,
@@ -78,32 +61,9 @@ public class Turret implements Subsystem {
                 0.0);
 
         m_turret.clearStickyFaults();
-        m_flywheelMaster.clearStickyFaults();
-        m_flywheelSlave.clearStickyFaults();
-
         isAiming = false;
 
     }
-
-    /**
-     * Spin the turret flywheel at a raw percent VBus value
-     *
-     * @param spin percent of max voltage output
-     */
-    public static void spinFlywheel(double spin) {
-        m_flywheelMaster.set(ControlMode.PercentOutput, spin);
-    }
-
-    /**
-     * Get the status of the flywheel if it's ready to shoot
-     */
-    public static boolean canShoot() {
-        // Check the velocity and return true when it is within the
-        // velocity target. Bogus for now. Change the comment later. TBD
-        return true;
-    }
-
-    // Turret Angle
 
     /**
      * Set the desired angle of the turret (and put it into position control mode if it isn't already).
@@ -208,8 +168,8 @@ public class Turret implements Subsystem {
     }
 
     public static synchronized void writePeriodicOutputs() {
-        if (isAiming && Limelight.hasTrack()) {
-            double offset = Limelight.getDegHorizontalError();
+        if (isAiming && Limelight.GetInstance().hasTrack()) {
+            double offset = Limelight.GetInstance().getDegHorizontalError();
             double turretAngle = getAngleDegrees();
             Turret.setAngle(turretAngle + offset);
         }

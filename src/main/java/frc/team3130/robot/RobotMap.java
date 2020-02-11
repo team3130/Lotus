@@ -66,6 +66,15 @@ public class RobotMap {
     public static double kTurretTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // checked 1/31
     public static double kTurretOnTargetTolerance = 0.5;
 
+
+    //Flywheel
+    public static double kFlywheelP = 1.0; //FIXME
+    public static double kFlywheelI = 0.0;
+    public static double kFlywheelD = 0.0;
+    public static double kFlywheelF = 0.0;
+
+    public static double kFlywheelTicksPerRevolution = 1.0; //FIXME
+
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;
 

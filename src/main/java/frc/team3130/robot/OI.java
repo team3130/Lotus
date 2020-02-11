@@ -2,13 +2,13 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team3130.robot.commands.Flywheel.SpinFlywheel;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.DeployIntake;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.RetakeIntake;
-import frc.team3130.robot.commands.Turret.SpinFlywheel;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
 import frc.team3130.robot.commands.WheelOfFortune.TestHSB;
