@@ -37,7 +37,7 @@ public class Intake implements Subsystem {
         m_intakeMotor.configFactoryDefault();
         m_intakeMotor.setNeutralMode(NeutralMode.Coast);
 
-        m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
+        m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNW_INTAKE);
     }
 
     public static void runIntake(double speed){
