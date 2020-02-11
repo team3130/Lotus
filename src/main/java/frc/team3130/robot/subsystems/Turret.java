@@ -176,9 +176,9 @@ public class Turret implements Subsystem {
     public static void setAimState(boolean aimState) {
         isAiming = aimState;
         if (isAiming) {
-            Limelight.setLedState(true);
+            Limelight.GetInstance().setLedState(true);
         } else {
-            Limelight.setLedState(false);
+            Limelight.GetInstance().setLedState(false);
         }
     }
 
@@ -213,8 +213,8 @@ public class Turret implements Subsystem {
     }
 
     public static synchronized void writePeriodicOutputs() {
-        if (isAiming && Limelight.hasTrack()) {
-            double offset = Limelight.getDegHorizontalError();
+        if (isAiming && Limelight.GetInstance().hasTrack()) {
+            double offset = Limelight.GetInstance().getDegHorizontalError();
             double turretAngle = getAngleDegrees();
             Turret.setAngle(turretAngle + offset);
         }

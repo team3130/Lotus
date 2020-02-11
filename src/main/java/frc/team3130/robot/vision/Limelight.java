@@ -4,10 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpiutil.math.MatBuilder;
 import edu.wpi.first.wpiutil.math.Matrix;
-import edu.wpi.first.wpiutil.math.Nat;
-import edu.wpi.first.wpiutil.math.VecBuilder;
 import edu.wpi.first.wpiutil.math.numbers.N1;
 import edu.wpi.first.wpiutil.math.numbers.N3;
 import frc.team3130.robot.RobotMap;
@@ -22,19 +19,19 @@ public class Limelight {
         return m_pInstance;
     }
 
-    private static NetworkTableEntry tv; // Whether the limelight has any valid targets (0 or 1)
-    private static NetworkTableEntry tx; // x angle offset from crosshair, range of -27 to 27
-    private static NetworkTableEntry ty; // y angle offset from crosshair, range of -20.5 to 20.5
-    private static NetworkTableEntry ta; // area of contour bounding box
-    private static NetworkTableEntry ts; // Skew or rotation (-90 degrees to 0 degrees)
+    private NetworkTableEntry tv; // Whether the limelight has any valid targets (0 or 1)
+    private NetworkTableEntry tx; // x angle offset from crosshair, range of -27 to 27
+    private NetworkTableEntry ty; // y angle offset from crosshair, range of -20.5 to 20.5
+    private NetworkTableEntry ta; // area of contour bounding box
+    private NetworkTableEntry ts; // Skew or rotation (-90 degrees to 0 degrees)
 
-    private static double x_targetOffsetAngle = 0.0;
-    private static double y_targetOffsetAngle = 0.0;
-    private static double area = 0.0;
-    private static double skew = 0.0;
+    private double x_targetOffsetAngle = 0.0;
+    private double y_targetOffsetAngle = 0.0;
+    private double area = 0.0;
+    private double skew = 0.0;
 
-    private static Matrix<N3,N3> rotation;      // Own rotation
-    private static Matrix<N3,N1> translation;   // Own translation
+    private Matrix<N3,N3> rotation;      // Own rotation
+    private Matrix<N3,N1> translation;   // Own translation
 
     protected Limelight() {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -60,7 +57,7 @@ public class Limelight {
     /**
      * Read data from the Limelight and update local values
      */
-    public static void updateData() {
+    public void updateData() {
         //Check if limelight sees a target
         x_targetOffsetAngle = -tx.getDouble(0.0);
         y_targetOffsetAngle = ty.getDouble(0.0);
@@ -93,11 +90,11 @@ public class Limelight {
      *
      * @return true if Limelight has targets
      */
-    public static boolean hasTrack() {
+    public boolean hasTrack() {
         return tv.getDouble(0.0) == 1.0;
     }
 
-    public static double getTargetRotationTan() {
+    public double getTargetRotationTan() {
         double realSkew = Math.toRadians(skew < -45 ? skew + 90 : skew);
         // Very approximate adjustment for the camera tilt, should work for small angles
         // Rationale: the best view is straight from below which is 90 degree, then no adjustment would be needed
@@ -118,7 +115,7 @@ public class Limelight {
      *
      * @return angle in degrees
      */
-    public static double getDegHorizontalError() {
+    public double getDegHorizontalError() {
         return x_targetOffsetAngle;
     }
 
@@ -127,7 +124,7 @@ public class Limelight {
      *
      * @return distance in inches
      */
-    public static double getDistanceToTarget() {
+    public double getDistanceToTarget() {
         if (area == 0.0) return 0.0; // we have no target to track, return 0.0
 
         double angle = y_targetOffsetAngle + RobotMap.kLimeLightPitch;
@@ -141,7 +138,7 @@ public class Limelight {
     /**
      * Calibrate the tilt angle of the Limelight
      */
-    public static void calibrate() {
+    public void calibrate() {
         updateData();
 
         double height = RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight;
@@ -156,7 +153,7 @@ public class Limelight {
      *
      * @param isOn true means on
      */
-    public static void setLedState(boolean isOn) {
+    public void setLedState(boolean isOn) {
         if (isOn) {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
         } else {
@@ -169,7 +166,7 @@ public class Limelight {
      *
      * @param pipelineNumber the id of the pipeline
      */
-    public static void setPipeline(double pipelineNumber) {
+    public void setPipeline(double pipelineNumber) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipelineNumber);
         /*
         How to set a parameter value:
@@ -179,10 +176,11 @@ public class Limelight {
 
 
     public static void outputToSmartDashboard() {
-        SmartDashboard.putNumber("Limelight X Angle", x_targetOffsetAngle);
-        SmartDashboard.putNumber("Limelight Y Angle", y_targetOffsetAngle);
-        SmartDashboard.putNumber("LimelightArea", area);
-        SmartDashboard.putBoolean("Limelight Has Target", hasTrack());
+        Limelight o = GetInstance();
+        SmartDashboard.putNumber("Limelight X Angle", o.x_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Y Angle", o.y_targetOffsetAngle);
+        SmartDashboard.putNumber("LimelightArea", o.area);
+        SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
     }
 
 }
