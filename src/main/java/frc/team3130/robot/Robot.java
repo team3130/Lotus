@@ -79,6 +79,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         Intake.retakeIntake();
+        Climber.retractClimb();
     }
 
     @Override
