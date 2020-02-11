@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -13,6 +14,7 @@ public class Turret implements Subsystem {
 
     //Create necessary objects
     private static WPI_TalonSRX m_turret;
+
 
     //Create and define all standard data types needed
     private static boolean isAiming;
@@ -53,6 +55,9 @@ public class Turret implements Subsystem {
         m_turret.setSensorPhase(true);
 
         m_turret.enableVoltageCompensation(true);
+
+
+
 
         configPIDF(m_turret,
                 RobotMap.kTurretP,
@@ -131,9 +136,9 @@ public class Turret implements Subsystem {
     public static void setAimState(boolean aimState) {
         isAiming = aimState;
         if (isAiming) {
-            Limelight.setLedState(true);
+            Limelight.GetInstance().setLedState(true);
         } else {
-            Limelight.setLedState(false);
+            Limelight.GetInstance().setLedState(false);
         }
     }
 

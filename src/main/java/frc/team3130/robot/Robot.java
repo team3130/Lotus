@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         Intake.retakeIntake();
+        Climber.retractClimb();
     }
 
     @Override
@@ -90,7 +91,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         outputToSmartDashboard();
-
+        Limelight.GetInstance().updateData();
     }
 
     /**
@@ -115,7 +116,6 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         scheduler.run();
-        Limelight.updateData();
     }
 
     /**
@@ -124,12 +124,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         scheduler.run();
-        Limelight.updateData();
         writePeriodicOutputs();
-
-
-
-
     }
 
     /**
