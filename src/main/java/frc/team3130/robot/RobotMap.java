@@ -111,7 +111,9 @@ public class RobotMap {
     public static final int PNM_SHIFT = 0;
     public static final int PNM_CLIMBERARM = 1;
     public static final int PNM_WHEELARM = 2;
-    public static final int PNW_INTAKE = 4;
+    public static final int PNM_INTAKE = 3;
+    public static final int PNM_HOODPISTONS = 4;
+
 
 
     /**
