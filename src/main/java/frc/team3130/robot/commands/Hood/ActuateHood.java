@@ -2,6 +2,7 @@ package frc.team3130.robot.commands.Hood;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Turret;
 import frc.team3130.robot.subsystems.WheelOfFortune;
 
@@ -19,7 +20,8 @@ public class ActuateHood implements Command {
      */
     @Override
     public void initialize() {
-        if (WheelOfFortune.)
+        Hood.getInstance().toggleHoodPistons();
+
     }
 
     /**

@@ -34,6 +34,15 @@ public class Hood implements Subsystem {
         m_hoodPistons.set(false);
     }
 
+    public void toggleHoodPistons(){
+        if (m_hoodPistons.get() == false){
+            m_hoodPistons.set(true);
+        } else {
+            m_hoodPistons.set(false);
+        }
+    }
+
+
     /**
      * Returns the Singleton instance of this ExampleSubsystem. This static method
      * should be used -- {@code ExampleSubsystem.getInstance();} -- by external
