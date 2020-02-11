@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -16,6 +17,7 @@ public class Turret implements Subsystem {
     private static WPI_TalonSRX m_turret;
     private static WPI_TalonFX m_flywheelMaster;
     private static WPI_TalonFX m_flywheelSlave;
+
 
     //Create and define all standard data types needed
     private static boolean isAiming;
@@ -70,6 +72,9 @@ public class Turret implements Subsystem {
 
         m_turret.enableVoltageCompensation(true);
         m_flywheelMaster.enableVoltageCompensation(true);
+
+
+
 
         configPIDF(m_turret,
                 RobotMap.kTurretP,

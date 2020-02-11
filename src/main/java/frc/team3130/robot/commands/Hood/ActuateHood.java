@@ -1,16 +1,18 @@
-package frc.team3130.robot.commands.Intake;
+package frc.team3130.robot.commands.Hood;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Intake;
+import frc.team3130.robot.subsystems.Hood;
+import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
 
-public class IntakeIn implements Command {
+public class ActuateHood implements Command {
     private final Set<Subsystem> subsystems;
 
-    public IntakeIn() {
-        this.subsystems = Set.of(Intake.getInstance());
+    public ActuateHood() {
+        this.subsystems = Set.of(Hood.getInstance());
     }
 
     /**
@@ -18,7 +20,8 @@ public class IntakeIn implements Command {
      */
     @Override
     public void initialize() {
-        Intake.runIntake(.6);
+        Hood.getInstance().toggleHoodPistons();
+
     }
 
     /**
@@ -46,7 +49,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     /**
@@ -59,7 +62,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Intake.runIntake(0);
+
     }
 
     /**
