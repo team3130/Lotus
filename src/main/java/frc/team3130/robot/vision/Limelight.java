@@ -65,9 +65,15 @@ public class Limelight {
         skew = ts.getDouble(0.0);
     }
 
+    /**
+     * Calculate a position vector based on angles from vision
+     * @param ax Horizontal Offset From Crosshair To Target
+     * @param ay Vertical Offset From Crosshair To Target
+     * @return resulting vector from the Turret's origin to the target
+     */
     public Matrix<N3,N1> calcPosition(double ax, double ay) {
         // Convert degrees from the vision to coordinates of unknown units
-        double ux = Math.tan(Math.toRadians(ax));
+        double ux = Math.tan(Math.toRadians(-ax));
         double uy = Math.tan(Math.toRadians(ay));
 
         // Build a "unit" vector in 3-D and rotate it from camera's
@@ -116,7 +122,8 @@ public class Limelight {
      * @return angle in degrees
      */
     public double getDegHorizontalError() {
-        return x_targetOffsetAngle;
+        Matrix<N3,N1> aVec = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
+        return Math.toDegrees(Math.atan2(aVec.get(0,0), -aVec.get(2,0)));
     }
 
     /**
