@@ -56,6 +56,7 @@ public class OI {
     private static JoystickButton retakeIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_WINDOW);
     private static JoystickButton deployClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton climberPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_RBUMPER);
+
     // Binding the buttons and triggers that are defined above to respective commands
     private OI() {
         intakeIn.whenHeld(new IntakeIn());

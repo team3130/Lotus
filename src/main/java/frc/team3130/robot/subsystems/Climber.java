@@ -46,18 +46,19 @@ public class Climber implements Subsystem {
     public static void motorSpin(double spin) {
         m_skyWalker.set(spin);
     }
+
     public static void flier(double spin) {
         m_climberWinchMaster.set(spin);
         m_climberWinchSlave.set(spin);
     }
 
     //method for deploying wheel to be called in a command
-    public static void deployClimb () {
+    public static void deployClimb() {
         m_climberArm.set(true);
     }
 
     //method for retracting wheel to be called in a command
-    public static void retractClimb () {
+    public static void retractClimb() {
         m_climberArm.set(false);
     }
 }

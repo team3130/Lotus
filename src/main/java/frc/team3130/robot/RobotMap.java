@@ -46,8 +46,8 @@ public class RobotMap {
 
     //Limelight
     public static double kLimeLightPitch = 19.76;   // Tilting forward is negative FIXME: calibrate
-    public static double kLimeLightYaw  = 0;        // Aiming bias FIXME: calibrate
-    public static double kLimeLightRoll  = 0;       // If any
+    public static double kLimeLightYaw = 0;        // Aiming bias FIXME: calibrate
+    public static double kLimeLightRoll = 0;       // If any
     public static double kLimelightHeight = 23;     // Height of camera aperture from the ground
     public static double kLimeLightLength = 9.5;    // Distance to the turret's rotation axis
     public static double kLimeLightOffset = 0;      // Side offset from the turret's plane of symmetry (left+)
@@ -118,12 +118,10 @@ public class RobotMap {
      * Pneumatics ports
      */
     public static final int PNM_SHIFT = 0;
-    public static final int PNM_HOODPISTONS = 4;
-    public static final int PNW_INTAKE = 1;
+    public static final int PNM_INTAKE = 1;
     public static final int PNM_CLIMBERARM = 2;
     public static final int PNM_WHEELARM = 3;
-    
-
+    public static final int PNM_HOODPISTONS = 4;
 
 
     /**

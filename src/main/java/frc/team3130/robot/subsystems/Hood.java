@@ -34,8 +34,8 @@ public class Hood implements Subsystem {
         m_hoodPistons.set(false);
     }
 
-    public void toggleHoodPistons(){
-        if (m_hoodPistons.get() == false){
+    public void toggleHoodPistons() {
+        if (m_hoodPistons.get() == false) {
             m_hoodPistons.set(true);
         } else {
             m_hoodPistons.set(false);

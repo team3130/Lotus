@@ -1,17 +1,16 @@
 package frc.team3130.robot.subsystems;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorSensorV3;
-
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class WheelOfFortune implements Subsystem {
