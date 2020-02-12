@@ -45,8 +45,6 @@ public class Turret implements Subsystem {
 
         m_turret.setNeutralMode(NeutralMode.Brake);
 
-        m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
-
         // configure Talons
         m_turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
@@ -63,7 +61,10 @@ public class Turret implements Subsystem {
                 0.0);
 
         m_turret.clearStickyFaults();
+
         isAiming = false;
+
+        m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
 
     }
 
@@ -110,7 +111,7 @@ public class Turret implements Subsystem {
      * @return Error of angle in degrees
      */
     private static double getAngleError() {
-        return getAngleDegrees() - getAngleSetpoint();
+        return getAngleSetpoint() - getAngleDegrees();
     }
 
 

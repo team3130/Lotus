@@ -17,11 +17,11 @@ public class RobotMap {
 
     public static double kChassisWidth = 23.0; //FIXME
     public static double kChassisLengthBumpers = 39.0; //FIXME
-    public static double kLWheelDiameter = 6.0; //Center wheel
-    public static double kRWheelDiameter = 6.0; //Center wheel
+    public static double kLWheelDiameter = 6.0; // Center wheel
+    public static double kRWheelDiameter = 6.0; // Center wheel
 
     public static double kMaxDriveSpeed = 0.8;
-    public static double kMaxTurnThrottle = 0.7; //Applied on top of max drive speed
+    public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
 
     public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter); //FIXME
     public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter); //FIXME
@@ -64,7 +64,7 @@ public class RobotMap {
     public static double kTurretD = 210.0;
     public static double kTurretF = 0;
 
-    public static double kTurretTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // checked 1/31
+    public static double kTurretTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // Checked 1/31
     public static double kTurretOnTargetTolerance = 0.5;
 
 
