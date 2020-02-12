@@ -140,6 +140,7 @@ public class Robot extends TimedRobot {
         Turret.outputToSmartDashboard();
         Hopper.outputToSmartDashboard();
         Limelight.outputToSmartDashboard();
+        Flywheel.outputToSmartDashboard();
 
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
             if (gettime == true) {

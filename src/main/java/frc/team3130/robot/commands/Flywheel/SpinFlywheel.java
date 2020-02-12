@@ -18,7 +18,7 @@ public class SpinFlywheel implements Command {
      */
     @Override
     public void initialize() {
-        Flywheel.spinFlywheel(0.5);
+        Flywheel.setOpenLoop(0.5);
     }
 
     /**
@@ -58,7 +58,7 @@ public class SpinFlywheel implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Flywheel.spinFlywheel(0.0);
+        Flywheel.stop();
     }
 
     /**

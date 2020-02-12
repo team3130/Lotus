@@ -4,6 +4,7 @@ import java.util.Set;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hopper;
 import frc.team3130.robot.subsystems.Turret;
 
@@ -29,7 +30,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
-        if (Turret.getInstance().canShoot()) {
+        if (Flywheel.getInstance().canShoot()) {
             Hopper.runHopperTop(0.5);
         } else if (Hopper.isEmpty()) {
             Hopper.runHopperTop(0.3);

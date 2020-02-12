@@ -1,11 +1,11 @@
 package frc.team3130.robot.util;
 
-public class Util {
+public class Utils {
 
     /**
      * Prevent this class from being instantiated.
      */
-    private Util() {
+    private Utils() {
     }
 
     /**
