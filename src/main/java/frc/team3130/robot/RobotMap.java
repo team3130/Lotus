@@ -70,13 +70,16 @@ public class RobotMap {
 
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
+    public static double kFlywheelOpenRampRate = 1.0; // Minimum amount to time in seconds for Open Loop control output to ramp up
 
-    public static double kFlywheelP = 1.0; //FIXME
+    public static double kFlywheelP = 0.0; //FIXME
     public static double kFlywheelI = 0.0;
     public static double kFlywheelD = 0.0;
-    public static double kFlywheelF = 0.0;
+    public static double kFlywheelF = (0.5 * 1023.0) / 10010.0; // Checked 2/11, Optimal speed at 50% power
 
-    public static double kFlywheelTicksPerRevolution = 1.0; //FIXME
+    public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
+    public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
+    public static double kFlywheelReadyTolerance = 15.0; // In RPM
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;

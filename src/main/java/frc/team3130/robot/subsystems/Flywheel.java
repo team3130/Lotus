@@ -1,7 +1,7 @@
 package frc.team3130.robot.subsystems;
 
+import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,7 +55,6 @@ public class Flywheel implements Subsystem {
         m_flywheelSlave.setNeutralMode(NeutralMode.Coast);
 
         // configure Talons
-        m_flywheelMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         m_flywheelSlave.follow(m_flywheelMaster);
 
         m_flywheelSlave.setInverted(true);
@@ -63,11 +62,13 @@ public class Flywheel implements Subsystem {
         m_flywheelMaster.configVoltageCompSaturation(RobotMap.kFlywheelMaxVoltage);
         m_flywheelMaster.enableVoltageCompensation(true);
 
+        m_flywheelMaster.configOpenloopRamp(RobotMap.kFlywheelOpenRampRate);
+
         configPIDF(m_flywheelMaster,
                 RobotMap.kFlywheelP,
                 RobotMap.kFlywheelI,
                 RobotMap.kFlywheelD,
-                0.0);
+                RobotMap.kFlywheelF);
 
         m_flywheelMaster.clearStickyFaults();
         m_flywheelSlave.clearStickyFaults();
@@ -82,37 +83,81 @@ public class Flywheel implements Subsystem {
      *
      * @param spin percent of max voltage output
      */
-    public static void spinFlywheel(double spin) {
+    public static void setOpenLoop(double spin) {
         m_flywheelMaster.set(ControlMode.PercentOutput, spin);
     }
 
+    /**
+     * Sets the RPM of the flywheel. The flywheel will then spin up to the set
+     * speed.
+     *
+     * @param rpm flywheel RPM
+     */
+    public static void setSpeed(double rpm) {
+        m_flywheelMaster.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+    }
+
+    public static void stop() {
+        setOpenLoop(0.0);
+    }
 
     /**
      * Returns the current speed of the flywheel motor in native units
      *
      * @return Current speed of the flywheel motor (ticks per 0.1 seconds)
      */
-    public static double getRawSpeed() {
+    public static long getRawSpeed() {
         return m_flywheelMaster.getSelectedSensorVelocity(0);
     }
 
 
     public static double getRPM() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return 10.0 * getRawSpeed() / RobotMap.kFlywheelTicksPerRevolution;
+        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, getRawSpeed());
     }
 
+    /**
+     * Gets the latest speed setpoint of the closed loop controller
+     *
+     * @return speed setpoint in RPM
+     */
+    public static double getAngleSetpoint() {
+        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
+    }
+
+    /**
+     * Gets the current error of the flywheel speed
+     *
+     * @return Error of speed in rpm
+     */
+    private static double getAngleError() {
+        return getAngleSetpoint() - getRPM();
+    }
+
+    /**
+     * Gets the revolutions of the flywheel
+     *
+     * @return number of revolutions
+     */
+    public static double getRevolutions(){
+        return Util.scaleNativeUnitsToRotations(RobotMap.kFlywheelTicksPerRevolution, m_flywheelMaster.getSelectedSensorPosition());
+    }
 
     /**
      * Get the status of the flywheel if it's ready to shoot
      */
     public static boolean canShoot() {
         // Check the velocity and return true when it is within the
-        // velocity target. TODO: Bogus for now. Change the comment later. TBD
-        return true;
+        // velocity target.
+        if(m_flywheelMaster.getControlMode() == ControlMode.Velocity){
+            return Math.abs(getAngleError()) < RobotMap.kFlywheelReadyTolerance;
+        }else {
+            return true;
+        }
     }
 
     public static void outputToSmartDashboard() {
+        SmartDashboard.putNumber("Flywheel Revolutions", getRevolutions());
         SmartDashboard.putNumber("Flywheel RPM", getRPM());
         SmartDashboard.putNumber("Flywheel Raw Speed", getRawSpeed());
         SmartDashboard.putBoolean("Flywheel canShoot", canShoot());
