@@ -1,5 +1,8 @@
 package frc.team3130.robot.commands.Flywheel;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Flywheel;
@@ -8,6 +11,11 @@ import java.util.Set;
 
 public class SpinFlywheel implements Command {
     private final Set<Subsystem> subsystems;
+    private ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
+    private NetworkTableEntry flywheelRPM =
+            tab.add("RPM", 7500.0)
+                    .getEntry();
+
 
     public SpinFlywheel() {
         this.subsystems = Set.of(Flywheel.getInstance());
@@ -18,7 +26,7 @@ public class SpinFlywheel implements Command {
      */
     @Override
     public void initialize() {
-        Flywheel.setOpenLoop(0.5);
+        Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
     }
 
     /**

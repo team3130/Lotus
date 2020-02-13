@@ -4,6 +4,9 @@ import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -16,6 +19,14 @@ public class Flywheel implements Subsystem {
     private static WPI_TalonFX m_flywheelSlave;
 
     //Create and define all standard data types needed
+
+    private static ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
+    private static NetworkTableEntry testP =
+            tab.add("Flywheel P", 1.0)
+                    .getEntry();
+    private static NetworkTableEntry testD =
+            tab.add("Flywheel D", 0.0)
+                    .getEntry();
 
     /**
      * The Singleton instance of this Flywheel. External classes should
@@ -94,6 +105,7 @@ public class Flywheel implements Subsystem {
      * @param rpm flywheel RPM
      */
     public static void setSpeed(double rpm) {
+        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), 0.0);
         m_flywheelMaster.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
     }
 
