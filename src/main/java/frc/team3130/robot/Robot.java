@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
         //Register and instantiate subsystems (optionally with default commands)
         //Note: registerSubsystem is NOT needed if setDefaultCommand is used
         scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
-        // scheduler.setDefaultCommand(Climber.getInstance(), new SkyWalker());
+        scheduler.registerSubsystem(Climber.getInstance());
         scheduler.registerSubsystem(Intake.getInstance());
         scheduler.registerSubsystem(Hopper.getInstance());
         scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
