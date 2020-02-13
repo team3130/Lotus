@@ -158,9 +158,12 @@ public class Turret implements Subsystem {
 
     public static void outputToShuffleboard() {
         Shuffleboard.getTab("Turret")
-                .add("Turret Angle", getAngleDegrees())
-                .add("Turret Setpoint", getAngleSetpoint())
-                .add("Turret onTarget", isOnTarget())
+                .add("Turret Angle", getAngleDegrees());
+        Shuffleboard.getTab("Turret");
+                .add("Turret Setpoint", getAngleSetpoint());
+        Shuffleboard.getTab("Turret")
+                .add("Turret onTarget", isOnTarget());
+        Shuffleboard.getTab("Turret")
                 .add("Turret isAiming", isTurretAiming());
     }
 

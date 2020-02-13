@@ -155,9 +155,12 @@ public class WheelOfFortune implements Subsystem {
 
     public static void outputToShuffleboard() {
         Shuffleboard.getTab("WheelOfFortune")
-                .add("HSB Detected color", getInstance().detectHSB())
-                .add("Hue Degree", getInstance().deg) //TODO: remove these
-                .add("Saturation", getInstance().sat)
+                .add("HSB Detected color", getInstance().detectHSB());
+        Shuffleboard.getTab("WheelOfFortune")
+                .add("Hue Degree", getInstance().deg); //TODO: remove these
+        Shuffleboard.getTab("WheelOfFortune")
+                .add("Saturation", getInstance().sat);
+        Shuffleboard.getTab("WheelOfFortune")
                 .add("Brightness", getInstance().brightness);
     }
 

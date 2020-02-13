@@ -312,22 +312,30 @@ public class Chassis implements Subsystem {
 
     public static void outputToShuffleboard() {
         Shuffleboard.getTab("Chassis")
-                .add("Chassis Right Velocity", getRawSpeedR())
-                .add("Chassis Left Velocity", getRawSpeedL())
+                .add("Chassis Right Velocity", getRawSpeedR());
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Left Velocity", getRawSpeedL());
 
         //SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
         //SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Right Speed", getSpeedR());
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Left Speed", getSpeedL());
 
-                .add("Chassis Right Speed", getSpeedR())
-                .add("Chassis Left Speed", getSpeedL())
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Distance R", getDistanceR());
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Distance L", getDistanceL());
 
-                .add("Chassis Distance R", getDistanceR())
-                .add("Chassis Distance L", getDistanceL())
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Right Sensor Value", getRawR());
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Left Sensor Value", getRawL());
 
-                .add("Chassis Right Sensor Value", getRawR())
-                .add("Chassis Left Sensor Value", getRawL())
-
-                .add("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent())
+        Shuffleboard.getTab("Chassis")
+                .add("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
+        Shuffleboard.getTab("Chassis")
                 .add("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
     }
