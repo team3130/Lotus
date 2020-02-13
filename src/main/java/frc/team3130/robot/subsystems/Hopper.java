@@ -77,8 +77,9 @@ public class Hopper implements Subsystem {
         m_hopperMotorTop.set(speed);
     }
 
-    public static void outputToSmartDashboard() {
-        SmartDashboard.putBoolean("Loader Empty", isEmpty());
+    public static void outputToShuffleboard() {
+        Shuffleboard.getTab("Hopper")
+                .add("Loader Empty", isEmpty());
     }
 }
 

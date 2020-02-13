@@ -153,11 +153,12 @@ public class WheelOfFortune implements Subsystem {
         m_spinWheel.set(spin);
     }
 
-    public static void outputToSmartDashboard() {
-        SmartDashboard.putString("HSB Detected color", getInstance().detectHSB());
-        SmartDashboard.putNumber("Hue Degree", getInstance().deg); //TODO: remove these
-        SmartDashboard.putNumber("Saturation", getInstance().sat);
-        SmartDashboard.putNumber("Brightness", getInstance().brightness);
+    public static void outputToShuffleboard() {
+        Shuffleboard.getTab("WheelOfFortune")
+                .add("HSB Detected color", getInstance().detectHSB())
+                .add("Hue Degree", getInstance().deg) //TODO: remove these
+                .add("Saturation", getInstance().sat)
+                .add("Brightness", getInstance().brightness);
     }
 
     //Shuffleboard block stuff
@@ -177,7 +178,7 @@ public class WheelOfFortune implements Subsystem {
     } else if (color.equals ("Yellow")){
         booleanYellow = true;
     } else if (!color.equals("Cyan") && !color.equals("Red") && !color.equals("Green") && !color.equals("Yellow")){
-        bruhMoment = true;
+        bruhMomento = true;
     }
 
 

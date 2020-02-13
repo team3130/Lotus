@@ -156,11 +156,12 @@ public class Turret implements Subsystem {
         return isAiming;
     }
 
-    public static void outputToSmartDashboard() {
-        SmartDashboard.putNumber("Turret Angle", getAngleDegrees());
-        SmartDashboard.putNumber("Turret Setpoint", getAngleSetpoint());
-        SmartDashboard.putBoolean("Turret onTarget", isOnTarget());
-        SmartDashboard.putBoolean("Turret isAiming", isTurretAiming());
+    public static void outputToShuffleboard() {
+        Shuffleboard.getTab("Turret")
+                .add("Turret Angle", getAngleDegrees())
+                .add("Turret Setpoint", getAngleSetpoint())
+                .add("Turret onTarget", isOnTarget())
+                .add("Turret isAiming", isTurretAiming());
     }
 
     public static void configPIDF(WPI_TalonSRX _talon, double kP, double kI, double kD, double kF) {

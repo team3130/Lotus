@@ -156,11 +156,13 @@ public class Flywheel implements Subsystem {
         }
     }
 
-    public static void outputToSmartDashboard() {
-        SmartDashboard.putNumber("Flywheel Revolutions", getRevolutions());
-        SmartDashboard.putNumber("Flywheel RPM", getRPM());
-        SmartDashboard.putNumber("Flywheel Raw Speed", getRawSpeed());
-        SmartDashboard.putBoolean("Flywheel canShoot", canShoot());
+    public static void outputToShuffleboard() {
+        Shuffleboard.getTab("Flywheel")
+                .add("Flywheel Revolutions", getRevolutions())
+                .add("Flywheel RPM", getRPM())
+                .add("Flywheel RPM", getRPM())
+                .add("Flywheel Raw Speed", getRawSpeed())
+                .add("Flywheel canShoot", canShoot());
     }
 
     public static void configPIDF(WPI_TalonFX _talon, double kP, double kI, double kD, double kF) {

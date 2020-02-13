@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        outputToSmartDashboard();
+        outputToShuffleboard();
         Limelight.GetInstance().updateData();
     }
 
@@ -134,13 +134,13 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
     }
 
-    public void outputToSmartDashboard() {
-        WheelOfFortune.outputToSmartDashboard();
-        Chassis.outputToSmartDashboard();
-        Turret.outputToSmartDashboard();
-        Hopper.outputToSmartDashboard();
+    public void outputToShuffleboard() {
+        WheelOfFortune.outputToShuffleboard();
+        Chassis.outputToShuffleboard();
+        Turret.outputToShuffleboard();
+        Hopper.outputToShuffleboard();
         Limelight.outputToSmartDashboard();
-        Flywheel.outputToSmartDashboard();
+        Flywheel.outputToShuffleboard();
 
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
             if (gettime == true) {
