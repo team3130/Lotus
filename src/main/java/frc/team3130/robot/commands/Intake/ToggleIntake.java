@@ -1,18 +1,16 @@
-package frc.team3130.robot.commands.Climber;
+package frc.team3130.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Climber;
+import frc.team3130.robot.subsystems.Intake;
 
 import java.util.Set;
 
-public class DeployClimber implements Command {
+public class ToggleIntake implements Command {
     private final Set<Subsystem> subsystems;
 
-    public DeployClimber() {
-        this.subsystems = Set.of(Climber.getInstance());
+    public ToggleIntake() {
+        this.subsystems = Set.of(Intake.getInstance());
     }
 
     /**
@@ -20,9 +18,7 @@ public class DeployClimber implements Command {
      */
     @Override
     public void initialize() {
-        //if(OI.weaponsGamepad.getRawButton(RobotMap.LST_BTN_WINDOW)) {
-            Climber.deployClimb();
-       // }
+        Intake.toggleIntake();
     }
 
     /**
@@ -50,7 +46,8 @@ public class DeployClimber implements Command {
      */
     @Override
     public boolean isFinished() {
-        return true;
+        // TODO: Make this return true when this Command no longer needs to run execute()
+        return false;
     }
 
     /**

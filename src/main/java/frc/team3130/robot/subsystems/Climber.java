@@ -52,8 +52,8 @@ public class Climber implements Subsystem {
     }
 
     //method for deploying wheel to be called in a command
-    public static void deployClimb() {
-        m_climberArm.set(true);
+    public static void toggleClimb() {
+        m_climberArm.set(!m_climberArm.get());
     }
 
     //method for retracting wheel to be called in a command

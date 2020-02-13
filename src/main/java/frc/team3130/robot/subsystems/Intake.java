@@ -52,13 +52,15 @@ public class Intake implements Subsystem {
     }
 
     public static void retakeIntake() {
-        if (m_intakeSolenoid.get() == false) {
-            m_intakeSolenoid.set(true);
-        } else {
+
             m_intakeSolenoid.set(false);
-        }
+
     }
 
+
+    public static void toggleIntake() {
+        m_intakeSolenoid.set(!m_intakeSolenoid.get());
+    }
 
 
 }

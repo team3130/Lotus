@@ -5,18 +5,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.ClimberPull;
 import frc.team3130.robot.commands.Climber.ClimberUnpull;
-import frc.team3130.robot.commands.Climber.DeployClimber;
+import frc.team3130.robot.commands.Climber.ToggleClimber;
 import frc.team3130.robot.commands.Flywheel.SpinFlywheel;
 import frc.team3130.robot.commands.Hood.ActuateHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
-import frc.team3130.robot.commands.Intake.DeployIntake;
-import frc.team3130.robot.commands.Intake.IntakeIn;
-import frc.team3130.robot.commands.Intake.IntakeOut;
-import frc.team3130.robot.commands.Intake.RetakeIntake;
+import frc.team3130.robot.commands.Intake.*;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
-import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
-import frc.team3130.robot.commands.WheelOfFortune.TestHSB;
 import frc.team3130.robot.controls.JoystickTrigger;
 
 public class OI {
@@ -57,11 +52,10 @@ public class OI {
 
 
 //    private static JoystickButton testTestHSB = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
-    private static JoystickButton deployIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
-    private static JoystickButton retakeIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_WINDOW);
+    private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton shift = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS);
     private static JoystickButton toggleHood = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
-    private static JoystickButton deployClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU);
+    private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton climberPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_RBUMPER);
     private static JoystickButton climberunpull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_LBUMPER);
 
@@ -81,10 +75,9 @@ public class OI {
         testTurret.whenPressed(new ToggleTurretAim());
         testFlywheel.whenHeld(new SpinFlywheel());
 
-        deployIntake.whenPressed(new DeployIntake());
-        retakeIntake.whenPressed(new RetakeIntake());
+        toggleIntake.whenPressed(new ToggleIntake());
 
-        deployClimber.whenPressed(new DeployClimber());
+        toggleClimber.whenPressed(new ToggleClimber());
         climberPull.whileHeld(new ClimberPull());
         climberunpull.whileHeld(new ClimberUnpull());
 
