@@ -81,7 +81,7 @@ public class Limelight {
         Matrix<N3,N1> v0 = rotation.times(Algebra.buildVector(ux, uy, 1));
 
         // Scaling ratio based on the known height of the vision target
-        double c = RobotMap.VISIONTARGETHEIGHT / v0.get(1, 0);
+        double c = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight) / v0.get(1, 0);
 
         // Find the real vector from camera to target
         Matrix<N3,N1> v = v0.times(c);
