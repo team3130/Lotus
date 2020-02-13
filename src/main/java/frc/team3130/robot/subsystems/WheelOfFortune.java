@@ -5,6 +5,8 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -129,6 +131,8 @@ public class WheelOfFortune implements Subsystem {
         }
     }
 
+
+
     /**
      * wheelArm(false) is when it is not deployed
      * wheelArm(true) is when it is deployed
@@ -154,5 +158,33 @@ public class WheelOfFortune implements Subsystem {
         SmartDashboard.putNumber("Hue Degree", getInstance().deg); //TODO: remove these
         SmartDashboard.putNumber("Saturation", getInstance().sat);
         SmartDashboard.putNumber("Brightness", getInstance().brightness);
+    }
+
+    //Shuffleboard block stuff
+    boolean booleanCyan;
+    boolean booleanRed;
+    boolean booleanGreen;
+    boolean booleanYellow;
+    boolean bruhMoment;
+
+    String color = WheelOfFortune.getInstance().determineColor();
+    if (color.equals("Cyan")){
+        booleanCyan = true;
+    } else if (color.equals("Red")){
+        booleanRed = true;
+    } else if (color.equals("Green")){
+        booleanGreen = true;
+    } else if (color.equals ("Yellow")){
+        booleanYellow = true;
+    } else if (!color.equals("Cyan") && !color.equals("Red") && !color.equals("Green") && !color.equals("Yellow")){
+        bruhMoment = true;
+    }
+
+
+    private SuppliedValueWidget colorWidget =
+            Shuffleboard.getTab("Kyber").addBoolean("Color", () -> true);
+
+    public void periodic() {
+        colorWidget.withProperties(Map.of("colorWhenTrue", color));
     }
 }
