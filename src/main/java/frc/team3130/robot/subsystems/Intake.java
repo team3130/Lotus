@@ -38,7 +38,7 @@ public class Intake implements Subsystem {
         m_intakeMotor.setNeutralMode(NeutralMode.Coast);
         m_intakeMotor.overrideLimitSwitchesEnable(false);
 
-        m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNW_INTAKE);
+        m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
     }
 
     public static void runIntake(double speed) {
@@ -46,12 +46,20 @@ public class Intake implements Subsystem {
     }
 
     public static void deployIntake() {
-        m_intakeSolenoid.set(true);
+        if (m_intakeSolenoid.get() == false) {
+            m_intakeSolenoid.set(true);
+        }
     }
 
     public static void retakeIntake() {
-        m_intakeSolenoid.set(false);
+        if (m_intakeSolenoid.get() == false) {
+            m_intakeSolenoid.set(true);
+        } else {
+            m_intakeSolenoid.set(false);
+        }
     }
+
+
 
 }
 

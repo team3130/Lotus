@@ -166,7 +166,7 @@ public class WheelOfFortune implements Subsystem {
     boolean booleanGreen;
     boolean booleanYellow;
     boolean bruhMoment;
-
+/*
     String color = WheelOfFortune.getInstance().determineColor();
     if (color.equals("Cyan")){
         booleanCyan = true;
@@ -187,4 +187,6 @@ public class WheelOfFortune implements Subsystem {
     public void periodic() {
         colorWidget.withProperties(Map.of("colorWhenTrue", color));
     }
+    */
+
 }

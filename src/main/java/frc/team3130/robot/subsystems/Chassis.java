@@ -166,6 +166,11 @@ public class Chassis implements Subsystem {
      *
      * @return true means the robot is in low gear, false if it's in high gear
      */
+
+    public static boolean getShift() {
+        return m_shifter.get();
+    }
+
     public static boolean isLowGear() {
         return !m_shifter.get();
     }

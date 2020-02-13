@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         Intake.retakeIntake();
         Climber.retractClimb();
+        WheelOfFortune.retractWheel();
     }
 
     @Override

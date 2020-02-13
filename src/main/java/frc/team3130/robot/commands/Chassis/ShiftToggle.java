@@ -1,25 +1,32 @@
-package frc.team3130.robot.commands.Intake;
+package frc.team3130.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
-import frc.team3130.robot.subsystems.Intake;
+import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.subsystems.Chassis;
+import edu.wpi.first.wpilibj.Timer;
 
 import java.util.Set;
 
-public class RetakeIntake implements Command {
+public class ShiftToggle implements Command {
     private final Set<Subsystem> subsystems;
 
-    public RetakeIntake() {
-        this.subsystems = Set.of(Intake.getInstance());
+    public ShiftToggle() {
+        this.subsystems = Set.of(Chassis.getInstance());
+        timer = new Timer();
+        hasShifted = false;
+        currentShift = Chassis.isLowGear();
     }
+    private Timer timer;
+    private boolean hasShifted;
+    private boolean currentShift;
 
-    /**
-     * The initial subroutine of a command.  Called once when the command is initially scheduled.
-     */
     @Override
     public void initialize() {
-        Intake.retakeIntake();
+        timer.reset();
+        Chassis.driveTank(0, 0, false); 		//Cut all power to the motors so they aren't running during the shift
+        timer.start();
     }
 
     /**
@@ -28,7 +35,16 @@ public class RetakeIntake implements Command {
      */
     @Override
     public void execute() {
+        if(!hasShifted && timer.get() > RobotMap.kChassisShiftWait){
+            currentShift = Chassis.isLowGear();
 
+            Chassis.shift(!currentShift); //toggle the gear to what it isn't currently
+            hasShifted = true;
+
+            //Reset the timer so that the ending dead time is from shifting rather than from the start.
+            timer.reset();
+            timer.start();
+        }
     }
 
     /**
@@ -48,7 +64,7 @@ public class RetakeIntake implements Command {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return (hasShifted && timer.get() > RobotMap.kChassisShiftWait);
     }
 
     /**
@@ -61,7 +77,8 @@ public class RetakeIntake implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        hasShifted = false;
+        timer.stop();
     }
 
     /**

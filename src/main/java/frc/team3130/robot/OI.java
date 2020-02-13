@@ -2,10 +2,12 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.ClimberPull;
 import frc.team3130.robot.commands.Climber.ClimberUnpull;
 import frc.team3130.robot.commands.Climber.DeployClimber;
 import frc.team3130.robot.commands.Flywheel.SpinFlywheel;
+import frc.team3130.robot.commands.Hood.ActuateHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.DeployIntake;
@@ -43,21 +45,27 @@ public class OI {
     /**
      * Definitions for joystick buttons start
      */
-    private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_X);
-    private static JoystickButton testFlywheel = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
+    private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
+    private static JoystickTrigger testFlywheel = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
 
-    private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
+//    private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
 //    private static JoystickButton testTripleSpinFinish = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
-    private static JoystickButton intakeIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
-    private static JoystickButton intakeOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER);
-    private static JoystickTrigger hopperIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER);
-    private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER);
-    private static JoystickButton testTestHSB = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
+    private static JoystickButton intakeOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER);
+    private static JoystickButton intakeIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER);
+    private static JoystickButton hopperIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_X);
+    private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
+
+
+//    private static JoystickButton testTestHSB = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
     private static JoystickButton deployIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton retakeIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_WINDOW);
+    private static JoystickButton shift = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS);
+    private static JoystickButton toggleHood = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton deployClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton climberPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_RBUMPER);
     private static JoystickButton climberunpull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_LBUMPER);
+
+
     // Binding the buttons and triggers that are defined above to respective commands
     private OI() {
         intakeIn.whenHeld(new IntakeIn());
@@ -67,8 +75,8 @@ public class OI {
         hopperOut.whenHeld(new HopperOut());
 
 //        testTripleSpinFinish.whenPressed(new TripleSpinFinish());
-        testColorAlignment.whenPressed(new ColorAlignment());
-        testTestHSB.whenHeld(new TestHSB());
+//        testColorAlignment.whenPressed(new ColorAlignment());
+//        testTestHSB.whenHeld(new TestHSB());
 
         testTurret.whenPressed(new ToggleTurretAim());
         testFlywheel.whenHeld(new SpinFlywheel());
@@ -79,6 +87,10 @@ public class OI {
         deployClimber.whenPressed(new DeployClimber());
         climberPull.whileHeld(new ClimberPull());
         climberunpull.whileHeld(new ClimberUnpull());
+
+        shift.whenPressed(new ShiftToggle());
+
+        toggleHood.whenPressed(new ActuateHood());
     }
 }
 

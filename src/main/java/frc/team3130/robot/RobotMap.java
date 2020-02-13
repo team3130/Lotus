@@ -37,6 +37,7 @@ public class RobotMap {
     public static double kMPChassisI = 0.0;
     public static double kMPChassisD = 0.0;
     public static double kMPChassisF = 1023.0 / (92.0 * (kLChassisTicksPerInch + kRChassisTicksPerInch) / 2.0); //Checked 3/23
+    public static double kChassisShiftWait = 0.07;
 
     public static double kMPMaxVel = 115.0; //maximum achievable velocity of the drivetrain in in/s NOTE: the actual motion profile should be generated at 80% of this
     public static double kMPMaxAcc = 60.0; ///maximum achievable acceleration of the drivetrain in in/s^2 NOTE: the actual motion profile should be generated at 80% of this

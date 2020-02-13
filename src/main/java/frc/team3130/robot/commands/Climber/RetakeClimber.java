@@ -11,7 +11,7 @@ public class RetakeClimber implements Command {
     private final Set<Subsystem> subsystems;
 
     public RetakeClimber() {
-        this.subsystems = Set.of(ExampleSubsystem.getInstance());
+        this.subsystems = Set.of(Climber.getInstance());
     }
 
     /**

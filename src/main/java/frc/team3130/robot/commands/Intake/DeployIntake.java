@@ -11,7 +11,7 @@ public class DeployIntake implements Command {
     private final Set<Subsystem> subsystems;
 
     public DeployIntake() {
-        this.subsystems = Set.of(ExampleSubsystem.getInstance());
+        this.subsystems = Set.of(Intake.getInstance());
     }
 
     /**

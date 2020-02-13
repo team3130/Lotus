@@ -63,7 +63,7 @@ public class DeployClimber implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.retractClimb();
+
     }
 
     /**
