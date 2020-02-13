@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -16,6 +18,8 @@ public class Turret implements Subsystem {
 
 
     //Create and define all standard data types needed
+    private static ShuffleboardTab tab = Shuffleboard.getTab("Turret");
+    
     private static boolean isAiming;
 
     /**
@@ -157,14 +161,10 @@ public class Turret implements Subsystem {
     }
 
     public static void outputToShuffleboard() {
-        Shuffleboard.getTab("Turret")
-                .add("Turret Angle", getAngleDegrees());
-        Shuffleboard.getTab("Turret");
-                .add("Turret Setpoint", getAngleSetpoint());
-        Shuffleboard.getTab("Turret")
-                .add("Turret onTarget", isOnTarget());
-        Shuffleboard.getTab("Turret")
-                .add("Turret isAiming", isTurretAiming());
+        tab.add("Turret Angle", getAngleDegrees());
+        tab.add("Turret Setpoint", getAngleSetpoint());
+        tab.add("Turret onTarget", isOnTarget());
+        tab.add("Turret isAiming", isTurretAiming());
     }
 
     public static void configPIDF(WPI_TalonSRX _talon, double kP, double kI, double kD, double kF) {

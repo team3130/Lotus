@@ -3,6 +3,8 @@ package frc.team3130.robot.vision;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.numbers.N1;
@@ -18,6 +20,8 @@ public class Limelight {
         if (m_pInstance == null) m_pInstance = new Limelight();
         return m_pInstance;
     }
+
+    private static ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
 
     private NetworkTableEntry tv; // Whether the limelight has any valid targets (0 or 1)
     private NetworkTableEntry tx; // x angle offset from crosshair, range of -27 to 27
@@ -182,12 +186,12 @@ public class Limelight {
     }
 
 
-    public static void outputToSmartDashboard() {
+    public static void outputToShuffleboard() {
         Limelight o = GetInstance();
-        SmartDashboard.putNumber("Limelight X Angle", o.x_targetOffsetAngle);
-        SmartDashboard.putNumber("Limelight Y Angle", o.y_targetOffsetAngle);
-        SmartDashboard.putNumber("LimelightArea", o.area);
-        SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
+        tab.add("Limelight X Angle", o.x_targetOffsetAngle);
+        tab.add("Limelight Y Angle", o.y_targetOffsetAngle);
+        tab.add("LimelightArea", o.area);
+        tab.add("Limelight Has Target", o.hasTrack());
     }
 
 }

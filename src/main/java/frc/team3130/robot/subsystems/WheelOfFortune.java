@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -21,6 +22,9 @@ public class WheelOfFortune implements Subsystem {
     private static ColorSensorV3 m_colorSensor;
     private static WPI_TalonSRX m_spinWheel;
     private static Solenoid m_wheelArm;
+
+    //Create and define all standard data types needed
+    private static ShuffleboardTab tab = Shuffleboard.getTab("WheelOfFortune");
 
     private Map<String, String> fieldToTargetColorMap = new HashMap<String, String>();
 
@@ -132,7 +136,6 @@ public class WheelOfFortune implements Subsystem {
     }
 
 
-
     /**
      * wheelArm(false) is when it is not deployed
      * wheelArm(true) is when it is deployed
@@ -154,14 +157,10 @@ public class WheelOfFortune implements Subsystem {
     }
 
     public static void outputToShuffleboard() {
-        Shuffleboard.getTab("WheelOfFortune")
-                .add("HSB Detected color", getInstance().detectHSB());
-        Shuffleboard.getTab("WheelOfFortune")
-                .add("Hue Degree", getInstance().deg); //TODO: remove these
-        Shuffleboard.getTab("WheelOfFortune")
-                .add("Saturation", getInstance().sat);
-        Shuffleboard.getTab("WheelOfFortune")
-                .add("Brightness", getInstance().brightness);
+        tab.add("HSB Detected color", getInstance().detectHSB());
+        tab.add("Hue Degree", getInstance().deg); //TODO: remove these
+        tab.add("Saturation", getInstance().sat);
+        tab.add("Brightness", getInstance().brightness);
     }
 
     //Shuffleboard block stuff

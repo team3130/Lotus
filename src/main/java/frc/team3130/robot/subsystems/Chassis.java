@@ -7,6 +7,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -24,7 +26,8 @@ public class Chassis implements Subsystem {
     private static Solenoid m_shifter;
 
     //Create and define all standard data types needed
-
+    private static ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+    
     /**
      * The Singleton instance of this Chassis. External classes should use the
      * {@link #getInstance()} method to get the instance.
@@ -311,32 +314,22 @@ public class Chassis implements Subsystem {
 
 
     public static void outputToShuffleboard() {
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Right Velocity", getRawSpeedR());
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Left Velocity", getRawSpeedL());
+        tab.add("Chassis Right Velocity", getRawSpeedR());
+        tab.add("Chassis Left Velocity", getRawSpeedL());
 
         //SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
         //SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Right Speed", getSpeedR());
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Left Speed", getSpeedL());
+        tab.add("Chassis Right Speed", getSpeedR());
+        tab.add("Chassis Left Speed", getSpeedL());
 
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Distance R", getDistanceR());
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Distance L", getDistanceL());
+        tab.add("Chassis Distance R", getDistanceR());
+        tab.add("Chassis Distance L", getDistanceL());
 
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Right Sensor Value", getRawR());
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Left Sensor Value", getRawL());
+        tab.add("Chassis Right Sensor Value", getRawR());
+        tab.add("Chassis Left Sensor Value", getRawL());
 
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
-        Shuffleboard.getTab("Chassis")
-                .add("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
+        tab.add("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
+        tab.add("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
     }
 

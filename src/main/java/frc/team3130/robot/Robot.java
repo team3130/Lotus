@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
         Chassis.outputToShuffleboard();
         Turret.outputToShuffleboard();
         Hopper.outputToShuffleboard();
-        Limelight.outputToSmartDashboard();
+        Limelight.outputToShuffleboard();
         Flywheel.outputToShuffleboard();
 
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {

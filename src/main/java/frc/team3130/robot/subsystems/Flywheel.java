@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 
@@ -151,7 +150,7 @@ public class Flywheel implements Subsystem {
      *
      * @return number of revolutions
      */
-    public static double getRevolutions(){
+    public static double getRevolutions() {
         return Util.scaleNativeUnitsToRotations(RobotMap.kFlywheelTicksPerRevolution, m_flywheelMaster.getSelectedSensorPosition());
     }
 
@@ -161,24 +160,19 @@ public class Flywheel implements Subsystem {
     public static boolean canShoot() {
         // Check the velocity and return true when it is within the
         // velocity target.
-        if(m_flywheelMaster.getControlMode() == ControlMode.Velocity){
+        if (m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
             return Math.abs(getAngleError()) < RobotMap.kFlywheelReadyTolerance;
-        }else {
+        } else {
             return true;
         }
     }
 
     public static void outputToShuffleboard() {
-        Shuffleboard.getTab("Flywheel")
-                .add("Flywheel Revolutions", getRevolutions());
-        Shuffleboard.getTab("Flywheel")
-                .add("Flywheel RPM", getRPM());
-        Shuffleboard.getTab("Flywheel")
-                .add("Flywheel RPM", getRPM());
-        Shuffleboard.getTab("Flywheel")
-                .add("Flywheel Raw Speed", getRawSpeed());
-        Shuffleboard.getTab("Flywheel")
-                .add("Flywheel canShoot", canShoot());
+        tab.add("Flywheel Revolutions", getRevolutions());
+        tab.add("Flywheel RPM", getRPM());
+        tab.add("Flywheel RPM", getRPM());
+        tab.add("Flywheel Raw Speed", getRawSpeed());
+        tab.add("Flywheel canShoot", canShoot());
     }
 
     public static void configPIDF(WPI_TalonFX _talon, double kP, double kI, double kD, double kF) {
