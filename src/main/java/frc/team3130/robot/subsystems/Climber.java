@@ -1,5 +1,6 @@
 package frc.team3130.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -10,7 +11,6 @@ public class Climber implements Subsystem {
 
     //Create necessary objects
     private static WPI_TalonSRX m_skyWalker;
-    private static WPI_TalonSRX m_climberElevator;
     private static WPI_TalonSRX m_climberWinchMaster;
     private static WPI_VictorSPX m_climberWinchSlave;
 
@@ -40,7 +40,6 @@ public class Climber implements Subsystem {
 
         m_climberArm = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM);
 
-        m_climberArm.set(false);
     }
 
     public static void motorSpin(double spin) {
@@ -49,7 +48,7 @@ public class Climber implements Subsystem {
 
     public static void flier(double spin) {
         m_climberWinchMaster.set(spin);
-        m_climberWinchSlave.set(spin);
+        m_climberWinchSlave.set(ControlMode.PercentOutput, spin);
     }
 
     //method for deploying wheel to be called in a command

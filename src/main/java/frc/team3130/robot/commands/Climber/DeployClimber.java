@@ -20,9 +20,9 @@ public class DeployClimber implements Command {
      */
     @Override
     public void initialize() {
-        if(OI.weaponsGamepad.getRawButton(RobotMap.LST_BTN_WINDOW)) {
+        //if(OI.weaponsGamepad.getRawButton(RobotMap.LST_BTN_WINDOW)) {
             Climber.deployClimb();
-        }
+       // }
     }
 
     /**

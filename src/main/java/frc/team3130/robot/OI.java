@@ -3,6 +3,7 @@ package frc.team3130.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Climber.ClimberPull;
+import frc.team3130.robot.commands.Climber.ClimberUnpull;
 import frc.team3130.robot.commands.Climber.DeployClimber;
 import frc.team3130.robot.commands.Flywheel.SpinFlywheel;
 import frc.team3130.robot.commands.Hopper.HopperIn;
@@ -56,7 +57,7 @@ public class OI {
     private static JoystickButton retakeIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_WINDOW);
     private static JoystickButton deployClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton climberPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_RBUMPER);
-
+    private static JoystickButton climberunpull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_LBUMPER);
     // Binding the buttons and triggers that are defined above to respective commands
     private OI() {
         intakeIn.whenHeld(new IntakeIn());
@@ -77,6 +78,7 @@ public class OI {
 
         deployClimber.whenPressed(new DeployClimber());
         climberPull.whileHeld(new ClimberPull());
+        climberunpull.whileHeld(new ClimberUnpull());
     }
 }
 
