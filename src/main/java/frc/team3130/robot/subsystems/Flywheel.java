@@ -170,10 +170,14 @@ public class Flywheel implements Subsystem {
 
     public static void outputToShuffleboard() {
         Shuffleboard.getTab("Flywheel")
-                .add("Flywheel Revolutions", getRevolutions())
-                .add("Flywheel RPM", getRPM())
-                .add("Flywheel RPM", getRPM())
-                .add("Flywheel Raw Speed", getRawSpeed())
+                .add("Flywheel Revolutions", getRevolutions());
+        Shuffleboard.getTab("Flywheel")
+                .add("Flywheel RPM", getRPM());
+        Shuffleboard.getTab("Flywheel")
+                .add("Flywheel RPM", getRPM());
+        Shuffleboard.getTab("Flywheel")
+                .add("Flywheel Raw Speed", getRawSpeed());
+        Shuffleboard.getTab("Flywheel")
                 .add("Flywheel canShoot", canShoot());
     }
 
