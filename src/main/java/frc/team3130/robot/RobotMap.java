@@ -78,6 +78,7 @@ public class RobotMap {
     public static double kFlywheelD = 0.0;
     public static double kFlywheelF = (0.5 * 1023.0) / 10010.0; // Checked 2/11, Optimal speed at 50% power
 
+    public static double kFlywheelMagicNumber = 1.0965; // TODO: Work around for falcon velocity setpoint issue
     public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
     public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
     public static double kFlywheelReadyTolerance = 15.0; // In RPM

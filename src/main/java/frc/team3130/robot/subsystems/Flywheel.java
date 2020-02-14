@@ -107,7 +107,7 @@ public class Flywheel implements Subsystem {
         configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), 0.0);
         System.out.println("P: "+ testP.getDouble(RobotMap.kFlywheelP)+ " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + rpm / (10.0 * 60.0) * RobotMap.kFlywheelTicksPerRevolution);
 
-        m_flywheelMaster.set(ControlMode.Velocity, 1.096 * rpm / (10.0 * 60.0) * RobotMap.kFlywheelTicksPerRevolution);
+        m_flywheelMaster.set(ControlMode.Velocity, RobotMap.kFlywheelMagicNumber * rpm / (10.0 * 60.0) * RobotMap.kFlywheelTicksPerRevolution);
     }
 
     public static void stop() {
@@ -135,7 +135,7 @@ public class Flywheel implements Subsystem {
      * @return speed setpoint in RPM
      */
     public static double getRPMSetpoint() {
-        return  (m_flywheelMaster.getClosedLoopTarget() / 1.096) / RobotMap.kFlywheelRPMtoNativeUnitsScalar;
+        return  (m_flywheelMaster.getClosedLoopTarget() / RobotMap.kFlywheelMagicNumber) / RobotMap.kFlywheelRPMtoNativeUnitsScalar;
     }
 
     /**
@@ -170,7 +170,6 @@ public class Flywheel implements Subsystem {
     }
 
     public static void outputToShuffleboard() {
-
         SmartDashboard.putNumber("Flywheel Raw Setpoint", m_flywheelMaster.getClosedLoopTarget());
         SmartDashboard.putNumber("Flywheel Setpoint", getRPMSetpoint());
         SmartDashboard.putNumber("Flywheel RPM", getRPM());
