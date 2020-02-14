@@ -3,8 +3,6 @@ package frc.team3130.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -18,7 +16,6 @@ public class Hopper implements Subsystem {
     private static DigitalInput m_beam;
 
     //Create and define all standard data types needed
-    private static ShuffleboardTab tab = Shuffleboard.getTab("Hopper");
 
     /**
      * The Singleton instance of this Hopper. External classes should
@@ -78,7 +75,7 @@ public class Hopper implements Subsystem {
     }
 
     public static void outputToShuffleboard() {
-        tab.add("Loader Empty", isEmpty());
+        SmartDashboard.putBoolean("Loader Empty", isEmpty());
     }
 }
 

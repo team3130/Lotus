@@ -5,9 +5,6 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -24,7 +21,6 @@ public class WheelOfFortune implements Subsystem {
     private static Solenoid m_wheelArm;
 
     //Create and define all standard data types needed
-    private static ShuffleboardTab tab = Shuffleboard.getTab("WheelOfFortune");
 
     private Map<String, String> fieldToTargetColorMap = new HashMap<String, String>();
 
@@ -157,10 +153,10 @@ public class WheelOfFortune implements Subsystem {
     }
 
     public static void outputToShuffleboard() {
-        tab.add("HSB Detected color", getInstance().detectHSB());
-        tab.add("Hue Degree", getInstance().deg); //TODO: remove these
-        tab.add("Saturation", getInstance().sat);
-        tab.add("Brightness", getInstance().brightness);
+        SmartDashboard.putString("HSB Detected color", getInstance().detectHSB());
+        SmartDashboard.putNumber("Hue Degree", getInstance().deg); //TODO: remove these
+        SmartDashboard.putNumber("Saturation", getInstance().sat);
+        SmartDashboard.putNumber("Brightness", getInstance().brightness);
     }
 
     //Shuffleboard block stuff

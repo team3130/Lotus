@@ -3,8 +3,6 @@ package frc.team3130.robot.vision;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.numbers.N1;
@@ -21,8 +19,6 @@ public class Limelight {
         return m_pInstance;
     }
 
-    private static ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
-
     private NetworkTableEntry tv; // Whether the limelight has any valid targets (0 or 1)
     private NetworkTableEntry tx; // x angle offset from crosshair, range of -27 to 27
     private NetworkTableEntry ty; // y angle offset from crosshair, range of -20.5 to 20.5
@@ -34,8 +30,8 @@ public class Limelight {
     private double area = 0.0;
     private double skew = 0.0;
 
-    private Matrix<N3,N3> rotation;      // Own rotation
-    private Matrix<N3,N1> translation;   // Own translation
+    private Matrix<N3, N3> rotation;      // Own rotation
+    private Matrix<N3, N1> translation;   // Own translation
 
     protected Limelight() {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -45,16 +41,16 @@ public class Limelight {
         ta = table.getEntry("ta");
         ts = table.getEntry("ts");
 
-        Matrix<N3,N1> rVec = Algebra.buildVector(
-            Math.toRadians(RobotMap.kLimeLightPitch),
-            Math.toRadians(RobotMap.kLimeLightYaw),
-            Math.toRadians(RobotMap.kLimeLightRoll)
+        Matrix<N3, N1> rVec = Algebra.buildVector(
+                Math.toRadians(RobotMap.kLimeLightPitch),
+                Math.toRadians(RobotMap.kLimeLightYaw),
+                Math.toRadians(RobotMap.kLimeLightRoll)
         );
         rotation = Algebra.Rodrigues(rVec);
         translation = Algebra.buildVector(
-            RobotMap.kLimeLightOffset,
-            RobotMap.kLimelightHeight,
-            -RobotMap.kLimeLightLength
+                RobotMap.kLimeLightOffset,
+                RobotMap.kLimelightHeight,
+                -RobotMap.kLimeLightLength
         );
     }
 
@@ -71,30 +67,32 @@ public class Limelight {
 
     /**
      * Calculate a position vector based on angles from vision
+     *
      * @param ax Horizontal Offset From Crosshair To Target
      * @param ay Vertical Offset From Crosshair To Target
      * @return resulting vector from the Turret's origin to the target
      */
-    public Matrix<N3,N1> calcPosition(double ax, double ay) {
+    public Matrix<N3, N1> calcPosition(double ax, double ay) {
         // Convert degrees from the vision to coordinates of unknown units
         double ux = Math.tan(Math.toRadians(-ax));
         double uy = Math.tan(Math.toRadians(ay));
 
         // Build a "unit" vector in 3-D and rotate it from camera's
         // coordinates to real (robot's (turret's)) coordinates
-        Matrix<N3,N1> v0 = rotation.times(Algebra.buildVector(ux, uy, 1));
+        Matrix<N3, N1> v0 = rotation.times(Algebra.buildVector(ux, uy, 1));
 
         // Scaling ratio based on the known height of the vision target
         double c = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight) / v0.get(1, 0);
 
         // Find the real vector from camera to target
-        Matrix<N3,N1> v = v0.times(c);
+        Matrix<N3, N1> v = v0.times(c);
 
         // Add the offset of the camera from the turret's origin
-        Matrix<N3,N1> a = translation.plus(v);
+        Matrix<N3, N1> a = translation.plus(v);
         // That's the droid we're looking for
         return a;
     }
+
     /**
      * If the Limelight has a target track
      *
@@ -126,8 +124,8 @@ public class Limelight {
      * @return angle in degrees
      */
     public double getDegHorizontalError() {
-        Matrix<N3,N1> aVec = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
-        return Math.toDegrees(Math.atan2(aVec.get(0,0), -aVec.get(2,0)));
+        Matrix<N3, N1> aVec = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
+        return Math.toDegrees(Math.atan2(aVec.get(0, 0), -aVec.get(2, 0)));
     }
 
     /**
@@ -188,10 +186,10 @@ public class Limelight {
 
     public static void outputToShuffleboard() {
         Limelight o = GetInstance();
-        tab.add("Limelight X Angle", o.x_targetOffsetAngle);
-        tab.add("Limelight Y Angle", o.y_targetOffsetAngle);
-        tab.add("LimelightArea", o.area);
-        tab.add("Limelight Has Target", o.hasTrack());
+        SmartDashboard.putNumber("Limelight X Angle", o.x_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Y Angle", o.y_targetOffsetAngle);
+        SmartDashboard.putNumber("LimelightArea", o.area);
+        SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
     }
 
 }

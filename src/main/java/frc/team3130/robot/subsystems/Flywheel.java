@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 
@@ -18,7 +19,6 @@ public class Flywheel implements Subsystem {
     private static WPI_TalonFX m_flywheelSlave;
 
     //Create and define all standard data types needed
-
     private static ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
     private static NetworkTableEntry testP =
             tab.add("Flywheel P", 1.0)
@@ -168,11 +168,10 @@ public class Flywheel implements Subsystem {
     }
 
     public static void outputToShuffleboard() {
-        tab.add("Flywheel Revolutions", getRevolutions());
-        tab.add("Flywheel RPM", getRPM());
-        tab.add("Flywheel RPM", getRPM());
-        tab.add("Flywheel Raw Speed", getRawSpeed());
-        tab.add("Flywheel canShoot", canShoot());
+        SmartDashboard.putNumber("Flywheel Revolutions", getRevolutions());
+        SmartDashboard.putNumber("Flywheel RPM", getRPM());
+        SmartDashboard.putNumber("Flywheel Raw Speed", getRawSpeed());
+        SmartDashboard.putBoolean("Flywheel canShoot", canShoot());
     }
 
     public static void configPIDF(WPI_TalonFX _talon, double kP, double kI, double kD, double kF) {
