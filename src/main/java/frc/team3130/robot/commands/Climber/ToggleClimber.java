@@ -20,9 +20,7 @@ public class ToggleClimber implements Command {
      */
     @Override
     public void initialize() {
-        if(OI.weaponsGamepad.getRawButton(RobotMap.LST_BTN_WINDOW)) {
-            Climber.toggleClimb();
-        }
+        Climber.toggleClimb();
     }
 
     /**

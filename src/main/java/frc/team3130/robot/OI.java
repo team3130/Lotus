@@ -52,7 +52,7 @@ public class OI {
 
 
 //    private static JoystickButton testTestHSB = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
-    private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
+    private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_WINDOW);
     private static JoystickButton shift = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS);
     private static JoystickButton toggleHood = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU);
     private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU);

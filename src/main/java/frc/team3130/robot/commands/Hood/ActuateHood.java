@@ -20,8 +20,7 @@ public class ActuateHood implements Command {
      */
     @Override
     public void initialize() {
-        Hood.getInstance().toggleHoodPistons();
-
+        Hood.toggleHoodPistons();
     }
 
     /**
@@ -62,7 +61,6 @@ public class ActuateHood implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
     }
 
     /**
