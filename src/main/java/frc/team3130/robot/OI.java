@@ -6,11 +6,13 @@ import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.ClimberPull;
 import frc.team3130.robot.commands.Climber.ClimberUnpull;
 import frc.team3130.robot.commands.Climber.ToggleClimber;
-import frc.team3130.robot.commands.Flywheel.SpinFlywheel;
+import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ActuateHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
-import frc.team3130.robot.commands.Intake.*;
+import frc.team3130.robot.commands.Intake.IntakeIn;
+import frc.team3130.robot.commands.Intake.IntakeOut;
+import frc.team3130.robot.commands.Intake.ToggleIntake;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.controls.JoystickTrigger;
 
@@ -73,7 +75,7 @@ public class OI {
 //        testTestHSB.whenHeld(new TestHSB());
 
         testTurret.whenPressed(new ToggleTurretAim());
-        testFlywheel.whenHeld(new SpinFlywheel());
+        testFlywheel.whenHeld(new SetFlywheelRPM());
 
         toggleIntake.whenPressed(new ToggleIntake());
 
