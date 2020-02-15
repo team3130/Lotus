@@ -14,6 +14,8 @@ public class testLimeLight {
         Matrix<N3,N1> realVec = Limelight.GetInstance().calcPosition(3, 0);
         System.out.println(String.format("realVec = [%8.5f, %8.5f, %8.5f]",
             realVec.get(0,0),realVec.get(1,0),realVec.get(2,0)));
-        assertEquals("X is wrong", 12.0,         realVec.get(0,0), 1.0);
+        assertEquals("X is wrong",   12.0, realVec.get(0,0), 1.0);
+        assertEquals("Y is wrong",   98.0, realVec.get(1,0), 1.0);
+        assertEquals("Z is wrong", -219.0, realVec.get(2,0), 1.0);
     }
 }
