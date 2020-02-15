@@ -11,6 +11,9 @@ public class RobotMap {
     /**
      * Constants
      */
+    //Wheel speed calc path
+    public static String kWheelSpeedPath = "home/lvuser/speed-storage-turret.ini";
+
 
     //Chassis
     public static double kChassisMaxVoltage = 12.0;
@@ -20,7 +23,7 @@ public class RobotMap {
     public static double kLWheelDiameter = 6.0; // Center wheel
     public static double kRWheelDiameter = 6.0; // Center wheel
 
-    public static double kMaxDriveSpeed = 0.8;
+    public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
 
     public static double kLChassisTicksPerInch = 4096.0 / (Math.PI * kLWheelDiameter); //FIXME
@@ -73,15 +76,14 @@ public class RobotMap {
     public static double kFlywheelMaxVoltage = 12.0;
     public static double kFlywheelOpenRampRate = 1.0; // Minimum amount to time in seconds for Open Loop control output to ramp up
 
-    public static double kFlywheelP = 0.0; //FIXME
+    public static double kFlywheelP = 0.22; //Checked 2/14
     public static double kFlywheelI = 0.0;
-    public static double kFlywheelD = 0.0;
-    public static double kFlywheelF = (0.5 * 1023.0) / 10010.0; // Checked 2/11, Optimal speed at 50% power
+    public static double kFlywheelD = 12.0;
+    public static double kFlywheelF = (0.51 * 1023.0) / 10650.0; // Checked 2/11, Optimal speed at 51% power
 
-    public static double kFlywheelMagicNumber = 1.0965; // TODO: Work around for falcon velocity setpoint issue
     public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
     public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
-    public static double kFlywheelReadyTolerance = 15.0; // In RPM
+    public static double kFlywheelReadyTolerance = 50.0; // In RPM
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;

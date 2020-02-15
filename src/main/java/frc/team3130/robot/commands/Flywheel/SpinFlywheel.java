@@ -19,7 +19,7 @@ public class SpinFlywheel implements Command {
      */
     @Override
     public void initialize() {
-        Flywheel.setOpenLoop(0.5);
+        Flywheel.setOpenLoop(0.7);
     }
 
     /**
