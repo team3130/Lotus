@@ -52,12 +52,14 @@ public class HopperIn implements Command {
             }
             if (Hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
-                Hopper.runHopperTop(0.4);
+                Hopper.runHopperTop(0.35);
                 Hopper.runHopperLeft(0.33);
                 Hopper.runHopperRight(0.33);
                 hasIndexed = false;
             } else {
                 Hopper.runHopperTop(0.0);
+                Hopper.runHopperLeft(0.0);
+                Hopper.runHopperRight(0.0);
                 if (Timer.getFPGATimestamp() - lastIndexTime > 0.4) {
                     justShot = false;
                     changedState = true;
