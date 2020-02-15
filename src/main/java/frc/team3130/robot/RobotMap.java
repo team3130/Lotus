@@ -63,7 +63,11 @@ public class RobotMap {
     public static double kTurretManualDeadband = 0.09;
     public static double kTurretManualMultipler = 0.15;
 
-    public static double kTurretP = 1.4; //PID checked 2/6
+    public static double kTurretStartupAngle = -90.0;
+    public static double kTurretFwdLimit = 190.0; // Angle in degrees
+    public static double kTurretRevLimit = 190.0; // Angle in degrees
+
+    public static double kTurretP = 1.4; // PID checked 2/6
     public static double kTurretI = 0;
     public static double kTurretD = 210.0;
     public static double kTurretF = 0;

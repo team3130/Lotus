@@ -41,7 +41,7 @@ public class Turret implements Subsystem {
         m_turret.configFactoryDefault();
 
         m_turret.overrideLimitSwitchesEnable(false);
-        m_turret.overrideSoftLimitsEnable(false);
+        m_turret.overrideSoftLimitsEnable(true);
 
         m_turret.setNeutralMode(NeutralMode.Brake);
 
@@ -65,6 +65,11 @@ public class Turret implements Subsystem {
         isAiming = false;
 
         m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
+        m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle* RobotMap.kTurretTicksPerDegree));
+
+        m_turret.configForwardSoftLimitThreshold((int) (RobotMap.kTurretFwdLimit * RobotMap.kTurretTicksPerDegree));
+        m_turret.configReverseSoftLimitThreshold((int) (RobotMap.kTurretRevLimit * RobotMap.kTurretTicksPerDegree));
+
 
     }
 
