@@ -1,16 +1,16 @@
-package frc.team3130.robot.commands.Intake;
+package frc.team3130.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Intake;
+import frc.team3130.robot.subsystems.Climber;
 
 import java.util.Set;
 
-public class IntakeIn implements Command {
+public class LeftClimberUnpull implements Command {
     private final Set<Subsystem> subsystems;
 
-    public IntakeIn() {
-        this.subsystems = Set.of(Intake.getInstance());
+    public LeftClimberUnpull() {
+        this.subsystems = Set.of(Climber.getInstance());
     }
 
     /**
@@ -18,8 +18,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public void initialize() {
-        Intake.runIntake(.4);
-        Intake.retakeIntake();
+        Climber.Leftflier(0.3);
     }
 
     /**
@@ -60,8 +59,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Intake.runIntake(0);
-        Intake.deployIntake();
+        Climber.Leftflier(0);
     }
 
     /**

@@ -23,7 +23,7 @@ public class TripleSpinFinish implements Command {
         cyanCounter = 0;
         WheelOfFortune.motorSpin(0.5);
 
-        WheelOfFortune.deployWheel();
+        WheelOfFortune.toggleWheel();
     }
 
 
