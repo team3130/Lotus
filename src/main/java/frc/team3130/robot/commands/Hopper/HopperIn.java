@@ -33,7 +33,7 @@ public class HopperIn implements Command {
         if (Flywheel.getInstance().canShoot()) {
             Hopper.runHopperTop(0.5);
         } else if (Hopper.isEmpty()) {
-            Hopper.runHopperTop(0.3);
+            Hopper.runHopperTop(0.4);
         } else {
             Hopper.runHopperTop(0.0);
             // Tactile feedback to the driver's control maybe?
