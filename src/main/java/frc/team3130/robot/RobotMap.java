@@ -87,7 +87,7 @@ public class RobotMap {
 
     public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
     public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
-    public static double kFlywheelReadyTolerance = 50.0; // In RPM
+    public static double kFlywheelReadyTolerance = 30.0; // In RPM
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;

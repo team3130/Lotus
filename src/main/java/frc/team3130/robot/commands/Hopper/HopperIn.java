@@ -2,6 +2,7 @@ package frc.team3130.robot.commands.Hopper;
 
 import java.util.Set;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Flywheel;
@@ -11,8 +12,18 @@ import frc.team3130.robot.subsystems.Turret;
 public class HopperIn implements Command {
     private final Set<Subsystem> subsystems;
 
+    private boolean justShot;
+    private boolean changedState;
+    private boolean hasIndexed;
+    private boolean isShooting;
+    private double lastIndexTime;
+
     public HopperIn() {
         this.subsystems = Set.of(Hopper.getInstance());
+        justShot = true;
+        hasIndexed = false;
+        isShooting = false;
+        changedState = true;
     }
 
     /**
@@ -20,8 +31,11 @@ public class HopperIn implements Command {
      */
     @Override
     public void initialize() {
-        Hopper.runHopperLeft(0.33);
-        Hopper.runHopperRight(0.33);
+        justShot = true;
+        changedState = true;
+        hasIndexed = false;
+        isShooting = false;
+        lastIndexTime = Timer.getFPGATimestamp();
     }
 
     /**
@@ -30,13 +44,42 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
-        if (Flywheel.getInstance().canShoot()) {
-            Hopper.runHopperTop(0.5);
-        } else if (Hopper.isEmpty()) {
-            Hopper.runHopperTop(0.4);
+        if (justShot) {
+            if (changedState) {
+                lastIndexTime = Timer.getFPGATimestamp();
+                changedState = false;
+                hasIndexed = true;
+            }
+            if (Hopper.isEmpty()) {
+                lastIndexTime = Timer.getFPGATimestamp();
+                Hopper.runHopperTop(0.4);
+                Hopper.runHopperLeft(0.33);
+                Hopper.runHopperRight(0.33);
+                hasIndexed = false;
+            } else {
+                Hopper.runHopperTop(0.0);
+                if (Timer.getFPGATimestamp() - lastIndexTime > 0.4) {
+                    justShot = false;
+                    changedState = true;
+                }
+
+            }
         } else {
-            Hopper.runHopperTop(0.0);
-            // Tactile feedback to the driver's control maybe?
+            if (changedState && Flywheel.getInstance().canShoot()) {
+                Hopper.runHopperTop(0.6);
+                isShooting = true;
+                changedState = false;
+            } else {
+                if (isShooting) {
+                    if (!Flywheel.getInstance().canShoot()) {
+                        isShooting = false;
+                    }
+                } else {
+                    Hopper.runHopperTop(0.0);
+                    justShot = true;
+                    changedState = true;
+                }
+            }
         }
     }
 
