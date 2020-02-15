@@ -32,6 +32,7 @@ public class Limelight {
 
     private Matrix<N3, N3> rotation;      // Own rotation
     private Matrix<N3, N1> translation;   // Own translation
+    private Matrix<N3, N1> realVector;
 
     protected Limelight() {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -58,11 +59,11 @@ public class Limelight {
      * Read data from the Limelight and update local values
      */
     public void updateData() {
-        //Check if limelight sees a target
         x_targetOffsetAngle = -tx.getDouble(0.0);
         y_targetOffsetAngle = ty.getDouble(0.0);
         area = ta.getDouble(0.0);
         skew = ts.getDouble(0.0);
+        realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
     }
 
     /**
@@ -124,8 +125,11 @@ public class Limelight {
      * @return angle in degrees
      */
     public double getDegHorizontalError() {
-        Matrix<N3, N1> aVec = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
-        return Math.toDegrees(Math.atan2(aVec.get(0, 0), -aVec.get(2, 0)));
+        // realVector is calculated in updateData that should be called before doing this
+        // The horizontal error is an angle between the vector's projection on the XZ plane
+        // and the negative Z-axis.
+        // Note that Z is negative because our 3-D space is right-handed.
+        return Math.toDegrees(Math.atan2(realVector.get(0, 0), -realVector.get(2, 0)));
     }
 
     /**
@@ -134,13 +138,9 @@ public class Limelight {
      * @return distance in inches
      */
     public double getDistanceToTarget() {
-        if (area == 0.0) return 0.0; // we have no target to track, return 0.0
-
-        double angle = y_targetOffsetAngle + RobotMap.kLimeLightPitch;
-        double hLimelight = RobotMap.kLimelightHeight;
-        double hTarget = RobotMap.VISIONTARGETHEIGHT;
-
-        return (hTarget - hLimelight) / Math.tan(Math.toRadians(angle));
+        Matrix<N3,N1> projection = realVector.copy();
+        projection.set(1, 0, 0.0);
+        return projection.normF();
     }
 
 
