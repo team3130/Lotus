@@ -31,8 +31,10 @@ public class DefaultDrive implements Command {
     @Override
     public void execute() {
 
-        double moveSpeed = -OI.driverGamepad.getRawAxis(1) * RobotMap.kMaxDriveSpeed; //joystick's y axis is inverted
-        double turnSpeed = OI.driverGamepad.getRawAxis(4) * RobotMap.kMaxDriveSpeed;
+        double moveSpeed = -OI.driverGamepad.getRawAxis(1); //joystick's y axis is inverted
+        if(!Chassis.isLowGear())
+            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
+        double turnSpeed = OI.driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
 
         Chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }

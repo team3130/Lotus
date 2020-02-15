@@ -18,7 +18,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public void initialize() {
-        Intake.runIntake(.6);
+        Intake.runIntake(0.4);
     }
 
     /**
