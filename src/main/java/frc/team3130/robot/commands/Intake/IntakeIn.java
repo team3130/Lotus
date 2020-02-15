@@ -18,8 +18,8 @@ public class IntakeIn implements Command {
      */
     @Override
     public void initialize() {
-        Intake.runIntake(.6);
-        Intake.deployIntake();
+        Intake.runIntake(.4);
+        Intake.retakeIntake();
     }
 
     /**
@@ -61,7 +61,7 @@ public class IntakeIn implements Command {
     @Override
     public void end(boolean interrupted) {
         Intake.runIntake(0);
-        Intake.retakeIntake();
+        Intake.deployIntake();
     }
 
     /**
