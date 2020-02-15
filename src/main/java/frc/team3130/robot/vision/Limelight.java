@@ -138,9 +138,13 @@ public class Limelight {
      * @return distance in inches
      */
     public double getDistanceToTarget() {
-        Matrix<N3,N1> projection = realVector.copy();
-        projection.set(1, 0, 0.0);
-        return projection.normF();
+        if (Limelight.GetInstance().hasTrack()){
+            Matrix<N3,N1> projection = realVector.copy();
+            projection.set(1, 0, 0.0);
+            return projection.normF();
+        }else{
+            return 0.0;
+        }
     }
 
 
@@ -188,6 +192,7 @@ public class Limelight {
         Limelight o = GetInstance();
         SmartDashboard.putNumber("Limelight X Angle", o.x_targetOffsetAngle);
         SmartDashboard.putNumber("Limelight Y Angle", o.y_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Distance", Limelight.GetInstance().getDistanceToTarget());
         SmartDashboard.putNumber("LimelightArea", o.area);
         SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
     }
