@@ -137,9 +137,9 @@ public class WheelOfFortune implements Subsystem {
      * wheelArm(true) is when it is deployed
      */
     //method for deploying wheel to be called in a command
-    public static void deployWheel() {
-        System.out.println("Wheel has deployed");
-        m_wheelArm.set(true);
+    public static void toggleWheel() {
+        System.out.println("Wheel has toggled");
+        m_wheelArm.set(!m_wheelArm.get());
     }
 
     //method for retracting wheel to be called in a command

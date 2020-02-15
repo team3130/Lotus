@@ -46,14 +46,11 @@ public class Intake implements Subsystem {
     }
 
     public static void deployIntake() {
-        if (m_intakeSolenoid.get() == false) {
-            m_intakeSolenoid.set(true);
-        }
+        m_intakeSolenoid.set(true);
     }
 
     public static void retakeIntake() {
-
-            m_intakeSolenoid.set(false);
+        m_intakeSolenoid.set(false);
 
     }
 

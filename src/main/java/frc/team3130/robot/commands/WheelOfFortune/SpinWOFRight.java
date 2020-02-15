@@ -1,16 +1,16 @@
-package frc.team3130.robot.commands.Intake;
+package frc.team3130.robot.commands.WheelOfFortune;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Intake;
+import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
 
-public class IntakeIn implements Command {
+public class SpinWOFRight implements Command {
     private final Set<Subsystem> subsystems;
 
-    public IntakeIn() {
-        this.subsystems = Set.of(Intake.getInstance());
+    public SpinWOFRight() {
+        this.subsystems = Set.of(WheelOfFortune.getInstance());
     }
 
     /**
@@ -18,8 +18,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public void initialize() {
-        Intake.runIntake(.6);
-        Intake.deployIntake();
+    WheelOfFortune.motorSpin(.2);
     }
 
     /**
@@ -47,6 +46,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public boolean isFinished() {
+        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -60,8 +60,7 @@ public class IntakeIn implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Intake.runIntake(0);
-        Intake.retakeIntake();
+
     }
 
     /**

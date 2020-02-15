@@ -46,8 +46,11 @@ public class Climber implements Subsystem {
         m_skyWalker.set(spin);
     }
 
-    public static void flier(double spin) {
+    public static void Leftflier(double spin) {
         m_climberWinchMaster.set(spin);
+    }
+
+    public static void Rightflier(double spin) {
         m_climberWinchSlave.set(ControlMode.PercentOutput, spin);
     }
 

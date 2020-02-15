@@ -6,10 +6,10 @@ import frc.team3130.robot.subsystems.Climber;
 
 import java.util.Set;
 
-public class ClimberUnpull implements Command {
+public class RightClimberPull implements Command {
     private final Set<Subsystem> subsystems;
 
-    public ClimberUnpull() {
+    public RightClimberPull() {
         this.subsystems = Set.of(Climber.getInstance());
     }
 
@@ -18,7 +18,7 @@ public class ClimberUnpull implements Command {
      */
     @Override
     public void initialize() {
-        Climber.flier(0.3);
+        Climber.Rightflier(-0.3);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ClimberUnpull implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.flier(0);
+        Climber.Rightflier(0);
     }
 
     /**
