@@ -21,10 +21,10 @@ public class Flywheel implements Subsystem {
     //Create and define all standard data types needed
     private static ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
     private static NetworkTableEntry testP =
-            tab.add("Flywheel P", 1.0)
+            tab.add("Flywheel P", RobotMap.kFlywheelP)
                     .getEntry();
     private static NetworkTableEntry testD =
-            tab.add("Flywheel D", 0.0)
+            tab.add("Flywheel D", RobotMap.kFlywheelD)
                     .getEntry();
 
     /**
@@ -78,7 +78,7 @@ public class Flywheel implements Subsystem {
                 RobotMap.kFlywheelP,
                 RobotMap.kFlywheelI,
                 RobotMap.kFlywheelD,
-                0.0);
+                RobotMap.kFlywheelF);
 
         m_flywheelMaster.clearStickyFaults();
         m_flywheelSlave.clearStickyFaults();
@@ -104,12 +104,10 @@ public class Flywheel implements Subsystem {
      * @param rpm flywheel RPM
      */
     public static void setSpeed(double rpm) {
-        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), 0.0);
-        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + rpm / (10.0 * 60.0) * RobotMap.kFlywheelTicksPerRevolution);
+        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
+        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
 
-        m_flywheelMaster.set(ControlMode.Velocity,
-                RobotMap.kFlywheelMagicNumber *
-                        Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        m_flywheelMaster.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
     }
 
     public static void stop() {
@@ -137,8 +135,7 @@ public class Flywheel implements Subsystem {
      * @return speed setpoint in RPM
      */
     public static double getRPMSetpoint() {
-        return 1.0 / RobotMap.kFlywheelMagicNumber *
-                Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
+        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
     }
 
     /**
@@ -168,7 +165,7 @@ public class Flywheel implements Subsystem {
         if (m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
             return Math.abs(getRPMError()) < RobotMap.kFlywheelReadyTolerance;
         } else {
-            return true;
+            return false;
         }
     }
 
