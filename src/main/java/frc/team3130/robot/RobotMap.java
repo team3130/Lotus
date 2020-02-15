@@ -11,6 +11,9 @@ public class RobotMap {
     /**
      * Constants
      */
+    //Wheel speed calc path
+    public static String kWheelSpeedPath = "home/lvuser/speed-storage-turret.ini";
+
 
     //Chassis
     public static double kChassisMaxVoltage = 12.0;
