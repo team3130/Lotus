@@ -51,9 +51,9 @@ public class RobotMap {
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
     //Limelight
-    public static double kLimeLightPitch = 19.76;   // Tilting forward is negative FIXME: calibrate
-    public static double kLimeLightYaw = 0;        // Aiming bias FIXME: calibrate
-    public static double kLimeLightRoll = 0;       // If any
+    public static double kLimeLightPitch = -30.76;   // Facing up is negative FIXME: calibrate
+    public static double kLimeLightYaw = 0;        // Aiming bias, facing left is positive FIXME: calibrate
+    public static double kLimeLightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 23;     // Height of camera aperture from the ground
     public static double kLimeLightLength = 9.5;    // Distance to the turret's rotation axis
     public static double kLimeLightOffset = 0;      // Side offset from the turret's plane of symmetry (left+)

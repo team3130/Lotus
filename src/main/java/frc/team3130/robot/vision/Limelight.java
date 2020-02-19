@@ -59,13 +59,27 @@ public class Limelight {
      * Read data from the Limelight and update local values
      */
     public void updateData() {
-        x_targetOffsetAngle = -tx.getDouble(0.0);
+        x_targetOffsetAngle = tx.getDouble(0.0);
         y_targetOffsetAngle = ty.getDouble(0.0);
         area = ta.getDouble(0.0);
         skew = ts.getDouble(0.0);
         realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
     }
 
+    /**
+     * 
+     * Build a "unit" vector in 3-D and rotate it from camera's
+     * coordinates to real (robot's (turret's)) coordinates
+     * @param ax horizontal angle, left is positive 
+     * @param ay vertical angle, up is positive
+     * @return a vector pointing to the direction but with the length = 1
+     */
+    public Matrix<N3, N1> levelVector(double ax, double ay) {
+        // Convert degrees from the vision to unit coordinates
+        double ux = Math.tan(Math.toRadians(ax));
+        double uy = Math.tan(Math.toRadians(ay));
+        return rotation.times(Algebra.buildVector(ux, uy, 1));
+    }
     /**
      * Calculate a position vector based on angles from vision
      *
@@ -74,13 +88,9 @@ public class Limelight {
      * @return resulting vector from the Turret's origin to the target
      */
     public Matrix<N3, N1> calcPosition(double ax, double ay) {
-        // Convert degrees from the vision to coordinates of unknown units
-        double ux = Math.tan(Math.toRadians(-ax));
-        double uy = Math.tan(Math.toRadians(ay));
 
-        // Build a "unit" vector in 3-D and rotate it from camera's
-        // coordinates to real (robot's (turret's)) coordinates
-        Matrix<N3, N1> v0 = rotation.times(Algebra.buildVector(ux, uy, 1));
+        // Find where the vector is actually pointing
+        Matrix<N3, N1> v0 = levelVector(ax, ay);
 
         // Scaling ratio based on the known height of the vision target
         double c = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight) / v0.get(1, 0);
@@ -127,9 +137,8 @@ public class Limelight {
     public double getDegHorizontalError() {
         // realVector is calculated in updateData that should be called before doing this
         // The horizontal error is an angle between the vector's projection on the XZ plane
-        // and the negative Z-axis.
-        // Note that Z is negative because our 3-D space is right-handed.
-        return Math.toDegrees(Math.atan2(realVector.get(0, 0), -realVector.get(2, 0)));
+        // and the Z-axis which is where the turret is always facing.
+        return Math.toDegrees(Math.atan2(realVector.get(0, 0), realVector.get(2, 0)));
     }
 
     /**
