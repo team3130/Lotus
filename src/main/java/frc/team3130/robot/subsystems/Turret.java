@@ -177,7 +177,8 @@ public class Turret implements Subsystem {
 
     public static synchronized void writePeriodicOutputs() {
         if (isAiming && Limelight.GetInstance().hasTrack()) {
-            double offset = Limelight.GetInstance().getDegHorizontalError();
+            // TODO: Explain why is this negative
+            double offset = -Limelight.GetInstance().getDegHorizontalError();
             double turretAngle = getAngleDegrees();
             Turret.setAngle(turretAngle + offset);
         }

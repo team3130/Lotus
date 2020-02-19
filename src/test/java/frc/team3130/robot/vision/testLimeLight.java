@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class testLimeLight {
     @Test
     public void RotationTest() {
-        Matrix<N3,N1> lvec = Limelight.GetInstance().levelVector(0, 0);
+        Matrix<N3,N1> lvec = Limelight.GetInstance().levelVector(1, 0);
         System.out.println(String.format("level Vec = [%8.5f, %8.5f, %8.5f]",
             lvec.get(0,0), lvec.get(1,0), lvec.get(2,0)));
         assertEquals("Length is wrong", 1.0, lvec.normF(), 0.001);
