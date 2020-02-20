@@ -51,7 +51,7 @@ public class Limelight {
         translation = Algebra.buildVector(
                 RobotMap.kLimeLightOffset,
                 RobotMap.kLimelightHeight,
-                -RobotMap.kLimeLightLength
+                RobotMap.kLimeLightLength
         );
     }
 
@@ -160,14 +160,14 @@ public class Limelight {
     /**
      * Calibrate the tilt angle of the Limelight
      */
-    public void calibrate() {
+    public double calibrate() {
         updateData();
 
         double height = RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight;
         double distance = RobotMap.kLimeLightCalibrationDist;
 
         double tiltAngle = Math.toDegrees(Math.atan2(height, distance)) - y_targetOffsetAngle;
-        System.out.format("Limelight Tilt angle: %f %n", tiltAngle);
+        return tiltAngle;
     }
 
     /**
@@ -204,6 +204,7 @@ public class Limelight {
         SmartDashboard.putNumber("Limelight Distance", Limelight.GetInstance().getDistanceToTarget());
         SmartDashboard.putNumber("LimelightArea", o.area);
         SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
+        SmartDashboard.putNumber("Limelight mounting angle",  Limelight.GetInstance().calibrate());
     }
 
 }
