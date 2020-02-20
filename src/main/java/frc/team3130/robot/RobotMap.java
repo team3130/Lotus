@@ -72,7 +72,8 @@ public class RobotMap {
     public static double kTurretD = 210.0;
     public static double kTurretF = 0;
 
-    public static double kTurretTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // Checked 1/31
+    public static double kTurretPracticebotTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // Checked 1/31
+    public static double kTurretCompbotTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 32.0); // Checked 2/19
     public static double kTurretOnTargetTolerance = 0.5;
 
 

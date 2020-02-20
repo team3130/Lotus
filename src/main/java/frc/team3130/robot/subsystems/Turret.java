@@ -64,11 +64,12 @@ public class Turret implements Subsystem {
 
         isAiming = false;
 
+        //TODO: switch from practice bot ticks to comp bot ticks
         m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
-        m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle* RobotMap.kTurretTicksPerDegree));
+        m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle* RobotMap.kTurretPracticebotTicksPerDegree));
 
-        m_turret.configForwardSoftLimitThreshold((int) (RobotMap.kTurretFwdLimit * RobotMap.kTurretTicksPerDegree));
-        m_turret.configReverseSoftLimitThreshold((int) (RobotMap.kTurretRevLimit * RobotMap.kTurretTicksPerDegree));
+        m_turret.configForwardSoftLimitThreshold((int) (RobotMap.kTurretFwdLimit * RobotMap.kTurretPracticebotTicksPerDegree));
+        m_turret.configReverseSoftLimitThreshold((int) (RobotMap.kTurretRevLimit * RobotMap.kTurretPracticebotTicksPerDegree));
 
 
     }
@@ -80,7 +81,7 @@ public class Turret implements Subsystem {
      */
     public synchronized static void setAngle(double angle_deg) {
         // In Position mode, outputValue set is in rotations of the motor
-        m_turret.set(ControlMode.Position, angle_deg * RobotMap.kTurretTicksPerDegree);
+        m_turret.set(ControlMode.Position, angle_deg * RobotMap.kTurretPracticebotTicksPerDegree);
     }
 
     /**
@@ -98,7 +99,7 @@ public class Turret implements Subsystem {
      * @return Angle of the turret in degrees
      */
     public static double getAngleDegrees() {
-        return m_turret.getSelectedSensorPosition() / RobotMap.kTurretTicksPerDegree;
+        return m_turret.getSelectedSensorPosition() / RobotMap.kTurretPracticebotTicksPerDegree;
     }
 
     /**
@@ -107,7 +108,7 @@ public class Turret implements Subsystem {
      * @return Angle setpoint in degrees
      */
     public static double getAngleSetpoint() {
-        return m_turret.getClosedLoopTarget() / RobotMap.kTurretTicksPerDegree;
+        return m_turret.getClosedLoopTarget() / RobotMap.kTurretPracticebotTicksPerDegree;
     }
 
     /**
