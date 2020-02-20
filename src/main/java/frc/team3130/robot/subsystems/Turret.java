@@ -146,6 +146,19 @@ public class Turret implements Subsystem {
         }
     }
 
+    public void calculateRPM() {
+        if ((7 * 12) >= Limelight.GetInstance().getDistanceToTarget()) {
+            Flywheel.setSpeed(3900);
+        } else if ((26 * 12) <= Limelight.GetInstance().getDistanceToTarget()){
+            Flywheel.setSpeed(7500);
+        }
+        else{
+            Flywheel.setSpeed((Math.pow(Limelight.GetInstance().getDistanceToTarget(), 5) / (1.2 * Math.pow(10,9)) + 3900));
+        }
+
+    }
+
+
     /**
      * Flip the aiming state of the turret
      */
