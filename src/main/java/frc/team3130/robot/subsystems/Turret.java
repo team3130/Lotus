@@ -148,7 +148,7 @@ public class Turret implements Subsystem {
 
     public void calculateRPM() {
         if ((7 * 12) >= Limelight.GetInstance().getDistanceToTarget()) {
-            Flywheel.setSpeed(3900);
+            Flywheel.setSpeed(3200);
         } else if ((26 * 12) <= Limelight.GetInstance().getDistanceToTarget()){
             Flywheel.setSpeed(7500);
         }
