@@ -8,6 +8,7 @@ import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.numbers.N1;
 import edu.wpi.first.wpiutil.math.numbers.N3;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.subsystems.Turret;
 
 
 public class Limelight {
@@ -32,6 +33,7 @@ public class Limelight {
 
     private Matrix<N3, N3> rotation;      // Own rotation
     private Matrix<N3, N1> translation;   // Own translation
+    private Matrix<N3, N1> tilt;          // Turret tilt
     private Matrix<N3, N1> realVector;
 
     protected Limelight() {
@@ -53,6 +55,11 @@ public class Limelight {
                 RobotMap.kLimelightHeight,
                 RobotMap.kLimeLightLength
         );
+        tilt = Algebra.buildVector(
+            Math.toRadians(RobotMap.kTurretPitch),
+            0,
+            Math.toRadians(RobotMap.kTurretRoll)
+        );
     }
 
     /**
@@ -67,19 +74,45 @@ public class Limelight {
     }
 
     /**
+     * Calculate additional rotation matrix due to robot's tilt
+     * If the plane in which the turret is turning is not level
+     * then we need to compensate for this tilt.
+     * @param heading the angle in degrees from the turret's encoder
+     * @return rotation matrix to compensate for the tilt
+     */
+    Matrix<N3,N3> turretRotation(double heading) {
+        // Heading is where the turret is facing relative to the robot
+        // so convert it to the robot's heading relative to the turret (negative)
+        // and create a rotation matrix from this rotation
+        Matrix<N3,N3> turn = Algebra.Rodrigues(
+            Algebra.buildVector(0, Math.toRadians(-heading), 0)
+        );
+        // Now using this new rotation rotate the tilt vector and create
+        // another rotation matrix which is the compensation rotation we want
+        return Algebra.Rodrigues(turn.times(tilt));
+    }
+
+    /**
      * 
      * Build a "unit" vector in 3-D and rotate it from camera's
      * coordinates to real (robot's (turret's)) coordinates
      * @param ax horizontal angle, left is positive 
      * @param ay vertical angle, up is positive
+     * @param heading turret's turn angle for tilt compensation
      * @return a vector pointing to the direction but with the length = 1
      */
-    public Matrix<N3, N1> levelVector(double ax, double ay) {
+    public Matrix<N3, N1> levelVector(double ax, double ay, double heading) {
         // Convert degrees from the vision to unit coordinates
         double ux = Math.tan(Math.toRadians(ax));
         double uy = Math.tan(Math.toRadians(ay));
-        return rotation.times(Algebra.buildVector(ux, uy, 1));
+        // Do two rotations: for LimeLight mount and for robot tilt
+        return turretRotation(heading).times(
+            rotation.times(
+                Algebra.buildVector(ux, uy, 1)
+            )
+        );
     }
+
     /**
      * Calculate a position vector based on angles from vision
      *
@@ -90,7 +123,7 @@ public class Limelight {
     public Matrix<N3, N1> calcPosition(double ax, double ay) {
 
         // Find where the vector is actually pointing
-        Matrix<N3, N1> v0 = levelVector(ax, ay);
+        Matrix<N3, N1> v0 = levelVector(ax, ay, Turret.getAngleDegrees());
 
         // Scaling ratio based on the known height of the vision target
         double c = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight) / v0.get(1, 0);

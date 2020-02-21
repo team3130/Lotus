@@ -60,6 +60,11 @@ public class RobotMap {
     public static double kLimeLightCalibrationDist = 120.0; // Exact horizontal distance between target and lens FIXME
 
     //Turret
+
+    // Turret pitch and roll is how much the plane of the turret's rotation isn't level
+    public static final double kTurretPitch = -1.0; // Drop forward in degrees
+    public static final double kTurretRoll = 0; // Roll to the right in degrees
+
     public static double kTurretManualDeadband = 0.09;
     public static double kTurretManualMultipler = 0.15;
 
