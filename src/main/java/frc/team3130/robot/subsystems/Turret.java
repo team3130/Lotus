@@ -67,10 +67,9 @@ public class Turret implements Subsystem {
 
         m_turret.clearStickyFaults();
 
-        m_controlState = TurretState.IDLE;
+        m_controlState = TurretState.IDLE; // Initialize turret state to IDLE
 
         //TODO: switch from practice bot ticks to comp bot ticks
-        m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
         m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle * RobotMap.kTurretPracticebotTicksPerDegree));
 
         m_turret.configForwardSoftLimitThreshold((int) (RobotMap.kTurretFwdLimit * RobotMap.kTurretPracticebotTicksPerDegree));
@@ -93,7 +92,11 @@ public class Turret implements Subsystem {
      * @param usePrediction Predict the where the target is using chassis odometry
      */
     public static void aim(boolean usePrediction) {
-        m_controlState = TurretState.AIMING;
+        if(usePrediction){
+            m_controlState = TurretState.PREDICT;
+        }else{
+            m_controlState = TurretState.AIMING;
+        }
     }
 
     /**
@@ -115,8 +118,8 @@ public class Turret implements Subsystem {
     public static void stow() {
         m_controlState = TurretState.STOWED;
 
-        // Reset output to stowed position (0.0 currently)
-        output = 0.0;
+        // Reset output to stowing position
+        output = RobotMap.kTurretStowingAngle;
     }
 
     /**
@@ -125,7 +128,6 @@ public class Turret implements Subsystem {
     public static void idle() {
         m_controlState = TurretState.IDLE;
     }
-
 
     /**
      * System states
@@ -228,7 +230,7 @@ public class Turret implements Subsystem {
             configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
 
             //TODO: implement actual dead reckoning
-            output = 180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - Chassis.getInstance().getAngle();
+            output = 180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - Navx.GetInstance().getHeading();
 
             setAngleMM(output);
         }
@@ -267,6 +269,7 @@ public class Turret implements Subsystem {
         if (Limelight.GetInstance().hasTrack()) {
             // TODO: Explain why is this negative
             double offset = -Limelight.GetInstance().getDegHorizontalError();
+            //
             output = getAngleDegrees() + offset;
             setAngleMM(offset);
         }
@@ -287,14 +290,12 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretHoldF);
             configMotionMagic(m_turret, 0, 0);
 
-            // Track initial Chassis angle after transitioning from another state
-            initialChassisHoldAngle = Chassis.getInstance().getAngle();
-
-            setAngle(output);
-
+            // Track initial Chassis heading after transitioning from another state
+            initialChassisHoldAngle = Navx.GetInstance().getHeading();
         }
 
-
+        // Set the angle of the turret while compensating for Chassis angle change TODO: use odometry
+        setAngle(output - (Navx.GetInstance().getHeading() - initialChassisHoldAngle));
 
     }
 
@@ -385,7 +386,7 @@ public class Turret implements Subsystem {
         return getAngleSetpoint() - getAngleDegrees();
     }
 
-    public static boolean isFinished() {
+    public static boolean isFinished() { //TODO: needs other isFinished checks for other states
         if (m_controlState != m_lastState) return false;
         if (m_controlState == TurretState.PREDICT && (getAngleError() < RobotMap.kTurretReadyToAimTolerance))
             return true;
@@ -431,6 +432,6 @@ public class Turret implements Subsystem {
         SmartDashboard.putNumber("Turret Angle", getAngleDegrees());
         SmartDashboard.putNumber("Turret Setpoint", getAngleSetpoint());
         SmartDashboard.putBoolean("Turret onTarget", isOnTarget());
-        SmartDashboard.putBoolean("Turret isAiming", isTracking());
+        SmartDashboard.putBoolean("Turret isTracking", isTracking());
     }
 }
