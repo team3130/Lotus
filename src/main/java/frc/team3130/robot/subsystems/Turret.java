@@ -147,15 +147,17 @@ public class Turret implements Subsystem {
     }
 
     public void calculateRPM() {
-        if ((7 * 12) >= Limelight.GetInstance().getDistanceToTarget()) {
+        double RPM = Limelight.GetInstance().getDistanceToTarget();
+        if ((7 * 12) >= RPM) {
             Flywheel.setSpeed(3200);
-        } else if ((26 * 12) <= Limelight.GetInstance().getDistanceToTarget()){
+        } else if ((26 * 12) <= RPM){
             Flywheel.setSpeed(7500);
         }
         else{
-            Flywheel.setSpeed((Math.pow(Limelight.GetInstance().getDistanceToTarget(), 5) / (1.2 * Math.pow(10,9)) + 3900));
+            //TODO: make distance a variable
+            //Flywheel.setSpeed((Math.pow(Limelight.GetInstance().getDistanceToTarget(), 4) / (40 * Math.pow(10,5)) + 3625)); //The Tomas
+            Flywheel.setSpeed(.0714 * Math.pow(RPM, 2)  - (18.856 * RPM) + 4963.2); //The Archit
         }
-
     }
 
 
