@@ -68,11 +68,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        Chassis.configBrakeMode(true);
     }
 
     @Override
     public void disabledInit() {
+        Chassis.configBrakeMode(false);
         Intake.retakeIntake();
         Climber.retractClimb();
         WheelOfFortune.retractWheel();
@@ -82,7 +83,7 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
 
     }
-    
+  
     /**
      * This function is called every robot packet, no matter the mode. Use
      * this for items like diagnostics that you want ran during disabled,
