@@ -1,5 +1,8 @@
 package frc.team3130.robot;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -16,6 +19,8 @@ public class RobotMap {
 
 
     //Chassis
+    public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+
     public static double kChassisMaxVoltage = 12.0;
 
     public static double kChassisWidth = 23.0; //FIXME
@@ -67,15 +72,23 @@ public class RobotMap {
     public static double kTurretFwdLimit = 190.0; // Angle in degrees
     public static double kTurretRevLimit = -190.0; // Angle in degrees
 
-    public static double kTurretP = 1.4; // PID checked 2/6
+    public static double kTurretP = 1.0; // TODO: tune me
     public static double kTurretI = 0;
-    public static double kTurretD = 210.0;
+    public static double kTurretD = 0;
     public static double kTurretF = 0;
+    public static int kTurretMaxAcc = 1000;
+    public static int kTurretMaxVel = 1500;
+
+    public static double kTurretHoldP = 1.4; // PID checked 2/6
+    public static double kTurretHoldI = 0;
+    public static double kTurretHoldD = 210.0;
+    public static double kTurretHoldF = 0;
 
     public static double kTurretPracticebotTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // Checked 1/31
     public static double kTurretCompbotTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 32.0); // Checked 2/19
-    public static double kTurretOnTargetTolerance = 0.5;
+    public static double kTurretOnTargetTolerance = 0.5; // In degrees
 
+    public static double kTurretReadyToAimTolerance = 5.0; // In degrees
 
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
