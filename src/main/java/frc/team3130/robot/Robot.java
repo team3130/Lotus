@@ -49,6 +49,9 @@ public class Robot extends TimedRobot {
         //Instantiate Limelight interface
         Limelight.GetInstance();
 
+        //Instantiate Navx
+        Navx.GetInstance();
+
         WheelSpeedCalculations.GetInstance();
 
         //Register and instantiate subsystems (optionally with default commands)
@@ -138,6 +141,7 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
+        Navx.GetInstance().outputToShuffleboard();
         WheelOfFortune.outputToShuffleboard();
         Chassis.outputToShuffleboard();
         Turret.outputToShuffleboard();
