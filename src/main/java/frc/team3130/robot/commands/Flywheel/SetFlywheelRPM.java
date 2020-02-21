@@ -28,7 +28,9 @@ public class SetFlywheelRPM implements Command {
      */
     @Override
     public void initialize() {
-        Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
+        //Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
+        Turret.getInstance().calculateRPM();
+
     }
 
     /**
@@ -37,7 +39,6 @@ public class SetFlywheelRPM implements Command {
      */
     @Override
     public void execute() {
-        //Turret.getInstance().calculateRPM();
     }
 
     /**
