@@ -58,7 +58,7 @@ public class RobotMap {
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
     public static double kLimeLightLength = 9.5;    // Distance to the turret's rotation axis
     public static double kLimeLightOffset = 0;      // Side offset from the turret's plane of symmetry (left+)
-    public static double kLimeLightCalibrationDist = 120.0; // Exact horizontal distance between target and lens FIXME
+    public static double kLimeLightCalibrationDist = 120.0; // Exact horizontal distance between target and lens 
 
     //Turret
 
