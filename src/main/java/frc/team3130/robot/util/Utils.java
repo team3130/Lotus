@@ -1,5 +1,8 @@
 package frc.team3130.robot.util;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 public class Utils {
 
     /**
@@ -37,6 +40,46 @@ public class Utils {
         } else {
             return 0.0;
         }
+    }
+
+    /**
+     * Configure motion magic parameters of a Talon motor controller
+     * @param acceleration maximum/target acceleration
+     * @param cruiseVelocity cruise velocity
+     */
+    public static void configMotionMagic(WPI_TalonSRX _talon, int acceleration, int cruiseVelocity){
+        _talon.configMotionCruiseVelocity(cruiseVelocity, 0);
+        _talon.configMotionAcceleration(acceleration, 0);
+    }
+
+    /**
+     * Configure the PIDF values of a Talon motor controller
+     * @param _talon the Talon motor controller
+     * @param kP
+     * @param kI
+     * @param kD
+     * @param kF
+     */
+    public static void configPIDF(WPI_TalonSRX _talon, double kP, double kI, double kD, double kF) {
+        _talon.config_kP(0, kP, 0);
+        _talon.config_kI(0, kI, 0);
+        _talon.config_kD(0, kD, 0);
+        _talon.config_kF(0, kF, 0);
+    }
+
+    /**
+     * Configure the PIDF values of a Talon motor controller
+     * @param _talon the Talon motor controller
+     * @param kP
+     * @param kI
+     * @param kD
+     * @param kF
+     */
+    public static void configPIDF(WPI_TalonFX _talon, double kP, double kI, double kD, double kF) {
+        _talon.config_kP(0, kP, 0);
+        _talon.config_kI(0, kI, 0);
+        _talon.config_kD(0, kD, 0);
+        _talon.config_kF(0, kF, 0);
     }
 
 }

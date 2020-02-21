@@ -181,21 +181,4 @@ public class Turret implements Subsystem {
         SmartDashboard.putBoolean("Turret onTarget", isOnTarget());
         SmartDashboard.putBoolean("Turret isAiming", isTurretAiming());
     }
-
-    public static void configPIDF(WPI_TalonSRX _talon, double kP, double kI, double kD, double kF) {
-        _talon.config_kP(0, kP, 0);
-        _talon.config_kI(0, kI, 0);
-        _talon.config_kD(0, kD, 0);
-        _talon.config_kF(0, kF, 0);
-    }
-
-    public static synchronized void writePeriodicOutputs() {
-        if (isAiming && Limelight.GetInstance().hasTrack()) {
-            // TODO: Explain why is this negative
-            double offset = -Limelight.GetInstance().getDegHorizontalError();
-            double turretAngle = getAngleDegrees();
-            Turret.setAngle(turretAngle + offset);
-        }
-    }
-
 }
