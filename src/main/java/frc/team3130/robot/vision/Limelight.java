@@ -3,6 +3,7 @@ package frc.team3130.robot.vision;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.numbers.N1;
@@ -20,16 +21,21 @@ public class Limelight {
         return m_pInstance;
     }
 
+    NetworkTable visionTable;
+
     private NetworkTableEntry tv; // Whether the limelight has any valid targets (0 or 1)
     private NetworkTableEntry tx; // x angle offset from crosshair, range of -27 to 27
     private NetworkTableEntry ty; // y angle offset from crosshair, range of -20.5 to 20.5
     private NetworkTableEntry ta; // area of contour bounding box
     private NetworkTableEntry ts; // Skew or rotation (-90 degrees to 0 degrees)
 
-    private double x_targetOffsetAngle = 0.0;
-    private double y_targetOffsetAngle = 0.0;
-    private double area = 0.0;
-    private double skew = 0.0;
+
+    private MedianFilter txFilter;
+    private MedianFilter tyFilter;
+    private double x_targetOffsetAngle;
+    private double y_targetOffsetAngle;
+    private double area;
+    private double skew;
 
     private Matrix<N3, N3> rotation;      // Own rotation
     private Matrix<N3, N1> translation;   // Own translation
@@ -37,23 +43,30 @@ public class Limelight {
     private Matrix<N3, N1> realVector;
 
     protected Limelight() {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        tv = table.getEntry("tv");
-        tx = table.getEntry("tx");
-        ty = table.getEntry("ty");
-        ta = table.getEntry("ta");
-        ts = table.getEntry("ts");
+        visionTable = NetworkTableInstance.getDefault().getTable("limelight");
+        tv = visionTable.getEntry("tv");
+        tx = visionTable.getEntry("tx");
+        ty = visionTable.getEntry("ty");
+        ta = visionTable.getEntry("ta");
+        ts = visionTable.getEntry("ts");
+
+        txFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
+        tyFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
+        x_targetOffsetAngle = 0.0;
+        y_targetOffsetAngle = 0.0;
+        area = 0.0;
+        skew = 0.0;
 
         Matrix<N3, N1> rVec = Algebra.buildVector(
-                Math.toRadians(RobotMap.kLimeLightPitch),
-                Math.toRadians(RobotMap.kLimeLightYaw),
-                Math.toRadians(RobotMap.kLimeLightRoll)
+                Math.toRadians(RobotMap.kLimelightPitch),
+                Math.toRadians(RobotMap.kLimelightYaw),
+                Math.toRadians(RobotMap.kLimelightRoll)
         );
         rotation = Algebra.Rodrigues(rVec);
         translation = Algebra.buildVector(
-                RobotMap.kLimeLightOffset,
+                RobotMap.kLimelightOffset,
                 RobotMap.kLimelightHeight,
-                RobotMap.kLimeLightLength
+                RobotMap.kLimelightLength
         );
         tilt = Algebra.buildVector(
             Math.toRadians(RobotMap.kTurretPitch),
@@ -62,14 +75,38 @@ public class Limelight {
         );
     }
 
+    public double getTx() {
+        return tx.getDouble(0.0);
+    }
+
+    public double getTy() {
+        return ty.getDouble(0.0);
+    }
+
+    public double getArea() {
+        return ta.getDouble(0.0);
+    }
+
+    public double getSkew() {
+        return ts.getDouble(0.0);
+    }
+
+    /**
+     * Limelight vision tracking pipeline latency.
+     * @return Latency in milliseconds
+     */
+    public double getLatency(){
+        return visionTable.getEntry("tl").getDouble(0) + RobotMap.kLimelightLatencyMs;
+    }
+
     /**
      * Read data from the Limelight and update local values
      */
     public void updateData() {
-        x_targetOffsetAngle = tx.getDouble(0.0);
-        y_targetOffsetAngle = ty.getDouble(0.0);
-        area = ta.getDouble(0.0);
-        skew = ts.getDouble(0.0);
+        x_targetOffsetAngle = txFilter.calculate(getTx());
+        y_targetOffsetAngle = tyFilter.calculate(getTy());
+        area = getArea();
+        skew = getSkew();
         realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
     }
 
@@ -93,10 +130,10 @@ public class Limelight {
     }
 
     /**
-     * 
      * Build a "unit" vector in 3-D and rotate it from camera's
      * coordinates to real (robot's (turret's)) coordinates
-     * @param ax horizontal angle, left is positive 
+     *
+     * @param ax horizontal angle, left is positive
      * @param ay vertical angle, up is positive
      * @param heading turret's turn angle for tilt compensation
      * @return a vector pointing to the direction but with the length = 1
@@ -155,7 +192,7 @@ public class Limelight {
         // TAN(new) = COS(ty)*TAN(skew)/SIN(cam+ty)
         double tx = Math.toRadians(x_targetOffsetAngle);
         double ty = Math.toRadians(y_targetOffsetAngle);
-        double cam = Math.toRadians(RobotMap.kLimeLightPitch);
+        double cam = Math.toRadians(RobotMap.kLimelightPitch);
         double sinTilt = Math.sin(cam + ty);
         double tanRot = Math.cos(ty) * Math.tan(realSkew) / sinTilt + 10.0 * (1.0 - Math.cos(tx)) * sinTilt;
         System.out.format("Real skew:%8.3f, rot:%8.3f ty:%8.3f %n", realSkew, tanRot, ty);
@@ -180,11 +217,11 @@ public class Limelight {
      * @return distance in inches
      */
     public double getDistanceToTarget() {
-        if (Limelight.GetInstance().hasTrack()){
-            Matrix<N3,N1> projection = realVector.copy();
+        if (Limelight.GetInstance().hasTrack()) {
+            Matrix<N3, N1> projection = realVector.copy();
             projection.set(1, 0, 0.0);
             return projection.normF();
-        }else{
+        } else {
             return 0.0;
         }
     }
@@ -197,7 +234,7 @@ public class Limelight {
         updateData();
 
         double height = RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight;
-        double distance = RobotMap.kLimeLightCalibrationDist;
+        double distance = RobotMap.kLimelightCalibrationDist;
 
         double tiltAngle = Math.toDegrees(Math.atan2(height, distance)) - y_targetOffsetAngle;
         return tiltAngle;
@@ -210,9 +247,9 @@ public class Limelight {
      */
     public void setLedState(boolean isOn) {
         if (isOn) {
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+            visionTable.getEntry("ledMode").setNumber(3);
         } else {
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+            visionTable.getEntry("ledMode").setNumber(1);
         }
     }
 
@@ -222,7 +259,7 @@ public class Limelight {
      * @param pipelineNumber the id of the pipeline
      */
     public void setPipeline(double pipelineNumber) {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipelineNumber);
+        visionTable.getEntry("pipeline").setNumber(pipelineNumber);
         /*
         How to set a parameter value:
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<PUT VARIABLE NAME HERE>").setNumber(<TO SET VALUE>);
@@ -232,12 +269,12 @@ public class Limelight {
 
     public static void outputToShuffleboard() {
         Limelight o = GetInstance();
-        SmartDashboard.putNumber("Limelight X Angle", o.x_targetOffsetAngle);
-        SmartDashboard.putNumber("Limelight Y Angle", o.y_targetOffsetAngle);
-        SmartDashboard.putNumber("Limelight Distance", Limelight.GetInstance().getDistanceToTarget());
+        SmartDashboard.putNumber("Limelight Filtered X Angle", o.x_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Filtered Y Angle", o.y_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Distance", o.getDistanceToTarget());
         SmartDashboard.putNumber("LimelightArea", o.area);
         SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
-        SmartDashboard.putNumber("Limelight mounting angle",  Limelight.GetInstance().calibrate());
+        SmartDashboard.putNumber("Limelight mounting angle", o.calibrate());
     }
 
 }
