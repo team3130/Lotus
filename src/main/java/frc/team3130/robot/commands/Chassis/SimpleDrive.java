@@ -1,18 +1,21 @@
-package frc.team3130.robot.commands.WheelOfFortune;
+package frc.team3130.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.WheelOfFortune;
+import frc.team3130.robot.OI;
+import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.Set;
 
-public class TripleSpinFinish implements Command {
+
+//Drive at half speed when held, and then stop when ended
+
+public class SimpleDrive implements Command {
     private final Set<Subsystem> subsystems;
 
-    private static int blueCounter;
-
-    public TripleSpinFinish() {
-        this.subsystems = Set.of(WheelOfFortune.getInstance());
+    public SimpleDrive() {
+        this.subsystems = Set.of(Chassis.getInstance());
     }
 
     /**
@@ -20,12 +23,8 @@ public class TripleSpinFinish implements Command {
      */
     @Override
     public void initialize() {
-        blueCounter = 0;
-        WheelOfFortune.motorSpin(0.5);
-
-        WheelOfFortune.toggleWheel();
+        Chassis.driveTank(.50,.50,false);
     }
-
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
@@ -33,13 +32,7 @@ public class TripleSpinFinish implements Command {
      */
     @Override
     public void execute() {
-        //store returned color into local variable
-        String color = WheelOfFortune.getInstance().determineColor();
 
-        if (color.equals("Blue")) {
-            blueCounter++;
-        }
-        System.out.println("lmao the blueCounter is " + blueCounter);
     }
 
     /**
@@ -58,9 +51,6 @@ public class TripleSpinFinish implements Command {
      */
     @Override
     public boolean isFinished() {
-        if (blueCounter >= 7) {
-            return true;
-        }
         return false;
     }
 
@@ -74,8 +64,7 @@ public class TripleSpinFinish implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        WheelOfFortune.motorSpin(0.0);
-        WheelOfFortune.retractWheel();
+        Chassis.driveTank(0,0,true);
     }
 
     /**
