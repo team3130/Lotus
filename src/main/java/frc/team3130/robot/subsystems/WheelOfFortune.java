@@ -5,6 +5,8 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -21,15 +23,16 @@ public class WheelOfFortune implements Subsystem {
     private static Solenoid m_wheelArm;
 
     //Create and define all standard data types needed
+    private SuppliedValueWidget colorWidget =
+            Shuffleboard.getTab("Kyber").addBoolean("Wheel Color", () -> true);
 
     private Map<String, String> fieldToTargetColorMap = new HashMap<String, String>();
 
     private double lastTimestamp;
-
     private boolean isChanged;
     private boolean isCounted;
 
-    private String actualColor = "No Color Yet";
+    private String actualColor;
 
     private float deg = 0;
     private float sat = 0;
@@ -64,10 +67,12 @@ public class WheelOfFortune implements Subsystem {
         m_wheelArm.set(false);
 
         //This is the Map for converting the fieldColor into targetColor, which can be used to clear a lot of confusion while making the algorithm
-        fieldToTargetColorMap.put("Cyan", "Red");
+        fieldToTargetColorMap.put("Blue", "Red");
         fieldToTargetColorMap.put("Green", "Yellow");
-        fieldToTargetColorMap.put("Red", "Cyan");
+        fieldToTargetColorMap.put("Red", "Blue");
         fieldToTargetColorMap.put("Yellow", "Green");
+
+        actualColor = "Black"; // Initialize color tracker to black
     }
 
     public static String getTargetColor(String sourceColor) {
@@ -106,7 +111,7 @@ public class WheelOfFortune implements Subsystem {
         int g = m_colorSensor.getGreen();
         int b = m_colorSensor.getBlue();
 
-        float hsb[] = java.awt.Color.RGBtoHSB(r, g, b, null);
+        float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);
         deg = hsb[0] * 360;
         sat = hsb[1];
         brightness = hsb[2];
@@ -123,7 +128,7 @@ public class WheelOfFortune implements Subsystem {
             } else if (deg < 130) {
                 return "Green";
             } else if (deg < 250) {
-                return "Cyan";
+                return "Blue";
             } else {
                 //System.out.println("bruh what color is this");
                 return "Bruh";
@@ -133,16 +138,16 @@ public class WheelOfFortune implements Subsystem {
 
 
     /**
-     * wheelArm(false) is when it is not deployed
-     * wheelArm(true) is when it is deployed
+     * Method for toggling wheel of fortune manipulator
      */
-    //method for deploying wheel to be called in a command
     public static void toggleWheel() {
         System.out.println("Wheel has toggled");
         m_wheelArm.set(!m_wheelArm.get());
     }
 
-    //method for retracting wheel to be called in a command
+    /**
+     * method for retracting wheel to be called in a command
+     */
     public static void retractWheel() {
         System.out.println("Wheel has retracted");
         m_wheelArm.set(false);
@@ -159,33 +164,9 @@ public class WheelOfFortune implements Subsystem {
         SmartDashboard.putNumber("Brightness", getInstance().brightness);
     }
 
-    //Shuffleboard block stuff
-    boolean booleanCyan;
-    boolean booleanRed;
-    boolean booleanGreen;
-    boolean booleanYellow;
-    boolean bruhMoment;
-/*
-    String color = WheelOfFortune.getInstance().determineColor();
-    if (color.equals("Cyan")){
-        booleanCyan = true;
-    } else if (color.equals("Red")){
-        booleanRed = true;
-    } else if (color.equals("Green")){
-        booleanGreen = true;
-    } else if (color.equals ("Yellow")){
-        booleanYellow = true;
-    } else if (!color.equals("Cyan") && !color.equals("Red") && !color.equals("Green") && !color.equals("Yellow")){
-        bruhMomento = true;
-    }
-
-
-    private SuppliedValueWidget colorWidget =
-            Shuffleboard.getTab("Kyber").addBoolean("Color", () -> true);
-
+    @Override
     public void periodic() {
-        colorWidget.withProperties(Map.of("colorWhenTrue", color));
+        colorWidget.withProperties(Map.of("colorWhenTrue", getInstance().determineColor()));
     }
-    */
 
 }

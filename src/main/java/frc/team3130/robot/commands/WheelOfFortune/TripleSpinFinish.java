@@ -9,7 +9,7 @@ import java.util.Set;
 public class TripleSpinFinish implements Command {
     private final Set<Subsystem> subsystems;
 
-    private static int cyanCounter;
+    private static int blueCounter;
 
     public TripleSpinFinish() {
         this.subsystems = Set.of(WheelOfFortune.getInstance());
@@ -20,7 +20,7 @@ public class TripleSpinFinish implements Command {
      */
     @Override
     public void initialize() {
-        cyanCounter = 0;
+        blueCounter = 0;
         WheelOfFortune.motorSpin(0.5);
 
         WheelOfFortune.toggleWheel();
@@ -36,10 +36,10 @@ public class TripleSpinFinish implements Command {
         //store returned color into local variable
         String color = WheelOfFortune.getInstance().determineColor();
 
-        if (color.equals("Cyan")) {
-            cyanCounter++;
+        if (color.equals("Blue")) {
+            blueCounter++;
         }
-        System.out.println("lmao the cyanCounter is " + cyanCounter);
+        System.out.println("lmao the blueCounter is " + blueCounter);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TripleSpinFinish implements Command {
      */
     @Override
     public boolean isFinished() {
-        if (cyanCounter >= 7) {
+        if (blueCounter >= 7) {
             return true;
         }
         return false;
