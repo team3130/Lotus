@@ -20,7 +20,6 @@ public class DefaultDrive implements Command {
      */
     @Override
     public void initialize() {
-        System.out.println("Setting drive max ramp rate......");
         Chassis.configRampRate(RobotMap.kDriveMaxRampRate);
     }
 
@@ -67,7 +66,6 @@ public class DefaultDrive implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        System.out.println("Disabling drive open loop ramping......");
         Chassis.configRampRate(0);
     }
 

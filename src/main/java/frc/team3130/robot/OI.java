@@ -77,10 +77,6 @@ public class OI {
     private static JoystickButton WOFLeft = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_X);
     private static JoystickButton WOFRight = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_B);
 
-    //Used to bind SimpleDrive
-    private static JoystickButton InitSimpleDrive = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_Y);
-
-
 
 
 
@@ -115,9 +111,6 @@ public class OI {
         shift.whenPressed(new ShiftToggle());
 
         toggleHood.whenPressed(new ActuateHood());
-
-        //cursed OI
-        InitSimpleDrive.whenHeld(new SimpleDrive());
     }
 }
 
