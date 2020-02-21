@@ -261,15 +261,18 @@ public class Turret implements Subsystem {
         }
 
         if (isOnTarget()) {
-            m_controlState = TurretState.HOLD;
             // We are going out of Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
+            // Track initial Chassis heading after transitioning to Hold state
+            initialChassisHoldAngle = Navx.GetInstance().getHeading();
+
+            // Transition to Hold state
+            m_controlState = TurretState.HOLD;
         }
 
         if (Limelight.GetInstance().hasTrack()) {
             // TODO: Explain why is this negative
             double offset = -Limelight.GetInstance().getDegHorizontalError();
-            //
             output = getAngleDegrees() + offset;
             setAngleMM(offset);
         }
@@ -289,9 +292,6 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretHoldD,
                     RobotMap.kTurretHoldF);
             configMotionMagic(m_turret, 0, 0);
-
-            // Track initial Chassis heading after transitioning from another state
-            initialChassisHoldAngle = Navx.GetInstance().getHeading();
         }
 
         // Set the angle of the turret while compensating for Chassis angle change TODO: use odometry
