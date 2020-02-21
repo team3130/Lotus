@@ -151,6 +151,19 @@ public class Turret implements Subsystem {
             isNewState = true;
         }
 
+        /* Handle state transition */
+        if (isNewState){
+            switch (m_lastState){
+                case AIMING:
+                    // Handle transition out of aiming state
+                    exitAiming();
+                    break;
+
+                default:
+                    // Do nothing on default
+            }
+        }
+
         /* Handle states */
         switch (m_controlState) {
             case STOWED:
@@ -192,6 +205,14 @@ public class Turret implements Subsystem {
         // Set the last state
         m_lastState = m_controlState;
 
+    }
+
+    /**
+     * Handle aiming state exit
+     */
+    private static void exitAiming() {
+        // We are going out of Limelight aiming, turn off LEDs
+        Limelight.GetInstance().setLedState(false);
     }
 
     /**
@@ -258,16 +279,15 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretD,
                     RobotMap.kTurretF);
             configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
-        }
-
-        if (isOnTarget()) {
-            // We are going out of Limelight aiming, turn off LEDs
-            Limelight.GetInstance().setLedState(false);
-            // Track initial Chassis heading after transitioning to Hold state
+        }else if (isOnTarget()) {
+            // Track initial Chassis heading before transitioning to Hold state
             initialChassisHoldAngle = Navx.GetInstance().getHeading();
 
             // Transition to Hold state
             m_controlState = TurretState.HOLD;
+
+            // Break from method to immediately go to Hold state
+            return;
         }
 
         if (Limelight.GetInstance().hasTrack()) {
