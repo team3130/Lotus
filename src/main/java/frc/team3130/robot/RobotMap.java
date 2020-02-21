@@ -30,6 +30,7 @@ public class RobotMap {
     public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter); //FIXME
 
     public static double kDriveDeadband = 0.02;
+    public static double kDriveMaxRampRate = 0.5; // Minimum seconds from 0 to 100 TODO: tune me
 
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;

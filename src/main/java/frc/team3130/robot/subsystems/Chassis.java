@@ -51,7 +51,7 @@ public class Chassis implements Subsystem {
         m_rightMotorFront.configFactoryDefault();
         m_rightMotorRear.configFactoryDefault();
 
-        talonsToCoast(true);
+        configBrakeMode(false); // Set to coast on cstr
 
         m_leftMotorRear.set(ControlMode.Follower, RobotMap.CAN_LEFTMOTORFRONT);
         m_rightMotorRear.set(ControlMode.Follower, RobotMap.CAN_RIGHTMOTORFRONT);
@@ -70,6 +70,7 @@ public class Chassis implements Subsystem {
         m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_rightMotorFront.enableVoltageCompensation(true);
         m_leftMotorFront.enableVoltageCompensation(true);
+
 
         m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
@@ -140,25 +141,6 @@ public class Chassis implements Subsystem {
     public static void reset() {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
-    }
-
-    /**
-     * Set the drive talons to either Coast or Brake mode
-     *
-     * @param coast true for Coast mode, false for Brake mode
-     */
-    public static void talonsToCoast(boolean coast) {
-        if (coast) {
-            m_leftMotorFront.setNeutralMode(NeutralMode.Coast);
-            m_leftMotorRear.setNeutralMode(NeutralMode.Coast);
-            m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
-            m_rightMotorRear.setNeutralMode(NeutralMode.Coast);
-        } else {
-            m_leftMotorFront.setNeutralMode(NeutralMode.Brake);
-            m_leftMotorRear.setNeutralMode(NeutralMode.Brake);
-            m_rightMotorFront.setNeutralMode(NeutralMode.Brake);
-            m_rightMotorRear.setNeutralMode(NeutralMode.Brake);
-        }
     }
 
     /**
@@ -278,6 +260,37 @@ public class Chassis implements Subsystem {
     }
 
     //Configs
+
+    /**
+     * Set the drive talons to either Brake or Coast mode
+     *
+     * @param brake true for Brake mode, false for Coast mode
+     */
+    public static void configBrakeMode(boolean brake) {
+        if (brake) {
+            m_leftMotorFront.setNeutralMode(NeutralMode.Brake);
+            m_leftMotorRear.setNeutralMode(NeutralMode.Brake);
+            m_rightMotorFront.setNeutralMode(NeutralMode.Brake);
+            m_rightMotorRear.setNeutralMode(NeutralMode.Brake);
+        } else {
+            m_leftMotorFront.setNeutralMode(NeutralMode.Coast);
+            m_leftMotorRear.setNeutralMode(NeutralMode.Coast);
+            m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
+            m_rightMotorRear.setNeutralMode(NeutralMode.Coast);
+        }
+    }
+
+    /**
+     * Configure the maximum ramping rate of the drivetrain while in Open Loop control mode
+     * <p>
+     * Value of 0 disables ramping
+     *
+     * @param maxRampRateSeconds Minimum desired time to go from neutral to full throttle
+     */
+    public static void configRampRate(double maxRampRateSeconds) {
+        m_rightMotorFront.configOpenloopRamp(maxRampRateSeconds);
+        m_leftMotorFront.configOpenloopRamp(maxRampRateSeconds);
+    }
 
     /**
      * Configure the drivetrain for motion profiling
