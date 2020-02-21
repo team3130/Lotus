@@ -15,13 +15,13 @@ public class DefaultDrive implements Command {
         this.subsystems = Set.of(Chassis.getInstance());
     }
 
-
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
     public void initialize() {
-
+        System.out.println("Setting drive max ramp rate......");
+        Chassis.configRampRate(RobotMap.kDriveMaxRampRate);
     }
 
     /**
@@ -30,9 +30,8 @@ public class DefaultDrive implements Command {
      */
     @Override
     public void execute() {
-
         double moveSpeed = -OI.driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        if(!Chassis.isLowGear())
+        if (!Chassis.isLowGear())
             moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
         double turnSpeed = OI.driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
 
@@ -68,7 +67,8 @@ public class DefaultDrive implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        System.out.println("Disabling drive open loop ramping......");
+        Chassis.configRampRate(0);
     }
 
     /**

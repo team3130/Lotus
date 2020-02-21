@@ -30,6 +30,7 @@ public class RobotMap {
     public static double kRChassisTicksPerInch = 4096.0 / (Math.PI * kRWheelDiameter); //FIXME
 
     public static double kDriveDeadband = 0.02;
+    public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
 
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
@@ -51,6 +52,7 @@ public class RobotMap {
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
     //Limelight
+
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
@@ -63,6 +65,11 @@ public class RobotMap {
     public static double kLimelightCalibrationDist = 180.0; // Exact horizontal distance between target and lens FIXME
 
     //Turret
+
+    // Turret pitch and roll is how much the plane of the turret's rotation isn't level
+    public static final double kTurretPitch = -1.0; // Drop forward in degrees
+    public static final double kTurretRoll = 0; // Roll to the right in degrees
+
     public static double kTurretManualDeadband = 0.09;
     public static double kTurretManualMultipler = 0.15;
 
