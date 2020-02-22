@@ -25,7 +25,7 @@ public class ManualTurretAim implements Command {
      */
     @Override
     public void initialize() {
-
+        manualChanged = false;
     }
 
     /**
