@@ -191,7 +191,7 @@ public class Turret implements Subsystem {
 
             case MANUAL:
                 // Handle manual control state
-                handleManual();
+                handleManual(isNewState);
                 break;
 
             case IDLE:
@@ -214,8 +214,6 @@ public class Turret implements Subsystem {
      * Handle aiming state exit
      */
     private static void exitAiming() {
-        // We are going out of Limelight aiming, turn off LEDs
-        Limelight.GetInstance().setLedState(false);
     }
 
     /**
@@ -237,6 +235,9 @@ public class Turret implements Subsystem {
      */
     private static void handleStowed(boolean newState) {
         if (newState) {
+            // We don't need Limelight aiming, turn off LEDs
+            Limelight.GetInstance().setLedState(false);
+
             // Configure PID MM
             configPIDF(m_turret,
                     RobotMap.kTurretP,
@@ -335,8 +336,15 @@ public class Turret implements Subsystem {
 
     /**
      * Handle system manual state
+     *
+     * @param newState Is this state new?
      */
-    private static void handleManual() {
+    private static void handleManual(boolean newState) {
+        if(newState) {
+            // We don't need Limelight aiming, turn off LEDs
+            Limelight.GetInstance().setLedState(false);
+        }
+
         setOpenLoop(output);
     }
 
@@ -347,6 +355,9 @@ public class Turret implements Subsystem {
      */
     private static void handleIdle(boolean newState) {
         if (newState) {
+            // We don't need Limelight aiming, turn off LEDs
+            Limelight.GetInstance().setLedState(false);
+
             // Force-set output
             output = 0.0;
 
