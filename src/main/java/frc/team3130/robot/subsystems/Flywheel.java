@@ -20,12 +20,12 @@ public class Flywheel implements Subsystem {
 
     //Create and define all standard data types needed
     private static ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
-    private static NetworkTableEntry testP =
-            tab.add("Flywheel P", RobotMap.kFlywheelP)
-                    .getEntry();
-    private static NetworkTableEntry testD =
-            tab.add("Flywheel D", RobotMap.kFlywheelD)
-                    .getEntry();
+//    private static NetworkTableEntry testP =
+//            tab.add("Flywheel P", RobotMap.kFlywheelP)
+//                    .getEntry();
+//    private static NetworkTableEntry testD =
+//            tab.add("Flywheel D", RobotMap.kFlywheelD)
+//                    .getEntry();
 
     /**
      * The Singleton instance of this Flywheel. External classes should
