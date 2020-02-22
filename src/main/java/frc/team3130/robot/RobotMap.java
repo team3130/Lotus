@@ -11,6 +11,9 @@ public class RobotMap {
     /**
      * Constants
      */
+    //Which Robot
+    public static boolean kUseCompbot = false;
+
     //Wheel speed calc path
     public static String kWheelSpeedPath = "home/lvuser/speed-storage-turret.ini";
 
@@ -56,8 +59,7 @@ public class RobotMap {
     //Turret
 
     // Turret pitch and roll is how much the plane of the turret's rotation isn't level
-    public static final double kPracticebotTurretPitch = -0.875; // Drop forward in degrees
-    public static final double kCompbotTurretPitch = -0.423; // Drop forward in degrees
+    public static final double kTurretPitch =(kUseCompbot ? -0.423 : -0.875); // Drop forward in degrees
     public static final double kTurretRoll = 0; // Roll to the right in degrees
 
     public static double kTurretManualDeadband = 0.09;
@@ -72,8 +74,7 @@ public class RobotMap {
     public static double kTurretD = 210.0;
     public static double kTurretF = 0;
 
-    //public static double kTurretPracticebotTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 30.0); // Checked 1/31
-    public static double kTurretPracticebotTicksPerDegree = (1.0 / 360.0) * 4096.0 * (204.0 / 32.0); // Checked 2/19
+    public static double kTurretTicksPerDegree = (kUseCompbot ? (1.0 / 360.0) * 4096.0 * (204.0 / 32.0) : (1.0 / 360.0) * 4096.0 * (204.0 / 30.0)); // Checked 1/31
     public static double kTurretOnTargetTolerance = 0.5;
 
     //Limelight
@@ -81,8 +82,7 @@ public class RobotMap {
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static double kPracticebotLimelightPitch = -31.625;   // Facing up is negative Checked: 2/21
-    public static double kCompbotLimelightPitch = -31.4325;
+    public static double kLimelightPitch = (kUseCompbot ? -31.4325 : -31.625);   // Facing up is negative Checked: 2/21
     public static double kLimelightYaw = 3.1;        // Aiming bias, facing left is positive FIXME: calibrate
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
