@@ -43,6 +43,8 @@ public class Turret implements Subsystem {
         m_turret.overrideLimitSwitchesEnable(false);
         m_turret.overrideSoftLimitsEnable(true);
 
+        //m_turret.getSensorCollection(),
+
         m_turret.setNeutralMode(NeutralMode.Brake);
 
         // configure Talons
