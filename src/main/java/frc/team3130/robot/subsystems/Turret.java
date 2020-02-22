@@ -241,10 +241,10 @@ public class Turret implements Subsystem {
 
             // Configure PID MM
             configPIDF(m_turret,
-                    RobotMap.kTurretP,
-                    RobotMap.kTurretI,
-                    RobotMap.kTurretD,
-                    RobotMap.kTurretF);
+                    RobotMap.kTurretMMP,
+                    RobotMap.kTurretMMI,
+                    RobotMap.kTurretMMD,
+                    RobotMap.kTurretMMF);
             configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
 
             // Send turret to stowed position
@@ -261,10 +261,10 @@ public class Turret implements Subsystem {
         if (newState) {
             // Configure PID MM
             configPIDF(m_turret,
-                    RobotMap.kTurretP,
-                    RobotMap.kTurretI,
-                    RobotMap.kTurretD,
-                    RobotMap.kTurretF);
+                    RobotMap.kTurretMMP,
+                    RobotMap.kTurretMMI,
+                    RobotMap.kTurretMMD,
+                    RobotMap.kTurretMMF);
             configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
 
             //TODO: implement actual dead reckoning
@@ -289,13 +289,13 @@ public class Turret implements Subsystem {
             // Turn on Limelight
             Limelight.GetInstance().setLedState(true);
 
-            // Configure PID MM
+            // Configure PID vision
             configPIDF(m_turret,
                     RobotMap.kTurretP,
                     RobotMap.kTurretI,
                     RobotMap.kTurretD,
                     RobotMap.kTurretF);
-            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+            configMotionMagic(m_turret, 0, 0);
 
             // Reset aiming stability counter
             isAimedCounter = 0;
@@ -322,7 +322,7 @@ public class Turret implements Subsystem {
             // TODO: Explain why is this negative
             double offset = -Limelight.GetInstance().getDegHorizontalError();
             output = getAngleDegrees() + offset;
-            setAngleMM(output);
+            setAngle(output);
         }
     }
 
@@ -333,7 +333,7 @@ public class Turret implements Subsystem {
      */
     private static void handleHold(boolean newState) {
         if (newState) {
-            // Config PIDF
+            // Config PID hold
             configPIDF(m_turret,
                     RobotMap.kTurretHoldP,
                     RobotMap.kTurretHoldI,
@@ -390,7 +390,7 @@ public class Turret implements Subsystem {
     }
 
     /**
-     * Set the desired angle of the turret using Motion Magic mode.
+     * Set the desired angle of the turret using Motion Magic control mode.
      *
      * @param angle_deg Absolute angle of the turret, in degrees
      */
@@ -399,7 +399,7 @@ public class Turret implements Subsystem {
     }
 
     /**
-     * Set the desired angle of the turret (and put it into position control mode if it isn't already).
+     * Set the desired angle of the turret using Position control mode.
      *
      * @param angle_deg Absolute angle of the turret, in degrees
      */
