@@ -34,7 +34,7 @@ public class testLimeLight {
     public void PositionTest() {
         double ay = 10;
         double distance = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight)
-            / Math.tan(Math.toRadians(ay - RobotMap.kLimelightPitch - RobotMap.kTurretPitch))
+            / Math.tan(Math.toRadians(ay - RobotMap.kPracticebotLimelightPitch - RobotMap.kPracticebotTurretPitch))
             + RobotMap.kLimelightLength;
         System.out.println(String.format("distance = %8.5f", distance));
         Matrix<N3,N1> realVec = Limelight.GetInstance().calcPosition(0, ay);

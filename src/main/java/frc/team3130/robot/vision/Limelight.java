@@ -58,7 +58,7 @@ public class Limelight {
         skew = 0.0;
 
         Matrix<N3, N1> rVec = Algebra.buildVector(
-                Math.toRadians(RobotMap.kLimelightPitch),
+                Math.toRadians(RobotMap.kPracticebotLimelightPitch),
                 Math.toRadians(RobotMap.kLimelightYaw),
                 Math.toRadians(RobotMap.kLimelightRoll)
         );
@@ -69,7 +69,7 @@ public class Limelight {
                 RobotMap.kLimelightLength
         );
         tilt = Algebra.buildVector(
-            Math.toRadians(RobotMap.kTurretPitch),
+            Math.toRadians(RobotMap.kPracticebotTurretPitch),
             0,
             Math.toRadians(RobotMap.kTurretRoll)
         );
@@ -192,7 +192,7 @@ public class Limelight {
         // TAN(new) = COS(ty)*TAN(skew)/SIN(cam+ty)
         double tx = Math.toRadians(x_targetOffsetAngle);
         double ty = Math.toRadians(y_targetOffsetAngle);
-        double cam = Math.toRadians(RobotMap.kLimelightPitch);
+        double cam = Math.toRadians(RobotMap.kPracticebotLimelightPitch);
         double sinTilt = Math.sin(cam + ty);
         double tanRot = Math.cos(ty) * Math.tan(realSkew) / sinTilt + 10.0 * (1.0 - Math.cos(tx)) * sinTilt;
         System.out.format("Real skew:%8.3f, rot:%8.3f ty:%8.3f %n", realSkew, tanRot, ty);
