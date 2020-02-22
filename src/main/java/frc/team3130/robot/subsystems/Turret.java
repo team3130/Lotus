@@ -23,6 +23,7 @@ public class Turret implements Subsystem {
     // Output value. This will be in various units depending on the control state
     private static double output = 0.0;
     private static double initialChassisHoldAngle = 0.0;
+    private static int isAimedCounter = 0;
 
     /**
      * The Singleton instance of this Turret. External classes should
@@ -87,9 +88,9 @@ public class Turret implements Subsystem {
      * @param usePrediction Predict the where the target is using chassis odometry
      */
     public static void aim(boolean usePrediction) {
-        if(usePrediction){
+        if (usePrediction) {
             m_controlState = TurretState.PREDICT;
-        }else{
+        } else {
             m_controlState = TurretState.AIMING;
         }
     }
@@ -147,8 +148,8 @@ public class Turret implements Subsystem {
         }
 
         /* Handle state transition */
-        if (isNewState){
-            switch (m_lastState){
+        if (isNewState) {
+            switch (m_lastState) {
                 case AIMING:
                     // Handle transition out of aiming state
                     exitAiming();
@@ -295,15 +296,27 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretD,
                     RobotMap.kTurretF);
             configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
-        }else if (isOnTarget()) {
-            // Track initial Chassis heading before transitioning to Hold state
-            initialChassisHoldAngle = Navx.GetInstance().getHeading();
 
-            // Transition to Hold state
-            m_controlState = TurretState.HOLD;
+            // Reset aiming stability counter
+            isAimedCounter = 0;
+        } else {
+            if (isOnTarget()) {
+                isAimedCounter++; // Increment since previous periodic managed to get turret on target
 
-            // Break from method to immediately go to Hold state
-            return;
+                if (isAimedCounter >= 5) { // Turret is ready to move to hold state if stable for 5 loops
+                    // Track initial Chassis heading before transitioning to Hold state
+                    initialChassisHoldAngle = Navx.GetInstance().getHeading();
+
+                    // Transition to Hold state
+                    m_controlState = TurretState.HOLD;
+
+                    // Break from method to immediately go to Hold state
+                    return;
+                }
+            }else{
+                // Turret got off target while settling, reset stability counter
+                isAimedCounter = 0;
+            }
         }
         if (Limelight.GetInstance().hasTrack()) {
             // TODO: Explain why is this negative
@@ -340,7 +353,7 @@ public class Turret implements Subsystem {
      * @param newState Is this state new?
      */
     private static void handleManual(boolean newState) {
-        if(newState) {
+        if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
         }
