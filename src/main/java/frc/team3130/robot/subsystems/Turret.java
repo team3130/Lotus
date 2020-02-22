@@ -17,7 +17,7 @@ public class Turret implements Subsystem {
     private static WPI_TalonSRX m_turret;
 
     //Create and define all standard data types needed
-    private static TurretState m_controlState = TurretState.IDLE;
+    private static TurretState m_controlState;
     private static TurretState m_lastState;
 
     // Output value. This will be in various units depending on the control state
@@ -59,15 +59,10 @@ public class Turret implements Subsystem {
 
         m_turret.enableVoltageCompensation(true);
 
-//        configPIDF(m_turret,
-//                RobotMap.kTurretHoldP,
-//                RobotMap.kTurretHoldI,
-//                RobotMap.kTurretHoldD,
-//                0.0);
-
         m_turret.clearStickyFaults();
 
-        m_controlState = TurretState.IDLE; // Initialize turret state to IDLE
+        m_controlState = TurretState.STOWED; // Initialize turret state to STOWED
+        m_lastState = TurretState.IDLE;
 
         //TODO: switch from practice bot ticks to comp bot ticks
         m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle * RobotMap.kTurretPracticebotTicksPerDegree));
