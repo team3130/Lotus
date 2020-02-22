@@ -111,10 +111,10 @@ public class Turret implements Subsystem {
      * Request to stow the turret
      */
     public static void stow() {
-        m_controlState = TurretState.STOWED;
-
         // Reset output to stowing position
         output = RobotMap.kTurretStowingAngle;
+
+        m_controlState = TurretState.STOWED;
     }
 
     /**
@@ -154,10 +154,18 @@ public class Turret implements Subsystem {
                     exitAiming();
                     break;
 
+                case MANUAL:
+                    // Handle transition out of aiming state
+                    exitManual();
+                    break;
+
                 default:
                     // Do nothing on default
             }
         }
+
+        // Cache current state locally
+        TurretState currentState = m_controlState;
 
         /* Handle states */
         switch (m_controlState) {
@@ -197,8 +205,8 @@ public class Turret implements Subsystem {
 
         }
 
-        // Set the last state
-        m_lastState = m_controlState;
+        // Update the last state with the cached current state
+        m_lastState = currentState;
 
     }
 
@@ -209,6 +217,18 @@ public class Turret implements Subsystem {
         // We are going out of Limelight aiming, turn off LEDs
         Limelight.GetInstance().setLedState(false);
     }
+
+    /**
+     * Handle manual state exit
+     */
+    private static void exitManual() {
+        // Force-set output
+        output = 0.0;
+
+        // Force-set the motor to 0.0V
+        m_turret.set(0.0);
+    }
+
 
     /**
      * Handle system stow state
