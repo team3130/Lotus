@@ -11,7 +11,6 @@ import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
 import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 import static frc.team3130.robot.OI.driverGamepad;
 
@@ -48,8 +47,6 @@ public class Robot extends TimedRobot {
 
         //Instantiate Limelight interface
         Limelight.GetInstance();
-
-        WheelSpeedCalculations.GetInstance();
 
         //Register and instantiate subsystems (optionally with default commands)
         //Note: registerSubsystem is NOT needed if setDefaultCommand is used

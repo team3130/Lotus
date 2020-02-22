@@ -14,9 +14,6 @@ public class RobotMap {
     //Which Robot
     public static boolean kUseCompbot = false;
 
-    //Wheel speed calc path
-    public static String kWheelSpeedPath = "home/lvuser/speed-storage-turret.ini";
-
 
     //Chassis
     public static double kChassisMaxVoltage = 12.0;
@@ -55,11 +52,10 @@ public class RobotMap {
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
 
-
     //Turret
 
     // Turret pitch and roll is how much the plane of the turret's rotation isn't level
-    public static final double kTurretPitch =(kUseCompbot ? -0.423 : -0.875); // Drop forward in degrees
+    public static final double kTurretPitch = (kUseCompbot ? -0.423 : -0.875); // Drop forward in degrees
     public static final double kTurretRoll = 0; // Roll to the right in degrees
 
     public static double kTurretManualDeadband = 0.09;
