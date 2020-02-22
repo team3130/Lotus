@@ -50,8 +50,6 @@ public class Turret implements Subsystem {
         m_turret.overrideLimitSwitchesEnable(false);
         m_turret.overrideSoftLimitsEnable(true);
 
-        //m_turret.getSensorCollection(),
-
         m_turret.setNeutralMode(NeutralMode.Brake);
 
         // configure Talons
@@ -68,7 +66,7 @@ public class Turret implements Subsystem {
         m_lastState = TurretState.IDLE;
 
         m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
-        
+
         m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle * RobotMap.kTurretTicksPerDegree));
 
         m_turret.configForwardSoftLimitThreshold((int) (RobotMap.kTurretFwdLimit * RobotMap.kTurretTicksPerDegree));
@@ -305,7 +303,7 @@ public class Turret implements Subsystem {
             if (isOnTarget()) {
                 isAimedCounter++; // Increment since previous periodic managed to get turret on target
 
-                if (isAimedCounter >= 5) { // Turret is ready to move to hold state if stable for 5 loops
+                if (isAimedCounter >= RobotMap.kLimelightFilterBufferSize) { // Turret is ready to move to hold state if stable for the limelight filter window size
                     // Track initial Chassis heading before transitioning to Hold state
                     initialChassisHoldAngle = Navx.GetInstance().getHeading();
 
