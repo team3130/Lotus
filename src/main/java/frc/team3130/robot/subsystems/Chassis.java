@@ -89,7 +89,7 @@ public class Chassis implements Subsystem {
         m_drive = new DifferentialDrive(m_left, m_right);
         m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
         m_drive.setDeadband(RobotMap.kDriveDeadband);
-        m_drive.setSafetyEnabled(true); //feed() must be called to prevent motor disable TODO: check me
+        m_drive.setSafetyEnabled(true); //feed() must be called to prevent motor disable
     }
 
     /**

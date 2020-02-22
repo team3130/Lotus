@@ -66,7 +66,6 @@ public class Turret implements Subsystem {
 
         isAiming = false;
 
-        //TODO: switch from practice bot ticks to comp bot ticks
         m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
         m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle* RobotMap.kTurretTicksPerDegree));
 
