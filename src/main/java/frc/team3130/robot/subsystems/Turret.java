@@ -394,7 +394,10 @@ public class Turret implements Subsystem {
      * @return Angle setpoint in degrees
      */
     public static double getAngleSetpoint() {
-        return m_turret.getClosedLoopTarget() / RobotMap.kTurretPracticebotTicksPerDegree;
+        if (m_turret.getControlMode() == ControlMode.MotionMagic || m_turret.getControlMode() == ControlMode.Position) {
+            return m_turret.getClosedLoopTarget() / RobotMap.kTurretPracticebotTicksPerDegree;
+        }
+        return 0.0;
     }
 
     /**

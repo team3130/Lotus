@@ -137,7 +137,10 @@ public class Flywheel implements Subsystem {
      * @return speed setpoint in RPM
      */
     public static double getRPMSetpoint() {
-        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
+        if(m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
+            return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
+        }
+        return 0.0;
     }
 
     /**
