@@ -3,10 +3,8 @@ package frc.team3130.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Chassis;
 
 public class Navx {
     //Instance Handling
@@ -43,7 +41,7 @@ public class Navx {
      * @return angle in degrees
      */
     public static double getAngle() {
-        if (m_bNavXPresent) return m_navX.getAngle();
+        if (m_bNavXPresent) return m_navX.getAngle() * (RobotMap.kNavxReversed ? -1.0 : 1.0);
         return -1;
     }
 
@@ -57,7 +55,7 @@ public class Navx {
      * @return the rate of change of the heading of the robot in degrees per second.
      */
     public static double getRate() {
-        if (m_bNavXPresent) return m_navX.getRate();
+        if (m_bNavXPresent) return m_navX.getRate() * (RobotMap.kNavxReversed ? -1.0 : 1.0);
         return -1;
     }
 
@@ -68,7 +66,7 @@ public class Navx {
      * @return angle in degrees
      */
     public static double getHeading() {
-        return Math.IEEEremainder(m_navX.getAngle(), 360) * (RobotMap.kNavxReversed ? -1.0 : 1.0);
+        return Math.IEEEremainder(m_navX.getAngle(), 360);
     }
 
     public static boolean getNavxPresent() {

@@ -18,7 +18,7 @@ public class RobotMap {
     public static String kWheelSpeedPath = "home/lvuser/speed-storage-turret.ini";
 
     //NavX
-    public static boolean kNavxReversed = true; //FIXME: check
+    public static boolean kNavxReversed = true;
 
     //Chassis
     public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
