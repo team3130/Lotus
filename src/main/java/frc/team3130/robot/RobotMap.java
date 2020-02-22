@@ -68,21 +68,21 @@ public class RobotMap {
 
     //Turret
     public static double kTurretManualDeadband = 0.09;
-    public static double kTurretManualMultipler = 0.15;
+    public static double kTurretManualMultipler = 0.2;
 
     public static double kTurretStowingAngle = 0.0;
-    public static double kTurretStartupAngle = -90.0;
+    public static double kTurretStartupAngle = 0.0; //TODO: remove me when absolute encoders implemented
     public static double kTurretFwdLimit = 190.0; // Angle in degrees
     public static double kTurretRevLimit = -190.0; // Angle in degrees
 
-    public static double kTurretP = 1.0; // TODO: tune me
+    public static double kTurretP = 1.0; //FIXME
     public static double kTurretI = 0;
-    public static double kTurretD = 0;
+    public static double kTurretD = 10.0;
     public static double kTurretF = 0;
-    public static int kTurretMaxAcc = 1000;
-    public static int kTurretMaxVel = 1500;
+    public static int kTurretMaxAcc = 2300;
+    public static int kTurretMaxVel = 2000;
 
-    public static double kTurretHoldP = 1.4; // PID checked 2/6
+    public static double kTurretHoldP = 1.4; //FIXME
     public static double kTurretHoldI = 0;
     public static double kTurretHoldD = 210.0;
     public static double kTurretHoldF = 0;
