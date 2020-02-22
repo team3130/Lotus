@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.*;
+import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Flywheel.TuneFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ActuateHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
@@ -90,8 +91,8 @@ public class OI {
 //        testTestHSB.whenHeld(new TestHSB());
 
         testTurret.toggleWhenActive(new ToggleTurretAim()); // TODO: check this
-//        testFlywheel.whenHeld(new SetFlywheelRPM());
-        testFlywheel.whenHeld(new TuneFlywheelRPM());
+        testFlywheel.whenHeld(new SetFlywheelRPM());
+//        testFlywheel.whenHeld(new TuneFlywheelRPM());
 
 
         toggleIntake.whenPressed(new ToggleIntake());
