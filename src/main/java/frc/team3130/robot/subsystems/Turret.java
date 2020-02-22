@@ -266,7 +266,7 @@ public class Turret implements Subsystem {
             configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
 
             //TODO: implement actual dead reckoning
-            output = 180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - Navx.GetInstance().getHeading();
+            output = -180.0 + RobotMap.kChassisStartingPose.getRotation().getDegrees() - Navx.GetInstance().getHeading();
 
             setAngleMM(output);
         }
