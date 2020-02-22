@@ -284,12 +284,11 @@ public class Turret implements Subsystem {
             // Break from method to immediately go to Hold state
             return;
         }
-
         if (Limelight.GetInstance().hasTrack()) {
             // TODO: Explain why is this negative
             double offset = -Limelight.GetInstance().getDegHorizontalError();
             output = getAngleDegrees() + offset;
-            setAngleMM(offset);
+            setAngleMM(output);
         }
     }
 
