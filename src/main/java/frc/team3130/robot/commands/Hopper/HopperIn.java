@@ -5,6 +5,7 @@ import java.util.Set;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hopper;
 import frc.team3130.robot.subsystems.Turret;
@@ -52,7 +53,7 @@ public class HopperIn implements Command {
             }
             if (Hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
-                Hopper.runHopperTop(0.35);
+                Hopper.runHopperTop(0.25);
                 Hopper.runHopperLeft(0.33);
                 Hopper.runHopperRight(-0.33);
                 hasIndexed = false;
@@ -60,7 +61,7 @@ public class HopperIn implements Command {
                 Hopper.runHopperTop(0.0);
                 Hopper.runHopperLeft(0.0);
                 Hopper.runHopperRight(0.0);
-                if (Timer.getFPGATimestamp() - lastIndexTime > 0.4) {
+                if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
                     justShot = false;
                     changedState = true;
                 }
@@ -101,10 +102,7 @@ public class HopperIn implements Command {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
-
-
     }
 
     /**
@@ -117,6 +115,8 @@ public class HopperIn implements Command {
      */
     @Override
     public void end(boolean interrupted) {
+        justShot = true;
+        changedState = true;
         Hopper.runHopperLeft(0.0);
         Hopper.runHopperRight(0.0);
         Hopper.runHopperTop(0.0);

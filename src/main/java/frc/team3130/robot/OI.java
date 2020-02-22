@@ -54,7 +54,7 @@ public class OI {
 //    private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
 //    private static JoystickButton testTripleSpinFinish = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
     private static JoystickButton testFlywheel = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
-    private static JoystickButton hopperIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER ); //R bumper TODO: check
+    private static JoystickButton hopperIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER ); //R bumper
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER); //L bumper
     private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS); //R joystick press
     private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU); //Menu button
