@@ -50,20 +50,21 @@ public class OI {
     private static JoystickTrigger intakeOut = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER); //R trigger
     private static JoystickTrigger intakeIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_LTRIGGER); // L trigger also deploys intake while active
 
-//    private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
+    //    private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
 //    private static JoystickButton testTripleSpinFinish = new JoystickButton(driverGamepad, RobotMap.LST_BTN_B);
     private static JoystickButton testFlywheel = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
-    private static JoystickButton hopperIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER ); //R bumper TODO: check
+    private static JoystickButton hopperIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER); //L bumper
     private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS); //R joystick press
     private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU); //Menu button
     private static JoystickButton shift = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS); //L joystick press
     private static JoystickButton toggleHood = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A); //Button A
 
+
 //    private static JoystickButton testTestHSB = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A);
 
     /**
-    * Weapons
+     * Weapons
      */
     private static JoystickTrigger RightWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_RTRIGGER);
     private static JoystickTrigger LeftWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_LTRIGGER);
@@ -74,8 +75,6 @@ public class OI {
     private static JoystickButton toggleWOF = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_A);
     private static JoystickButton WOFLeft = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_X);
     private static JoystickButton WOFRight = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_B);
-
-
 
 
     // Binding the buttons and triggers that are defined above to respective commands
@@ -92,6 +91,8 @@ public class OI {
 
         testTurret.toggleWhenActive(new ToggleTurretAim()); // TODO: check this
         testFlywheel.whenHeld(new SetFlywheelRPM());
+//        testFlywheel.whenHeld(new TuneFlywheelRPM());
+
 
         toggleIntake.whenPressed(new ToggleIntake());
 

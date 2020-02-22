@@ -1,30 +1,21 @@
-package frc.team3130.robot.commands.Hopper;
+package frc.team3130.robot.commands.Chassis;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.OI;
+import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.Set;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Flywheel;
-import frc.team3130.robot.subsystems.Hopper;
-import frc.team3130.robot.subsystems.Turret;
 
-public class HopperIn implements Command {
+//Drive at half speed when held, and then stop when ended
+
+public class SimpleDrive implements Command {
     private final Set<Subsystem> subsystems;
 
-    private boolean justShot;
-    private boolean changedState;
-    private boolean hasIndexed;
-    private boolean isShooting;
-    private double lastIndexTime;
-
-    public HopperIn() {
-        this.subsystems = Set.of(Hopper.getInstance());
-        justShot = true;
-        hasIndexed = false;
-        isShooting = false;
-        changedState = true;
+    public SimpleDrive() {
+        this.subsystems = Set.of(Chassis.getInstance());
     }
 
     /**
@@ -32,11 +23,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void initialize() {
-        justShot = true;
-        changedState = true;
-        hasIndexed = false;
-        isShooting = false;
-        lastIndexTime = Timer.getFPGATimestamp();
+        Chassis.driveTank(.50,.50,false);
     }
 
     /**
@@ -45,45 +32,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
-        if (justShot) {
-            if (changedState) {
-                lastIndexTime = Timer.getFPGATimestamp();
-                changedState = false;
-                hasIndexed = true;
-            }
-            if (Hopper.isEmpty()) {
-                lastIndexTime = Timer.getFPGATimestamp();
-                Hopper.runHopperTop(0.25);
-                Hopper.runHopperLeft(0.33);
-                Hopper.runHopperRight(-0.33);
-                hasIndexed = false;
-            } else {
-                Hopper.runHopperTop(0.0);
-                Hopper.runHopperLeft(0.0);
-                Hopper.runHopperRight(0.0);
-                if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
-                    justShot = false;
-                    changedState = true;
-                }
 
-            }
-        } else {
-            if (changedState && Flywheel.getInstance().canShoot()) {
-                Hopper.runHopperTop(0.6);
-                isShooting = true;
-                changedState = false;
-            } else {
-                if (isShooting) {
-                    if (!Flywheel.getInstance().canShoot()) {
-                        isShooting = false;
-                    }
-                } else {
-                    Hopper.runHopperTop(0.0);
-                    justShot = true;
-                    changedState = true;
-                }
-            }
-        }
     }
 
     /**
@@ -115,11 +64,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        justShot = true;
-        changedState = true;
-        Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);
+        Chassis.driveTank(0,0,true);
     }
 
     /**

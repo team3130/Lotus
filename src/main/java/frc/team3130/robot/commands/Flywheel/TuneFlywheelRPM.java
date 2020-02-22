@@ -5,22 +5,21 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
-import frc.team3130.robot.vision.Limelight;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
+import frc.team3130.robot.subsystems.Flywheel;
 
 import java.util.Set;
 
-public class AddPoint implements Command {
+public class TuneFlywheelRPM implements Command {
     private final Set<Subsystem> subsystems;
-
     private ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
+
     private NetworkTableEntry flywheelRPM =
             tab.add("RPM", 7500.0)
                     .getEntry();
 
-    public AddPoint() {
-        this.subsystems = Set.of(ExampleSubsystem.getInstance());
+
+    public TuneFlywheelRPM() {
+        this.subsystems = Set.of(Flywheel.getInstance());
     }
 
     /**
@@ -28,10 +27,7 @@ public class AddPoint implements Command {
      */
     @Override
     public void initialize() {
-        double dist = Limelight.GetInstance().getDistanceToTarget();
-        double speed = flywheelRPM.getDouble(5000.0);
-        System.out.println("Log Point: distance " + dist + " speed " + speed);
-//        WheelSpeedCalculations.GetInstance().AddPoint(dist, speed);
+        Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
     }
 
     /**
@@ -40,7 +36,6 @@ public class AddPoint implements Command {
      */
     @Override
     public void execute() {
-
     }
 
     /**
@@ -59,7 +54,7 @@ public class AddPoint implements Command {
      */
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     /**
@@ -72,7 +67,7 @@ public class AddPoint implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        Flywheel.stop();
     }
 
     /**
