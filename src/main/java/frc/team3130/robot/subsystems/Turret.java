@@ -146,20 +146,6 @@ public class Turret implements Subsystem {
         }
     }
 
-    public void calculateRPM() {
-        double RPM = Limelight.GetInstance().getDistanceToTarget();
-        if ((88) >= RPM) {
-            Flywheel.setSpeed(3200);
-        } else if ((315) <= RPM){
-            Flywheel.setSpeed(7500);
-        }
-        else{
-            //TODO: make distance a variable
-            //Flywheel.setSpeed((Math.pow(Limelight.GetInstance().getDistanceToTarget(), 4) / (40 * Math.pow(10,5)) + 3625)); //The Tomas
-            Flywheel.setSpeed(.0714 * Math.pow(RPM, 2)  - (18.856 * RPM) + 4963.2); //The Archit
-        }
-    }
-
 
     /**
      * Flip the aiming state of the turret
