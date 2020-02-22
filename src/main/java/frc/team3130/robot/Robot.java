@@ -52,8 +52,6 @@ public class Robot extends TimedRobot {
         //Instantiate Navx
         Navx.GetInstance();
 
-        WheelSpeedCalculations.GetInstance();
-
         //Register and instantiate subsystems (optionally with default commands)
         //Note: registerSubsystem is NOT needed if setDefaultCommand is used
         scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
@@ -149,6 +147,7 @@ public class Robot extends TimedRobot {
         Limelight.outputToShuffleboard();
         Flywheel.outputToShuffleboard();
 
+        //TODO: move this somewhere logical
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
             if (gettime == true) {
                 lastTimestamp = Timer.getFPGATimestamp();
@@ -172,7 +171,7 @@ public class Robot extends TimedRobot {
     }
 
     public void writePeriodicOutputs() {
-        Turret.writePeriodicOutputs();
+        Turret.getInstance().writePeriodicOutputs();
     }
 
     public void resetSubsystems() {
