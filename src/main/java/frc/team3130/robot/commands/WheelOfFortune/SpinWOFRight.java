@@ -18,7 +18,7 @@ public class SpinWOFRight implements Command {
      */
     @Override
     public void initialize() {
-    WheelOfFortune.motorSpin(.2);
+    WheelOfFortune.motorSpin(.5);
     }
 
     /**
@@ -46,7 +46,6 @@ public class SpinWOFRight implements Command {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -60,7 +59,7 @@ public class SpinWOFRight implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        WheelOfFortune.motorSpin((0));
     }
 
     /**
