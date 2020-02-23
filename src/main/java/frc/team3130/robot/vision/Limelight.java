@@ -32,6 +32,7 @@ public class Limelight {
 
     private MedianFilter txFilter;
     private MedianFilter tyFilter;
+    private MedianFilter tsFilter;
     private double x_targetOffsetAngle;
     private double y_targetOffsetAngle;
     private double area;
@@ -41,6 +42,7 @@ public class Limelight {
     private Matrix<N3, N1> translation;   // Own translation
     private Matrix<N3, N1> tilt;          // Turret tilt
     private Matrix<N3, N1> realVector;
+    private Matrix<N3, N1> sideVector;
 
     protected Limelight() {
         visionTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -52,6 +54,7 @@ public class Limelight {
 
         txFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
         tyFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
+        tsFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
         x_targetOffsetAngle = 0.0;
         y_targetOffsetAngle = 0.0;
         area = 0.0;
@@ -73,6 +76,8 @@ public class Limelight {
             0,
             Math.toRadians(RobotMap.kTurretRoll)
         );
+        realVector = Algebra.buildVector(0, 0, 0);
+        sideVector = Algebra.buildVector(0, 0, 0);
     }
 
     public double getTx() {
@@ -106,8 +111,16 @@ public class Limelight {
         x_targetOffsetAngle = txFilter.calculate(getTx());
         y_targetOffsetAngle = tyFilter.calculate(getTy());
         area = getArea();
-        skew = getSkew();
+        skew = tsFilter.calculate(getSkew());
         realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
+
+        // A side vector is a point somewhere on the line that connects
+        // the two top corners of the target, i.e. the top edge.
+        // Doesn't have to be a corner necessarily.
+        double realSkew = Math.toRadians(skew < -45 ? skew + 90 : skew);
+        double side_x = x_targetOffsetAngle + Math.cos(realSkew);
+        double side_y = y_targetOffsetAngle + Math.sin(realSkew);
+        sideVector = calcPosition(side_x, side_y);
     }
 
     /**
@@ -184,19 +197,8 @@ public class Limelight {
     }
 
     public double getTargetRotationTan() {
-        double realSkew = Math.toRadians(skew < -45 ? skew + 90 : skew);
-        // Very approximate adjustment for the camera tilt, should work for small angles
-        // Rationale: the best view is straight from below which is 90 degree, then no adjustment would be needed
-        // Then it gets worse as the tilt comes closer to zero degree - can't see rotation at the horizon.
-        // Ideally it would be better to do this with vectors and matrices
-        // TAN(new) = COS(ty)*TAN(skew)/SIN(cam+ty)
-        double tx = Math.toRadians(x_targetOffsetAngle);
-        double ty = Math.toRadians(y_targetOffsetAngle);
-        double cam = Math.toRadians(RobotMap.kLimelightPitch);
-        double sinTilt = Math.sin(cam + ty);
-        double tanRot = Math.cos(ty) * Math.tan(realSkew) / sinTilt + 10.0 * (1.0 - Math.cos(tx)) * sinTilt;
-        System.out.format("Real skew:%8.3f, rot:%8.3f ty:%8.3f %n", realSkew, tanRot, ty);
-        return tanRot;
+        Matrix<N3,N1> edge = sideVector.minus(realVector);
+        return edge.get(2, 0) / edge.get(0, 0);
     }
 
     /**
@@ -269,12 +271,13 @@ public class Limelight {
 
     public static void outputToShuffleboard() {
         Limelight o = GetInstance();
-        SmartDashboard.putNumber("Limelight Filtered X Angle", o.x_targetOffsetAngle);
-        SmartDashboard.putNumber("Limelight Filtered Y Angle", o.y_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight X", o.x_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Y", o.y_targetOffsetAngle);
         SmartDashboard.putNumber("Limelight Distance", o.getDistanceToTarget());
-        SmartDashboard.putNumber("LimelightArea", o.area);
+        SmartDashboard.putNumber("Limelight Area", o.area);
         SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
         SmartDashboard.putNumber("Limelight mounting angle", o.calibrate());
+        SmartDashboard.putNumber("Limelight Target Rotation", o.getTargetRotationTan());
     }
 
 }
