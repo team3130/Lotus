@@ -69,7 +69,8 @@ public class OI {
     private static JoystickTrigger RightWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_RTRIGGER);
     private static JoystickTrigger LeftWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_LTRIGGER);
 
-    private static JoystickButton toggleClimber1 = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU); //Menu button
+    private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU); //Menu button
+    private static JoystickButton RetakeClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_WINDOW); //Windows button
     private static JoystickButton RightWinchPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_RBUMPER);
     private static JoystickButton LeftWinchPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_LBUMPER);
     private static JoystickButton toggleWOF = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_A);
@@ -96,7 +97,8 @@ public class OI {
 
         toggleIntake.whenPressed(new ToggleIntake());
 
-        toggleClimber1.whenPressed(new DeployClimber());
+        toggleClimber.whenPressed(new DeployClimber());
+        RetakeClimber.whenPressed(new RetakeClimber());
         RightWinchPull.whenHeld(new RightClimberPull());
         LeftWinchPull.whenHeld(new LeftClimberPull());
         RightWinchUnpull.whenHeld(new RightClimberUnpull());
