@@ -15,6 +15,7 @@ public class Climber implements Subsystem {
     private static WPI_VictorSPX m_climberWinchSlave;
 
     private static Solenoid m_climberArm1;
+    private static Solenoid m_climberArm2;
 
     //Create and define all standard data types needed
 
@@ -39,6 +40,7 @@ public class Climber implements Subsystem {
         m_climberWinchSlave = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
 
         m_climberArm1 = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM1);
+        m_climberArm2 = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM2);
 
     }
 
@@ -55,12 +57,19 @@ public class Climber implements Subsystem {
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleClimb() {
+    public static void toggleClimb1() {
+        m_climberArm1.set(!m_climberArm1.get());
+    }
+
+    //method for deploying wheel to be called in a command
+    public static void toggleClimb2() {
         m_climberArm1.set(!m_climberArm1.get());
     }
 
     //method for retracting wheel to be called in a command
     public static void retractClimb() {
         m_climberArm1.set(false);
+        m_climberArm2.set(false);
     }
 }
+

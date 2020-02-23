@@ -8,10 +8,10 @@ import frc.team3130.robot.subsystems.Climber;
 
 import java.util.Set;
 
-public class ToggleClimber implements Command {
+public class ToggleClimberFirst implements Command {
     private final Set<Subsystem> subsystems;
 
-    public ToggleClimber() {
+    public ToggleClimberFirst() {
         this.subsystems = Set.of(Climber.getInstance());
     }
 
@@ -20,7 +20,7 @@ public class ToggleClimber implements Command {
      */
     @Override
     public void initialize() {
-        Climber.toggleClimb();
+        Climber.toggleClimb1();
     }
 
     /**

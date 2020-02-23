@@ -1,15 +1,16 @@
-package frc.team3130.robot.commands;
+package frc.team3130.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.subsystems.Climber;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
-public class ExampleCommand implements Command {
+public class ToggleClimberTwo implements Command {
     private final Set<Subsystem> subsystems;
 
-    public ExampleCommand() {
+    public ToggleClimberTwo() {
         this.subsystems = Set.of(ExampleSubsystem.getInstance());
     }
 
@@ -18,7 +19,7 @@ public class ExampleCommand implements Command {
      */
     @Override
     public void initialize() {
-
+        Climber.toggleClimb2();
     }
 
     /**
@@ -46,7 +47,6 @@ public class ExampleCommand implements Command {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
