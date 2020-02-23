@@ -54,8 +54,8 @@ public class HopperIn implements Command {
             if (Hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
                 Hopper.runHopperTop(0.25);
-                Hopper.runHopperLeft(-0.33);
-                Hopper.runHopperRight(-0.33);
+                Hopper.runHopperLeft(0.33);
+                Hopper.runHopperRight(0.33);
                 hasIndexed = false;
             } else {
                 Hopper.runHopperTop(0.0);
