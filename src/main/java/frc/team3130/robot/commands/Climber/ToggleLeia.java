@@ -20,7 +20,7 @@ public class ToggleLeia implements Command {
      */
     @Override
     public void initialize() {
-        Climber.toggleClimb1();
+        Climber.toggleLeia();
     }
 
     /**

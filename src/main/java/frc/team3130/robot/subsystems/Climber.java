@@ -59,7 +59,7 @@ public class Climber implements Subsystem {
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleClimb1() {
+    public static void toggleLeia() {
         m_Leia.set(!m_Leia.get());
     }
 
