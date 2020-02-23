@@ -1,5 +1,8 @@
 package frc.team3130.robot.commands.Flywheel;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Flywheel;
@@ -12,6 +15,12 @@ import java.util.Set;
 public class SetFlywheelRPM implements Command {
     private final Set<Subsystem> subsystems;
 
+    private ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
+
+    private NetworkTableEntry flywheelRPM =
+            tab.add("RPM", 7500.0)
+                    .getEntry();
+
 
     public SetFlywheelRPM() {
         this.subsystems = Set.of(Flywheel.getInstance(), Hood.getInstance());
@@ -22,6 +31,7 @@ public class SetFlywheelRPM implements Command {
      */
     @Override
     public void initialize() {
+        /**
         double x = Limelight.GetInstance().getDistanceToTarget();
 
         if (!Limelight.GetInstance().hasTrack()){
@@ -33,6 +43,8 @@ public class SetFlywheelRPM implements Command {
         } else{
             Flywheel.setSpeed(3500);
         }
+        */
+        Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
     }
 
     /**
