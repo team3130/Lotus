@@ -1,6 +1,9 @@
 package frc.team3130.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -19,7 +22,7 @@ public class WheelOfFortune implements Subsystem {
 
     //Create necessary objects
     private static ColorSensorV3 m_colorSensor;
-    private static WPI_TalonSRX m_spinWheel;
+    private static WPI_VictorSPX m_spinWheel;
     private static Solenoid m_wheelArm;
 
     //Create and define all standard data types needed
@@ -57,7 +60,7 @@ public class WheelOfFortune implements Subsystem {
     private WheelOfFortune() {
         m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
-        m_spinWheel = new WPI_TalonSRX(RobotMap.CAN_WHEELOFFORTUNE);
+        m_spinWheel = new WPI_VictorSPX(RobotMap.CAN_WHEELOFFORTUNE);
         m_spinWheel.configFactoryDefault();
 
         isChanged = false;
@@ -154,7 +157,7 @@ public class WheelOfFortune implements Subsystem {
     }
 
     public static void motorSpin(double spin) {
-        m_spinWheel.set(spin);
+        m_spinWheel.set(ControlMode.PercentOutput, spin);
     }
 
     public static void outputToShuffleboard() {

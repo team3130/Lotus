@@ -78,7 +78,7 @@ public class RobotMap {
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static double kLimelightPitch = (kUseCompbot ? -27.5 : -31.625);   // Facing up is negative Checked: 2/21
+    public static double kLimelightPitch = (kUseCompbot ? -27.26 : -31.625);   // Facing up is negative Checked: 2/21
     public static double kLimelightYaw = (kUseCompbot ? 0: 3.1);        // Aiming bias, facing left is positive FIXME: calibrate
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
@@ -127,7 +127,7 @@ public class RobotMap {
     public static final int CAN_LEFTMOTORFRONT = 4;
     public static final int CAN_LEFTMOTORREAR = 5;
 
-    public static final int CAN_WHEELOFFORTUNE = 107; //TODO: This is wrong
+    public static final int CAN_WHEELOFFORTUNE = 15;
 
     public static final int CAN_SKYWALKER = 106; //TODO: map this
     public static final int CAN_CLIMBER1 = 7; //TODO: also map this because I put a random number in
