@@ -46,7 +46,6 @@ public class SpinWOFLeft implements Command {
      */
     @Override
     public boolean isFinished() {
-        WheelOfFortune.motorSpin((0));
         return false;
     }
 
