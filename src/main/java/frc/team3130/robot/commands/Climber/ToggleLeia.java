@@ -2,16 +2,17 @@ package frc.team3130.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.OI;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Climber;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
-public class ToggleClimberTwo implements Command {
+public class ToggleLeia implements Command {
     private final Set<Subsystem> subsystems;
 
-    public ToggleClimberTwo() {
-        this.subsystems = Set.of(ExampleSubsystem.getInstance());
+    public ToggleLeia() {
+        this.subsystems = Set.of(Climber.getInstance());
     }
 
     /**
@@ -19,7 +20,7 @@ public class ToggleClimberTwo implements Command {
      */
     @Override
     public void initialize() {
-        Climber.toggleClimb2();
+        Climber.toggleClimb1();
     }
 
     /**
@@ -47,7 +48,7 @@ public class ToggleClimberTwo implements Command {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     /**

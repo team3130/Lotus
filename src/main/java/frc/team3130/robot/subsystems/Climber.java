@@ -14,8 +14,8 @@ public class Climber implements Subsystem {
     private static WPI_TalonSRX m_climberWinchMaster;
     private static WPI_VictorSPX m_climberWinchSlave;
 
-    private static Solenoid m_climberArm1;
-    private static Solenoid m_climberArm2;
+    private static Solenoid m_Leia;
+    private static Solenoid m_Luke;
 
     //Create and define all standard data types needed
 
@@ -39,8 +39,8 @@ public class Climber implements Subsystem {
         m_climberWinchMaster = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
         m_climberWinchSlave = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
 
-        m_climberArm1 = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM1);
-        m_climberArm2 = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM2);
+        m_Leia = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_LEIA);
+        m_Luke = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_LUKE);
 
     }
 
@@ -60,18 +60,18 @@ public class Climber implements Subsystem {
 
     //method for deploying wheel to be called in a command
     public static void toggleClimb1() {
-        m_climberArm1.set(!m_climberArm1.get());
+        m_Leia.set(!m_Leia.get());
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleClimb2() {
-        m_climberArm2.set(!m_climberArm2.get());
+    public static void toggleLuke() {
+        m_Luke.set(!m_Luke.get());
     }
 
     //method for retracting wheel to be called in a command
     public static void retractClimb() {
-        m_climberArm1.set(false);
-        m_climberArm2.set(false);
+        m_Leia.set(false);
+        m_Luke.set(false);
     }
 }
 

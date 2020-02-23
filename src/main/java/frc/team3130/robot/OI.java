@@ -97,8 +97,8 @@ public class OI {
 
         toggleIntake.whenPressed(new ToggleIntake());
 
-        toggleClimber2.whenPressed(new ToggleClimberTwo());
-        toggleClimber1.whenPressed(new ToggleClimberFirst());
+        toggleClimber2.whenPressed(new ToggleLuke());
+        toggleClimber1.whenPressed(new ToggleLeia());
         RightWinchPull.whenHeld(new RightClimberPull());
         LeftWinchPull.whenHeld(new LeftClimberPull());
         RightWinchUnpull.whenHeld(new RightClimberUnpull());
