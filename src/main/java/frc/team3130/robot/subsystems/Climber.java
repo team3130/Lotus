@@ -44,9 +44,11 @@ public class Climber implements Subsystem {
 
     }
 
+    /*
     public static void motorSpin(double spin) {
         m_skyWalker.set(spin);
     }
+    */
 
     public static void Leftflier(double spin) {
         m_climberWinchMaster.set(spin);
@@ -63,7 +65,7 @@ public class Climber implements Subsystem {
 
     //method for deploying wheel to be called in a command
     public static void toggleClimb2() {
-        m_climberArm1.set(!m_climberArm1.get());
+        m_climberArm2.set(!m_climberArm2.get());
     }
 
     //method for retracting wheel to be called in a command
