@@ -59,19 +59,23 @@ public class Climber implements Subsystem {
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleLeia() {
-        m_Leia.set(!m_Leia.get());
+    public static void DeployLeia() {
+        m_Leia.set(true);
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleLuke() {
-        m_Luke.set(!m_Luke.get());
+    public static void DeployLuke() {
+        m_Luke.set(true);
     }
 
-    //method for retracting wheel to be called in a command
-    public static void retractClimb() {
+    //method for retracting climberLeia to be called in a command
+    public static void RetractLeia() {
         m_Leia.set(false);
-        m_Luke.set(false);
+    }
+
+    //method for retracting climberLuke to be called in a command
+    public static void retractLuke() {
+        m_Leia.set(false);
     }
 }
 
