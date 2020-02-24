@@ -198,7 +198,16 @@ public class Limelight {
 
     public double getTargetRotationTan() {
         Matrix<N3,N1> edge = sideVector.minus(realVector);
-        return edge.get(2, 0) / edge.get(0, 0);
+        return -edge.get(2, 0) / edge.get(0, 0);
+    }
+
+    public Matrix<N3,N1> getInnerTarget() {
+        double depth = 29.25;
+        double alpha = Math.atan(getTargetRotationTan());
+        return Algebra.buildVector(
+            depth * Math.sin(alpha),
+            0,
+            depth * Math.cos(alpha));
     }
 
     /**
@@ -210,7 +219,17 @@ public class Limelight {
         // realVector is calculated in updateData that should be called before doing this
         // The horizontal error is an angle between the vector's projection on the XZ plane
         // and the Z-axis which is where the turret is always facing.
-        return Math.toDegrees(Math.atan2(realVector.get(0, 0), realVector.get(2, 0)));
+        double alpha = Math.toDegrees(Math.atan2(realVector.get(0, 0), realVector.get(2, 0)));
+        Matrix<N3,N1> inner = getInnerTarget();
+
+        // If rotation of the target is greater than this many inches along the edge
+        // of the outer goal (approx) forget about the inner goal
+        if (Math.abs(inner.get(0, 0)) > 5) return alpha;
+
+        // Otherwise add the inner goal's vector to the target vector
+        // to obtain a new aiming angle
+        Matrix<N3,N1> adjustedVec = realVector.plus(inner);
+        return Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0)));
     }
 
     /**
