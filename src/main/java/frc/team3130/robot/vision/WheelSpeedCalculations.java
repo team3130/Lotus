@@ -32,7 +32,6 @@ public class WheelSpeedCalculations {
 		
 		public DataPoint(String point) {
 			if(point.contains(",")) {
-				point = point.substring(1, point.length() - 1);
 				String[] parts = point.split(",");
 				distance = Double.parseDouble(parts[0]);
 				speed = Double.parseDouble(parts[1]);
@@ -78,8 +77,9 @@ public class WheelSpeedCalculations {
 		}
 
 		data_MainStorage = new ArrayList<DataPoint>();
-		speedCurve = null;
 		readFile();
+		speedCurve = null;
+		loadCurve();
 	}
  	
 	public void loadCurve() {
@@ -98,8 +98,6 @@ public class WheelSpeedCalculations {
 	public void readFile() {
 		data_MainStorage.clear();
 		
-		System.out.println("Open Read");
-		
 		try(BufferedReader br = new BufferedReader(new FileReader(FILEPATH))) {
 		    for(String line; (line = br.readLine()) != null; ) {
 		    	System.out.println(line);
@@ -109,12 +107,8 @@ public class WheelSpeedCalculations {
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("DoneReading");
+
 		data_MainStorage.sort(compPoint);
-		for (DataPoint dataPoint : data_MainStorage) {
-			System.out.println(dataPoint);
-		}
 		loadCurve();
 	}
 

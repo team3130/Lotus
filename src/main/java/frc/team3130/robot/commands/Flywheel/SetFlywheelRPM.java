@@ -21,16 +21,17 @@ public class SetFlywheelRPM implements Command {
      */
     @Override
     public void initialize() {
-
-        double x = Limelight.GetInstance().getDistanceToTarget();
-
         if (!Limelight.GetInstance().hasTrack()){
             Flywheel.setSpeed(3500.0);
-        }else if (71.0 <= x) {
-            Hood.setPistons(false);
-            Flywheel.setSpeed(WheelSpeedCalculations.GetInstance().getSpeed(x));
-        } else{
-            Flywheel.setSpeed(3500);
+        }else {
+            double x = Limelight.GetInstance().getDistanceToTarget();
+            if (71.0 <= x) {
+                Hood.setPistons(false);
+                double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
+                Flywheel.setSpeed(speed);
+            } else{
+                Flywheel.setSpeed(3500);
+            }
         }
     }
 

@@ -30,14 +30,17 @@ public class LinearInterp {
      */
     public double getY(double x) {
         int distSize = dist.size() - 1;
-        int iii = 0;
-
-        for (; iii < distSize && x <= dist.get(iii); iii++) {
+        int interval_begin = 0;
+        System.out.println(distSize);
+        for(int i = 0; i < distSize; i++) {
+            if(dist.get(i) <= x && x < dist.get(i + 1)){
+                interval_begin = i;
+                break;
+            }
         }
+        double m = ((speed.get(interval_begin + 1) - speed.get(interval_begin)) / (dist.get(interval_begin + 1) - dist.get(interval_begin)));
 
-        double m = ((speed.get(iii + 1) - speed.get(iii)) / (dist.get(iii + 1) - dist.get(iii)));
-
-        return m * (x - dist.get(iii)) + speed.get(iii);
+        return m * (x - dist.get(interval_begin)) + speed.get(interval_begin);
     }
 
     /**
