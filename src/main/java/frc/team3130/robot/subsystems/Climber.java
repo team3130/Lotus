@@ -50,21 +50,21 @@ public class Climber implements Subsystem {
     }
     */
 
-    public static void Leftflier(double spin) {
+    public static void leftFlier(double spin) {
         m_climberWinchMaster.set(spin);
     }
 
-    public static void Rightflier(double spin) {
+    public static void rightFlier(double spin) {
         m_climberWinchSlave.set(ControlMode.PercentOutput, spin);
     }
 
     //method for deploying wheel to be called in a command
-    public static void DeployLeia() {
+    public static void deployLeia() {
         m_Leia.set(true);
     }
 
     //method for deploying wheel to be called in a command
-    public static void DeployLuke() {
+    public static void deployLuke() {
         m_Luke.set(true);
     }
 
