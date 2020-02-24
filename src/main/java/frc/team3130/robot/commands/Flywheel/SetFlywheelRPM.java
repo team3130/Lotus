@@ -26,7 +26,7 @@ public class SetFlywheelRPM implements Command {
 
         if (!Limelight.GetInstance().hasTrack()){
             Flywheel.setSpeed(3500.0);
-        }else if (70.0 <= x) {
+        }else if (71.0 <= x) {
             Hood.setPistons(false);
             Flywheel.setSpeed(WheelSpeedCalculations.GetInstance().getSpeed(x));
         } else{
