@@ -11,6 +11,7 @@ import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
 import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 import static frc.team3130.robot.OI.driverGamepad;
 
@@ -48,6 +49,9 @@ public class Robot extends TimedRobot {
         //Instantiate Limelight interface
         Limelight.GetInstance();
 
+        //Instantiate Wheel Speed interpolator
+        WheelSpeedCalculations.GetInstance();
+
         //Register and instantiate subsystems (optionally with default commands)
         //Note: registerSubsystem is NOT needed if setDefaultCommand is used
         scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
@@ -80,7 +84,7 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
 
     }
-  
+
     /**
      * This function is called every robot packet, no matter the mode. Use
      * this for items like diagnostics that you want ran during disabled,

@@ -1,26 +1,16 @@
 package frc.team3130.robot.commands.Flywheel;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.subsystems.Turret;
 import frc.team3130.robot.vision.Limelight;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 import java.util.Set;
 
 public class SetFlywheelRPM implements Command {
     private final Set<Subsystem> subsystems;
-
-    private ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
-
-    private NetworkTableEntry flywheelRPM =
-            tab.add("RPM", 7500.0)
-                    .getEntry();
-
 
     public SetFlywheelRPM() {
         this.subsystems = Set.of(Flywheel.getInstance(), Hood.getInstance());
@@ -31,20 +21,17 @@ public class SetFlywheelRPM implements Command {
      */
     @Override
     public void initialize() {
-        /**
+
         double x = Limelight.GetInstance().getDistanceToTarget();
 
         if (!Limelight.GetInstance().hasTrack()){
             Flywheel.setSpeed(3500.0);
-        }else if (78.0 <= x) {
+        }else if (70.0 <= x) {
             Hood.setPistons(false);
-            //Flywheel.setSpeed((Math.pow(Limelight.GetInstance().getDistanceToTarget(), 4) / (40 * Math.pow(10,5)) + 3625)); //The Tomas
-            Flywheel.setSpeed((0.000007 * Math.pow(x, 4)) - (0.004 * Math.pow(x, 3)) + (0.7817 * Math.pow(x, 2)) - (57.797 * x) + 4807.7); //The Archit
+            Flywheel.setSpeed(WheelSpeedCalculations.GetInstance().getSpeed(x));
         } else{
             Flywheel.setSpeed(3500);
         }
-        */
-        Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
     }
 
     /**
