@@ -79,7 +79,7 @@ public class RobotMap {
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
     public static double kLimelightPitch = (kUseCompbot ? -26.34 : -31.625);   // Facing up is negative Checked: 2/21
-    public static double kLimelightYaw = (kUseCompbot ? 3.1-2.5: 3.1);        // Aiming bias, facing left is positive FIXME: calibrate
+    public static double kLimelightYaw = (kUseCompbot ? 2.1 : 3.1);        // Aiming bias, facing left is positive FIXME: calibrate
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
     public static double kLimelightLength = 9.5;    // Distance to the turret's rotation axis
@@ -98,7 +98,7 @@ public class RobotMap {
 
     public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
     public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
-    public static double kFlywheelReadyTolerance = 60.0; // In RPM FIXME: might be why we have variation while shooting
+    public static double kFlywheelReadyTolerance = 20.0; // In RPM
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;
