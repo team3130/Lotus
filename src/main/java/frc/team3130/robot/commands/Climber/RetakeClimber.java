@@ -1,5 +1,7 @@
 package frc.team3130.robot.commands.Climber;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Climber;
@@ -10,8 +12,11 @@ import java.util.Set;
 public class RetakeClimber implements Command {
     private final Set<Subsystem> subsystems;
 
+    private Timer timer;
+
     public RetakeClimber() {
         this.subsystems = Set.of(Climber.getInstance());
+        timer = new Timer();
     }
 
     /**
@@ -19,7 +24,9 @@ public class RetakeClimber implements Command {
      */
     @Override
     public void initialize() {
-        Climber.retractClimb();
+        Climber.retractLuke();
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -47,8 +54,14 @@ public class RetakeClimber implements Command {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        if (timer.get() > 3) {
+            Climber.RetractLeia();
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
     /**
@@ -61,7 +74,9 @@ public class RetakeClimber implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        if (interrupted) {
+            DriverStation.reportError("BRUH momento", false);
+        }
     }
 
     /**

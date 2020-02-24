@@ -15,14 +15,12 @@ public class HopperIn implements Command {
 
     private boolean justShot;
     private boolean changedState;
-    private boolean hasIndexed;
     private boolean isShooting;
     private double lastIndexTime;
 
     public HopperIn() {
         this.subsystems = Set.of(Hopper.getInstance());
         justShot = true;
-        hasIndexed = false;
         isShooting = false;
         changedState = true;
     }
@@ -34,7 +32,6 @@ public class HopperIn implements Command {
     public void initialize() {
         justShot = true;
         changedState = true;
-        hasIndexed = false;
         isShooting = false;
         lastIndexTime = Timer.getFPGATimestamp();
     }
@@ -49,14 +46,12 @@ public class HopperIn implements Command {
             if (changedState) {
                 lastIndexTime = Timer.getFPGATimestamp();
                 changedState = false;
-                hasIndexed = true;
             }
             if (Hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
                 Hopper.runHopperTop(0.25);
                 Hopper.runHopperLeft(0.33);
-                Hopper.runHopperRight(-0.33);
-                hasIndexed = false;
+                Hopper.runHopperRight(0.33);
             } else {
                 Hopper.runHopperTop(0.0);
                 Hopper.runHopperLeft(0.0);
@@ -65,14 +60,13 @@ public class HopperIn implements Command {
                     justShot = false;
                     changedState = true;
                 }
-
             }
         } else {
             if (changedState && Flywheel.getInstance().canShoot()) {
                 Hopper.runHopperTop(0.6);
                 isShooting = true;
                 changedState = false;
-            } else {
+            } else if(!changedState) {
                 if (isShooting) {
                     if (!Flywheel.getInstance().canShoot()) {
                         isShooting = false;

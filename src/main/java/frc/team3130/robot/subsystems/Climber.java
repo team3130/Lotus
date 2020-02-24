@@ -14,7 +14,8 @@ public class Climber implements Subsystem {
     private static WPI_TalonSRX m_climberWinchMaster;
     private static WPI_VictorSPX m_climberWinchSlave;
 
-    private static Solenoid m_climberArm;
+    private static Solenoid m_Leia;
+    private static Solenoid m_Luke;
 
     //Create and define all standard data types needed
 
@@ -34,33 +35,47 @@ public class Climber implements Subsystem {
     }
 
     private Climber() {
-        m_skyWalker = new WPI_TalonSRX(RobotMap.CAN_SKYWALKER);
+        // m_skyWalker = new WPI_TalonSRX(RobotMap.CAN_SKYWALKER);
         m_climberWinchMaster = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
         m_climberWinchSlave = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
 
-        m_climberArm = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_CLIMBERARM);
+        m_Leia = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_LEIA);
+        m_Luke = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_LUKE);
 
     }
 
+    /*
     public static void motorSpin(double spin) {
         m_skyWalker.set(spin);
     }
+    */
 
-    public static void Leftflier(double spin) {
+    public static void leftFlier(double spin) {
         m_climberWinchMaster.set(spin);
     }
 
-    public static void Rightflier(double spin) {
+    public static void rightFlier(double spin) {
         m_climberWinchSlave.set(ControlMode.PercentOutput, spin);
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleClimb() {
-        m_climberArm.set(!m_climberArm.get());
+    public static void deployLeia() {
+        m_Leia.set(true);
     }
 
-    //method for retracting wheel to be called in a command
-    public static void retractClimb() {
-        m_climberArm.set(false);
+    //method for deploying wheel to be called in a command
+    public static void deployLuke() {
+        m_Luke.set(true);
+    }
+
+    //method for retracting climberLeia to be called in a command
+    public static void RetractLeia() {
+        m_Leia.set(false);
+    }
+
+    //method for retracting climberLuke to be called in a command
+    public static void retractLuke() {
+        m_Leia.set(false);
     }
 }
+

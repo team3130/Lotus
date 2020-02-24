@@ -3,6 +3,7 @@ package frc.team3130.robot.commands.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Climber;
+import frc.team3130.robot.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
@@ -10,7 +11,7 @@ public class RightClimberUnpull implements Command {
     private final Set<Subsystem> subsystems;
 
     public RightClimberUnpull() {
-        this.subsystems = Set.of(Climber.getInstance());
+        this.subsystems = Set.of(ExampleSubsystem.getInstance());
     }
 
     /**
@@ -18,7 +19,7 @@ public class RightClimberUnpull implements Command {
      */
     @Override
     public void initialize() {
-        Climber.Rightflier(0.3);
+        Climber.rightFlier(0.3);
     }
 
     /**
@@ -59,7 +60,7 @@ public class RightClimberUnpull implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.Rightflier(0);
+        Climber.rightFlier(0);
     }
 
     /**
