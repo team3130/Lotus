@@ -19,7 +19,7 @@ public class RightClimberPull implements Command {
      */
     @Override
     public void initialize() {
-        Climber.Rightflier(-0.3);
+        Climber.rightFlier(-0.3);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RightClimberPull implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.Rightflier(0);
+        Climber.rightFlier(0);
     }
 
     /**

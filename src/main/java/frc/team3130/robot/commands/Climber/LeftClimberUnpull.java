@@ -19,7 +19,7 @@ public class LeftClimberUnpull implements Command {
      */
     @Override
     public void initialize() {
-        Climber.Leftflier(0.3);
+        Climber.leftFlier(0.3);
     }
 
     /**
@@ -60,7 +60,7 @@ public class LeftClimberUnpull implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.Leftflier(0);
+        Climber.leftFlier(0);
     }
 
     /**

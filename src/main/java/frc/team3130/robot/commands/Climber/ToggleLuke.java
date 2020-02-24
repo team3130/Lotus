@@ -19,7 +19,7 @@ public class ToggleLuke implements Command {
      */
     @Override
     public void initialize() {
-        Climber.toggleLuke();
+        Climber.deployLuke();
     }
 
     /**

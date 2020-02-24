@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Climber;
 
 import java.util.Set;
@@ -25,7 +23,7 @@ public class DeployClimber implements Command {
      */
     @Override
     public void initialize() {
-        Climber.DeployLeia();
+        Climber.deployLeia();
         timer.reset();
         timer.start();
     }
@@ -56,7 +54,7 @@ public class DeployClimber implements Command {
     @Override
     public boolean isFinished() {
         if (timer.get() > 3) {
-            Climber.DeployLuke();
+            Climber.deployLuke();
             return true;
         }
         else{
