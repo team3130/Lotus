@@ -72,7 +72,6 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         Chassis.configBrakeMode(false);
         Intake.retakeIntake();
-        Climber.retractClimb();
         Hood.setPistons(false);
         WheelOfFortune.retractWheel();
     }
