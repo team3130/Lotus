@@ -49,6 +49,9 @@ public class Robot extends TimedRobot {
         //Instantiate Limelight interface
         Limelight.GetInstance();
 
+        //Instantiate Navx
+        Navx.GetInstance();
+
         //Instantiate Wheel Speed interpolator
         WheelSpeedCalculations.GetInstance();
 
@@ -140,6 +143,7 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
+        Navx.GetInstance().outputToShuffleboard();
         WheelOfFortune.outputToShuffleboard();
         Chassis.outputToShuffleboard();
         Turret.outputToShuffleboard();
@@ -147,6 +151,7 @@ public class Robot extends TimedRobot {
         Limelight.outputToShuffleboard();
         Flywheel.outputToShuffleboard();
 
+        //TODO: move this somewhere logical
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
             if (gettime == true) {
                 lastTimestamp = Timer.getFPGATimestamp();
@@ -170,7 +175,7 @@ public class Robot extends TimedRobot {
     }
 
     public void writePeriodicOutputs() {
-        Turret.writePeriodicOutputs();
+        Turret.getInstance().writePeriodicOutputs();
     }
 
     public void resetSubsystems() {

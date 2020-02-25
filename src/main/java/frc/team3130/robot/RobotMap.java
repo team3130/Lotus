@@ -1,5 +1,8 @@
 package frc.team3130.robot;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -14,7 +17,12 @@ public class RobotMap {
     //Which Robot
     public static boolean kUseCompbot = true;
 
+    //NavX
+    public static boolean kNavxReversed = true;
+
     //Chassis
+    public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+
     public static double kChassisMaxVoltage = 12.0;
 
     public static double kChassisWidth = 23.0; //FIXME
@@ -59,21 +67,34 @@ public class RobotMap {
     public static final double kTurretRoll = 0; // Roll to the right in degrees
 
     public static double kTurretManualDeadband = 0.09;
-    public static double kTurretManualMultipler = 0.15;
+    public static double kTurretManualMultipler = 0.2;
 
-    public static double kTurretStartupAngle = -90.0;
+    public static double kTurretStowingAngle = 0.0;
+    public static double kTurretStartupAngle = 0.0; //TODO: remove me when absolute encoders implemented
     public static double kTurretFwdLimit = 190.0; // Angle in degrees
-    public static double kTurretRevLimit = 190.0; // Angle in degrees
+    public static double kTurretRevLimit = -190.0; // Angle in degrees
 
-    public static double kTurretP = 1.4; // PID checked 2/6
-    public static double kTurretI = 0;
-    public static double kTurretD = 210.0;
+    public static double kTurretP = 0.5;
+    public static double kTurretI = 0.0001;
+    public static double kTurretD = 37.0;
     public static double kTurretF = 0;
 
-    public static double kTurretTicksPerDegree = (kUseCompbot ? (1.0 / 360.0) * 4096.0 * (204.0 / 32.0) : (1.0 / 360.0) * 4096.0 * (204.0 / 30.0)); // Checked 1/31
-    public static double kTurretOnTargetTolerance = 0.5;
+    public static double kTurretMMP = 1.8;
+    public static double kTurretMMI = 0;
+    public static double kTurretMMD = 0.7;
+    public static double kTurretMMF = 0;
+    public static int kTurretMaxAcc = 3000;
+    public static int kTurretMaxVel = 1900;
 
-    //Limelight
+    public static double kTurretHoldP = 1.0;
+    public static double kTurretHoldI = 0;
+    public static double kTurretHoldD = 17.0;
+    public static double kTurretHoldF = 0;
+
+    public static double kTurretTicksPerDegree = (kUseCompbot ? (1.0 / 360.0) * 4096.0 * (204.0 / 32.0) : (1.0 / 360.0) * 4096.0 * (204.0 / 30.0)); // Checked 1/31
+    public static double kTurretOnTargetTolerance = 0.5; // In degrees
+
+    public static double kTurretReadyToAimTolerance = 5.0; // In degrees
 
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
