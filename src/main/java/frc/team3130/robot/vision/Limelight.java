@@ -289,7 +289,7 @@ public class Limelight {
 
     public double getLimelightYaw(){
         double yawCalc = RobotMap.kLimelightYaw;
-        yawCalc = yawCalc/ (getDistanceToTarget()+(287-71)/287);
+        //yawCalc = yawCalc/ (getDistanceToTarget()+(287-71)/287);
         return yawCalc;
     }
 

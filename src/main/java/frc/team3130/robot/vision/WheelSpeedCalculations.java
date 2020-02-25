@@ -100,7 +100,6 @@ public class WheelSpeedCalculations {
 		
 		try(BufferedReader br = new BufferedReader(new FileReader(FILEPATH))) {
 		    for(String line; (line = br.readLine()) != null; ) {
-		    	System.out.println(line);
 		        if(!line.equals(""))data_MainStorage.add(new DataPoint(line));
 		    }
 		    // line is not visible here.
