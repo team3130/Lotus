@@ -62,7 +62,7 @@ public class Limelight {
 
         Matrix<N3, N1> rVec = Algebra.buildVector(
                 Math.toRadians(RobotMap.kLimelightPitch),
-                Math.toRadians(RobotMap.kLimelightYaw),
+                Math.toRadians(getLimelightYaw()),
                 Math.toRadians(RobotMap.kLimelightRoll)
         );
         rotation = Algebra.Rodrigues(rVec);
@@ -285,6 +285,12 @@ public class Limelight {
         How to set a parameter value:
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<PUT VARIABLE NAME HERE>").setNumber(<TO SET VALUE>);
         */
+    }
+
+    public double getLimelightYaw(){
+        double yawCalc = RobotMap.kLimelightYaw;
+        yawCalc = yawCalc/ (getDistanceToTarget()+(287-71)/287);
+        return yawCalc;
     }
 
 
