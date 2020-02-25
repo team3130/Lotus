@@ -4,6 +4,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -17,6 +20,14 @@ public class Turret implements Subsystem {
     private static WPI_TalonSRX m_turret;
 
     //Create and define all standard data types needed
+//    private static ShuffleboardTab tab = Shuffleboard.getTab("Turret");
+//    private static NetworkTableEntry testP =
+//            tab.add("Turret P", 1.0)
+//                    .getEntry();
+//    private static NetworkTableEntry testD =
+//            tab.add("Turret D", 0.0)
+//                    .getEntry();
+
     private static TurretState m_controlState;
     private static TurretState m_lastState;
 
@@ -214,13 +225,13 @@ public class Turret implements Subsystem {
     /**
      * Handle aiming state exit
      */
-    private static void exitAiming() {
+    private synchronized static void exitAiming() {
     }
 
     /**
      * Handle manual state exit
      */
-    private static void exitManual() {
+    private synchronized static void exitManual() {
         // Force-set output
         output = 0.0;
 
@@ -234,7 +245,7 @@ public class Turret implements Subsystem {
      *
      * @param newState Is this state new?
      */
-    private static void handleStowed(boolean newState) {
+    private synchronized static void handleStowed(boolean newState) {
         if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
@@ -257,7 +268,7 @@ public class Turret implements Subsystem {
      *
      * @param newState Is this state new?
      */
-    private static void handlePredict(boolean newState) {
+    private synchronized static void handlePredict(boolean newState) {
         if (newState) {
             // Configure PID MM
             configPIDF(m_turret,
@@ -266,16 +277,22 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
             configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
-
+            initialChassisHoldAngle = Navx.GetInstance().getHeading();
             //TODO: implement actual dead reckoning
-            output = -180.0 + RobotMap.kChassisStartingPose.getRotation().getDegrees() - Navx.GetInstance().getHeading();
+            output = -180.0 + RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
 
             setAngleMM(output);
-        }
-
-        if (isFinished()) {
-            // Transition into Limelight aim state
-            m_controlState = TurretState.AIMING;
+        }else{
+            // New setpoint if Chassis angle has changed by more that the tolerance
+            if(Math.abs(Navx.GetInstance().getHeading() - initialChassisHoldAngle) > RobotMap.kTurretReadyToAimTolerance){
+                initialChassisHoldAngle = Navx.GetInstance().getHeading();
+                output = -180.0 + RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
+                setAngleMM(output);
+            }
+            if (isFinished()) {
+                // Transition into Limelight aim state
+                m_controlState = TurretState.AIMING;
+            }
         }
     }
 
@@ -284,7 +301,7 @@ public class Turret implements Subsystem {
      *
      * @param newState Is this state new?
      */
-    private static void handleAiming(boolean newState) {
+    private synchronized static void handleAiming(boolean newState) {
         if (newState) {
             // Turn on Limelight
             Limelight.GetInstance().setLedState(true);
@@ -296,7 +313,7 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretD,
                     RobotMap.kTurretF);
             configMotionMagic(m_turret, 0, 0);
-
+            m_turret.set(0.0);
             // Reset aiming stability counter
             isAimedCounter = 0;
         } else {
@@ -331,7 +348,7 @@ public class Turret implements Subsystem {
      *
      * @param newState Is this state new?
      */
-    private static void handleHold(boolean newState) {
+    private synchronized static void handleHold(boolean newState) {
         if (newState) {
             // Config PID hold
             configPIDF(m_turret,
@@ -352,7 +369,7 @@ public class Turret implements Subsystem {
      *
      * @param newState Is this state new?
      */
-    private static void handleManual(boolean newState) {
+    private synchronized static void handleManual(boolean newState) {
         if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
@@ -366,7 +383,7 @@ public class Turret implements Subsystem {
      *
      * @param newState Is this state new?
      */
-    private static void handleIdle(boolean newState) {
+    private synchronized static void handleIdle(boolean newState) {
         if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
@@ -449,7 +466,7 @@ public class Turret implements Subsystem {
 
     public static boolean isFinished() { //TODO: needs other isFinished checks for other states
         if (m_controlState != m_lastState) return false;
-        if (m_controlState == TurretState.PREDICT && (getAngleError() < RobotMap.kTurretReadyToAimTolerance))
+        if (m_controlState == TurretState.PREDICT && (Math.abs(output - getAngleDegrees()) < RobotMap.kTurretReadyToAimTolerance))
             return true;
         else return false;
     }
@@ -462,8 +479,8 @@ public class Turret implements Subsystem {
      * @return If the turret is aimed on target and in correct mode
      */
     public static boolean isOnTarget() {
-        if (m_controlState == TurretState.AIMING || m_controlState == TurretState.HOLD) {
-            return Math.abs(getAngleError()) < RobotMap.kTurretOnTargetTolerance;
+        if ((m_controlState == TurretState.AIMING && Limelight.GetInstance().hasTrack())|| m_controlState == TurretState.HOLD) {
+            return Math.abs(output - getAngleDegrees()) < RobotMap.kTurretOnTargetTolerance;
         } else {
             return false;
         }

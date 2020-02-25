@@ -74,21 +74,21 @@ public class RobotMap {
     public static double kTurretFwdLimit = 190.0; // Angle in degrees
     public static double kTurretRevLimit = -190.0; // Angle in degrees
 
-    public static double kTurretP = 1.4;
-    public static double kTurretI = 0;
-    public static double kTurretD = 210.0; //TODO: may need tuning for comp
+    public static double kTurretP = 0.5;
+    public static double kTurretI = 0.0001;
+    public static double kTurretD = 37.0;
     public static double kTurretF = 0;
 
-    public static double kTurretMMP = 1.0; //FIXME
+    public static double kTurretMMP = 1.8;
     public static double kTurretMMI = 0;
-    public static double kTurretMMD = 10.0;
+    public static double kTurretMMD = 0.7;
     public static double kTurretMMF = 0;
-    public static int kTurretMaxAcc = 2300;
-    public static int kTurretMaxVel = 2000;
+    public static int kTurretMaxAcc = 3000;
+    public static int kTurretMaxVel = 1900;
 
-    public static double kTurretHoldP = 1.4; //FIXME
+    public static double kTurretHoldP = 1.0;
     public static double kTurretHoldI = 0;
-    public static double kTurretHoldD = 120.0;
+    public static double kTurretHoldD = 17.0;
     public static double kTurretHoldF = 0;
 
     public static double kTurretTicksPerDegree = (kUseCompbot ? (1.0 / 360.0) * 4096.0 * (204.0 / 32.0) : (1.0 / 360.0) * 4096.0 * (204.0 / 30.0)); // Checked 1/31
