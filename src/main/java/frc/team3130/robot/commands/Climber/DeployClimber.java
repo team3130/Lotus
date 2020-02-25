@@ -1,18 +1,21 @@
 package frc.team3130.robot.commands.Climber;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Climber;
 
 import java.util.Set;
 
-public class ToggleClimber implements Command {
+public class DeployClimber implements Command {
     private final Set<Subsystem> subsystems;
 
-    public ToggleClimber() {
+    private Timer timer;
+
+    public DeployClimber() {
         this.subsystems = Set.of(Climber.getInstance());
+        timer = new Timer();
     }
 
     /**
@@ -20,7 +23,9 @@ public class ToggleClimber implements Command {
      */
     @Override
     public void initialize() {
-        Climber.toggleClimb();
+        Climber.deployLeia();
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -48,9 +53,15 @@ public class ToggleClimber implements Command {
      */
     @Override
     public boolean isFinished() {
-        return true;
-    }
+        if (timer.get() > 3) {
+            Climber.deployLuke();
+            return true;
+        }
+        else{
+            return false;
+        }
 
+    }
     /**
      * The action to take when the command ends. Called when either the command
      * finishes normally -- that is it is called when {@link #isFinished()} returns
@@ -61,7 +72,9 @@ public class ToggleClimber implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        if (interrupted) {
+            DriverStation.reportError("BRUH momento", false);
+        }
     }
 
     /**

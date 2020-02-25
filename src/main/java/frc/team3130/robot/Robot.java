@@ -49,6 +49,10 @@ public class Robot extends TimedRobot {
         //Instantiate Limelight interface
         Limelight.GetInstance();
 
+        //Instantiate Navx
+        Navx.GetInstance();
+
+        //Instantiate Wheel Speed interpolator
         WheelSpeedCalculations.GetInstance();
 
         //Register and instantiate subsystems (optionally with default commands)
@@ -75,7 +79,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         Chassis.configBrakeMode(false);
         Intake.retakeIntake();
-        Climber.retractClimb();
+        Hood.setPistons(false);
         WheelOfFortune.retractWheel();
     }
 
@@ -83,7 +87,7 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
 
     }
-  
+
     /**
      * This function is called every robot packet, no matter the mode. Use
      * this for items like diagnostics that you want ran during disabled,
@@ -139,6 +143,7 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
+        Navx.GetInstance().outputToShuffleboard();
         WheelOfFortune.outputToShuffleboard();
         Chassis.outputToShuffleboard();
         Turret.outputToShuffleboard();
@@ -146,6 +151,7 @@ public class Robot extends TimedRobot {
         Limelight.outputToShuffleboard();
         Flywheel.outputToShuffleboard();
 
+        //TODO: move this somewhere logical
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
             if (gettime == true) {
                 lastTimestamp = Timer.getFPGATimestamp();
@@ -169,7 +175,7 @@ public class Robot extends TimedRobot {
     }
 
     public void writePeriodicOutputs() {
-        Turret.writePeriodicOutputs();
+        Turret.getInstance().writePeriodicOutputs();
     }
 
     public void resetSubsystems() {

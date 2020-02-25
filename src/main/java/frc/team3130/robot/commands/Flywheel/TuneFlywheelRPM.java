@@ -1,17 +1,25 @@
-package frc.team3130.robot.commands.Intake;
+package frc.team3130.robot.commands.Flywheel;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
-import frc.team3130.robot.subsystems.Intake;
+import frc.team3130.robot.subsystems.Flywheel;
 
 import java.util.Set;
 
-public class RetakeIntake implements Command {
+public class TuneFlywheelRPM implements Command {
     private final Set<Subsystem> subsystems;
+    private ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
 
-    public RetakeIntake() {
-        this.subsystems = Set.of(Intake.getInstance());
+    private NetworkTableEntry flywheelRPM =
+            tab.add("RPM", 7500.0)
+                    .getEntry();
+
+
+    public TuneFlywheelRPM() {
+        this.subsystems = Set.of(Flywheel.getInstance());
     }
 
     /**
@@ -19,7 +27,7 @@ public class RetakeIntake implements Command {
      */
     @Override
     public void initialize() {
-        Intake.retakeIntake();
+        Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
     }
 
     /**
@@ -28,7 +36,6 @@ public class RetakeIntake implements Command {
      */
     @Override
     public void execute() {
-
     }
 
     /**
@@ -47,7 +54,6 @@ public class RetakeIntake implements Command {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -61,7 +67,7 @@ public class RetakeIntake implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        Flywheel.stop();
     }
 
     /**

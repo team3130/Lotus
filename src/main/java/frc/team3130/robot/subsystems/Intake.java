@@ -32,7 +32,7 @@ public class Intake implements Subsystem {
     }
 
     private Intake() {
-        m_intakeMotor = new WPI_VictorSPX(RobotMap.CAN_INTAKE1);
+        m_intakeMotor = new WPI_VictorSPX(RobotMap.CAN_INTAKE);
 
         m_intakeMotor.configFactoryDefault();
         m_intakeMotor.setNeutralMode(NeutralMode.Coast);

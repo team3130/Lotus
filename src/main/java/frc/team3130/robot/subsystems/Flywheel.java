@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 
+import static frc.team3130.robot.util.Utils.configPIDF;
+
 public class Flywheel implements Subsystem {
 
 
@@ -20,12 +22,12 @@ public class Flywheel implements Subsystem {
 
     //Create and define all standard data types needed
     private static ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
-    private static NetworkTableEntry testP =
-            tab.add("Flywheel P", RobotMap.kFlywheelP)
-                    .getEntry();
-    private static NetworkTableEntry testD =
-            tab.add("Flywheel D", RobotMap.kFlywheelD)
-                    .getEntry();
+//    private static NetworkTableEntry testP =
+//            tab.add("Flywheel P", RobotMap.kFlywheelP)
+//                    .getEntry();
+//    private static NetworkTableEntry testD =
+//            tab.add("Flywheel D", RobotMap.kFlywheelD)
+//                    .getEntry();
 
     /**
      * The Singleton instance of this Flywheel. External classes should
@@ -135,7 +137,10 @@ public class Flywheel implements Subsystem {
      * @return speed setpoint in RPM
      */
     public static double getRPMSetpoint() {
-        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
+        if(m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
+            return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
+        }
+        return 0.0;
     }
 
     /**
@@ -177,11 +182,5 @@ public class Flywheel implements Subsystem {
         SmartDashboard.putBoolean("Flywheel canShoot", canShoot());
     }
 
-    public static void configPIDF(WPI_TalonFX _talon, double kP, double kI, double kD, double kF) {
-        _talon.config_kP(0, kP, 0);
-        _talon.config_kI(0, kI, 0);
-        _talon.config_kD(0, kD, 0);
-        _talon.config_kF(0, kF, 0);
-    }
 }
 
