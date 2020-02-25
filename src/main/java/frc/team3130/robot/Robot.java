@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
+import frc.team3130.robot.commands.Climber.AdjustRPM;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
 import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
@@ -58,10 +59,12 @@ public class Robot extends TimedRobot {
         //Register and instantiate subsystems (optionally with default commands)
         //Note: registerSubsystem is NOT needed if setDefaultCommand is used
         scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
+        scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
+        scheduler.setDefaultCommand(Turret.getInstance(), new AdjustRPM());
+
         scheduler.registerSubsystem(Climber.getInstance());
         scheduler.registerSubsystem(Intake.getInstance());
         scheduler.registerSubsystem(Hopper.getInstance());
-        scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
         scheduler.registerSubsystem(Flywheel.getInstance());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
 
