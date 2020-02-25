@@ -90,7 +90,7 @@ public class OI {
 //        testColorAlignment.whenPressed(new ColorAlignment());
 //        testTestHSB.whenHeld(new TestHSB());
 
-        testTurret.toggleWhenActive(new ToggleTurretAim()); // TODO: check this
+        testTurret.whenPressed(new ToggleTurretAim());
         testFlywheel.whenHeld(new SetFlywheelRPM());
 //        testFlywheel.whenHeld(new TuneFlywheelRPM());
 

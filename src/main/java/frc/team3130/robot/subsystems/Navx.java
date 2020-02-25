@@ -66,7 +66,7 @@ public class Navx {
      * @return angle in degrees
      */
     public static double getHeading() {
-        return Math.IEEEremainder(m_navX.getAngle(), 360);
+        return Math.IEEEremainder(getAngle(), 360);
     }
 
     public static boolean getNavxPresent() {
