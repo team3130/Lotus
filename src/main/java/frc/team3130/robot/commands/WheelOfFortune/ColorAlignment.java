@@ -2,6 +2,7 @@ package frc.team3130.robot.commands.WheelOfFortune;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.GameData;
 import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
@@ -30,7 +31,7 @@ public class ColorAlignment implements Command {
     @Override
     public void initialize() {
         colorFound = false;
-        fieldColor = "Red";
+        fieldColor = GameData.getInstance().getControlColor();
         targetColor = WheelOfFortune.getTargetColor(fieldColor);
 
         WheelOfFortune.toggleWheel();
