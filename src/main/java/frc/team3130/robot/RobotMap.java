@@ -123,7 +123,7 @@ public class RobotMap {
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;
-    public static double kHopperChamberPause = 0.2;
+    public static double kHopperChamberPause = 0.1;
 
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;
