@@ -71,12 +71,12 @@ public class RobotMap {
 
     public static double kTurretStowingAngle = 0.0;
     public static double kTurretStartupAngle = 0.0; //TODO: remove me when absolute encoders implemented
-    public static double kTurretFwdLimit = 190.0; // Angle in degrees
-    public static double kTurretRevLimit = -190.0; // Angle in degrees
+    public static double kTurretFwdLimit = 7.0; // Angle in degrees
+    public static double kTurretRevLimit = -327.0; // Angle in degrees
 
-    public static double kTurretP = 0.5;
-    public static double kTurretI = 0.0001;
-    public static double kTurretD = 37.0;
+    public static double kTurretP = 1.6;
+    public static double kTurretI = 0.0;
+    public static double kTurretD = 180.0;
     public static double kTurretF = 0;
 
     public static double kTurretMMP = 1.8;

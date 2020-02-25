@@ -82,6 +82,8 @@ public class Turret implements Subsystem {
 
         m_turret.configForwardSoftLimitThreshold((int) (RobotMap.kTurretFwdLimit * RobotMap.kTurretTicksPerDegree));
         m_turret.configReverseSoftLimitThreshold((int) (RobotMap.kTurretRevLimit * RobotMap.kTurretTicksPerDegree));
+        m_turret.configForwardSoftLimitEnable(true);
+        m_turret.configReverseSoftLimitEnable(true);
     }
     /**
      * Manually move the turret
@@ -306,6 +308,8 @@ public class Turret implements Subsystem {
             // Turn on Limelight
             Limelight.GetInstance().setLedState(true);
 
+            m_turret.set(0.0);
+
             // Configure PID vision
             configPIDF(m_turret,
                     RobotMap.kTurretP,
@@ -313,7 +317,7 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretD,
                     RobotMap.kTurretF);
             configMotionMagic(m_turret, 0, 0);
-            m_turret.set(0.0);
+
             // Reset aiming stability counter
             isAimedCounter = 0;
         } else {
