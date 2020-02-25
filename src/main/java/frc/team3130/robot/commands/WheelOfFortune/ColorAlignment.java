@@ -10,10 +10,9 @@ import java.util.Set;
 public class ColorAlignment implements Command {
     private final Set<Subsystem> subsystems;
 
-    //TODO: make field color dependent on inputs from field
     private static String fieldColor;
     private static String targetColor;
-    private static double motorSpeed = .2;
+    private static double motorSpeed = .3;
 
 
     //used to terminate the program
@@ -33,10 +32,6 @@ public class ColorAlignment implements Command {
         colorFound = false;
         fieldColor = GameData.getInstance().getControlColor();
         targetColor = WheelOfFortune.getTargetColor(fieldColor);
-
-        WheelOfFortune.toggleWheel();
-
-        System.out.println("Initialized");
     }
 
     /**
@@ -52,7 +47,7 @@ public class ColorAlignment implements Command {
             System.out.println("color found");
 
         } else if(color.equals("Red")) {
-            System.out.println("Looking at Red");
+//            System.out.println("Looking at Red");
             switch (targetColor) {
                 case "Blue":
                     WheelOfFortune.motorSpin(motorSpeed);
@@ -66,7 +61,7 @@ public class ColorAlignment implements Command {
             }
 
         } else if (color.equals("Green")) {
-            System.out.println("Looking at Green");
+//            System.out.println("Looking at Green");
             switch (targetColor) {
                 case "Red":
                     WheelOfFortune.motorSpin(-motorSpeed);
@@ -79,7 +74,7 @@ public class ColorAlignment implements Command {
                     break;
             }
         } else if (color.equals("Blue")){
-            System.out.println("Looking at " + color);
+//            System.out.println("Looking at " + color);
             switch (targetColor) {
                 case "Red":
                     WheelOfFortune.motorSpin(motorSpeed);
@@ -92,7 +87,7 @@ public class ColorAlignment implements Command {
                     break;
             }
         } else if (color.equals("Yellow")){
-            System.out.println("Looking at Yellow");
+//            System.out.println("Looking at Yellow");
             switch (targetColor) {
                 case "Red":
                     WheelOfFortune.motorSpin(motorSpeed);
@@ -127,7 +122,6 @@ public class ColorAlignment implements Command {
         //Code should turn off now
         if (color.equals(targetColor)) {
             WheelOfFortune.motorSpin(0);
-            WheelOfFortune.retractWheel();
             return true;
         }
         return false;

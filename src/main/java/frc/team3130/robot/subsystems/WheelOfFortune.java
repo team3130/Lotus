@@ -1,6 +1,7 @@
 package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.ColorSensorV3;
@@ -61,6 +62,7 @@ public class WheelOfFortune implements Subsystem {
 
         m_spinWheel = new WPI_VictorSPX(RobotMap.CAN_WHEELOFFORTUNE);
         m_spinWheel.configFactoryDefault();
+        m_spinWheel.setNeutralMode(NeutralMode.Brake);
 
         isChanged = false;
 
@@ -91,7 +93,7 @@ public class WheelOfFortune implements Subsystem {
                 isChanged = true;
                 isCounted = false;
             } else {
-                if (Timer.getFPGATimestamp() - lastTimestamp > .2 && !isCounted) {
+                if (Timer.getFPGATimestamp() - lastTimestamp > .1 && !isCounted) {
                     isCounted = true;
                     isChanged = false;
                     actualColor = possibleColor;
@@ -120,7 +122,7 @@ public class WheelOfFortune implements Subsystem {
         //Potential algorithm for rgb to hsb
         if (sat < 0.3 && brightness > 0.9) {
             return "White";
-        } else if (brightness < 0.02) {
+        } else if (brightness < 40.0) {
             return "Black";
         } else {
             if (deg < 60 || deg > 310) {

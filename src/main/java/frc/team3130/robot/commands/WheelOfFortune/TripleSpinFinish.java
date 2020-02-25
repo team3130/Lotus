@@ -10,6 +10,7 @@ public class TripleSpinFinish implements Command {
     private final Set<Subsystem> subsystems;
 
     private static int blueCounter;
+    private static String lastColor;
 
     public TripleSpinFinish() {
         this.subsystems = Set.of(WheelOfFortune.getInstance());
@@ -21,9 +22,8 @@ public class TripleSpinFinish implements Command {
     @Override
     public void initialize() {
         blueCounter = 0;
+        lastColor = "none";
         WheelOfFortune.motorSpin(0.5);
-
-        WheelOfFortune.toggleWheel();
     }
 
 
@@ -36,9 +36,10 @@ public class TripleSpinFinish implements Command {
         //store returned color into local variable
         String color = WheelOfFortune.getInstance().determineColor();
 
-        if (color.equals("Blue")) {
+        if (!lastColor.equals(color) && color.equals("Blue")) {
             blueCounter++;
         }
+        lastColor = color;
         System.out.println("lmao the blueCounter is " + blueCounter);
     }
 
@@ -75,7 +76,6 @@ public class TripleSpinFinish implements Command {
     @Override
     public void end(boolean interrupted) {
         WheelOfFortune.motorSpin(0.0);
-        WheelOfFortune.retractWheel();
     }
 
     /**
