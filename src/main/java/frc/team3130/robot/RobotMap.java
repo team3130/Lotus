@@ -63,14 +63,14 @@ public class RobotMap {
     //Turret
 
     // Turret pitch and roll is how much the plane of the turret's rotation isn't level
-    public static final double kTurretPitch = (kUseCompbot ? -0.31 : -0.875); // Drop forward in degrees
+    public static final double kTurretPitch = (kUseCompbot ? -0.775 : -0.875); // Drop forward in degrees
     public static final double kTurretRoll = 0; // Roll to the right in degrees
 
     public static double kTurretManualDeadband = 0.09;
     public static double kTurretManualMultipler = 0.2;
 
     public static double kTurretStowingAngle = -90.0;
-    public static double kTurretStartupAngle = -90.0; //TODO: remove me when absolute encoders implemented
+    public static double kTurretStartupAngle = -90.0;
     public static double kTurretFwdLimit = 7.0; // Angle in degrees
     public static double kTurretRevLimit = -327.0; // Angle in degrees
 
@@ -99,8 +99,8 @@ public class RobotMap {
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static double kLimelightPitch = (kUseCompbot ? -26.34 : -31.625);   // Facing up is negative Checked: 2/21
-    public static double kLimelightYaw = (kUseCompbot ? 2.1 : 3.1);        // Aiming bias, facing left is positive FIXME: calibrate
+    public static double kLimelightPitch = (kUseCompbot ? -26.25 : -31.625);   // Facing up is negative Checked: 2/21
+    public static double kLimelightYaw = (kUseCompbot ? 1.7 : 3.1);        // Aiming bias, facing left is positive FIXME: calibrate
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
     public static double kLimelightLength = 9.5;    // Distance to the turret's rotation axis
@@ -123,7 +123,7 @@ public class RobotMap {
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;
-    public static double kHopperChamberPause = 0.3;
+    public static double kHopperChamberPause = 0.2;
 
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;

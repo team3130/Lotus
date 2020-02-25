@@ -4,9 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
@@ -73,17 +70,22 @@ public class Turret implements Subsystem {
 
         m_turret.clearStickyFaults();
 
-        m_controlState = TurretState.STOWED; // Initialize turret state to STOWED
-        m_lastState = TurretState.IDLE;
-
-        m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
-
         m_turret.setSelectedSensorPosition((int) (RobotMap.kTurretStartupAngle * RobotMap.kTurretTicksPerDegree));
 
+        // Set soft limits
         m_turret.configForwardSoftLimitThreshold((int) (RobotMap.kTurretFwdLimit * RobotMap.kTurretTicksPerDegree));
         m_turret.configReverseSoftLimitThreshold((int) (RobotMap.kTurretRevLimit * RobotMap.kTurretTicksPerDegree));
         m_turret.configForwardSoftLimitEnable(true);
         m_turret.configReverseSoftLimitEnable(true);
+
+        m_controlState = TurretState.STOWED; // Initialize turret state to STOWED
+        // Reset output to stowing position
+        output = RobotMap.kTurretStowingAngle;
+        m_lastState = TurretState.IDLE;
+
+        m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
+
+
     }
     /**
      * Manually move the turret
