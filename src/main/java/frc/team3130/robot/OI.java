@@ -7,7 +7,6 @@ import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.*;
 import frc.team3130.robot.commands.Flywheel.DecrementRPM;
 import frc.team3130.robot.commands.Flywheel.IncrementRPM;
-import frc.team3130.robot.commands.Flywheel.TuneFlywheelRPM;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
@@ -66,19 +65,15 @@ public class OI {
     /**
      * Weapons
      */
-    private static JoystickTrigger RightWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_RTRIGGER);
-    private static JoystickTrigger LeftWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_LTRIGGER);
 
     private static POVButton incrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_N);
     private static POVButton decrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_S);
 
     private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU); //Menu button
-    private static JoystickButton RetakeClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_WINDOW); //Windows button
-    private static JoystickButton RightWinchPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_RBUMPER);
-    private static JoystickButton LeftWinchPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_LBUMPER);
+    private static JoystickButton retractClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_WINDOW); //Windows button
     private static JoystickButton toggleWOF = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_A);
-    private static JoystickButton WOFLeft = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_X);
-    private static JoystickButton WOFRight = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_B);
+    private static JoystickButton wofLeft = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_X);
+    private static JoystickButton wofRight = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_B);
     private static JoystickButton testTripleSpinFinish = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_Y);
 
 
@@ -103,12 +98,12 @@ public class OI {
         toggleIntake.whenPressed(new ToggleIntake());
 
         toggleClimber.whenPressed(new DeploySmallClimber());
-        RetakeClimber.whenPressed(new DeployBigClimber());
+        retractClimber.whenPressed(new DeployBigClimber());
 
         toggleWOF.whenPressed(new ToggleWOF());
         testTripleSpinFinish.whenPressed(new ColorAlignment());
-        WOFLeft.whenHeld(new SpinWOFLeft());
-        WOFRight.whenHeld(new SpinWOFRight());
+        wofLeft.whenHeld(new SpinWOFLeft());
+        wofRight.whenHeld(new SpinWOFRight());
 
         shift.whenPressed(new ShiftToggle());
 
