@@ -49,7 +49,7 @@ public class Intake implements Subsystem {
         m_intakeSolenoid.set(true);
     }
 
-    public static void retakeIntake() {
+    public static void retractIntake() {
         m_intakeSolenoid.set(false);
     }
 

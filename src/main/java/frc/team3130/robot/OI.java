@@ -4,18 +4,21 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
-import frc.team3130.robot.commands.Climber.*;
+import frc.team3130.robot.commands.Climber.DeployBigClimber;
+import frc.team3130.robot.commands.Climber.DeploySmallClimber;
 import frc.team3130.robot.commands.Flywheel.DecrementRPM;
 import frc.team3130.robot.commands.Flywheel.IncrementRPM;
-import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ToggleHood;
-import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
+import frc.team3130.robot.commands.Shoot;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.ToggleIntake;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
-import frc.team3130.robot.commands.WheelOfFortune.*;
+import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
+import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
+import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
+import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 
 public class OI {
@@ -51,9 +54,9 @@ public class OI {
     private static JoystickTrigger intakeOut = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_RTRIGGER); //R trigger
     private static JoystickTrigger intakeIn = new JoystickTrigger(driverGamepad, RobotMap.LST_AXS_LTRIGGER); // L trigger also deploys intake while active
 
-    //    private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
-    private static JoystickButton testFlywheel = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
-    private static JoystickButton hopperIn = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
+//    private static JoystickButton testColorAlignment = new JoystickButton(driverGamepad, RobotMap.LST_BTN_Y);
+//    private static JoystickButton testFlywheel = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
+    private static JoystickButton shoot = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER); //L bumper
     private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS); //R joystick press
     private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU); //Menu button
@@ -81,14 +84,13 @@ public class OI {
         intakeIn.whenHeld(new IntakeIn());
         intakeOut.whenHeld(new IntakeOut());
 
-        hopperIn.whenHeld(new HopperIn());
+        shoot.whenHeld(new Shoot());
         hopperOut.whenHeld(new HopperOut());
 
 //        testColorAlignment.whenPressed(new ColorAlignment());
 //        testTestHSB.whenHeld(new TestHSB());
 
         testTurret.whenPressed(new ToggleTurretAim());
-        testFlywheel.whenHeld(new SetFlywheelRPM());
 //        testFlywheel.whenHeld(new TuneFlywheelRPM());
 
         incrementShooterOffset.whenPressed(new IncrementRPM());

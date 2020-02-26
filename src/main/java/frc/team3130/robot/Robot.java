@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Climber.SpinWinches;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
@@ -68,20 +69,27 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
-        Climber.setWinchToBreak();
 
+        /**
+        chooser = new SendableChooser<>();
+        chooser.setDefaultOption("No Auton", "None");
+        chooser.addOption("3Ball", "3Ball");
+        chooser.addOption("6Ball", "6Ball");
+        SmartDashboard.putData("Auto mode", chooser);
+    */
     }
 
 
     @Override
     public void teleopInit() {
+        autonomousCommand.cancel();
         Chassis.configBrakeMode(true);
     }
 
     @Override
     public void disabledInit() {
         Chassis.configBrakeMode(false);
-        Intake.retakeIntake();
+        Intake.retractIntake();
         Hood.setPistons(false);
         WheelOfFortune.retractWheel();
         Climber.retractClimb();
@@ -120,6 +128,16 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         resetSubsystems();
+
+        determineAuto();
+
+        autonomousCommand.schedule();
+
+    }
+
+    private void determineAuto(){
+        autonomousCommand = new Shoot6();
+        //autonomousCommand = new Shoot3();
     }
 
     /**
@@ -128,6 +146,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         scheduler.run();
+        writePeriodicOutputs();
     }
 
     /**

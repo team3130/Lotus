@@ -1,4 +1,4 @@
-package frc.team3130.robot.commands.Hopper;
+package frc.team3130.robot.commands;
 
 import java.util.Set;
 
@@ -7,10 +7,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Flywheel;
+import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Hopper;
 import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.vision.Limelight;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
-public class HopperIn implements Command {
+public class Shoot implements Command {
     private final Set<Subsystem> subsystems;
 
     private boolean justShot;
@@ -18,8 +21,8 @@ public class HopperIn implements Command {
     private boolean isShooting;
     private double lastIndexTime;
 
-    public HopperIn() {
-        this.subsystems = Set.of(Hopper.getInstance());
+    public Shoot() {
+        this.subsystems = Set.of(Hopper.getInstance(), Flywheel.getInstance(), Hood.getInstance());
         justShot = true;
         isShooting = false;
         changedState = true;
@@ -34,6 +37,18 @@ public class HopperIn implements Command {
         changedState = true;
         isShooting = false;
         lastIndexTime = Timer.getFPGATimestamp();
+        if (!Limelight.GetInstance().hasTrack()){
+            Flywheel.setSpeed(3500.0);
+        }else {
+            double x = Limelight.GetInstance().getDistanceToTarget();
+            if (71.0 <= x) {
+                Hood.setPistons(false);
+                double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
+                Flywheel.setSpeed(speed);
+            } else{
+                Flywheel.setSpeed(3500);
+            }
+        }
     }
 
     /**
@@ -42,6 +57,7 @@ public class HopperIn implements Command {
      */
     @Override
     public void execute() {
+
         if (justShot) {
             if (changedState) {
                 lastIndexTime = Timer.getFPGATimestamp();
@@ -114,6 +130,8 @@ public class HopperIn implements Command {
         Hopper.runHopperLeft(0.0);
         Hopper.runHopperRight(0.0);
         Hopper.runHopperTop(0.0);
+
+        Flywheel.stop();
     }
 
     /**

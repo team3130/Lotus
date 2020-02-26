@@ -1,22 +1,25 @@
-package frc.team3130.robot.commands.Chassis;
+package frc.team3130.robot.Auton;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Chassis;
+import frc.team3130.robot.subsystems.ExampleSubsystem;
+import frc.team3130.robot.subsystems.Turret;
 
 import java.util.Set;
 
-
-/**
- * Drive at half speed when held, and then stop when ended
- */
-public class SimpleDrive implements Command {
+public class AutoTurnTurret implements Command {
     private final Set<Subsystem> subsystems;
 
-    public SimpleDrive() {
-        this.subsystems = Set.of(Chassis.getInstance());
+    private double angle;
+
+    /**
+     * Turn the turret to a given angle
+     *
+     * @param angle Robot relative angle to turn turret to
+     */
+    public AutoTurnTurret(double angle) {
+        this.subsystems = Set.of(Turret.getInstance());
+        this.angle = angle;
     }
 
     /**
@@ -24,7 +27,7 @@ public class SimpleDrive implements Command {
      */
     @Override
     public void initialize() {
-        Chassis.driveTank(.50,.50,false);
+        Turret.toAngle(angle);
     }
 
     /**
@@ -52,7 +55,7 @@ public class SimpleDrive implements Command {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return Turret.getState() != Turret.TurretState.SETPOINT;
     }
 
     /**
@@ -65,7 +68,7 @@ public class SimpleDrive implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Chassis.driveTank(0,0,true);
+
     }
 
     /**

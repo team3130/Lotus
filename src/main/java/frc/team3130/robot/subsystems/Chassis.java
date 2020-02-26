@@ -4,21 +4,24 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
 
-public class Chassis implements Subsystem {
+public class Chassis extends PIDSubsystem {
 
     //Create necessary objects
     private static WPI_TalonFX m_leftMotorFront;
     private static WPI_TalonFX m_leftMotorRear;
     private static WPI_TalonFX m_rightMotorFront;
     private static WPI_TalonFX m_rightMotorRear;
+
+    private static double moveSpeed;
 
     private static DifferentialDrive m_drive;
 
@@ -42,6 +45,8 @@ public class Chassis implements Subsystem {
     }
 
     private Chassis() {
+        super(new PIDController(1, 0, 0));//TODO: Set Turn PID
+
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
         m_rightMotorFront = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORFRONT);
@@ -51,6 +56,7 @@ public class Chassis implements Subsystem {
         m_leftMotorRear.configFactoryDefault();
         m_rightMotorFront.configFactoryDefault();
         m_rightMotorRear.configFactoryDefault();
+
 
         configBrakeMode(false); // Set to coast on cstr
 
@@ -91,6 +97,10 @@ public class Chassis implements Subsystem {
         m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
         m_drive.setDeadband(RobotMap.kDriveDeadband);
         m_drive.setSafetyEnabled(true); //feed() must be called to prevent motor disable
+
+        m_drive.setSafetyEnabled(true); //feed() must be called to prevent motor disable TODO: check me
+
+        moveSpeed=0;
     }
 
     /**
@@ -321,6 +331,83 @@ public class Chassis implements Subsystem {
         m_rightMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
         //Profile already assumes base time is 0
         m_rightMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
+    }
+
+
+    @Override
+    protected void useOutput(double output, double setpoint) {
+        //Chassis ramp rate is the limit on the voltage change per cycle to prevent skidding.
+    	/*final double speedLimit = prevSpeedLimit + Preferences.getInstance().getDouble("ChassisRampRate", 0.25);
+    	if (output >  speedLimit) bias = speedLimit;
+        if (bias < -speedLimit) bias = -speedLimit;*/
+        //System.out.println("UsingTurnPID");
+        double speed_L = moveSpeed+output;
+        double speed_R = moveSpeed-output;
+        driveTank(speed_L, speed_R, false);
+        //driveTank(0.1,-0.1,false);
+        //prevSpeedLimit = Math.abs(speedLimit);
+    }
+
+    @Override
+    protected double getMeasurement() {
+        return getAngle();
+    }
+
+    public static void driveStraight(double move){
+        moveSpeed=move;
+    }
+
+    public static double getAngle()
+    {
+        if(Navx.getNavxPresent()){
+            return Navx.getAngle();
+        }else{
+            //TODO:Encoder Angle, if wanted
+            return 0;
+        }
+    }
+
+    /**
+     * Tell the Chassis to hold a relative angle
+     *
+     * @param angle angle to hold in degrees
+     */
+    public static void holdAngle(double angle, boolean smallAngle) {
+        setPIDValues(smallAngle);
+        getInstance().getController().reset();
+        getInstance().setSetpoint(getAngle()+angle);
+        getInstance().enable();
+    }
+
+    public static void ReleaseAngle(){
+        getInstance().disable();
+        driveTank(0, 0, false);//Clear motors
+    }
+
+    private static void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
+        if(smallAngleTurn){
+            getInstance().getController().setPID(
+                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
+                    Preferences.getInstance().getDouble("ChassisLowBigI", 0.015),
+                    Preferences.getInstance().getDouble("ChassisLowD", 0));
+        }else{
+            getInstance().getController().setPID(
+                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
+                    Preferences.getInstance().getDouble("ChassisLowI", 0.003),
+                    Preferences.getInstance().getDouble("ChassisLowD", 0));
+        }
+    }
+
+    public void setAbsoluteTolerance(double tolerance){
+        getController().setTolerance(tolerance);
+    }
+
+    public boolean onTarget(){
+        return getController().atSetpoint();
+    }
+
+    public double getSetpoint(){
+        return getController().getSetpoint();
     }
 
 
