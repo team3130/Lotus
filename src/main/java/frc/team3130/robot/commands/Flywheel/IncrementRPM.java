@@ -9,10 +9,10 @@ import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 import java.util.Set;
 
-public class AdjustRPM implements Command {
+public class IncrementRPM implements Command {
     private final Set<Subsystem> subsystems;
 
-    public AdjustRPM() {
+    public IncrementRPM() {
         this.subsystems = Set.of();
     }
 
@@ -21,7 +21,7 @@ public class AdjustRPM implements Command {
      */
     @Override
     public void initialize() {
-
+        WheelSpeedCalculations.GetInstance().incrementRPMOffset();
     }
 
     /**
@@ -30,15 +30,6 @@ public class AdjustRPM implements Command {
      */
     @Override
     public void execute() {
-        if(OI.weaponsGamepad.getRawButtonReleased(RobotMap.LST_POV_N)){
-            WheelSpeedCalculations.GetInstance().incrementRPMOffset();
-
-
-        }
-        else if(OI.weaponsGamepad.getRawButtonReleased(RobotMap.LST_POV_S)) {
-            WheelSpeedCalculations.GetInstance().decrementRPMOffset();
-        }
-
     }
 
     /**
@@ -57,7 +48,7 @@ public class AdjustRPM implements Command {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     /**

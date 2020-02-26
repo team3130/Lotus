@@ -3,7 +3,6 @@ package frc.team3130.robot.vision;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.commands.Flywheel.AdjustRPM;
 import frc.team3130.robot.util.LinearInterp;
 
 import java.io.*;
