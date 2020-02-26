@@ -7,9 +7,9 @@ import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.*;
 import frc.team3130.robot.commands.Flywheel.DecrementRPM;
 import frc.team3130.robot.commands.Flywheel.IncrementRPM;
-import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Flywheel.TuneFlywheelRPM;
-import frc.team3130.robot.commands.Hood.ActuateHood;
+import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
+import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.IntakeIn;
@@ -101,12 +101,8 @@ public class OI {
 
         toggleIntake.whenPressed(new ToggleIntake());
 
-        toggleClimber.whenPressed(new DeployClimber());
-        RetakeClimber.whenPressed(new RetakeClimber());
-        RightWinchPull.whenHeld(new RightClimberPull());
-        LeftWinchPull.whenHeld(new LeftClimberPull());
-        RightWinchUnpull.whenHeld(new RightClimberUnpull());
-        LeftWinchUnpull.whenHeld(new LeftClimberUnpull());
+        toggleClimber.whenPressed(new DeploySmallClimber());
+        RetakeClimber.whenPressed(new DeployBigClimber());
 
         toggleWOF.whenPressed(new ToggleWOF());
         testTripleSpinFinish.whenPressed(new ColorAlignment());
@@ -115,7 +111,7 @@ public class OI {
 
         shift.whenPressed(new ShiftToggle());
 
-        toggleHood.whenPressed(new ActuateHood());
+        toggleHood.whenPressed(new ToggleHood());
     }
 }
 

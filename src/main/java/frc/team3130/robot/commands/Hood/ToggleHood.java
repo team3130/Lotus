@@ -1,21 +1,18 @@
-package frc.team3130.robot.commands.Climber;
+package frc.team3130.robot.commands.Hood;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Climber;
+import frc.team3130.robot.subsystems.Hood;
+import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
 
-public class DeployClimber implements Command {
+public class ToggleHood implements Command {
     private final Set<Subsystem> subsystems;
 
-    private Timer timer;
-
-    public DeployClimber() {
-        this.subsystems = Set.of(Climber.getInstance());
-        timer = new Timer();
+    public ToggleHood() {
+        this.subsystems = Set.of(Hood.getInstance());
     }
 
     /**
@@ -23,9 +20,7 @@ public class DeployClimber implements Command {
      */
     @Override
     public void initialize() {
-        Climber.deployLeia();
-        timer.reset();
-        timer.start();
+        Hood.toggleHoodPistons();
     }
 
     /**
@@ -53,15 +48,9 @@ public class DeployClimber implements Command {
      */
     @Override
     public boolean isFinished() {
-        if (timer.get() > 3) {
-            Climber.deployLuke();
-            return true;
-        }
-        else{
-            return false;
-        }
-
+        return true;
     }
+
     /**
      * The action to take when the command ends. Called when either the command
      * finishes normally -- that is it is called when {@link #isFinished()} returns
@@ -72,9 +61,6 @@ public class DeployClimber implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        if (interrupted) {
-            DriverStation.reportError("BRUH momento", false);
-        }
     }
 
     /**
