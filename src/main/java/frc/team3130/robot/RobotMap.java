@@ -168,10 +168,10 @@ public class RobotMap {
      */
     public static final int PNM_SHIFT = 0;
     public static final int PNM_INTAKE = 1;
-    public static final int PNM_LUKE = 2;
+    public static final int PNM_DEPLOYER = 2;
     public static final int PNM_WHEELARM = 3;
     public static final int PNM_HOODPISTONS = 4;
-    public static final int PNM_LEIA = 5;
+    public static final int PNM_ACTUATOR = 5;
 
 
     /**

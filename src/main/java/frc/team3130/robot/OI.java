@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.*;
-import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Flywheel.TuneFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ActuateHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
@@ -93,12 +92,8 @@ public class OI {
 
         toggleIntake.whenPressed(new ToggleIntake());
 
-        toggleClimber.whenPressed(new DeployClimber());
-        RetakeClimber.whenPressed(new RetakeClimber());
-        RightWinchPull.whenHeld(new RightClimberPull());
-        LeftWinchPull.whenHeld(new LeftClimberPull());
-        RightWinchUnpull.whenHeld(new RightClimberUnpull());
-        LeftWinchUnpull.whenHeld(new LeftClimberUnpull());
+        toggleClimber.whenPressed(new DeploySmallClimber());
+        RetakeClimber.whenPressed(new DeployBigClimber());
 
         toggleWOF.whenPressed(new ToggleWOF());
         testTripleSpinFinish.whenPressed(new ColorAlignment());

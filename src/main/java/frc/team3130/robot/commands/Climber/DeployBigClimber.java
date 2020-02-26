@@ -3,15 +3,16 @@ package frc.team3130.robot.commands.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Climber;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
-public class LeftClimberPull implements Command {
+public class DeployBigClimber implements Command {
     private final Set<Subsystem> subsystems;
 
-    public LeftClimberPull() {
-        this.subsystems = Set.of(ExampleSubsystem.getInstance());
+
+    public DeployBigClimber() {
+        this.subsystems = Set.of(Climber.getInstance());
+
     }
 
     /**
@@ -19,7 +20,7 @@ public class LeftClimberPull implements Command {
      */
     @Override
     public void initialize() {
-        Climber.leftFlier(-0.3);
+        Climber.toggleBig();
     }
 
     /**
@@ -47,9 +48,8 @@ public class LeftClimberPull implements Command {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
-
     /**
      * The action to take when the command ends. Called when either the command
      * finishes normally -- that is it is called when {@link #isFinished()} returns
@@ -60,7 +60,7 @@ public class LeftClimberPull implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.leftFlier(0);
+
     }
 
     /**
