@@ -62,7 +62,7 @@ public class Limelight {
 
         Matrix<N3, N1> rVec = Algebra.buildVector(
                 Math.toRadians(RobotMap.kLimelightPitch),
-                Math.toRadians(getLimelightYaw()),
+                Math.toRadians(RobotMap.kLimelightYaw),
                 Math.toRadians(RobotMap.kLimelightRoll)
         );
         rotation = Algebra.Rodrigues(rVec);
@@ -221,15 +221,17 @@ public class Limelight {
         // and the Z-axis which is where the turret is always facing.
         double alpha = Math.toDegrees(Math.atan2(realVector.get(0, 0), realVector.get(2, 0)));
         Matrix<N3,N1> inner = getInnerTarget();
+        double yawAdj = GetInstance().getYawAdjustment();
+        System.out.println("Yaw Adjustment: " + yawAdj);
 
         // If rotation of the target is greater than this many inches along the edge
         // of the outer goal (approx) forget about the inner goal
-        if (Math.abs(inner.get(0, 0)) > 5) return alpha;
+        if (Math.abs(inner.get(0, 0)) > 5) return alpha;// + yawAdj;
 
         // Otherwise add the inner goal's vector to the target vector
         // to obtain a new aiming angle
         Matrix<N3,N1> adjustedVec = realVector.plus(inner);
-        return Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0)));
+        return Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0)));// + yawAdj;
     }
 
     /**
@@ -287,9 +289,10 @@ public class Limelight {
         */
     }
 
-    public double getLimelightYaw(){
-        double yawCalc = RobotMap.kLimelightYaw;
-        //yawCalc = yawCalc/ (getDistanceToTarget()+(287-71)/287);
+    public double getYawAdjustment(){
+        double yawCalc = RobotMap.kLimelightYaw *
+                Math.min(1.0, Math.max(0.0, (getDistanceToTarget() - 72)) / (290 - 72));
+//        yawCalc = yawCalc/ (getDistanceToTarget()+(290-72)/290);
         return yawCalc;
     }
 
