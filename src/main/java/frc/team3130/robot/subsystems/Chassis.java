@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 public class Chassis implements Subsystem {
 
@@ -340,6 +341,8 @@ public class Chassis implements Subsystem {
 
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
+
+        SmartDashboard.putNumber("RPM Offset", WheelSpeedCalculations.GetInstance().getRPMOffset());
 
     }
 

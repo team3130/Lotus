@@ -1,20 +1,19 @@
-package frc.team3130.robot.commands.Climber;
+package frc.team3130.robot.commands.Flywheel;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.OI;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 import java.util.Set;
 
 public class AdjustRPM implements Command {
     private final Set<Subsystem> subsystems;
-    static int RPMCounter;
 
     public AdjustRPM() {
-        this.subsystems = Set.of(ExampleSubsystem.getInstance());
-        RPMCounter = 0;
+        this.subsystems = Set.of();
     }
 
     /**
@@ -32,12 +31,12 @@ public class AdjustRPM implements Command {
     @Override
     public void execute() {
         if(OI.weaponsGamepad.getRawButtonReleased(RobotMap.LST_POV_N)){
-            RPMCounter++ ;
-            
+            WheelSpeedCalculations.GetInstance().incrementRPMOffset();
+
 
         }
         else if(OI.weaponsGamepad.getRawButtonReleased(RobotMap.LST_POV_S)) {
-            RPMCounter++;
+            WheelSpeedCalculations.GetInstance().decrementRPMOffset();
         }
 
     }

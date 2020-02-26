@@ -2,6 +2,7 @@ package frc.team3130.robot.vision;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.commands.Flywheel.AdjustRPM;
 import frc.team3130.robot.util.LinearInterp;
 
 import java.io.*;
@@ -69,12 +70,22 @@ public class WheelSpeedCalculations {
 	private LinearInterp speedCurve;
 	private final String FILEPATH;
 
+
+	private static int RPMOffset;
+
+	public int getRPMOffset() {
+		return RPMOffset;
+	}
+
+
 	public WheelSpeedCalculations() {
 		if(RobotMap.kUseCompbot) {
 			FILEPATH = Filesystem.getDeployDirectory() + File.separator +  "shooter_data_comp.csv";
 		} else {
 			FILEPATH = Filesystem.getDeployDirectory() + File.separator +  "shooter_data_practice.csv";
 		}
+
+		RPMOffset = 0;
 
 		data_MainStorage = new ArrayList<DataPoint>();
 		readFile();
@@ -111,7 +122,19 @@ public class WheelSpeedCalculations {
 		loadCurve();
 	}
 
-	public double getSpeed(Double dist) {
-		return speedCurve.getY(dist);
+
+
+	public void incrementRPMOffset() {
+		RPMOffset = RPMOffset + 30;
 	}
+
+	public void decrementRPMOffset() {
+		RPMOffset = RPMOffset - 30;
+	}
+
+	public double getSpeed(Double dist) {
+		return (speedCurve.getY(dist) + getRPMOffset());
+	}
+
 }
+
