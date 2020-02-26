@@ -1,18 +1,19 @@
-package frc.team3130.robot.commands.WheelOfFortune;
+package frc.team3130.robot.commands.Flywheel;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.WheelOfFortune;
+import frc.team3130.robot.OI;
+import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.subsystems.ExampleSubsystem;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 import java.util.Set;
 
-public class TestHSB implements Command {
+public class IncrementRPM implements Command {
     private final Set<Subsystem> subsystems;
 
-    public TestHSB() {
-        this.subsystems = Set.of(WheelOfFortune.getInstance());
-
+    public IncrementRPM() {
+        this.subsystems = Set.of();
     }
 
     /**
@@ -20,10 +21,8 @@ public class TestHSB implements Command {
      */
     @Override
     public void initialize() {
-
+        WheelSpeedCalculations.GetInstance().incrementRPMOffset();
     }
-
-
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
@@ -31,11 +30,6 @@ public class TestHSB implements Command {
      */
     @Override
     public void execute() {
-        String color = WheelOfFortune.getInstance().determineColor();
-        SmartDashboard.putString("God Color Detection", color);
-        System.out.print(color);
-
-
     }
 
     /**
@@ -54,7 +48,7 @@ public class TestHSB implements Command {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     /**
@@ -67,7 +61,6 @@ public class TestHSB implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-
 
     }
 

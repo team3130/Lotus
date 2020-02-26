@@ -64,9 +64,9 @@ public class Robot extends TimedRobot {
         //Note: registerSubsystem is NOT needed if setDefaultCommand is used
         scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
         scheduler.setDefaultCommand(Climber.getInstance(), new SpinWinches());
+        scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
         scheduler.registerSubsystem(Intake.getInstance());
         scheduler.registerSubsystem(Hopper.getInstance());
-        scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
         scheduler.registerSubsystem(Flywheel.getInstance());
         scheduler.registerSubsystem(WheelOfFortune.getInstance());
 
@@ -176,6 +176,7 @@ public class Robot extends TimedRobot {
         Hopper.outputToShuffleboard();
         Limelight.outputToShuffleboard();
         Flywheel.outputToShuffleboard();
+        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
         //TODO: move this somewhere logical
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {

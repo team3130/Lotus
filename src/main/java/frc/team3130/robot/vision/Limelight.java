@@ -222,14 +222,17 @@ public class Limelight {
         double alpha = Math.toDegrees(Math.atan2(realVector.get(0, 0), realVector.get(2, 0)));
         Matrix<N3,N1> inner = getInnerTarget();
 
+        System.out.println("Inner Goal offset: " + inner);
+
+        // TODO: Explain why is this negative
         // If rotation of the target is greater than this many inches along the edge
         // of the outer goal (approx) forget about the inner goal
-        if (Math.abs(inner.get(0, 0)) > 5) return alpha;
+        if (Math.abs(inner.get(0, 0)) > 5) return -1.0 * alpha;
 
         // Otherwise add the inner goal's vector to the target vector
         // to obtain a new aiming angle
         Matrix<N3,N1> adjustedVec = realVector.plus(inner);
-        return Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0)));
+        return -1.0 * Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0)));
     }
 
     /**
