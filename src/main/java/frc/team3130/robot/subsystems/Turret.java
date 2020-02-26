@@ -83,7 +83,7 @@ public class Turret implements Subsystem {
         m_controlState = TurretState.STOWED; // Initialize turret state to STOWED
         // Reset output to stowing position
         output = RobotMap.kTurretStowingAngle;
-        m_lastState = TurretState.MANUAL;
+        m_lastState = TurretState.SETPOINT;
 
         m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
 

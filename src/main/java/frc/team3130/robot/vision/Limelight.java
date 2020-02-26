@@ -229,12 +229,12 @@ public class Limelight {
         // TODO: Explain why is this negative
         // If rotation of the target is greater than this many inches along the edge
         // of the outer goal (approx) forget about the inner goal
-        if (Math.abs(inner.get(0, 0)) > 5) return alpha;// + yawAdj;
+        if (Math.abs(inner.get(0, 0)) > 5) return -1.0 * alpha;// + yawAdj;
 
         // Otherwise add the inner goal's vector to the target vector
         // to obtain a new aiming angle
         Matrix<N3,N1> adjustedVec = realVector.plus(inner);
-        return Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0)));// + yawAdj;
+        return -1.0 * Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0)));// + yawAdj;
     }
 
     /**
