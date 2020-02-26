@@ -8,12 +8,12 @@ import frc.team3130.robot.subsystems.Climber;
 
 import java.util.Set;
 
-public class RetakeClimber implements Command {
+public class RetractClimber implements Command {
     private final Set<Subsystem> subsystems;
 
     private double timer;
 
-    public RetakeClimber() {
+    public RetractClimber() {
         this.subsystems = Set.of(Climber.getInstance());
     }
 
