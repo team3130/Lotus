@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.*;
-import frc.team3130.robot.commands.Flywheel.TuneFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ActuateHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
@@ -12,6 +11,7 @@ import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.ToggleIntake;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
+import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.WheelOfFortune.*;
 import frc.team3130.robot.controls.JoystickTrigger;
 

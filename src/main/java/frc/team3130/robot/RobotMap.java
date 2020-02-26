@@ -34,8 +34,8 @@ public class RobotMap {
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
 
     public static double kChassisCodesPerRev = 2048;
-    public static double kLChassisTicksPerInch = kChassisCodesPerRev / (Math.PI * kLWheelDiameter);
-    public static double kRChassisTicksPerInch = kChassisCodesPerRev / (Math.PI * kRWheelDiameter);
+    public static double kLChassisTicksPerInch = 1500;
+    public static double kRChassisTicksPerInch = 1500;
 
     public static double kDriveDeadband = 0.02;
     public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
