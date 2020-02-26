@@ -1,6 +1,7 @@
 package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -10,12 +11,11 @@ import frc.team3130.robot.RobotMap;
 public class Climber implements Subsystem {
 
     //Create necessary objects
-    private static WPI_TalonSRX m_skyWalker;
-    private static WPI_TalonSRX m_climberWinchMaster;
-    private static WPI_VictorSPX m_climberWinchSlave;
+    private static WPI_TalonSRX m_climberWinchLeft;
+    private static WPI_VictorSPX m_climberWinchRight;
 
-    private static Solenoid m_Leia;
-    private static Solenoid m_Luke;
+    private static Solenoid m_smallClimberPnuematic;
+    private static Solenoid m_bigClimberPnuematic;
 
     //Create and define all standard data types needed
 
@@ -36,11 +36,11 @@ public class Climber implements Subsystem {
 
     private Climber() {
         // m_skyWalker = new WPI_TalonSRX(RobotMap.CAN_SKYWALKER);
-        m_climberWinchMaster = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
-        m_climberWinchSlave = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
+        m_climberWinchLeft = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
+        m_climberWinchRight = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
 
-        m_Leia = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_LEIA);
-        m_Luke = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_LUKE);
+        m_bigClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_ACTUATOR);
+         m_smallClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_DEPLOYER);
 
     }
 
@@ -50,32 +50,31 @@ public class Climber implements Subsystem {
     }
     */
 
-    public static void leftFlier(double spin) {
-        m_climberWinchMaster.set(spin);
+    public static void leftWinch(double spin) {
+        m_climberWinchLeft.set(spin);
     }
 
-    public static void rightFlier(double spin) {
-        m_climberWinchSlave.set(ControlMode.PercentOutput, spin);
-    }
-
-    //method for deploying wheel to be called in a command
-    public static void deployLeia() {
-        m_Leia.set(true);
+    public static void rightWinch(double spin) {
+        m_climberWinchRight.set(ControlMode.PercentOutput, spin);
     }
 
     //method for deploying wheel to be called in a command
-    public static void deployLuke() {
-        m_Luke.set(true);
+    public static void toggleSmall() {
+        m_smallClimberPnuematic.set(!m_smallClimberPnuematic.get());
     }
 
-    //method for retracting climberLeia to be called in a command
-    public static void RetractLeia() {
-        m_Leia.set(false);
+    //method for deploying wheel to be called in a command
+    public static void toggleBig() {
+        m_bigClimberPnuematic.set(!m_bigClimberPnuematic.get());
     }
 
-    //method for retracting climberLuke to be called in a command
-    public static void retractLuke() {
-        m_Leia.set(false);
+    public static void retractClimb(){
+        m_bigClimberPnuematic.set(false);
+        m_smallClimberPnuematic.set(false);
     }
+
+    public static void setWinchToBreak(){
+        m_climberWinchLeft.setNeutralMode(NeutralMode.Brake);
+        m_climberWinchRight.setNeutralMode(NeutralMode.Brake);}
 }
 
