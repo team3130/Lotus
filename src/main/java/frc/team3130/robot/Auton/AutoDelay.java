@@ -14,18 +14,19 @@ public class AutoDelay extends CommandBase {
 
     double delay;
     double startTime;
+
     /**
      * Creates a new AutoDelay.
      */
     public AutoDelay(double seconds) {
         // Use addRequirements() here to declare subsystem dependencies.
-        delay=seconds;
+        delay = seconds;
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        startTime=Timer.getFPGATimestamp();
+        startTime = Timer.getFPGATimestamp();
     }
 
     // Called every time the scheduler runs while the command is scheduled.

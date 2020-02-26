@@ -44,11 +44,11 @@ public class Shoot8 extends SequentialCommandGroup {
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         driveBack20.SetParam(
                 20, //Drive Distance (inches)
                 2,  //Tolerance
-                0.5,//PVbus speed
+                0.5, //PVbus speed
                 true//Nothing
         );
 
@@ -59,14 +59,14 @@ public class Shoot8 extends SequentialCommandGroup {
         );
 
         driveBackIntake.SetParam(
-                12*13,
+                12 * 13,
                 6,
                 0.35,
                 true
         );
 
         driveUp.SetParam(
-                -12*13,
+                -12 * 13,
                 6,
                 0.6,
                 true

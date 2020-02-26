@@ -9,8 +9,9 @@ import frc.team3130.robot.subsystems.Chassis;
 import java.util.Set;
 
 
-//Drive at half speed when held, and then stop when ended
-
+/**
+ * Drive at half speed when held, and then stop when ended
+ */
 public class SimpleDrive implements Command {
     private final Set<Subsystem> subsystems;
 

@@ -14,6 +14,7 @@ public class AutoTurnTurret implements Command {
 
     /**
      * Turn the turret to a given angle
+     *
      * @param angle Robot relative angle to turn turret to
      */
     public AutoTurnTurret(double angle) {

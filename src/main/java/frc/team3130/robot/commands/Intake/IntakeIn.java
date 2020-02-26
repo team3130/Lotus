@@ -61,7 +61,7 @@ public class IntakeIn implements Command {
     @Override
     public void end(boolean interrupted) {
         Intake.runIntake(0);
-        Intake.retakeIntake();
+        Intake.retractIntake();
     }
 
     /**
