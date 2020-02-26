@@ -153,6 +153,7 @@ public class Robot extends TimedRobot {
         Hopper.outputToShuffleboard();
         Limelight.outputToShuffleboard();
         Flywheel.outputToShuffleboard();
+        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
         //TODO: move this somewhere logical
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {

@@ -342,8 +342,6 @@ public class Chassis implements Subsystem {
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
-        SmartDashboard.putNumber("RPM Offset", WheelSpeedCalculations.GetInstance().getRPMOffset());
-
     }
 
 }
