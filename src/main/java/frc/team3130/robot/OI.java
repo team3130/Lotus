@@ -5,8 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.*;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
-import frc.team3130.robot.commands.Flywheel.TuneFlywheelRPM;
-import frc.team3130.robot.commands.Hood.ActuateHood;
+import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperIn;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.IntakeIn;
@@ -107,7 +106,7 @@ public class OI {
 
         shift.whenPressed(new ShiftToggle());
 
-        toggleHood.whenPressed(new ActuateHood());
+        toggleHood.whenPressed(new ToggleHood());
     }
 }
 
