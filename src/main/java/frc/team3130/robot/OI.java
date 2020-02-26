@@ -2,8 +2,11 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.*;
+import frc.team3130.robot.commands.Flywheel.DecrementRPM;
+import frc.team3130.robot.commands.Flywheel.IncrementRPM;
 import frc.team3130.robot.commands.Flywheel.TuneFlywheelRPM;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ToggleHood;
@@ -65,6 +68,9 @@ public class OI {
     private static JoystickTrigger RightWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_RTRIGGER);
     private static JoystickTrigger LeftWinchUnpull = new JoystickTrigger(weaponsGamepad, RobotMap.LST_AXS_LTRIGGER);
 
+    private static POVButton incrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_N);
+    private static POVButton decrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_S);
+
     private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU); //Menu button
     private static JoystickButton RetakeClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_WINDOW); //Windows button
     private static JoystickButton RightWinchPull = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_RBUMPER);
@@ -90,6 +96,8 @@ public class OI {
         testFlywheel.whenHeld(new SetFlywheelRPM());
 //        testFlywheel.whenHeld(new TuneFlywheelRPM());
 
+        incrementShooterOffset.whenPressed(new IncrementRPM());
+        decrementShooterOffset.whenPressed(new DecrementRPM());
 
         toggleIntake.whenPressed(new ToggleIntake());
 
