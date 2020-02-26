@@ -83,7 +83,7 @@ public class Turret implements Subsystem {
         m_controlState = TurretState.STOWED; // Initialize turret state to STOWED
         // Reset output to stowing position
         output = RobotMap.kTurretStowingAngle;
-        m_lastState = TurretState.SETPOINT;
+        m_lastState = TurretState.MANUAL;
 
         m_turret.set(ControlMode.PercentOutput, 0.0); //Reset turret talon to simple percent output mode
 
@@ -138,8 +138,13 @@ public class Turret implements Subsystem {
 
     /**
      * Request to send the turret to an angle
+     *
+     * @param angle Frame relative angle, CCW is positive and CW is negative, 0 degrees is facing the front of the bot
      */
-    public static void toAngle() {
+    public static void toAngle(double angle) {
+        // Set the output to the desired turret frame-relative angle
+        output = angle;
+
         m_controlState = TurretState.SETPOINT;
     }
 
@@ -204,8 +209,8 @@ public class Turret implements Subsystem {
                 break;
 
             case SETPOINT:
-                // Handle idle state
-                handleIdle(isNewState);
+                // Handle setpoint state
+                handleSetpoint(isNewState);
                 break;
 
             case HOLD:
@@ -352,6 +357,32 @@ public class Turret implements Subsystem {
     }
 
     /**
+     * Handle system setpoint state
+     *
+     * @param newState Is this state new?
+     */
+    private synchronized static void handleSetpoint(boolean newState) {
+        if (newState) {
+            // We don't need Limelight aiming, turn off LEDs
+            Limelight.GetInstance().setLedState(false);
+            // Configure PID MM
+            configPIDF(m_turret,
+                    RobotMap.kTurretMMP,
+                    RobotMap.kTurretMMI,
+                    RobotMap.kTurretMMD,
+                    RobotMap.kTurretMMF);
+            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+
+            setAngleMM(output);
+        } else {
+            if (isFinished()) {
+                // Transition into Limelight aim state
+                m_controlState = TurretState.AIMING;
+            }
+        }
+    }
+
+    /**
      * Handle system hold state
      *
      * @param newState Is this state new?
@@ -407,24 +438,6 @@ public class Turret implements Subsystem {
         }
 
         setOpenLoop(output);
-    }
-
-    /**
-     * Handle system idle state
-     *
-     * @param newState Is this state new?
-     */
-    private synchronized static void handleIdle(boolean newState) {
-        if (newState) {
-            // We don't need Limelight aiming, turn off LEDs
-            Limelight.GetInstance().setLedState(false);
-
-            // Force-set output
-            output = 0.0;
-
-            // Force-set the motor to 0.0V
-            m_turret.set(0.0);
-        }
     }
 
     /**
@@ -497,7 +510,8 @@ public class Turret implements Subsystem {
 
     public static boolean isFinished() { //TODO: needs other isFinished checks for other states
         if (m_controlState != m_lastState) return false;
-        if (m_controlState == TurretState.PREDICT && (Math.abs(output - getAngleDegrees()) < RobotMap.kTurretReadyToAimTolerance))
+        if ((m_controlState == TurretState.PREDICT || m_controlState == TurretState.SETPOINT)
+                && (Math.abs(output - getAngleDegrees()) < RobotMap.kTurretReadyToAimTolerance))
             return true;
         else return false;
     }
