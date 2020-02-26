@@ -1,20 +1,16 @@
-package frc.team3130.robot.commands.Climber;
+package frc.team3130.robot.commands.Flywheel;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Climber;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 import java.util.Set;
 
-public class RetakeClimber implements Command {
+public class DecrementRPM implements Command {
     private final Set<Subsystem> subsystems;
 
-    private double timer;
-
-    public RetakeClimber() {
-        this.subsystems = Set.of(Climber.getInstance());
+    public DecrementRPM() {
+        this.subsystems = Set.of();
     }
 
     /**
@@ -22,7 +18,7 @@ public class RetakeClimber implements Command {
      */
     @Override
     public void initialize() {
-        Climber.retractClimb();
+        WheelSpeedCalculations.GetInstance().decrementRPMOffset();
     }
 
     /**
@@ -31,7 +27,6 @@ public class RetakeClimber implements Command {
      */
     @Override
     public void execute() {
-
     }
 
     /**
@@ -50,7 +45,7 @@ public class RetakeClimber implements Command {
      */
     @Override
     public boolean isFinished() {
-    return true;
+        return true;
     }
 
     /**

@@ -1,23 +1,20 @@
-package frc.team3130.robot.commands.WheelOfFortune;
+package frc.team3130.robot.commands.Climber;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Climber;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
-import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
 
-public class SpinWheel implements Command {
+public class RetractClimber implements Command {
     private final Set<Subsystem> subsystems;
-    private final JoystickButton button;
 
-    public SpinWheel(JoystickButton button) {
-        this.subsystems = Set.of(WheelOfFortune.getInstance());
-        this.button = button;
+    private double timer;
+
+    public RetractClimber() {
+        this.subsystems = Set.of(Climber.getInstance());
     }
 
     /**
@@ -25,7 +22,7 @@ public class SpinWheel implements Command {
      */
     @Override
     public void initialize() {
-
+        Climber.retractClimb();
     }
 
     /**
@@ -34,7 +31,7 @@ public class SpinWheel implements Command {
      */
     @Override
     public void execute() {
-        WheelOfFortune.motorSpin(.3);
+
     }
 
     /**
@@ -53,9 +50,7 @@ public class SpinWheel implements Command {
      */
     @Override
     public boolean isFinished() {
-        if (!button.get())
-            return true;
-        return false;
+    return true;
     }
 
     /**
@@ -68,9 +63,8 @@ public class SpinWheel implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        WheelOfFortune.motorSpin(0);
-    }
 
+    }
 
     /**
      * <p>

@@ -224,6 +224,9 @@ public class Limelight {
         double yawAdj = GetInstance().getYawAdjustment();
         System.out.println("Yaw Adjustment: " + yawAdj);
 
+        System.out.println("Inner Goal offset: " + inner);
+
+        // TODO: Explain why is this negative
         // If rotation of the target is greater than this many inches along the edge
         // of the outer goal (approx) forget about the inner goal
         if (Math.abs(inner.get(0, 0)) > 5) return alpha;// + yawAdj;

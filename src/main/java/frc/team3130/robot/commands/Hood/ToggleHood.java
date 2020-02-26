@@ -8,10 +8,10 @@ import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
 
-public class ActuateHood implements Command {
+public class ToggleHood implements Command {
     private final Set<Subsystem> subsystems;
 
-    public ActuateHood() {
+    public ToggleHood() {
         this.subsystems = Set.of(Hood.getInstance());
     }
 

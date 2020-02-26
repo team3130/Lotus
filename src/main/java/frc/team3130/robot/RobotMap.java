@@ -83,8 +83,8 @@ public class RobotMap {
     public static double kTurretMMI = 0;
     public static double kTurretMMD = 0.7;
     public static double kTurretMMF = 0;
-    public static int kTurretMaxAcc = 3000;
-    public static int kTurretMaxVel = 1900;
+    public static int kTurretMaxAcc = 3800;
+    public static int kTurretMaxVel = 2300;
 
     public static double kTurretHoldP = 1.0;
     public static double kTurretHoldI = 0;
