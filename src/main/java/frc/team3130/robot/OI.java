@@ -9,13 +9,12 @@ import frc.team3130.robot.commands.Flywheel.DecrementRPM;
 import frc.team3130.robot.commands.Flywheel.IncrementRPM;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ToggleHood;
-import frc.team3130.robot.commands.Hopper.HopperIn;
+import frc.team3130.robot.commands.Hopper.Shoot;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.ToggleIntake;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
-import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.WheelOfFortune.*;
 import frc.team3130.robot.controls.JoystickTrigger;
 
@@ -82,7 +81,7 @@ public class OI {
         intakeIn.whenHeld(new IntakeIn());
         intakeOut.whenHeld(new IntakeOut());
 
-        hopperIn.whenHeld(new HopperIn());
+        hopperIn.whenHeld(new Shoot());
         hopperOut.whenHeld(new HopperOut());
 
 //        testColorAlignment.whenPressed(new ColorAlignment());
