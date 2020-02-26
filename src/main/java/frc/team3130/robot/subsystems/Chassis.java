@@ -43,9 +43,6 @@ public class Chassis implements Subsystem {
     }
 
     static Orchestra viola = new Orchestra();
-    static Orchestra violin = new Orchestra();
-    static Orchestra cello = new Orchestra();
-    static Orchestra bass = new Orchestra();
 
     private Chassis() {
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
@@ -61,9 +58,9 @@ public class Chassis implements Subsystem {
 
 
         viola.addInstrument(m_leftMotorFront);
-        violin.addInstrument(m_leftMotorRear);
-        cello.addInstrument(m_rightMotorFront);
-        bass.addInstrument(m_rightMotorRear);
+       // viola.addInstrument(m_leftMotorRear);
+       // viola.addInstrument(m_rightMotorFront);
+       // viola.addInstrument(m_rightMotorRear);
 
         configBrakeMode(false); // Set to coast on cstr
 
@@ -360,30 +357,21 @@ public class Chassis implements Subsystem {
 
     public static void loadOrchestra(){
         viola.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
-        violin.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
-        cello.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
-        bass.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
 
     }
     public static void playOrchestra(){
         viola.play();
-        violin.play();
-        cello.play();
-        bass.play();
+
     }
 
     public static void stopOrchestra(){
         viola.stop();
-        violin.stop();
-        cello.stop();
-        bass.stop();
+
     }
 
     public static void pauseOrchestra(){
         viola.pause();
-        violin.pause();
-        cello.pause();
-        bass.pause();
+
     }
 
 }
