@@ -2,7 +2,7 @@ package frc.team3130.robot.Auton;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import frc.team3130.robot.commands.Hopper.Shoot;
+import frc.team3130.robot.commands.Shoot;
 
 
 public class AutoShootAll extends ParallelCommandGroup {
