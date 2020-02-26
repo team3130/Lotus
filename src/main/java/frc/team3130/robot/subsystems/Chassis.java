@@ -3,6 +3,7 @@ package frc.team3130.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
+import com.ctre.phoenix.music.Orchestra;
 
 public class Chassis implements Subsystem {
 
@@ -40,6 +42,11 @@ public class Chassis implements Subsystem {
         return INSTANCE;
     }
 
+    static Orchestra viola = new Orchestra();
+    static Orchestra violin = new Orchestra();
+    static Orchestra cello = new Orchestra();
+    static Orchestra bass = new Orchestra();
+
     private Chassis() {
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
@@ -50,6 +57,13 @@ public class Chassis implements Subsystem {
         m_leftMotorRear.configFactoryDefault();
         m_rightMotorFront.configFactoryDefault();
         m_rightMotorRear.configFactoryDefault();
+
+
+
+        viola.addInstrument(m_leftMotorFront);
+        violin.addInstrument(m_leftMotorRear);
+        cello.addInstrument(m_rightMotorFront);
+        bass.addInstrument(m_rightMotorRear);
 
         configBrakeMode(false); // Set to coast on cstr
 
@@ -341,6 +355,35 @@ public class Chassis implements Subsystem {
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
+    }
+
+
+    public static void loadOrchestra(){
+        viola.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
+        violin.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
+        cello.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
+        bass.loadMusic("C:\\Users\\rahul\\Documents\\GitHub\\Kowalski\\src\\main\\deploy");
+
+    }
+    public static void playOrchestra(){
+        viola.play();
+        violin.play();
+        cello.play();
+        bass.play();
+    }
+
+    public static void stopOrchestra(){
+        viola.stop();
+        violin.stop();
+        cello.stop();
+        bass.stop();
+    }
+
+    public static void pauseOrchestra(){
+        viola.pause();
+        violin.pause();
+        cello.pause();
+        bass.pause();
     }
 
 }

@@ -77,7 +77,7 @@ public class OI {
     private static JoystickButton toggleWOF = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_A);
     private static JoystickButton WOFLeft = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_X);
     private static JoystickButton WOFRight = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_B);
-
+    private static JoystickButton LetsGo = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_Y);
 
     // Binding the buttons and triggers that are defined above to respective commands
     private OI() {
