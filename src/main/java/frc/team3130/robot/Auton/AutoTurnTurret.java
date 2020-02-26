@@ -10,8 +10,15 @@ import java.util.Set;
 public class AutoTurnTurret implements Command {
     private final Set<Subsystem> subsystems;
 
-    public AutoTurnTurret() {
+    private double angle;
+
+    /**
+     * Turn the turret to a given angle
+     * @param angle Robot relative angle to turn turret to
+     */
+    public AutoTurnTurret(double angle) {
         this.subsystems = Set.of(Turret.getInstance());
+        this.angle = angle;
     }
 
     /**
@@ -19,7 +26,7 @@ public class AutoTurnTurret implements Command {
      */
     @Override
     public void initialize() {
-        Turret.setAngle(-180);
+        Turret.toAngle(angle);
     }
 
     /**
@@ -47,8 +54,7 @@ public class AutoTurnTurret implements Command {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return Turret.getState() != Turret.TurretState.SETPOINT;
     }
 
     /**

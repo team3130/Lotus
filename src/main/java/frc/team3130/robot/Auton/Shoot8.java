@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 
-public class Shoot6 extends SequentialCommandGroup {
+public class Shoot8 extends SequentialCommandGroup {
     AutoDriveStraightToPoint driveBack20;
     AutoDelay shoot1Delay;
     AutoTurn intakeTurn;
@@ -17,7 +17,7 @@ public class Shoot6 extends SequentialCommandGroup {
     /**
      * Creates a new Shoot6.
      */
-    public Shoot6() {
+    public Shoot8() {
         driveBack20 = new AutoDriveStraightToPoint();
         shoot1Delay = new AutoDelay(2);
         intakeTurn = new AutoTurn();
@@ -29,7 +29,7 @@ public class Shoot6 extends SequentialCommandGroup {
         // Add your commands in the super() call, e.g.
         // super(new FooCommand(), new BarCommand());
         addCommands(
-                new ParallelRaceGroup(new AutoTurnTurret(), driveBack20,new AutoDelay(2)),
+                new ParallelRaceGroup(new AutoTurnTurret(-180.0), driveBack20, new AutoDelay(2)),
                 new AutoShootAll(),
                 new ParallelRaceGroup(intakeTurn, new AutoDelay(2)),
                 new ParallelDeadlineGroup(
@@ -38,6 +38,7 @@ public class Shoot6 extends SequentialCommandGroup {
                 ),
                 new AutoDelay(0.75),
                 new ParallelRaceGroup(driveUp, new AutoDelay(8)),
+                new ParallelRaceGroup(new AutoTurnTurret(-180.0), driveBack20, new AutoDelay(2)),
                 new AutoShootAll()
         );
     }

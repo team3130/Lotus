@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class Shoot3 extends SequentialCommandGroup {
     private AutoDriveStraightToPoint driveBack;
     private AutoDelay wait;
-    private AutoDelay shoot1Delay;
 
     /**
      * Creates a new Shoot3.
@@ -20,7 +19,7 @@ public class Shoot3 extends SequentialCommandGroup {
         // super(new FooCommand(), new BarCommand());
         addCommands(
                 new ParallelRaceGroup(driveBack, new AutoDelay(2)),
-                new ParallelRaceGroup(new AutoTurnTurret(), new AutoDelay(2)),
+                new ParallelRaceGroup(new AutoTurnTurret(-180.0), new AutoDelay(2)),
                 wait,
                 new ParallelRaceGroup(new AutoShootAll(), new AutoDelay(10))
         );

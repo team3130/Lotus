@@ -117,7 +117,8 @@ public class Turret implements Subsystem {
      * Flip the aiming state of the turret
      */
     public static void toggleAimState() {
-        if (m_controlState == TurretState.AIMING || m_controlState == TurretState.HOLD || m_controlState == TurretState.PREDICT) {
+        if (m_controlState == TurretState.AIMING || m_controlState == TurretState.HOLD
+                || m_controlState == TurretState.SETPOINT || m_controlState == TurretState.PREDICT) {
             stow();
         } else if (m_controlState == TurretState.STOWED) {
             aim(true);
@@ -151,7 +152,7 @@ public class Turret implements Subsystem {
     /**
      * System states
      */
-    private enum TurretState {
+    public enum TurretState {
         STOWED, // Turret stowed
         PREDICT, // Turret is using dead reckoning to predict where the target is
         AIMING, // Turret is aiming with Limelight assist
@@ -506,6 +507,15 @@ public class Turret implements Subsystem {
      */
     private static double getAngleError() {
         return getAngleSetpoint() - getAngleDegrees();
+    }
+
+    /**
+     * Gets the current state of the turret
+     *
+     * @return TurretState enum
+     */
+    public static TurretState getState() {
+        return m_controlState;
     }
 
     public static boolean isFinished() { //TODO: needs other isFinished checks for other states
