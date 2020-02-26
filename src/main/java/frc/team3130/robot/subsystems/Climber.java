@@ -41,13 +41,9 @@ public class Climber implements Subsystem {
 
         m_bigClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_ACTUATOR);
         m_smallClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_DEPLOYER);
-    }
 
-    /*
-    public static void motorSpin(double spin) {
-        m_skyWalker.set(spin);
+        setWinchToBreak();
     }
-    */
 
     public static void leftWinch(double spin) {
         m_climberWinchLeft.set(spin);

@@ -69,7 +69,6 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
-        Climber.setWinchToBreak();
 
         /**
         chooser = new SendableChooser<>();
