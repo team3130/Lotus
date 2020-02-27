@@ -85,7 +85,7 @@ public class WheelSpeedCalculations {
             FILEPATH = Filesystem.getDeployDirectory() + File.separator + "shooter_data_practice.csv";
         }
 
-        RPMOffset = 0;
+        RPMOffset = 0.05;
 
         data_MainStorage = new ArrayList<DataPoint>();
         readFile();
