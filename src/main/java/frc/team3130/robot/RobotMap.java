@@ -71,8 +71,8 @@ public class RobotMap {
 
     public static double kTurretStowingAngle = -90.0;
     public static double kTurretStartupAngle = -90.0;
-    public static double kTurretFwdLimit = 20.0; // Angle in degrees
-    public static double kTurretRevLimit = -310.0; // Angle in degrees
+    public static double kTurretFwdLimit = 15.0; // Angle in degrees
+    public static double kTurretRevLimit = -315.0; // Angle in degrees
 
     public static double kTurretP = 1.6;
     public static double kTurretI = 0.0;
