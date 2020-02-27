@@ -2,9 +2,10 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.ColorSensorV3;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -41,6 +42,31 @@ public class WheelOfFortune implements Subsystem {
     private float sat = 0;
     private float brightness = 0;
 
+    private Thread interrogator;
+    private int cachedR = 0;
+    private int cachedG = 0;
+    private int cachedB = 0;
+
+    private class InterrogationLoop implements Runnable {
+		public void run() {
+			try {
+                // These three operations can run away waiting for i2c synchronization
+                int r = m_colorSensor.getRed();
+                int g = m_colorSensor.getGreen();
+                int b = m_colorSensor.getBlue();
+                // Now as we are back we can update the cache at once
+                cachedR = r;
+                cachedG = g;
+                cachedB = b;
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				DriverStation.reportError(
+						"Thread "+Thread.currentThread().getName()+" got interrupted",
+						true);
+				return;
+			}
+		}
+	}
 
     /**
      * The Singleton instance of this WheelOfFortune. External classes should
@@ -77,6 +103,11 @@ public class WheelOfFortune implements Subsystem {
         fieldToTargetColorMap.put("Yellow", "Green");
 
         actualColor = "Black"; // Initialize color tracker to black
+
+        interrogator = new Thread(new InterrogationLoop(), "WOF interrogator");
+        interrogator.start();
+
+        DriverStation.reportWarning("WOF color sensor Init complete", false);
     }
 
     public static String getTargetColor(String sourceColor) {
@@ -111,11 +142,7 @@ public class WheelOfFortune implements Subsystem {
      * @return String name of the most likely color
      */
     public String detectHSB() {
-        int r = m_colorSensor.getRed();
-        int g = m_colorSensor.getGreen();
-        int b = m_colorSensor.getBlue();
-
-        float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);
+        float[] hsb = java.awt.Color.RGBtoHSB(cachedR, cachedG, cachedB, null);
         deg = hsb[0] * 360;
         sat = hsb[1];
         brightness = hsb[2];
