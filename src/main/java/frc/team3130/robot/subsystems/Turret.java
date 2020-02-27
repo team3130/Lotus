@@ -143,7 +143,7 @@ public class Turret implements Subsystem {
     public static void hold() {
         // Track the initial chassis angle for holding state
         initialChassisHoldAngle = Navx.GetInstance().getHeading();
-        
+
         m_controlState = TurretState.HOLD;
     }
 
