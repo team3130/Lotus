@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
         Hood.setPistons(false);
         WheelOfFortune.retractWheel();
         Climber.retractClimb();
+        Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
     }
 
     @Override
