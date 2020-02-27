@@ -33,7 +33,7 @@ public class Turret implements Subsystem {
     private static double output = 0.0;
     private static double initialChassisHoldAngle = 0.0;
     private static double lastHoldHeading = 0.0;
-    private static int isAimedCounter = 0;
+    private static int lostTrackCounter = 0;
 
     /**
      * The Singleton instance of this Turret. External classes should
@@ -135,6 +135,16 @@ public class Turret implements Subsystem {
         output = RobotMap.kTurretStowingAngle;
 
         m_controlState = TurretState.STOWED;
+    }
+
+    /**
+     * Request to hold the turret
+     */
+    public static void hold() {
+        // Track the initial chassis angle for holding state
+        initialChassisHoldAngle = Navx.GetInstance().getHeading();
+        
+        m_controlState = TurretState.HOLD;
     }
 
     /**
@@ -329,32 +339,48 @@ public class Turret implements Subsystem {
                     RobotMap.kTurretF);
             configMotionMagic(m_turret, 0, 0);
 
-            // Reset aiming stability counter
-            isAimedCounter = 0;
+            // Reset aiming unstability counter
+            lostTrackCounter = 0;
         } else {
-            if (isOnTarget()) {
-                isAimedCounter++; // Increment since previous periodic managed to get turret on target
+//            if (isOnTarget()) {
+//                isAimedCounter++; // Increment since previous periodic managed to get turret on target
+//
+//                if (isAimedCounter >= RobotMap.kLimelightFilterBufferSize) { // Turret is ready to move to hold state if stable for the limelight filter window size
+//                    // Track initial Chassis heading before transitioning to Hold state
+//                    initialChassisHoldAngle = Navx.GetInstance().getHeading();
+//
+//                    // Transition to Hold state
+//                    m_controlState = TurretState.HOLD;
+//
+//                    // Break from method to immediately go to Hold state
+//                    return;
+//                }
+//            } else {
+//                // Turret got off target while settling, reset stability counter
+//                isAimedCounter = 0;
+//            }
+            if (Limelight.GetInstance().hasTrack()) {
+                // Reset aiming unstability counter
+                lostTrackCounter = 0;
 
-                if (isAimedCounter >= RobotMap.kLimelightFilterBufferSize) { // Turret is ready to move to hold state if stable for the limelight filter window size
-                    // Track initial Chassis heading before transitioning to Hold state
-                    initialChassisHoldAngle = Navx.GetInstance().getHeading();
+                double offset = Limelight.GetInstance().getDegHorizontalError();
+                output = getAngleDegrees() + offset;
+                setAngle(output);
+            } else { // Limelight lost track of target
+                lostTrackCounter++;
+                if (lostTrackCounter >= RobotMap.kTurretOffTargetMax) {
+                    // Turret has lost track for specified number of loops, go to stow mode
+                    // Reset output to stowing position
+                    output = RobotMap.kTurretStowingAngle;
 
-                    // Transition to Hold state
-                    m_controlState = TurretState.HOLD;
+                    m_controlState = TurretState.STOWED;
 
-                    // Break from method to immediately go to Hold state
+                    // Break from method to immediately go to Stowed state
                     return;
                 }
-            } else {
-                // Turret got off target while settling, reset stability counter
-                isAimedCounter = 0;
             }
         }
-        if (Limelight.GetInstance().hasTrack()) {
-            double offset = Limelight.GetInstance().getDegHorizontalError();
-            output = getAngleDegrees() + offset;
-            setAngle(output);
-        }
+
     }
 
     /**

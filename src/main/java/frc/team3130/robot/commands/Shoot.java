@@ -22,7 +22,7 @@ public class Shoot implements Command {
     private double lastIndexTime;
 
     public Shoot() {
-        this.subsystems = Set.of(Hopper.getInstance(), Flywheel.getInstance(), Hood.getInstance());
+        this.subsystems = Set.of(Turret.getInstance(), Hopper.getInstance(), Flywheel.getInstance(), Hood.getInstance());
         justShot = true;
         isShooting = false;
         changedState = true;
@@ -33,10 +33,16 @@ public class Shoot implements Command {
      */
     @Override
     public void initialize() {
+        // Reset data trackers
         justShot = true;
         changedState = true;
         isShooting = false;
         lastIndexTime = Timer.getFPGATimestamp();
+
+        // Tell turret to hold angle
+        Turret.hold();
+
+        // Find the flywheel speed
         if (!Limelight.GetInstance().hasTrack()){
             Flywheel.setSpeed(3500.0);
         }else {
@@ -57,7 +63,6 @@ public class Shoot implements Command {
      */
     @Override
     public void execute() {
-
         if (justShot) {
             if (changedState) {
                 lastIndexTime = Timer.getFPGATimestamp();
@@ -127,11 +132,17 @@ public class Shoot implements Command {
     public void end(boolean interrupted) {
         justShot = true;
         changedState = true;
+
+        // Turn off hopper
         Hopper.runHopperLeft(0.0);
         Hopper.runHopperRight(0.0);
         Hopper.runHopperTop(0.0);
 
+        // Stop flywheel
         Flywheel.stop();
+
+        // Tell turret to aim again
+        Turret.aim(false);
     }
 
     /**
