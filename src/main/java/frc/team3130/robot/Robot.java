@@ -174,14 +174,14 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
-        Navx.GetInstance().outputToShuffleboard();
-        WheelOfFortune.outputToShuffleboard();
-        Chassis.outputToShuffleboard();
+//        Navx.GetInstance().outputToShuffleboard();
+//        WheelOfFortune.outputToShuffleboard();
+//        Chassis.outputToShuffleboard();
         Turret.outputToShuffleboard();
-        Hopper.outputToShuffleboard();
-        Limelight.GetInstance().outputToShuffleboard();
+//        Hopper.outputToShuffleboard();
+//        Limelight.GetInstance().outputToShuffleboard();
         Flywheel.outputToShuffleboard();
-        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
+//        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
         //TODO: move this somewhere logical
         if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {

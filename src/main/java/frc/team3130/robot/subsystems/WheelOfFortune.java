@@ -27,8 +27,8 @@ public class WheelOfFortune implements Subsystem {
     private static Solenoid m_wheelArm;
 
     //Create and define all standard data types needed
-    private SuppliedValueWidget colorWidget =
-            Shuffleboard.getTab("Kyber").addBoolean("Wheel Color", () -> true);
+//    private SuppliedValueWidget colorWidget =
+//            Shuffleboard.getTab("Kyber").addBoolean("Wheel Color", () -> true);
 
     private Map<String, String> fieldToTargetColorMap = new HashMap<String, String>();
 
@@ -197,7 +197,7 @@ public class WheelOfFortune implements Subsystem {
 
     @Override
     public void periodic() {
-        colorWidget.withProperties(Map.of("colorWhenTrue", getInstance().determineColor()));
+//        colorWidget.withProperties(Map.of("colorWhenTrue", getInstance().determineColor()));
     }
 
 }
