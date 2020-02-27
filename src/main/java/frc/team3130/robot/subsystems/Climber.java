@@ -35,14 +35,13 @@ public class Climber implements Subsystem {
     }
 
     private Climber() {
-        // m_skyWalker = new WPI_TalonSRX(RobotMap.CAN_SKYWALKER);
         m_climberWinchLeft = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
         m_climberWinchRight = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
 
         m_bigClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_ACTUATOR);
         m_smallClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_DEPLOYER);
 
-        setWinchToBreak();
+        setWinchToBrake();
     }
 
     public static void leftWinch(double spin) {
@@ -68,7 +67,7 @@ public class Climber implements Subsystem {
         m_smallClimberPnuematic.set(false);
     }
 
-    public static void setWinchToBreak(){
+    public static void setWinchToBrake(){
         m_climberWinchLeft.setNeutralMode(NeutralMode.Brake);
         m_climberWinchRight.setNeutralMode(NeutralMode.Brake);}
 }

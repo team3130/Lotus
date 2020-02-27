@@ -150,7 +150,6 @@ public class RobotMap {
 
     public static final int CAN_WHEELOFFORTUNE = 15;
 
-    // public static final int CAN_SKYWALKER = 106;
     public static final int CAN_CLIMBER1 = 7;
     public static final int CAN_CLIMBER2 = 11;
 

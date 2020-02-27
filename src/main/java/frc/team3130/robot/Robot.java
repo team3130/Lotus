@@ -70,20 +70,13 @@ public class Robot extends TimedRobot {
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
 
-        /**
-        chooser = new SendableChooser<>();
-        chooser.setDefaultOption("No Auton", "None");
-        chooser.addOption("3Ball", "3Ball");
-        chooser.addOption("6Ball", "6Ball");
-        SmartDashboard.putData("Auto mode", chooser);
-    */
-    }
-
-
-    @Override
-    public void teleopInit() {
-        autonomousCommand.cancel();
-        Chassis.configBrakeMode(true);
+        /*
+         chooser = new SendableChooser<>();
+         chooser.setDefaultOption("No Auton", "None");
+         chooser.addOption("3Ball", "3Ball");
+         chooser.addOption("6Ball", "6Ball");
+         SmartDashboard.putData("Auto mode", chooser);
+         */
     }
 
     @Override
@@ -111,7 +104,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         outputToShuffleboard();
-        Limelight.GetInstance().updateData();
     }
 
     /**
@@ -127,17 +119,12 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        resetSubsystems();
-
         determineAuto();
 
-        autonomousCommand.schedule();
-
-    }
-
-    private void determineAuto(){
-        autonomousCommand = new Shoot6();
-        //autonomousCommand = new Shoot3();
+        // Schedule autonomous command if it exists
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+        }
     }
 
     /**
@@ -145,8 +132,22 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
+        Limelight.GetInstance().updateData();
         scheduler.run();
         writePeriodicOutputs();
+    }
+
+    @Override
+    public void teleopInit() {
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
+        }
+
+        Chassis.configBrakeMode(true);
     }
 
     /**
@@ -154,8 +155,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        Limelight.GetInstance().updateData();
         scheduler.run();
         writePeriodicOutputs();
+    }
+
+    @Override
+    public void testInit() {
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll();
     }
 
     /**
@@ -196,6 +204,11 @@ public class Robot extends TimedRobot {
         }
 
 
+    }
+
+    private void determineAuto() {
+        autonomousCommand = new Shoot6();
+        //autonomousCommand = new Shoot3();
     }
 
     public void writePeriodicOutputs() {
