@@ -85,7 +85,7 @@ public class WheelSpeedCalculations {
             FILEPATH = Filesystem.getDeployDirectory() + File.separator + "shooter_data_practice.csv";
         }
 
-        RPMOffset = 0.05;
+        RPMOffset = RobotMap.kRPMChange;
 
         data_MainStorage = new ArrayList<DataPoint>();
         readFile();
@@ -129,6 +129,10 @@ public class WheelSpeedCalculations {
 
     public void decrementRPMOffset() {
         RPMOffset -= 0.05;
+    }
+
+    public void resetRPMOffset(){
+        RPMOffset = RobotMap.kRPMChange;
     }
 
     public double getSpeed(Double dist) {

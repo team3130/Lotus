@@ -8,6 +8,7 @@ import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
 import frc.team3130.robot.commands.Flywheel.DecrementRPM;
 import frc.team3130.robot.commands.Flywheel.IncrementRPM;
+import frc.team3130.robot.commands.Flywheel.ResetRPM;
 import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Shoot;
@@ -70,6 +71,8 @@ public class OI {
 
     private static POVButton incrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_N);
     private static POVButton decrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_S);
+    private static POVButton resetShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_E);
+
 
     private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU); //Menu button
     private static JoystickButton retractClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_WINDOW); //Windows button
@@ -95,6 +98,8 @@ public class OI {
 
         incrementShooterOffset.whenPressed(new IncrementRPM());
         decrementShooterOffset.whenPressed(new DecrementRPM());
+        resetShooterOffset.whenPressed(new ResetRPM());
+
 
         toggleIntake.whenPressed(new ToggleIntake());
 
