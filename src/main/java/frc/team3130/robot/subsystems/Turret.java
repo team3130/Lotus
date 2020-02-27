@@ -520,7 +520,7 @@ public class Turret implements Subsystem {
 
     public static boolean isFinished() { //TODO: needs other isFinished checks for other states
         if (m_controlState != m_lastState) return false;
-        if ((m_controlState == TurretState.PREDICT || m_controlState == TurretState.SETPOINT)
+        if ((m_controlState == TurretState.STOWED || m_controlState == TurretState.PREDICT || m_controlState == TurretState.SETPOINT)
                 && (Math.abs(output - getAngleDegrees()) < RobotMap.kTurretReadyToAimTolerance))
             return true;
         else return false;
