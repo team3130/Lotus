@@ -300,7 +300,7 @@ public class Limelight {
     }
 
 
-    public static void outputToShuffleboard() {
+    public void outputToShuffleboard() {
         Limelight o = GetInstance();
         SmartDashboard.putNumber("Limelight X", o.x_targetOffsetAngle);
         SmartDashboard.putNumber("Limelight Y", o.y_targetOffsetAngle);

@@ -58,7 +58,7 @@ public class OI {
 //    private static JoystickButton testFlywheel = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
     private static JoystickButton shoot = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RBUMPER); //R bumper
     private static JoystickButton hopperOut = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LBUMPER); //L bumper
-    private static JoystickButton testTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS); //R joystick press
+    private static JoystickButton aimTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS); //R joystick press
     private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU); //Menu button
     private static JoystickButton shift = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS); //L joystick press
     private static JoystickButton toggleHood = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A); //Button A
@@ -90,7 +90,7 @@ public class OI {
 //        testColorAlignment.whenPressed(new ColorAlignment());
 //        testTestHSB.whenHeld(new TestHSB());
 
-        testTurret.whenPressed(new ToggleTurretAim());
+        aimTurret.whenPressed(new ToggleTurretAim());
 //        testFlywheel.whenHeld(new TuneFlywheelRPM());
 
         incrementShooterOffset.whenPressed(new IncrementRPM());

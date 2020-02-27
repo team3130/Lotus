@@ -179,7 +179,7 @@ public class Robot extends TimedRobot {
         Chassis.outputToShuffleboard();
         Turret.outputToShuffleboard();
         Hopper.outputToShuffleboard();
-        Limelight.outputToShuffleboard();
+        Limelight.GetInstance().outputToShuffleboard();
         Flywheel.outputToShuffleboard();
         WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
