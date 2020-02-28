@@ -18,7 +18,7 @@ public class Shoot3 extends SequentialCommandGroup {
         // super(new FooCommand(), new BarCommand());
         addCommands(
                 new ParallelRaceGroup(new AutoTurnTurret(-180.0), new AutoDelay(1.5)),
-                new AutoDelay(0.5),
+                new AutoDelay(0.4),
                 new AutoShootAll(),
                 new ParallelRaceGroup(new HopperOut(), new AutoDelay(1.5)),
                 new AutoShootAll(),
