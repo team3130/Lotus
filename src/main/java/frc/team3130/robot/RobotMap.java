@@ -62,6 +62,9 @@ public class RobotMap {
 
     //Turret
 
+    //Climber
+    public static double kClimberTriggerDeadband = 0.07;
+
     // Turret pitch and roll is how much the plane of the turret's rotation isn't level
     public static final double kTurretPitch = (kUseCompbot ? -0.25 : -0.875); // Drop forward in degrees
     public static final double kTurretRoll = 0; // Roll to the right in degrees
@@ -130,6 +133,7 @@ public class RobotMap {
 
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;
+
 
     /**
      * Field parameters

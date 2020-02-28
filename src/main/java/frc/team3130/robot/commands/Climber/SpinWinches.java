@@ -32,12 +32,29 @@ public class SpinWinches implements Command {
      */
     @Override
     public void execute() {
+
+        double spinSpeedLeft = OI.weaponsGamepad.getRawAxis(RobotMap.LST_AXS_LTRIGGER);
+        double spinSpeedRight = OI.weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER);
+
+        if (spinSpeedLeft >= RobotMap.kClimberTriggerDeadband){
+            Climber.leftWinch(spinSpeedLeft);
+        }else{
+            Climber.leftWinch(0);
+        }
+
+        if (spinSpeedRight >= RobotMap.kClimberTriggerDeadband){
+            Climber.rightWinch(-spinSpeedRight);
+        }else{
+            Climber.rightWinch(0);
+        }
+
+        /**
         if(OI.weaponsGamepad.getRawButtonPressed(RobotMap.LST_BTN_RBUMPER)){
-            Climber.rightWinch(-0.65);
+            Climber.rightWinch(-0.8);
 
         }
         if(OI.weaponsGamepad.getRawButtonPressed(RobotMap.LST_BTN_LBUMPER)) {
-            Climber.leftWinch(0.65);
+            Climber.leftWinch(0.8);
 
         }
 
@@ -48,6 +65,8 @@ public class SpinWinches implements Command {
         if (OI.weaponsGamepad.getRawButtonReleased(RobotMap.LST_BTN_LBUMPER)) {
             Climber.leftWinch(0);
         }
+        */
+
 /**
 
         if(OI.weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER) >= .001){
