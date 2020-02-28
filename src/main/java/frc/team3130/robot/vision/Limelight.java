@@ -233,7 +233,7 @@ public class Limelight {
 
         // Otherwise add the inner goal's vector to the target vector
         // to obtain a new aiming angle
-        Matrix<N3,N1> adjustedVec = realVector.plus(inner);
+        Matrix<N3,N1> adjustedVec = realVector.minus(inner);
         return -1.0 * Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0))) + yawAdj;
     }
 
@@ -293,9 +293,12 @@ public class Limelight {
     }
 
     public double getYawAdjustment(){
-        double yawCalc = RobotMap.kLimelightYaw *
-                Math.min(1.0, Math.max(0.0, (getDistanceToTarget() - 72)) / (290 - 72));
-//        yawCalc = yawCalc/ (getDistanceToTarget()+(290-72)/290);
+        double distance = getDistanceToTarget();
+        double yawCalc = 0.0;
+        if(distance >= 190){
+        yawCalc = RobotMap.kLimelightYaw *
+                Math.min(1.0, Math.max(0.0, (distance - 150)) / (290 - 150));
+        }
         return yawCalc;
     }
 

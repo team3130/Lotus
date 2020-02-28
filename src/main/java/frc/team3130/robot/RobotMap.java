@@ -69,7 +69,7 @@ public class RobotMap {
     public static double kTurretManualDeadband = 0.09;
     public static double kTurretManualMultipler = 0.2;
 
-    public static int kTurretOffTargetMax = 5;
+    public static int kTurretOffTargetMax = 15;
     public static double kTurretStowingAngle = -90.0;
     public static double kTurretStartupAngle = -90.0;
     public static double kTurretFwdLimit = 15.0; // Angle in degrees
@@ -101,7 +101,7 @@ public class RobotMap {
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
     public static double kLimelightPitch = (kUseCompbot ? -28.07 : -31.625);   // Facing up is negative Checked: 2/21
-    public static double kLimelightYaw = (kUseCompbot ? 2.0 : 3.1);        // Aiming bias, facing left is positive
+    public static double kLimelightYaw = (kUseCompbot ? 2.8 : 3.1);        // Aiming bias, facing left is positive
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
     public static double kLimelightLength = 9.5;    // Distance to the turret's rotation axis
@@ -118,7 +118,7 @@ public class RobotMap {
     public static double kFlywheelD = 12.0;
     public static double kFlywheelF = (0.51 * 1023.0) / 10650.0; // Checked 2/11, Optimal speed at 51% power
 
-    public static double kRPMChange = .05;
+    public static double kRPMChange = 0.0;
 
     public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
     public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);

@@ -371,12 +371,9 @@ public class Turret implements Subsystem {
                 if (lostTrackCounter >= RobotMap.kTurretOffTargetMax) {
                     // Turret has lost track for specified number of loops, go to stow mode
                     // Reset output to stowing position
-//                    output = RobotMap.kTurretStowingAngle;
-//
-//                    m_controlState = TurretState.STOWED;
+                    output = RobotMap.kTurretStowingAngle;
 
-                    // Break from method to immediately go to Stowed state
-                    return;
+                    m_controlState = TurretState.STOWED;
                 }
             }
         }

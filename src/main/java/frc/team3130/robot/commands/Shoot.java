@@ -70,7 +70,7 @@ public class Shoot implements Command {
             }
             if (Hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
-                Hopper.runHopperTop(0.25);
+                Hopper.runHopperTop(0.20);
                 Hopper.runHopperLeft(-0.5);
                 Hopper.runHopperRight(-0.6);
             } else {
