@@ -42,7 +42,7 @@ public class Shoot6 extends SequentialCommandGroup {
                         new ParallelRaceGroup(driveBackIntake, new AutoDelay(4)),
                         intake
                 ),
-                new AutoDelay(0.75),
+                new AutoDelay(0.5),
                 new ParallelRaceGroup(driveUp, new AutoDelay(8)),
                 new ParallelRaceGroup(shootAim2, driveBack, new AutoDelay(2)),
                 new AutoShootAll()
