@@ -102,6 +102,7 @@ public class AutoDriveStraightToPoint implements Command {
         System.out.println("ENDING");
         Chassis.ReleaseAngle();
         Chassis.driveTank(0, 0, false);
+        Chassis.configRampRate(0);
     }
 
     /**

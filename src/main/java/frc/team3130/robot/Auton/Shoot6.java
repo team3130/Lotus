@@ -8,10 +8,8 @@ import frc.team3130.robot.commands.Intake.IntakeIn;
 public class Shoot6 extends SequentialCommandGroup {
     AutoDriveStraightToPoint driveBack20;
     AutoDriveStraightToPoint driveBack;
-    AutoDelay shoot1Delay;
     AutoTurnTurret shootAim1;
     AutoTurnTurret shootAim2;
-    AutoTurn intakeTurn;
     IntakeIn intake;
     AutoDriveStraightToPoint driveBackIntake;
     AutoDriveStraightToPoint driveUp;
@@ -22,14 +20,12 @@ public class Shoot6 extends SequentialCommandGroup {
      */
     public Shoot6() {
         driveBack20 = new AutoDriveStraightToPoint();
-        shootAim1 = new AutoTurnTurret(-180.0);
-        shoot1Delay = new AutoDelay(2);
-        intakeTurn = new AutoTurn();
+        shootAim1 = new AutoTurnTurret(-160.0);
         intake = new IntakeIn();
         driveBackIntake = new AutoDriveStraightToPoint();
         driveUp = new AutoDriveStraightToPoint();
         driveBack = new AutoDriveStraightToPoint();
-        shootAim2 = new AutoTurnTurret(-180.0);
+        shootAim2 = new AutoTurnTurret(-160.0);
         shoot2Delay = new AutoDelay(3);
 
         // Add your commands in the super() call, e.g.
@@ -37,8 +33,8 @@ public class Shoot6 extends SequentialCommandGroup {
         addCommands(
                 new ParallelRaceGroup(shootAim1, driveBack20, new AutoDelay(2)),
                 new AutoDelay(0.25),
-                new AutoShootAll(),
-                new ParallelRaceGroup(intakeTurn, new AutoDelay(2)),
+                new ParallelRaceGroup(new AutoShootAll(), new AutoDelay(3)),
+                new ParallelRaceGroup(new IntakeIn(), new AutoDelay(0.25)),
                 new ParallelDeadlineGroup(
                         new ParallelRaceGroup(driveBackIntake, new AutoDelay(4)),
                         intake
@@ -47,7 +43,7 @@ public class Shoot6 extends SequentialCommandGroup {
                 new ParallelRaceGroup(driveUp, new AutoDelay(8)),
                 new ParallelRaceGroup(shootAim2, driveBack, new AutoDelay(2)),
                 new AutoDelay(0.25),
-                new AutoShootAll()
+                new ParallelRaceGroup(new AutoShootAll(), new AutoDelay(3))
         );
     }
 
@@ -60,21 +56,15 @@ public class Shoot6 extends SequentialCommandGroup {
                 true//Nothing
         );
 
-        intakeTurn.setParam(
-                -5, //turn angle (degrees)
-                0.5,//tolerance (degrees)
-                true//small angle
-        );
-
         driveBackIntake.SetParam(
                 12 * 13,
                 6,
-                0.35,
+                0.4,
                 true
         );
 
         driveUp.SetParam(
-                -12 * 13,
+                -12 * 12,
                 6,
                 0.6,
                 true

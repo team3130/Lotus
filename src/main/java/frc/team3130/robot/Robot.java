@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team3130.robot.Auton.RendezvousShoot5;
 import frc.team3130.robot.Auton.Shoot3;
 import frc.team3130.robot.Auton.Shoot5;
 import frc.team3130.robot.Auton.Shoot6;
@@ -210,6 +211,7 @@ public class Robot extends TimedRobot {
     }
 
     private void determineAuto() {
+//          autonomousCommand = new RendezvousShoot5();
         autonomousCommand = new Shoot3();
 //        autonomousCommand = new Shoot5();
 //        autonomousCommand = new Shoot6();
