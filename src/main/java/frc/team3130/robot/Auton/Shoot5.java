@@ -26,7 +26,7 @@ public class Shoot5 extends SequentialCommandGroup {
                 new ParallelRaceGroup(driveToBalls, intake, new AutoDelay(5)),
                 new ParallelRaceGroup(driveBack, new AutoDelay(5)),
                 new ParallelRaceGroup(shootAim, new AutoDelay(1)),
-                new AutoDelay(0.75),
+                new AutoDelay(0.5),
                 new AutoShootAll()
         );
     }
