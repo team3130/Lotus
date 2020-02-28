@@ -358,7 +358,7 @@ public class Chassis extends PIDSubsystem {
     public static double getAngle()
     {
         if(Navx.getNavxPresent()){
-            return Navx.getAngle();
+            return -Navx.getAngle();
         }else{
             //TODO:Encoder Angle, if wanted
             return 0;

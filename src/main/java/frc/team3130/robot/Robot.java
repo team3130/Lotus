@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.Auton.Shoot3;
+import frc.team3130.robot.Auton.Shoot5;
+import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Climber.SpinWinches;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
@@ -208,8 +210,9 @@ public class Robot extends TimedRobot {
     }
 
     private void determineAuto() {
-        autonomousCommand = new Shoot3();
-        //autonomousCommand = new Shoot3();
+//        autonomousCommand = new Shoot3();
+//        autonomousCommand = new Shoot5();
+        autonomousCommand = new Shoot6();
     }
 
     public void writePeriodicOutputs() {

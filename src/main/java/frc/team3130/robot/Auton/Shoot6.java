@@ -36,6 +36,7 @@ public class Shoot6 extends SequentialCommandGroup {
         // super(new FooCommand(), new BarCommand());
         addCommands(
                 new ParallelRaceGroup(shootAim1, driveBack20, new AutoDelay(2)),
+                new AutoDelay(0.25),
                 new AutoShootAll(),
                 new ParallelRaceGroup(intakeTurn, new AutoDelay(2)),
                 new ParallelDeadlineGroup(
@@ -45,6 +46,7 @@ public class Shoot6 extends SequentialCommandGroup {
                 new AutoDelay(0.5),
                 new ParallelRaceGroup(driveUp, new AutoDelay(8)),
                 new ParallelRaceGroup(shootAim2, driveBack, new AutoDelay(2)),
+                new AutoDelay(0.25),
                 new AutoShootAll()
         );
     }
@@ -59,7 +61,7 @@ public class Shoot6 extends SequentialCommandGroup {
         );
 
         intakeTurn.setParam(
-                -3, //turn angle (degrees)
+                -5, //turn angle (degrees)
                 0.5,//tolerance (degrees)
                 true//small angle
         );

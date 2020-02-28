@@ -36,14 +36,14 @@ public class Shoot5 extends SequentialCommandGroup {
         driveToBalls.SetParam(
                 195, //Drive Distance (inches)
                 2,  //Tolerance
-                0.7, //PVbus speed
+                0.5, //PVbus speed
                 true//Nothing
         );
 
         driveBack.SetParam(
                 -195,
                 6,
-                0.7,
+                0.5,
                 true
         );
 
