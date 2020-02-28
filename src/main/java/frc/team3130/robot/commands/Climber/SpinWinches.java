@@ -33,11 +33,11 @@ public class SpinWinches implements Command {
     @Override
     public void execute() {
         if(OI.weaponsGamepad.getRawButtonPressed(RobotMap.LST_BTN_RBUMPER)){
-            Climber.rightWinch(-0.55);
+            Climber.rightWinch(-0.65);
 
         }
         if(OI.weaponsGamepad.getRawButtonPressed(RobotMap.LST_BTN_LBUMPER)) {
-            Climber.leftWinch(0.55);
+            Climber.leftWinch(0.65);
 
         }
 

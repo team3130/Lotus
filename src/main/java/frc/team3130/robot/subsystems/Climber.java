@@ -12,7 +12,7 @@ public class Climber implements Subsystem {
 
     //Create necessary objects
     private static WPI_TalonSRX m_climberWinchLeft;
-    private static WPI_VictorSPX m_climberWinchRight;
+    private static WPI_TalonSRX m_climberWinchRight;
 
     private static Solenoid m_smallClimberPnuematic;
     private static Solenoid m_bigClimberPnuematic;
@@ -36,7 +36,7 @@ public class Climber implements Subsystem {
 
     private Climber() {
         m_climberWinchLeft = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
-        m_climberWinchRight = new WPI_VictorSPX(RobotMap.CAN_CLIMBER2);
+        m_climberWinchRight = new WPI_TalonSRX(RobotMap.CAN_CLIMBER2);
 
         m_bigClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_ACTUATOR);
         m_smallClimberPnuematic = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_DEPLOYER);
@@ -49,7 +49,7 @@ public class Climber implements Subsystem {
     }
 
     public static void rightWinch(double spin) {
-        m_climberWinchRight.set(ControlMode.PercentOutput, spin);
+        m_climberWinchRight.set(spin);
     }
 
     //method for deploying wheel to be called in a command

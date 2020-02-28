@@ -69,9 +69,9 @@ public class OI {
      * Weapons
      */
 
-    private static POVButton incrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_N);
-    private static POVButton decrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_S);
-    private static POVButton resetShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_E);
+//    private static POVButton incrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_N);
+//    private static POVButton decrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_S);
+//    private static POVButton resetShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_E);
 
 
     private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU); //Menu button
@@ -96,9 +96,9 @@ public class OI {
         aimTurret.whenPressed(new ToggleTurretAim());
 //        testFlywheel.whenHeld(new TuneFlywheelRPM());
 
-        incrementShooterOffset.whenPressed(new IncrementRPM());
-        decrementShooterOffset.whenPressed(new DecrementRPM());
-        resetShooterOffset.whenPressed(new ResetRPM());
+//        incrementShooterOffset.whenPressed(new IncrementRPM());
+//        decrementShooterOffset.whenPressed(new DecrementRPM());
+//        resetShooterOffset.whenPressed(new ResetRPM());
 
 
         toggleIntake.whenPressed(new ToggleIntake());
