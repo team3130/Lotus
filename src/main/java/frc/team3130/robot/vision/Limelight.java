@@ -221,10 +221,10 @@ public class Limelight {
         // and the Z-axis which is where the turret is always facing.
         double alpha = Math.toDegrees(Math.atan2(realVector.get(0, 0), realVector.get(2, 0)));
         Matrix<N3,N1> inner = getInnerTarget();
-        double yawAdj = GetInstance().getYawAdjustment();
+        double yawAdj = 0; // GetInstance().getYawAdjustment();
         System.out.println("Yaw Adjustment: " + yawAdj);
 
-        System.out.println("Inner Goal offset: " + Math.toDegrees(Math.atan2(inner.get(0, 0), inner.get(2, 0))));
+//        System.out.println("Inner Goal offset: " + Math.toDegrees(Math.atan2(inner.get(0, 0), inner.get(2, 0))));
 
         // TODO: Explain why is this negative
         // If rotation of the target is greater than this many inches along the edge
@@ -295,9 +295,9 @@ public class Limelight {
     public double getYawAdjustment(){
         double distance = getDistanceToTarget();
         double yawCalc = 0.0;
-        if(distance >= 190){
+        if(distance >= 220){
         yawCalc = RobotMap.kLimelightYaw *
-                Math.min(1.0, Math.max(0.0, (distance - 150)) / (290 - 150));
+                Math.min(1.0, Math.max(0.0, (distance - 190)) / (290 - 190));
         }
         return yawCalc;
     }
