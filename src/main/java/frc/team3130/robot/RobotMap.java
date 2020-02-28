@@ -21,11 +21,11 @@ public class RobotMap {
     public static boolean kNavxReversed = true;
 
     //Chassis
-    public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+    public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)); //-49.37 for shoot5 auto
 
     public static double kChassisMaxVoltage = 12.0;
 
-    public static double kChassisWidth = 23.0; //FIXME
+    public static double kChassisWidth = 28.0; //FIXME: check
     public static double kChassisLengthBumpers = 39.0; //FIXME
     public static double kLWheelDiameter = 6.0; // Center wheel
     public static double kRWheelDiameter = 6.0; // Center wheel

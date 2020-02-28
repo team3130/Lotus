@@ -309,7 +309,7 @@ public class Turret implements Subsystem {
             // New setpoint if Chassis angle has changed by more that the tolerance
             if (Math.abs(Navx.GetInstance().getHeading() - initialChassisHoldAngle) > RobotMap.kTurretReadyToAimTolerance) {
                 initialChassisHoldAngle = Navx.GetInstance().getHeading();
-                output = -180.0 + RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
+                output = -180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
                 setAngleMM(output);
             }
             if (isFinished()) {
