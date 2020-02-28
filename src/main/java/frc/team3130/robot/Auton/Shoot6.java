@@ -7,6 +7,7 @@ import frc.team3130.robot.commands.Intake.IntakeIn;
 
 public class Shoot6 extends SequentialCommandGroup {
     AutoDriveStraightToPoint driveBack20;
+    AutoDriveStraightToPoint driveBack;
     AutoTurnTurret shootAim1;
     AutoTurnTurret shootAim2;
     IntakeIn intake;
@@ -23,6 +24,7 @@ public class Shoot6 extends SequentialCommandGroup {
         intake = new IntakeIn();
         driveBackIntake = new AutoDriveStraightToPoint();
         driveUp = new AutoDriveStraightToPoint();
+        driveBack = new AutoDriveStraightToPoint();
         shootAim2 = new AutoTurnTurret(-160.0);
         shoot2Delay = new AutoDelay(3);
 
@@ -32,14 +34,14 @@ public class Shoot6 extends SequentialCommandGroup {
                 new ParallelRaceGroup(shootAim1, driveBack20, new AutoDelay(2)),
                 new AutoDelay(0.25),
                 new ParallelRaceGroup(new AutoShootAll(), new AutoDelay(3)),
-                new ParallelRaceGroup(new IntakeIn(), new AutoDelay(0.5)),
+                new ParallelRaceGroup(new IntakeIn(), new AutoDelay(0.25)),
                 new ParallelDeadlineGroup(
                         new ParallelRaceGroup(driveBackIntake, new AutoDelay(4)),
                         intake
                 ),
-                new AutoDelay(0.25),
+                new AutoDelay(0.5),
                 new ParallelRaceGroup(driveUp, new AutoDelay(8)),
-                new ParallelRaceGroup(shootAim2, new AutoDelay(2)),
+                new ParallelRaceGroup(shootAim2, driveBack, new AutoDelay(2)),
                 new AutoDelay(0.25),
                 new ParallelRaceGroup(new AutoShootAll(), new AutoDelay(3))
         );
@@ -62,9 +64,9 @@ public class Shoot6 extends SequentialCommandGroup {
         );
 
         driveUp.SetParam(
-                -11 * 13,
+                -12 * 12,
                 6,
-                0.7,
+                0.6,
                 true
         );
 

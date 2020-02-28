@@ -21,7 +21,7 @@ public class RobotMap {
     public static boolean kNavxReversed = true;
 
     //Chassis
-    public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)); //-49.37 for shoot5 auto
+    public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)); //-49.37 for shoot5 auto TODO: Permanent solution for this
 
     public static double kChassisMaxVoltage = 12.0;
 
