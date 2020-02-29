@@ -2,19 +2,16 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
-import frc.team3130.robot.commands.Flywheel.DecrementRPM;
-import frc.team3130.robot.commands.Flywheel.IncrementRPM;
-import frc.team3130.robot.commands.Flywheel.ResetRPM;
 import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Shoot;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.ToggleIntake;
+import frc.team3130.robot.commands.ShootNear;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
 import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
@@ -62,7 +59,7 @@ public class OI {
     private static JoystickButton aimTurret = new JoystickButton(driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS); //R joystick press
     private static JoystickButton toggleIntake = new JoystickButton(driverGamepad, RobotMap.LST_BTN_MENU); //Menu button
     private static JoystickButton shift = new JoystickButton(driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS); //L joystick press
-    private static JoystickButton toggleHood = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A); //Button A
+    private static JoystickButton nearShoot = new JoystickButton(driverGamepad, RobotMap.LST_BTN_A); //Button A
 
 
     /**
@@ -113,7 +110,7 @@ public class OI {
 
         shift.whenPressed(new ShiftToggle());
 
-        toggleHood.whenPressed(new ToggleHood());
+        nearShoot.whenHeld(new ShootNear());
     }
 }
 

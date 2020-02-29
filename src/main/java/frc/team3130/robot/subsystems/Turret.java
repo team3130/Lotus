@@ -160,6 +160,15 @@ public class Turret implements Subsystem {
     }
 
     /**
+     * Request to set the turret up for near shot
+     */
+    public static void nearShot() {
+        output = 0.0;
+
+        m_controlState = TurretState.NEAR_SHOOT;
+    }
+
+    /**
      * System states
      */
     public enum TurretState {
@@ -169,6 +178,7 @@ public class Turret implements Subsystem {
         HOLD, // Turret holding heading to target
         MANUAL, // Manual voltage control
         SETPOINT, // Turret to angle setpoint mode
+        NEAR_SHOOT, // Turret needs to be near shooting mode
     }
 
     /**
@@ -227,6 +237,11 @@ public class Turret implements Subsystem {
             case HOLD:
                 // Handle holding turret heading state
                 handleHold(isNewState);
+                break;
+
+            case NEAR_SHOOT:
+                // Handle manual control state
+                handleNear(isNewState);
                 break;
 
             case MANUAL:
@@ -448,6 +463,27 @@ public class Turret implements Subsystem {
             }
         }
 
+    }
+
+    /**
+     * Handle near shooting state
+     *
+     * @param newState Is this state new?
+     */
+    private synchronized static void handleNear(boolean newState) {
+        if (newState) {
+            // We don't need Limelight aiming, turn off LEDs
+            Limelight.GetInstance().setLedState(false);
+            // Configure PID MM
+            configPIDF(m_turret,
+                    RobotMap.kTurretMMP,
+                    RobotMap.kTurretMMI,
+                    RobotMap.kTurretMMD,
+                    RobotMap.kTurretMMF);
+            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+
+            setAngleMM(output);
+        }
     }
 
     /**
