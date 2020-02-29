@@ -68,7 +68,7 @@ public class RobotMap {
     public static final double kTurretPitch = (kUseCompbot ? -0.49 : -0.875); // Drop forward in degrees
     public static final double kTurretRoll = 0; // Roll to the right in degrees
 
-    public static double kTurretManualDeadband = 0.09;
+    public static double kTurretManualDeadband = 0.15;
     public static double kTurretManualMultipler = 0.2;
 
     public static int kTurretOffTargetMax = 25;
@@ -77,7 +77,7 @@ public class RobotMap {
     public static double kTurretFwdLimit = 15.0; // Angle in degrees
     public static double kTurretRevLimit = -315.0; // Angle in degrees
 
-    public static double kTurretP = 1.6;
+    public static double kTurretP = 1.5;
     public static double kTurretI = 0.0;
     public static double kTurretD = 180.0;
     public static double kTurretF = 0;
@@ -86,8 +86,8 @@ public class RobotMap {
     public static double kTurretMMI = 0;
     public static double kTurretMMD = 0.7;
     public static double kTurretMMF = 0;
-    public static int kTurretMaxAcc = 4300;
-    public static int kTurretMaxVel = 3000;
+    public static int kTurretMaxAcc = 4600;
+    public static int kTurretMaxVel = 3400;
 
     public static double kTurretHoldP = 1.0;
     public static double kTurretHoldI = 0;
@@ -103,7 +103,7 @@ public class RobotMap {
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
     public static double kLimelightPitch = (kUseCompbot ? -39.05 : -31.625);   // Facing up is negative Checked: 2/21
-    public static double kLimelightYaw = (kUseCompbot ? 1.2 : 3.1);        // Aiming bias, facing left is positive
+    public static double kLimelightYaw = (kUseCompbot ? 1.8 : 3.1);        // Aiming bias, facing left is positive
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
     public static double kLimelightLength = 9.5;    // Distance to the turret's rotation axis
@@ -128,7 +128,7 @@ public class RobotMap {
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;
-    public static double kHopperChamberPause = 0.1;
+    public static double kHopperChamberPause = 0.2;
 
     //Intake
     public static double kIntakeTriggerDeadband = 0.4;
