@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
 public class AutoDriveStraightToPoint implements Command {
@@ -102,7 +103,7 @@ public class AutoDriveStraightToPoint implements Command {
         System.out.println("ENDING");
         Chassis.ReleaseAngle();
         Chassis.driveTank(0, 0, false);
-        Chassis.configRampRate(0);
+        Chassis.configRampRate(RobotMap.kDriveMaxRampRate);
     }
 
     /**

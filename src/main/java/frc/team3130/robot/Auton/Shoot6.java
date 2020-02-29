@@ -34,15 +34,15 @@ public class Shoot6 extends SequentialCommandGroup {
                 new ParallelRaceGroup(shootAim1, driveBack20, new AutoDelay(2)),
                 new AutoDelay(0.25),
                 new ParallelRaceGroup(new AutoShootAll(), new AutoDelay(3)),
-                new ParallelRaceGroup(new IntakeIn(), new AutoDelay(0.25)),
+                new ParallelRaceGroup(new IntakeIn(), new AutoDelay(0.1)),
                 new ParallelDeadlineGroup(
                         new ParallelRaceGroup(driveBackIntake, new AutoDelay(4)),
                         intake
                 ),
-                new AutoDelay(0.5),
+                new AutoDelay(0.25),
                 new ParallelRaceGroup(driveUp, new AutoDelay(8)),
                 new ParallelRaceGroup(shootAim2, driveBack, new AutoDelay(2)),
-                new AutoDelay(0.25),
+                new AutoDelay(0.7),
                 new ParallelRaceGroup(new AutoShootAll(), new AutoDelay(3))
         );
     }
@@ -66,7 +66,7 @@ public class Shoot6 extends SequentialCommandGroup {
         driveUp.SetParam(
                 -12 * 12,
                 6,
-                0.6,
+                0.7,
                 true
         );
 

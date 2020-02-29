@@ -79,7 +79,7 @@ public class RobotMap {
 
     public static double kTurretP = 0.8;
     public static double kTurretI = 0.0;
-    public static double kTurretD = 160.0;
+    public static double kTurretD = 168.0;
     public static double kTurretF = 0;
 
     public static double kTurretMMP = 1.8;

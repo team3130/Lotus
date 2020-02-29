@@ -212,9 +212,9 @@ public class Robot extends TimedRobot {
 
     private void determineAuto() {
 //          autonomousCommand = new RendezvousShoot5();
-        autonomousCommand = new Shoot3();
+//        autonomousCommand = new Shoot3();
 //        autonomousCommand = new Shoot5();
-//        autonomousCommand = new Shoot6();
+        autonomousCommand = new Shoot6();
     }
 
     public void writePeriodicOutputs() {
