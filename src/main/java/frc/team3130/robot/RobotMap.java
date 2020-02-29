@@ -65,7 +65,7 @@ public class RobotMap {
 
     //Turret
     // Turret pitch and roll is how much the plane of the turret's rotation isn't level
-    public static final double kTurretPitch = (kUseCompbot ? -0.49 : -0.875); // Drop forward in degrees
+    public static final double kTurretPitch = (kUseCompbot ? -0.495 : -0.875); // Drop forward in degrees
     public static final double kTurretRoll = 0; // Roll to the right in degrees
 
     public static double kTurretManualDeadband = 0.15;
@@ -77,9 +77,9 @@ public class RobotMap {
     public static double kTurretFwdLimit = 15.0; // Angle in degrees
     public static double kTurretRevLimit = -315.0; // Angle in degrees
 
-    public static double kTurretP = 1.5;
+    public static double kTurretP = 0.8;
     public static double kTurretI = 0.0;
-    public static double kTurretD = 180.0;
+    public static double kTurretD = 160.0;
     public static double kTurretF = 0;
 
     public static double kTurretMMP = 1.8;
@@ -102,7 +102,7 @@ public class RobotMap {
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static double kLimelightPitch = (kUseCompbot ? -39.05 : -31.625);   // Facing up is negative Checked: 2/21
+    public static double kLimelightPitch = (kUseCompbot ? -39.025 : -31.625);   // Facing up is negative Checked: 2/21
     public static double kLimelightYaw = (kUseCompbot ? 1.8 : 3.1);        // Aiming bias, facing left is positive
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
