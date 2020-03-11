@@ -1,49 +1,58 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.team3130.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
-public class Hood implements Subsystem {
 
-    //Create necessary objects
-    private static Solenoid m_hoodPistons;
+public class Hood extends SubsystemBase {
+	private static WPI_TalonSRX m_hood;
+
+	/**
+		 * The Singleton instance of this Chassis. External classes should use the
+		 * {@link #getInstance()} method to get the instance.
+		 */
+		private final static Hood INSTANCE = new Hood();
+
+		/**
+		 * Returns the Singleton instance of this Chassis. This static method should be
+		 * used -- {@code Chassis.getInstance();} -- by external classes, rather than
+		 * the constructor to get the instance of this class.
+		 */
+		public static Hood getInstance() {
+				return INSTANCE;
+		}
 
 
-    //Create and define all standard data types needed
+	/**
+	 * Creates a new Hood.
+	 */
+	public Hood() {
+		m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD);
+		m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
+		m_hood.configReverseSoftLimitThreshold(0);
+		m_hood.configForwardSoftLimitEnable(true);
+		m_hood.configReverseSoftLimitEnable(true);
+	}
 
-    /**
-     * The Singleton instance of this Hood. External classes should
-     * use the {@link #getInstance()} method to get the instance.
-     */
-    private final static Hood INSTANCE = new Hood();
+	public static void moveHood(double pVBus){
+		m_hood.set(pVBus);		
+	}
 
-    /**
-     * Returns the Singleton instance of this Hood. This static method
-     * should be used -- {@code Hood.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Hood getInstance() {
-        return INSTANCE;
-    }
-
-    /**
-     * Creates a new instance of this Hood.
-     * This constructor is private since this class is a Singleton. External classes
-     * should use the {@link #getInstance()} method to get the instance.
-     */
-    private Hood() {
-        m_hoodPistons = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_HOODPISTONS);
-        m_hoodPistons.set(false);
-    }
-
-    public static void setPistons(boolean state){
-        m_hoodPistons.set(state);
-    }
-
-    public static void toggleHoodPistons() {
-        m_hoodPistons.set(!m_hoodPistons.get());
-    }
-
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+		SmartDashboard.putNumber("Hood Position", m_hood.getSelectedSensorPosition());
+	}
 }
-

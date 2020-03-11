@@ -2,9 +2,11 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
+import frc.team3130.robot.commands.Hood.MoveHood;
 import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Shoot;
@@ -70,6 +72,8 @@ public class OI {
 //    private static POVButton decrementShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_S);
 //    private static POVButton resetShooterOffset = new POVButton(weaponsGamepad, RobotMap.LST_POV_E);
 
+    private static POVButton hoodUp = new POVButton(driverGamepad, RobotMap.LST_POV_N);
+    private static POVButton hoodDown = new POVButton(driverGamepad, RobotMap.LST_POV_S);
 
     private static JoystickButton toggleClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_MENU); //Menu button
     private static JoystickButton retractClimber = new JoystickButton(weaponsGamepad, RobotMap.LST_BTN_WINDOW); //Windows button
@@ -97,6 +101,8 @@ public class OI {
 //        decrementShooterOffset.whenPressed(new DecrementRPM());
 //        resetShooterOffset.whenPressed(new ResetRPM());
 
+        hoodUp.whenHeld(new MoveHood(1));
+        hoodDown.whenHeld(new MoveHood(-1));
 
         toggleIntake.whenPressed(new ToggleIntake());
 

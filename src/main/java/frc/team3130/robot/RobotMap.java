@@ -110,6 +110,8 @@ public class RobotMap {
     public static double kLimelightOffset = 0;      // Side offset from the turret's plane of symmetry (left+)
     public static double kLimelightCalibrationDist = 120.0; // Exact horizontal distance between target and lens
 
+    //Hood
+    public static int kHoodForward = 17669;//TODO: FIND Real Number
 
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
@@ -168,6 +170,7 @@ public class RobotMap {
     public static final int CAN_HOPPERL = 8;
     public static final int CAN_HOPPERR = 9;
     public static final int CAN_HOPPERTOP = 12;
+    public static final int CAN_HOOD = 16;
     /**
      * Pneumatics ports
      */

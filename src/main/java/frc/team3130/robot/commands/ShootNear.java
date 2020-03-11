@@ -43,7 +43,7 @@ public class ShootNear implements Command {
         Turret.nearShot();
 
         // Open the hood and set flywheel to close shot speed
-        Hood.setPistons(true);
+        //Hood.setPistons(true);
         Flywheel.setSpeed(2900.0);
 
     }
@@ -130,7 +130,7 @@ public class ShootNear implements Command {
         Hopper.runHopperTop(0.0);
 
         // Reset the hood
-        Hood.setPistons(false);
+        //Hood.setPistons(false);
 
         // Stop flywheel
         Flywheel.stop();

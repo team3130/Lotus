@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         Chassis.configBrakeMode(false);
         Intake.retractIntake();
-        Hood.setPistons(false);
+        //Hood.setPistons(false);
         WheelOfFortune.retractWheel();
         Climber.retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables

@@ -20,7 +20,7 @@ public class ToggleHood implements Command {
      */
     @Override
     public void initialize() {
-        Hood.toggleHoodPistons();
+        //Hood.toggleHoodPistons();
     }
 
     /**
