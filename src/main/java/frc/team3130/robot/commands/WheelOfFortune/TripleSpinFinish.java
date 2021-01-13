@@ -24,7 +24,7 @@ public class TripleSpinFinish extends CommandBase {
     public void initialize() {
         blueCounter = 0;
         lastColor = "none";
-        WheelOfFortune.motorSpin(0.5);
+        m_wof.motorSpin(0.5);
     }
 
 
@@ -76,6 +76,6 @@ public class TripleSpinFinish extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        WheelOfFortune.motorSpin(0.0);
+        m_wof.motorSpin(0.0);
     }
 }

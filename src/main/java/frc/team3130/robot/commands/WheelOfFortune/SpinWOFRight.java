@@ -20,7 +20,7 @@ public class SpinWOFRight extends CommandBase {
      */
     @Override
     public void initialize() {
-    WheelOfFortune.motorSpin(.5);
+        m_wof.motorSpin(.5);
     }
 
     /**
@@ -61,6 +61,6 @@ public class SpinWOFRight extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        WheelOfFortune.motorSpin((0));
+        m_wof.motorSpin((0));
     }
 }

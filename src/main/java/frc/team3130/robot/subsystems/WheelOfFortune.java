@@ -96,7 +96,7 @@ public class WheelOfFortune extends SubsystemBase {
         DriverStation.reportWarning("WOF color sensor Init complete", false);
     }
 
-    public static String getTargetColor(String sourceColor, WheelOfFortune subsystem) {
+    public String getTargetColor(String sourceColor, WheelOfFortune subsystem) {
         return subsystem.fieldToTargetColorMap.get(sourceColor);
     }
 
@@ -157,7 +157,7 @@ public class WheelOfFortune extends SubsystemBase {
     /**
      * Method for toggling wheel of fortune manipulator
      */
-    public static void toggleWheel() {
+    public void toggleWheel() {
         System.out.println("Wheel has toggled");
         m_wheelArm.set(!m_wheelArm.get());
     }
@@ -165,16 +165,16 @@ public class WheelOfFortune extends SubsystemBase {
     /**
      * method for retracting wheel to be called in a command
      */
-    public static void retractWheel() {
+    public void retractWheel() {
         System.out.println("Wheel has retracted");
         m_wheelArm.set(false);
     }
 
-    public static void motorSpin(double spin) {
+    public void motorSpin(double spin) {
         m_spinWheel.set(ControlMode.PercentOutput, spin);
     }
 
-    public static void outputToShuffleboard(WheelOfFortune subsystem) {
+    public void outputToShuffleboard(WheelOfFortune subsystem) {
         SmartDashboard.putString("HSB Detected color", subsystem.detectHSB());
         SmartDashboard.putNumber("Hue Degree", subsystem.deg); //TODO: remove these
         SmartDashboard.putNumber("Saturation", subsystem.sat);

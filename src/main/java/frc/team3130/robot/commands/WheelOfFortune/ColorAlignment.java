@@ -32,7 +32,7 @@ public class ColorAlignment extends CommandBase {
     public void initialize() {
         colorFound = false;
         fieldColor = GameData.getInstance().getControlColor();
-        targetColor = WheelOfFortune.getTargetColor(fieldColor, m_wof);
+        targetColor = m_wof.getTargetColor(fieldColor, m_wof);
     }
 
     /**
@@ -44,20 +44,20 @@ public class ColorAlignment extends CommandBase {
         String color = m_wof.determineColor();
 
         if (color.equals(targetColor)){
-            WheelOfFortune.motorSpin(0);
+            m_wof.motorSpin(0);
             System.out.println("color found");
 
         } else if(color.equals("Red")) {
 //            System.out.println("Looking at Red");
             switch (targetColor) {
                 case "Blue":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Green":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Yellow":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
             }
 
@@ -65,39 +65,39 @@ public class ColorAlignment extends CommandBase {
 //            System.out.println("Looking at Green");
             switch (targetColor) {
                 case "Red":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
                 case "Blue":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Yellow":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
             }
         } else if (color.equals("Blue")){
 //            System.out.println("Looking at " + color);
             switch (targetColor) {
                 case "Red":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Green":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
                 case "Yellow":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
             }
         } else if (color.equals("Yellow")){
 //            System.out.println("Looking at Yellow");
             switch (targetColor) {
                 case "Red":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Green":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Blue":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
             }
         }
@@ -122,7 +122,7 @@ public class ColorAlignment extends CommandBase {
         String color = m_wof.determineColor();
         //Code should turn off now
         if (color.equals(targetColor)) {
-            WheelOfFortune.motorSpin(0);
+            m_wof.motorSpin(0);
             return true;
         }
         return false;

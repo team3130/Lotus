@@ -23,7 +23,7 @@ public class ToggleWOF extends CommandBase {
      */
     @Override
     public void initialize() {
-    WheelOfFortune.toggleWheel();
+        m_wof.toggleWheel();
     m_intake.deployIntake();
     }
 

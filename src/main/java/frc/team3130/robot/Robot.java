@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
         m_robotContainer.getChassis().configBrakeMode(false);
         m_robotContainer.getIntake().retractIntake();
         //Hood.setPistons(false);
-        WheelOfFortune.retractWheel();
+        m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
     }
