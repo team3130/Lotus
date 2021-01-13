@@ -19,7 +19,7 @@ public class ToggleIntake extends CommandBase {
      */
     @Override
     public void initialize() {
-        Intake.toggleIntake();
+        m_intake.toggleIntake();
     }
 
     /**

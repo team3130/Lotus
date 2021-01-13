@@ -11,9 +11,11 @@ import java.util.Set;
 
 public class ToggleWOF extends CommandBase {
     private final WheelOfFortune m_wof;
+    private final Intake m_intake;
 
-    public ToggleWOF(WheelOfFortune subsystem) {
-        m_wof = subsystem;
+    public ToggleWOF(WheelOfFortune subsystemWof, Intake subsystemIn) {
+        m_wof = subsystemWof;
+        m_intake = subsystemIn;
     }
 
     /**
@@ -22,7 +24,7 @@ public class ToggleWOF extends CommandBase {
     @Override
     public void initialize() {
     WheelOfFortune.toggleWheel();
-    Intake.deployIntake();
+    m_intake.deployIntake();
     }
 
     /**

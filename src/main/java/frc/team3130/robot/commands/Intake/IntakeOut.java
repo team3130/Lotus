@@ -1,11 +1,7 @@
 package frc.team3130.robot.commands.Intake;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.Intake;
-
-import java.util.Set;
 
 public class IntakeOut extends CommandBase {
     private final Intake m_intake;
@@ -19,7 +15,7 @@ public class IntakeOut extends CommandBase {
      */
     @Override
     public void initialize() {
-        Intake.runIntake(-0.6);
+        m_intake.runIntake(-0.6);
     }
 
     /**
@@ -60,6 +56,6 @@ public class IntakeOut extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Intake.runIntake(0);
+        m_intake.runIntake(0);
     }
 }

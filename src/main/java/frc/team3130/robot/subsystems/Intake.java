@@ -27,19 +27,19 @@ public class Intake extends SubsystemBase {
         m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
     }
 
-    public static void runIntake(double speed) {
+    public void runIntake(double speed) {
         m_intakeMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    public static void deployIntake() {
+    public void deployIntake() {
         m_intakeSolenoid.set(true);
     }
 
-    public static void retractIntake() {
+    public void retractIntake() {
         m_intakeSolenoid.set(false);
     }
 
-    public static void toggleIntake() {
+    public void toggleIntake() {
         m_intakeSolenoid.set(!m_intakeSolenoid.get());
     }
 }
