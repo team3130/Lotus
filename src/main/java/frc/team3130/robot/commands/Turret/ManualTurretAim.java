@@ -1,15 +1,11 @@
 package frc.team3130.robot.commands.Turret;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Turret;
 import frc.team3130.robot.util.Utils;
 
-import java.util.Set;
-
-import static frc.team3130.robot.RobotContainer.weaponsGamepad;
+import static frc.team3130.robot.RobotContainer.m_weaponsGamepad;
 
 public class ManualTurretAim extends CommandBase {
     private final Turret m_turret;
@@ -35,7 +31,7 @@ public class ManualTurretAim extends CommandBase {
      */
     @Override
     public void execute() {
-        double turnSpeed = -weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RJOYSTICKX); //returns value from -1 to 1 of R X axis of gamepad.
+        double turnSpeed = -m_weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RJOYSTICKX); //returns value from -1 to 1 of R X axis of gamepad.
 
         if (Math.abs(turnSpeed) >= RobotMap.kTurretManualDeadband){
             double moveSpeed = RobotMap.kTurretManualMultipler * Utils.applyDeadband(turnSpeed, RobotMap.kTurretManualDeadband);

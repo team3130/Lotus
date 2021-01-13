@@ -1,13 +1,10 @@
 package frc.team3130.robot.commands.Chassis;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotContainer;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
-import java.util.Set;
 import java.util.function.DoubleSupplier;
 
 public class DefaultDrive extends CommandBase {
@@ -31,10 +28,10 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -RobotContainer.driverGamepad.getRawAxis(1); //joystick's y axis is inverted
+        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
         if (!Chassis.isLowGear())
             moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
-        double turnSpeed = RobotContainer.driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
+        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
 
         Chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }

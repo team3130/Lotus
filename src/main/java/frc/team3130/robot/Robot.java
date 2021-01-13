@@ -8,14 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.Auton.Shoot6;
-import frc.team3130.robot.commands.Chassis.DefaultDrive;
-import frc.team3130.robot.commands.Climber.SpinWinches;
-import frc.team3130.robot.commands.Turret.ManualTurretAim;
 import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
 import frc.team3130.robot.vision.WheelSpeedCalculations;
 
-import static frc.team3130.robot.RobotContainer.driverGamepad;
+import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -183,14 +180,14 @@ public class Robot extends TimedRobot {
                 lastTimestamp = Timer.getFPGATimestamp();
                 gettime = false;
             }
-            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
-            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
             if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
                 checkif = false;
             }
         } else {
-            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
             gettime = true;
             if (Turret.isOnTarget() == false) {
                 checkif = true;

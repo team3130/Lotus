@@ -1,14 +1,9 @@
 package frc.team3130.robot.commands.Climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotContainer;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Chassis;
 import frc.team3130.robot.subsystems.Climber;
-
-import java.util.Set;
 
 public class SpinWinches extends CommandBase {
     private final Climber m_climber;
@@ -34,8 +29,8 @@ public class SpinWinches extends CommandBase {
     @Override
     public void execute() {
 
-        double spinSpeedLeft = RobotContainer.weaponsGamepad.getRawAxis(RobotMap.LST_AXS_LTRIGGER);
-        double spinSpeedRight = RobotContainer.weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER);
+        double spinSpeedLeft = RobotContainer.m_weaponsGamepad.getRawAxis(RobotMap.LST_AXS_LTRIGGER);
+        double spinSpeedRight = RobotContainer.m_weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER);
 
         if (spinSpeedLeft >= RobotMap.kClimberTriggerDeadband){
             Climber.leftWinch(spinSpeedLeft);
