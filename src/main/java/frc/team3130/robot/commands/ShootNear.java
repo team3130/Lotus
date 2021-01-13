@@ -52,7 +52,7 @@ public class ShootNear extends CommandBase {
 
         // Open the hood and set flywheel to close shot speed
         //Hood.setPistons(true);
-        Flywheel.setSpeed(2900.0);
+        m_flywheel.setSpeed(2900.0);
 
     }
 
@@ -141,7 +141,7 @@ public class ShootNear extends CommandBase {
         //Hood.setPistons(false);
 
         // Stop flywheel
-        Flywheel.stop();
+        m_flywheel.stop();
 
         // Tell turret to stow
         Turret.stow();

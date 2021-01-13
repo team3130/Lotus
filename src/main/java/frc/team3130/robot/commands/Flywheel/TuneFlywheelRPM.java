@@ -28,7 +28,7 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        Flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
+        m_flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
     }
 
     /**
@@ -68,6 +68,6 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Flywheel.stop();
+        m_flywheel.stop();
     }
 }

@@ -20,7 +20,7 @@ public class SpinFlywheel extends CommandBase {
      */
     @Override
     public void initialize() {
-        Flywheel.setOpenLoop(0.7);
+        m_flywheel.setOpenLoop(0.7);
     }
 
     /**
@@ -60,6 +60,6 @@ public class SpinFlywheel extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Flywheel.stop();
+        m_flywheel.stop();
     }
 }

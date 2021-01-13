@@ -26,15 +26,15 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void initialize() {
         if (!Limelight.GetInstance().hasTrack()){
-            Flywheel.setSpeed(3500.0);
+            m_flywheel.setSpeed(3500.0);
         }else {
             double x = Limelight.GetInstance().getDistanceToTarget();
             if (71.0 <= x) {
                 //Hood.setPistons(false);
                 double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
-                Flywheel.setSpeed(speed);
+                m_flywheel.setSpeed(speed);
             } else{
-                Flywheel.setSpeed(3500);
+                m_flywheel.setSpeed(3500);
             }
         }
     }
@@ -76,6 +76,6 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Flywheel.stop();
+        m_flywheel.stop();
     }
 }

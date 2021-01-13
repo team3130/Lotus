@@ -171,7 +171,7 @@ public class Robot extends TimedRobot {
         Turret.outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
         Limelight.GetInstance().outputToShuffleboard();
-        Flywheel.outputToShuffleboard();
+        m_robotContainer.getFlywheel().outputToShuffleboard();
         WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
         //TODO: move this somewhere logical
