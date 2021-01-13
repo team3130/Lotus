@@ -11,14 +11,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Hood;
 
 public class MoveHood extends CommandBase {
+	private final Hood m_hood;
 	private double speed;
 
 	/**
 	 * Creates a new MoveHood.
 	 */
-	public MoveHood(double pvBus) {
+	public MoveHood(double pvBus, Hood subsystem) {
+		m_hood = subsystem;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(Hood.getInstance());
+		addRequirements(m_hood);
 
 		speed=pvBus;
 	}

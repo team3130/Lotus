@@ -6,9 +6,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
-public class Climber implements Subsystem {
+public class Climber extends SubsystemBase {
 
     //Create necessary objects
     private static WPI_TalonSRX m_climberWinchLeft;
@@ -20,21 +21,10 @@ public class Climber implements Subsystem {
     //Create and define all standard data types needed
 
     /**
-     * The Singleton instance of this Climber. External classes should
-     * use the {@link #getInstance()} method to get the instance.
+     * used to be a singelton please use the public constructor/object defined in robotContainer
      */
-    private final static Climber INSTANCE = new Climber();
 
-    /**
-     * Returns the Singleton instance of this Climber. This static method
-     * should be used -- {@code Climber.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Climber getInstance() {
-        return INSTANCE;
-    }
-
-    private Climber() {
+    public Climber() {
         m_climberWinchLeft = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
         m_climberWinchRight = new WPI_TalonSRX(RobotMap.CAN_CLIMBER2);
 

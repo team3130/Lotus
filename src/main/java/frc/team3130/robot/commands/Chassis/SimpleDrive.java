@@ -1,9 +1,8 @@
 package frc.team3130.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.Set;
@@ -12,11 +11,11 @@ import java.util.Set;
 /**
  * Drive at half speed when held, and then stop when ended
  */
-public class SimpleDrive implements Command {
-    private final Set<Subsystem> subsystems;
+public class SimpleDrive extends CommandBase {
+    private final Chassis m_chassis;
 
-    public SimpleDrive() {
-        this.subsystems = Set.of(Chassis.getInstance());
+    public SimpleDrive(Chassis subsystem) {
+        m_chassis = subsystem;
     }
 
     /**
@@ -66,23 +65,5 @@ public class SimpleDrive implements Command {
     @Override
     public void end(boolean interrupted) {
         Chassis.driveTank(0,0,true);
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
     }
 }

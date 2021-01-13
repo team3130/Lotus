@@ -13,13 +13,14 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class WheelOfFortune implements Subsystem {
+public class WheelOfFortune extends SubsystemBase {
 
     //Create necessary objects
     private static ColorSensorV3 m_colorSensor;
@@ -68,22 +69,7 @@ public class WheelOfFortune implements Subsystem {
 		}
 	}
 
-    /**
-     * The Singleton instance of this WheelOfFortune. External classes should
-     * use the {@link #getInstance()} method to get the instance.
-     */
-    private final static WheelOfFortune INSTANCE = new WheelOfFortune();
-
-    /**
-     * Returns the Singleton instance of this WheelOfFortune. This static method
-     * should be used -- {@code WheelOfFortune.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static WheelOfFortune getInstance() {
-        return INSTANCE;
-    }
-
-    private WheelOfFortune() {
+    public WheelOfFortune() {
         m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
         m_spinWheel = new WPI_VictorSPX(RobotMap.CAN_WHEELOFFORTUNE);
@@ -110,13 +96,13 @@ public class WheelOfFortune implements Subsystem {
         DriverStation.reportWarning("WOF color sensor Init complete", false);
     }
 
-    public static String getTargetColor(String sourceColor) {
-        return getInstance().fieldToTargetColorMap.get(sourceColor);
+    public static String getTargetColor(String sourceColor, WheelOfFortune subsystem) {
+        return subsystem.fieldToTargetColorMap.get(sourceColor);
     }
 
     public String determineColor() { //TODO: check with motor
 
-        String possibleColor = getInstance().detectHSB();
+        String possibleColor = this.detectHSB();
 
         if (!possibleColor.equals(actualColor)) {
             if (!isChanged) {
@@ -188,11 +174,11 @@ public class WheelOfFortune implements Subsystem {
         m_spinWheel.set(ControlMode.PercentOutput, spin);
     }
 
-    public static void outputToShuffleboard() {
-        SmartDashboard.putString("HSB Detected color", getInstance().detectHSB());
-        SmartDashboard.putNumber("Hue Degree", getInstance().deg); //TODO: remove these
-        SmartDashboard.putNumber("Saturation", getInstance().sat);
-        SmartDashboard.putNumber("Brightness", getInstance().brightness);
+    public static void outputToShuffleboard(WheelOfFortune subsystem) {
+        SmartDashboard.putString("HSB Detected color", subsystem.detectHSB());
+        SmartDashboard.putNumber("Hue Degree", subsystem.deg); //TODO: remove these
+        SmartDashboard.putNumber("Saturation", subsystem.sat);
+        SmartDashboard.putNumber("Brightness", subsystem.brightness);
     }
 
     @Override

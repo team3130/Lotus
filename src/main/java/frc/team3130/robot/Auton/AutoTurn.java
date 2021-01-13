@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Chassis;
 
 public class AutoTurn extends CommandBase {
+    private final Chassis m_chassis;
 
     private double angle;
     private double thresh;
@@ -12,9 +13,10 @@ public class AutoTurn extends CommandBase {
     /**
      * Creates a new AutoTurn.
      */
-    public AutoTurn() {
+    public AutoTurn(Chassis subsystem) {
+        m_chassis = subsystem;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(Chassis.getInstance());
+        addRequirements(m_chassis);
     }
 
     /**
@@ -39,9 +41,9 @@ public class AutoTurn extends CommandBase {
     public void initialize() {
         System.out.println("StartAutoTurn");
         Chassis.shift(false);
-        Chassis.ReleaseAngle();
-        Chassis.getInstance().setAbsoluteTolerance(thresh);
-        Chassis.holdAngle(angle, smallAngle);
+        Chassis.ReleaseAngle(m_chassis);
+        m_chassis.setAbsoluteTolerance(thresh);
+        Chassis.holdAngle(angle, smallAngle, m_chassis);
         Chassis.driveStraight(0);
     }
 
@@ -49,7 +51,7 @@ public class AutoTurn extends CommandBase {
     @Override
     public void execute() {
         System.out.println("Angle: " + Chassis.getAngle());
-        System.out.println("Setpoint: " + Chassis.getInstance().getSetpoint());
+        System.out.println("Setpoint: " + m_chassis.getSetpoint());
         System.out.println();
     }
 
@@ -57,12 +59,12 @@ public class AutoTurn extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         System.out.println("ENDING");
-        Chassis.ReleaseAngle();
+        Chassis.ReleaseAngle(m_chassis);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(Chassis.getAngle() - Chassis.getInstance().getSetpoint()) < thresh;
+        return Math.abs(Chassis.getAngle() - m_chassis.getSetpoint()) < thresh;
     }
 }

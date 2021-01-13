@@ -1,14 +1,15 @@
 package frc.team3130.robot.Auton;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
 import frc.team3130.robot.subsystems.Turret;
 
 import java.util.Set;
 
-public class AutoTurnTurret implements Command {
-    private final Set<Subsystem> subsystems;
+public class AutoTurnTurret extends CommandBase {
+    private final Turret m_turret;
 
     private double angle;
 
@@ -17,8 +18,8 @@ public class AutoTurnTurret implements Command {
      *
      * @param angle Robot relative angle to turn turret to
      */
-    public AutoTurnTurret(double angle) {
-        this.subsystems = Set.of(Turret.getInstance());
+    public AutoTurnTurret(double angle, Turret subsystem) {
+        m_turret = subsystem;
         this.angle = angle;
     }
 
@@ -69,23 +70,5 @@ public class AutoTurnTurret implements Command {
     @Override
     public void end(boolean interrupted) {
 
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
     }
 }

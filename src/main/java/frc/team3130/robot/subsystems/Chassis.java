@@ -30,21 +30,16 @@ public class Chassis extends PIDSubsystem {
     //Create and define all standard data types needed
 
     /**
-     * The Singleton instance of this Chassis. External classes should use the
-     * {@link #getInstance()} method to get the instance.
+     * This used to be a singelton but per the new system we are now using
      */
-    private final static Chassis INSTANCE = new Chassis();
 
     /**
      * Returns the Singleton instance of this Chassis. This static method should be
      * used -- {@code Chassis.getInstance();} -- by external classes, rather than
      * the constructor to get the instance of this class.
      */
-    public static Chassis getInstance() {
-        return INSTANCE;
-    }
 
-    private Chassis() {
+    public Chassis() {
         super(new PIDController(1, 0, 0));//TODO: Set Turn PID
 
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
@@ -370,26 +365,26 @@ public class Chassis extends PIDSubsystem {
      *
      * @param angle angle to hold in degrees
      */
-    public static void holdAngle(double angle, boolean smallAngle) {
-        setPIDValues(smallAngle);
-        getInstance().getController().reset();
-        getInstance().setSetpoint(getAngle()+angle);
-        getInstance().enable();
+    public static void holdAngle(double angle, boolean smallAngle, Chassis subsystem) {
+        setPIDValues(smallAngle, subsystem);
+        subsystem.getController().reset();
+        subsystem.setSetpoint(getAngle()+angle);
+        subsystem.enable();
     }
 
-    public static void ReleaseAngle(){
-        getInstance().disable();
+    public static void ReleaseAngle(Chassis subsystem){
+        subsystem.disable();
         driveTank(0, 0, false);//Clear motors
     }
 
-    private static void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
+    private static void setPIDValues(boolean smallAngleTurn, Chassis subsystem){//TOD2O: Tune Pid
         if(smallAngleTurn){
-            getInstance().getController().setPID(
+            subsystem.getController().setPID(
                     Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
                     Preferences.getInstance().getDouble("ChassisLowBigI", 0.015),
                     Preferences.getInstance().getDouble("ChassisLowD", 0));
         }else{
-            getInstance().getController().setPID(
+            subsystem.getController().setPID(
                     Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
                     Preferences.getInstance().getDouble("ChassisLowI", 0.003),
                     Preferences.getInstance().getDouble("ChassisLowD", 0));

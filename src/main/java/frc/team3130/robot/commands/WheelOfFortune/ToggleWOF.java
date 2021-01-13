@@ -1,6 +1,7 @@
 package frc.team3130.robot.commands.WheelOfFortune;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
 import frc.team3130.robot.subsystems.Intake;
@@ -8,11 +9,11 @@ import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
 
-public class ToggleWOF implements Command {
-    private final Set<Subsystem> subsystems;
+public class ToggleWOF extends CommandBase {
+    private final WheelOfFortune m_wof;
 
-    public ToggleWOF() {
-        this.subsystems = Set.of(WheelOfFortune.getInstance(), Intake.getInstance());
+    public ToggleWOF(WheelOfFortune subsystem) {
+        m_wof = subsystem;
     }
 
     /**
@@ -63,23 +64,5 @@ public class ToggleWOF implements Command {
     @Override
     public void end(boolean interrupted) {
 
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
     }
 }

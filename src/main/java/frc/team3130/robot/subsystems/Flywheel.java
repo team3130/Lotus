@@ -9,11 +9,12 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
 import static frc.team3130.robot.util.Utils.configPIDF;
 
-public class Flywheel implements Subsystem {
+public class Flywheel extends SubsystemBase {
 
 
     //Create necessary objects
@@ -29,27 +30,9 @@ public class Flywheel implements Subsystem {
 //            tab.add("Flywheel D", RobotMap.kFlywheelD)
 //                    .getEntry();
 
-    /**
-     * The Singleton instance of this Flywheel. External classes should
-     * use the {@link #getInstance()} method to get the instance.
-     */
-    private final static Flywheel INSTANCE = new Flywheel();
 
-    /**
-     * Returns the Singleton instance of this Flywheel. This static method
-     * should be used -- {@code Flywheel.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Flywheel getInstance() {
-        return INSTANCE;
-    }
 
-    /**
-     * Creates a new instance of this Flywheel.
-     * This constructor is private since this class is a Singleton. External classes
-     * should use the {@link #getInstance()} method to get the instance.
-     */
-    private Flywheel() {
+    public Flywheel() {
         // Map CAN devices
         m_flywheelMaster = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL1);
         m_flywheelSlave = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL2);

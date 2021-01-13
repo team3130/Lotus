@@ -7,9 +7,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.Auton.RendezvousShoot5;
-import frc.team3130.robot.Auton.Shoot3;
-import frc.team3130.robot.Auton.Shoot5;
 import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Climber.SpinWinches;
@@ -18,7 +15,7 @@ import frc.team3130.robot.subsystems.*;
 import frc.team3130.robot.vision.Limelight;
 import frc.team3130.robot.vision.WheelSpeedCalculations;
 
-import static frc.team3130.robot.OI.driverGamepad;
+import static frc.team3130.robot.RobotContainer.driverGamepad;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +25,8 @@ import static frc.team3130.robot.OI.driverGamepad;
  * project.
  */
 public class Robot extends TimedRobot {
+    public RobotContainer m_robotContainer;
+
     CommandScheduler scheduler = CommandScheduler.getInstance();
     CommandBase autonomousCommand = null;
     private SendableChooser<String> chooser = new SendableChooser<String>();
@@ -49,7 +48,7 @@ public class Robot extends TimedRobot {
         timer.start();
 
         //Instantiate operator interface
-        OI.GetInstance();
+        m_robotContainer = new RobotContainer();
 
         //Instantiate Limelight interface
         Limelight.GetInstance();
@@ -60,15 +59,6 @@ public class Robot extends TimedRobot {
         //Instantiate Wheel Speed interpolator
         WheelSpeedCalculations.GetInstance();
 
-        //Register and instantiate subsystems (optionally with default commands)
-        //Note: registerSubsystem is NOT needed if setDefaultCommand is used
-        scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
-        scheduler.setDefaultCommand(Climber.getInstance(), new SpinWinches());
-        scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
-        scheduler.registerSubsystem(Intake.getInstance());
-        scheduler.registerSubsystem(Hopper.getInstance());
-        scheduler.registerSubsystem(Flywheel.getInstance());
-        scheduler.registerSubsystem(WheelOfFortune.getInstance());
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
@@ -214,11 +204,11 @@ public class Robot extends TimedRobot {
 //          autonomousCommand = new RendezvousShoot5();
 //        autonomousCommand = new Shoot3();
 //        autonomousCommand = new Shoot5();
-        autonomousCommand = new Shoot6();
+        autonomousCommand = new Shoot6(m_robotContainer.getIntake(), m_robotContainer.getChassis(), m_robotContainer.getTurret(), m_robotContainer.getHopper(), m_robotContainer.getFlywheel(), m_robotContainer.getHood());
     }
 
     public void writePeriodicOutputs() {
-        Turret.getInstance().writePeriodicOutputs();
+        m_robotContainer.getTurret().writePeriodicOutputs();
     }
 
     public void resetSubsystems() {

@@ -15,29 +15,7 @@ public class Hopper implements Subsystem {
     private static WPI_VictorSPX m_hopperMotorTop;
     private static DigitalInput m_beam;
 
-    //Create and define all standard data types needed
-
-    /**
-     * The Singleton instance of this Hopper. External classes should
-     * use the {@link #getInstance()} method to get the instance.
-     */
-    private final static Hopper INSTANCE = new Hopper();
-
-    /**
-     * Returns the Singleton instance of this Hopper. This static method
-     * should be used -- {@code Hopper.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Hopper getInstance() {
-        return INSTANCE;
-    }
-
-    /**
-     * Creates a new instance of this Hopper.
-     * This constructor is private since this class is a Singleton. External classes
-     * should use the {@link #getInstance()} method to get the instance.
-     */
-    private Hopper() {
+    public Hopper() {
         m_beam = new DigitalInput(RobotMap.DIO_FEEDERBEAM);
         m_hopperMotorL = new WPI_VictorSPX(RobotMap.CAN_HOPPERL);
         m_hopperMotorR = new WPI_VictorSPX(RobotMap.CAN_HOPPERR);

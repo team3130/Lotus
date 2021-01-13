@@ -6,13 +6,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.util.Epsilon;
 import frc.team3130.robot.vision.Limelight;
 
 import static frc.team3130.robot.util.Utils.*;
 
-public class Turret implements Subsystem {
+public class Turret extends SubsystemBase {
 
     //Create necessary objects
     private static WPI_TalonSRX m_turret;
@@ -35,22 +36,7 @@ public class Turret implements Subsystem {
     private static double lastHoldHeading = 0.0;
     private static int lostTrackCounter = 0;
 
-    /**
-     * The Singleton instance of this Turret. External classes should
-     * use the {@link #getInstance()} method to get the instance.
-     */
-    private final static Turret INSTANCE = new Turret();
-
-    /**
-     * Returns the Singleton instance of this Turret. This static method
-     * should be used -- {@code Turret.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Turret getInstance() {
-        return INSTANCE;
-    }
-
-    private Turret() {
+    public Turret() {
         // Map CAN devices
         m_turret = new WPI_TalonSRX(RobotMap.CAN_TURRETANGLE);
 
