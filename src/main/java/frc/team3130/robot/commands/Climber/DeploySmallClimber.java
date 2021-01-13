@@ -23,7 +23,7 @@ public class DeploySmallClimber extends CommandBase {
      */
     @Override
     public void initialize() {
-        Climber.toggleSmall();
+        m_climber.toggleSmall();
     }
 
     /**

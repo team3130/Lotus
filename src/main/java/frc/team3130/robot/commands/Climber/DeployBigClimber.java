@@ -20,7 +20,7 @@ public class DeployBigClimber extends CommandBase {
      */
     @Override
     public void initialize() {
-        Climber.toggleBig();
+        m_climber.toggleBig();
     }
 
     /**

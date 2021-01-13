@@ -33,15 +33,15 @@ public class SpinWinches extends CommandBase {
         double spinSpeedRight = RobotContainer.m_weaponsGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER);
 
         if (spinSpeedLeft >= RobotMap.kClimberTriggerDeadband){
-            Climber.leftWinch(spinSpeedLeft);
+            m_climber.leftWinch(spinSpeedLeft);
         }else{
-            Climber.leftWinch(0);
+            m_climber.leftWinch(0);
         }
 
         if (spinSpeedRight >= RobotMap.kClimberTriggerDeadband){
-            Climber.rightWinch(-spinSpeedRight);
+            m_climber.rightWinch(-spinSpeedRight);
         }else{
-            Climber.rightWinch(0);
+            m_climber.rightWinch(0);
         }
 
         /**
@@ -112,7 +112,7 @@ public class SpinWinches extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.rightWinch(0);
-        Climber.leftWinch(0);
+        m_climber.rightWinch(0);
+        m_climber.leftWinch(0);
     }
 }

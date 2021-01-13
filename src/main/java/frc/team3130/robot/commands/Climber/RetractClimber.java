@@ -23,7 +23,7 @@ public class RetractClimber extends CommandBase {
      */
     @Override
     public void initialize() {
-        Climber.retractClimb();
+        m_climber.retractClimb();
     }
 
     /**

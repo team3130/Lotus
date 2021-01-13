@@ -12,11 +12,11 @@ import frc.team3130.robot.RobotMap;
 public class Climber extends SubsystemBase {
 
     //Create necessary objects
-    private static WPI_TalonSRX m_climberWinchLeft;
-    private static WPI_TalonSRX m_climberWinchRight;
+    private WPI_TalonSRX m_climberWinchLeft;
+    private WPI_TalonSRX m_climberWinchRight;
 
-    private static Solenoid m_smallClimberPnuematic;
-    private static Solenoid m_bigClimberPnuematic;
+    private Solenoid m_smallClimberPnuematic;
+    private Solenoid m_bigClimberPnuematic;
 
     //Create and define all standard data types needed
 
@@ -34,30 +34,30 @@ public class Climber extends SubsystemBase {
         setWinchToBrake();
     }
 
-    public static void leftWinch(double spin) {
+    public void leftWinch(double spin) {
         m_climberWinchLeft.set(spin);
     }
 
-    public static void rightWinch(double spin) {
+    public void rightWinch(double spin) {
         m_climberWinchRight.set(spin);
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleSmall() {
+    public void toggleSmall() {
         m_smallClimberPnuematic.set(!m_smallClimberPnuematic.get());
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleBig() {
+    public void toggleBig() {
         m_bigClimberPnuematic.set(!m_bigClimberPnuematic.get());
     }
 
-    public static void retractClimb(){
+    public void retractClimb(){
         m_bigClimberPnuematic.set(false);
         m_smallClimberPnuematic.set(false);
     }
 
-    public static void setWinchToBrake(){
+    public void setWinchToBrake(){
         m_climberWinchLeft.setNeutralMode(NeutralMode.Brake);
         m_climberWinchRight.setNeutralMode(NeutralMode.Brake);}
 }
