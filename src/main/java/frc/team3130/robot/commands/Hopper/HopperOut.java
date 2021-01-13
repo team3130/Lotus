@@ -20,9 +20,9 @@ public class HopperOut extends CommandBase {
      */
     @Override
     public void initialize() {
-        Hopper.runHopperLeft(-0.15);
-        Hopper.runHopperRight(0.15);
-        Hopper.runHopperTop(-0.2);
+        m_hopper.runHopperLeft(-0.15);
+        m_hopper.runHopperRight(0.15);
+        m_hopper.runHopperTop(-0.2);
     }
 
     /**
@@ -63,7 +63,7 @@ public class HopperOut extends CommandBase {
      * @param interrupted whether the command was interrupted/canceled
      */
     @Override
-    public void end(boolean interrupted) { Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);}
+    public void end(boolean interrupted) { m_hopper.runHopperLeft(0.0);
+        m_hopper.runHopperRight(0.0);
+        m_hopper.runHopperTop(0.0);}
 }

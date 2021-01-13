@@ -48,7 +48,7 @@ public class Shoot extends CommandBase {
         lastIndexTime = Timer.getFPGATimestamp();
 
         // Tell turret to hold angle
-        Turret.hold();
+        m_turret.hold();
 
         // Find the flywheel speed
         if (!Limelight.GetInstance().hasTrack()){
@@ -76,15 +76,15 @@ public class Shoot extends CommandBase {
                 lastIndexTime = Timer.getFPGATimestamp();
                 changedState = false;
             }
-            if (Hopper.isEmpty()) {
+            if (m_hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
-                Hopper.runHopperTop(0.20);
-                Hopper.runHopperLeft(-0.5);
-                Hopper.runHopperRight(-0.6);
+                m_hopper.runHopperTop(0.20);
+                m_hopper.runHopperLeft(-0.5);
+                m_hopper.runHopperRight(-0.6);
             } else {
-                Hopper.runHopperTop(0.0);
-                Hopper.runHopperLeft(0.0);
-                Hopper.runHopperRight(0.0);
+                m_hopper.runHopperTop(0.0);
+                m_hopper.runHopperLeft(0.0);
+                m_hopper.runHopperRight(0.0);
                 if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
                     justShot = false;
                     changedState = true;
@@ -92,7 +92,7 @@ public class Shoot extends CommandBase {
             }
         } else {
             if (changedState && m_flywheel.canShoot()) {
-                Hopper.runHopperTop(0.6);
+                m_hopper.runHopperTop(0.6);
                 isShooting = true;
                 changedState = false;
             } else if(!changedState) {
@@ -101,7 +101,7 @@ public class Shoot extends CommandBase {
                         isShooting = false;
                     }
                 } else {
-                    Hopper.runHopperTop(0.0);
+                    m_hopper.runHopperTop(0.0);
                     justShot = true;
                     changedState = true;
                 }
@@ -142,14 +142,14 @@ public class Shoot extends CommandBase {
         changedState = true;
 
         // Turn off hopper
-        Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);
+        m_hopper.runHopperLeft(0.0);
+        m_hopper.runHopperRight(0.0);
+        m_hopper.runHopperTop(0.0);
 
         // Stop flywheel
         m_flywheel.stop();
 
         // Tell turret to aim again
-        Turret.aim(false);
+        m_turret.aim(false);
     }
 }

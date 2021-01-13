@@ -28,7 +28,7 @@ public class MoveHood extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		Hood.moveHood(speed);
+		m_hood.moveHood(speed);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -39,7 +39,7 @@ public class MoveHood extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		Hood.moveHood(0);
+		m_hood.moveHood(0);
 	}
 
 	// Returns true when the command should end.

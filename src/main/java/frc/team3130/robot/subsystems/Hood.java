@@ -31,7 +31,7 @@ public class Hood extends SubsystemBase {
 		m_hood.configReverseSoftLimitEnable(true);
 	}
 
-	public static void moveHood(double pVBus){
+	public void moveHood(double pVBus){
 		m_hood.set(pVBus);		
 	}
 

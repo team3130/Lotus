@@ -36,23 +36,23 @@ public class Hopper implements Subsystem {
         m_hopperMotorL.setInverted(false);
     }
 
-    public static boolean isEmpty() {
+    public boolean isEmpty() {
         return m_beam.get();
     }
 
-    public static void runHopperRight(double speed) {
+    public void runHopperRight(double speed) {
         m_hopperMotorR.set(speed);
     }
 
-    public static void runHopperLeft(double speed) {
+    public void runHopperLeft(double speed) {
         m_hopperMotorL.set(speed);
     }
 
-    public static void runHopperTop(double speed) {
+    public void runHopperTop(double speed) {
         m_hopperMotorTop.set(speed);
     }
 
-    public static void outputToShuffleboard() {
+    public void outputToShuffleboard() {
         SmartDashboard.putBoolean("Loader Empty", isEmpty());
     }
 }

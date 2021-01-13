@@ -67,15 +67,15 @@ public class ShootNear extends CommandBase {
                 lastIndexTime = Timer.getFPGATimestamp();
                 changedState = false;
             }
-            if (Hopper.isEmpty()) {
+            if (m_hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
-                Hopper.runHopperTop(0.20);
-                Hopper.runHopperLeft(-0.5);
-                Hopper.runHopperRight(-0.6);
+                m_hopper.runHopperTop(0.20);
+                m_hopper.runHopperLeft(-0.5);
+                m_hopper.runHopperRight(-0.6);
             } else {
-                Hopper.runHopperTop(0.0);
-                Hopper.runHopperLeft(0.0);
-                Hopper.runHopperRight(0.0);
+                m_hopper.runHopperTop(0.0);
+                m_hopper.runHopperLeft(0.0);
+                m_hopper.runHopperRight(0.0);
                 if (Timer.getFPGATimestamp() - lastIndexTime > 0.1) {
                     justShot = false;
                     changedState = true;
@@ -83,7 +83,7 @@ public class ShootNear extends CommandBase {
             }
         } else {
             if (changedState && m_flywheel.canShoot()) {
-                Hopper.runHopperTop(0.6);
+                m_hopper.runHopperTop(0.6);
                 isShooting = true;
                 changedState = false;
             } else if(!changedState) {
@@ -92,7 +92,7 @@ public class ShootNear extends CommandBase {
                         isShooting = false;
                     }
                 } else {
-                    Hopper.runHopperTop(0.0);
+                    m_hopper.runHopperTop(0.0);
                     justShot = true;
                     changedState = true;
                 }
@@ -133,9 +133,9 @@ public class ShootNear extends CommandBase {
         changedState = true;
 
         // Turn off hopper
-        Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);
+        m_hopper.runHopperLeft(0.0);
+        m_hopper.runHopperRight(0.0);
+        m_hopper.runHopperTop(0.0);
 
         // Reset the hood
         //Hood.setPistons(false);
@@ -144,6 +144,6 @@ public class ShootNear extends CommandBase {
         m_flywheel.stop();
 
         // Tell turret to stow
-        Turret.stow();
+        m_turret.stow();
     }
 }
