@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         m_robotContainer.getChassis().configBrakeMode(false);
-        Intake.retractIntake();
+        m_robotContainer.getIntake().retractIntake();
         //Hood.setPistons(false);
         WheelOfFortune.retractWheel();
         m_robotContainer.getClimber().retractClimb();
@@ -168,14 +168,14 @@ public class Robot extends TimedRobot {
 //        Navx.GetInstance().outputToShuffleboard();
 //        WheelOfFortune.outputToShuffleboard();
 //        Chassis.outputToShuffleboard();
-        Turret.outputToShuffleboard();
+        m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
         Limelight.GetInstance().outputToShuffleboard();
         m_robotContainer.getFlywheel().outputToShuffleboard();
         WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
         //TODO: move this somewhere logical
-        if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
+        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
             if (gettime == true) {
                 lastTimestamp = Timer.getFPGATimestamp();
                 gettime = false;
@@ -189,7 +189,7 @@ public class Robot extends TimedRobot {
             m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
             m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
             gettime = true;
-            if (Turret.isOnTarget() == false) {
+            if (m_robotContainer.getTurret().isOnTarget() == false) {
                 checkif = true;
             }
         }

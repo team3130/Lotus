@@ -20,7 +20,7 @@ public class StowTurret extends CommandBase {
      */
     @Override
     public void initialize() {
-        Turret.stow();
+        m_turret.stow();
     }
 
     /**
@@ -48,7 +48,7 @@ public class StowTurret extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return Turret.isFinished();
+        return m_turret.isFinished();
     }
 
     /**

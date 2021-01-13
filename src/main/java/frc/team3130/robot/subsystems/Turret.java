@@ -9,32 +9,33 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.util.Epsilon;
+import frc.team3130.robot.util.Utils;
 import frc.team3130.robot.vision.Limelight;
 
-import static frc.team3130.robot.util.Utils.*;
+import frc.team3130.robot.util.Utils.*;
 
 public class Turret extends SubsystemBase {
 
     //Create necessary objects
-    private static WPI_TalonSRX m_turret;
+    private WPI_TalonSRX m_turret;
 
     //Create and define all standard data types needed
-//    private static ShuffleboardTab tab = Shuffleboard.getTab("Turret");
-//    private static NetworkTableEntry testP =
+//    private ShuffleboardTab tab = Shuffleboard.getTab("Turret");
+//    private NetworkTableEntry testP =
 //            tab.add("Turret P", 1.0)
 //                    .getEntry();
-//    private static NetworkTableEntry testD =
+//    private NetworkTableEntry testD =
 //            tab.add("Turret D", 0.0)
 //                    .getEntry();
 
-    private static TurretState m_controlState;
-    private static TurretState m_lastState;
+    private TurretState m_controlState;
+    private TurretState m_lastState;
 
     // Output value. This will be in various units depending on the control state
-    private static double output = 0.0;
-    private static double initialChassisHoldAngle = 0.0;
-    private static double lastHoldHeading = 0.0;
-    private static int lostTrackCounter = 0;
+    private double output = 0.0;
+    private double initialChassisHoldAngle = 0.0;
+    private double lastHoldHeading = 0.0;
+    private int lostTrackCounter = 0;
 
     public Turret() {
         // Map CAN devices
@@ -81,7 +82,7 @@ public class Turret extends SubsystemBase {
      *
      * @param speed Input range -1.0 to 1.0
      */
-    public static void manualOp(double speed) {
+    public void manualOp(double speed) {
         m_controlState = TurretState.MANUAL;
         output = speed;
     }
@@ -91,7 +92,7 @@ public class Turret extends SubsystemBase {
      *
      * @param usePrediction Predict the where the target is using chassis odometry
      */
-    public static void aim(boolean usePrediction) {
+    public void aim(boolean usePrediction) {
         if (usePrediction) {
             m_controlState = TurretState.PREDICT;
         } else {
@@ -102,7 +103,7 @@ public class Turret extends SubsystemBase {
     /**
      * Flip the aiming state of the turret
      */
-    public static void toggleAimState() {
+    public void toggleAimState() {
         if (m_controlState == TurretState.AIMING || m_controlState == TurretState.HOLD
                 || m_controlState == TurretState.SETPOINT || m_controlState == TurretState.PREDICT) {
             stow();
@@ -116,7 +117,7 @@ public class Turret extends SubsystemBase {
     /**
      * Request to stow the turret
      */
-    public static void stow() {
+    public void stow() {
         // Reset output to stowing position
         output = RobotMap.kTurretStowingAngle;
 
@@ -126,7 +127,7 @@ public class Turret extends SubsystemBase {
     /**
      * Request to hold the turret
      */
-    public static void hold() {
+    public void hold() {
         // Track the initial chassis angle for holding state
         initialChassisHoldAngle = Navx.GetInstance().getHeading();
 
@@ -138,7 +139,7 @@ public class Turret extends SubsystemBase {
      *
      * @param angle Frame relative angle, CCW is positive and CW is negative, 0 degrees is facing the front of the bot
      */
-    public static void toAngle(double angle) {
+    public void toAngle(double angle) {
         // Set the output to the desired turret frame-relative angle
         output = angle;
 
@@ -148,7 +149,7 @@ public class Turret extends SubsystemBase {
     /**
      * Request to set the turret up for near shot
      */
-    public static void nearShot() {
+    public void nearShot() {
         output = 0.0;
 
         m_controlState = TurretState.NEAR_SHOOT;
@@ -170,7 +171,7 @@ public class Turret extends SubsystemBase {
     /**
      * Manage the Turret state outputs.
      */
-    public static synchronized void writePeriodicOutputs() {
+    public synchronized void writePeriodicOutputs() {
         // Determine if this state is new
         boolean isNewState = false;
         if (m_controlState != m_lastState) {
@@ -249,13 +250,13 @@ public class Turret extends SubsystemBase {
     /**
      * Handle aiming state exit
      */
-    private synchronized static void exitAiming() {
+    private synchronized void exitAiming() {
     }
 
     /**
      * Handle manual state exit
      */
-    private synchronized static void exitManual() {
+    private synchronized void exitManual() {
         // Force-set output
         output = 0.0;
 
@@ -269,18 +270,18 @@ public class Turret extends SubsystemBase {
      *
      * @param newState Is this state new?
      */
-    private synchronized static void handleStowed(boolean newState) {
+    private synchronized void handleStowed(boolean newState) {
         if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
 
             // Configure PID MM
-            configPIDF(m_turret,
+            Utils.configPIDF(m_turret,
                     RobotMap.kTurretMMP,
                     RobotMap.kTurretMMI,
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
-            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+            Utils.configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
 
             // Send turret to stowed position
             setAngleMM(output);
@@ -292,15 +293,15 @@ public class Turret extends SubsystemBase {
      *
      * @param newState Is this state new?
      */
-    private synchronized static void handlePredict(boolean newState) {
+    private synchronized void handlePredict(boolean newState) {
         if (newState) {
             // Configure PID MM
-            configPIDF(m_turret,
+            Utils.configPIDF(m_turret,
                     RobotMap.kTurretMMP,
                     RobotMap.kTurretMMI,
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
-            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+            Utils.configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
             initialChassisHoldAngle = Navx.GetInstance().getHeading();
             //TODO: implement actual dead reckoning
             output = -180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
@@ -325,7 +326,7 @@ public class Turret extends SubsystemBase {
      *
      * @param newState Is this state new?
      */
-    private synchronized static void handleAiming(boolean newState) {
+    private synchronized void handleAiming(boolean newState) {
         if (newState) {
             // Turn on Limelight
             Limelight.GetInstance().setLedState(true);
@@ -333,12 +334,12 @@ public class Turret extends SubsystemBase {
             m_turret.set(0.0);
 
             // Configure PID vision
-            configPIDF(m_turret,
+            Utils.configPIDF(m_turret,
                     RobotMap.kTurretP,
                     RobotMap.kTurretI,
                     RobotMap.kTurretD,
                     RobotMap.kTurretF);
-            configMotionMagic(m_turret, 0, 0);
+            Utils.configMotionMagic(m_turret, 0, 0);
 
             // Reset aiming unstability counter
             lostTrackCounter = 0;
@@ -386,17 +387,17 @@ public class Turret extends SubsystemBase {
      *
      * @param newState Is this state new?
      */
-    private synchronized static void handleSetpoint(boolean newState) {
+    private synchronized void handleSetpoint(boolean newState) {
         if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
             // Configure PID MM
-            configPIDF(m_turret,
+            Utils.configPIDF(m_turret,
                     RobotMap.kTurretMMP,
                     RobotMap.kTurretMMI,
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
-            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+            Utils.configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
 
             setAngleMM(output);
         } else {
@@ -412,35 +413,35 @@ public class Turret extends SubsystemBase {
      *
      * @param newState Is this state new?
      */
-    private synchronized static void handleHold(boolean newState) {
+    private synchronized void handleHold(boolean newState) {
         if (newState) {
             // Config PID hold
-            configPIDF(m_turret,
+            Utils.configPIDF(m_turret,
                     RobotMap.kTurretHoldP,
                     RobotMap.kTurretHoldI,
                     RobotMap.kTurretHoldD,
                     RobotMap.kTurretHoldF);
-            configMotionMagic(m_turret, 0, 0);
+            Utils.configMotionMagic(m_turret, 0, 0);
             lastHoldHeading = initialChassisHoldAngle;
         }
         double currentHeading = Navx.GetInstance().getHeading();
         if (!Epsilon.epsilonEquals(lastHoldHeading, currentHeading, 7.0)) {
-            configPIDF(m_turret,
+            Utils.configPIDF(m_turret,
                     RobotMap.kTurretMMP,
                     RobotMap.kTurretMMI,
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
-            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+            Utils.configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
             setAngleMM(output - (currentHeading - initialChassisHoldAngle));
         } else {
             if (m_turret.getControlMode() == ControlMode.MotionMagic) {
                 if (m_turret.isMotionProfileFinished()) {
-                    configPIDF(m_turret,
+                    Utils.configPIDF(m_turret,
                             RobotMap.kTurretHoldP,
                             RobotMap.kTurretHoldI,
                             RobotMap.kTurretHoldD,
                             RobotMap.kTurretHoldF);
-                    configMotionMagic(m_turret, 0, 0);
+                    Utils.configMotionMagic(m_turret, 0, 0);
                 }
                 // Do nothing if it's still in motion magic mode
             } else {
@@ -456,17 +457,17 @@ public class Turret extends SubsystemBase {
      *
      * @param newState Is this state new?
      */
-    private synchronized static void handleNear(boolean newState) {
+    private synchronized void handleNear(boolean newState) {
         if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
             // Configure PID MM
-            configPIDF(m_turret,
+            Utils.configPIDF(m_turret,
                     RobotMap.kTurretMMP,
                     RobotMap.kTurretMMI,
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
-            configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
+            Utils.configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
 
             setAngleMM(output);
         }
@@ -477,7 +478,7 @@ public class Turret extends SubsystemBase {
      *
      * @param newState Is this state new?
      */
-    private synchronized static void handleManual(boolean newState) {
+    private synchronized void handleManual(boolean newState) {
         if (newState) {
             // We don't need Limelight aiming, turn off LEDs
             Limelight.GetInstance().setLedState(false);
@@ -491,7 +492,7 @@ public class Turret extends SubsystemBase {
      *
      * @param angle_deg Angle to add in degrees, positive is CCW
      */
-    public synchronized static void addAngleMM(double angle_deg) {
+    public synchronized void addAngleMM(double angle_deg) {
         output += angle_deg;
         setAngleMM(output);
     }
@@ -501,7 +502,7 @@ public class Turret extends SubsystemBase {
      *
      * @param angle_deg Absolute angle of the turret, in degrees
      */
-    public synchronized static void setAngleMM(double angle_deg) {
+    public synchronized void setAngleMM(double angle_deg) {
         m_turret.set(ControlMode.MotionMagic, angle_deg * RobotMap.kTurretTicksPerDegree);
     }
 
@@ -510,7 +511,7 @@ public class Turret extends SubsystemBase {
      *
      * @param angle_deg Absolute angle of the turret, in degrees
      */
-    public synchronized static void setAngle(double angle_deg) {
+    public synchronized void setAngle(double angle_deg) {
         // In Position mode, outputValue set is in rotations of the motor
         m_turret.set(ControlMode.Position, angle_deg * RobotMap.kTurretTicksPerDegree);
     }
@@ -520,7 +521,7 @@ public class Turret extends SubsystemBase {
      *
      * @param speed Input range -1.0 to 1.0
      */
-    private synchronized static void setOpenLoop(double speed) {
+    private synchronized void setOpenLoop(double speed) {
         m_turret.set(ControlMode.PercentOutput, speed);
     }
 
@@ -529,7 +530,7 @@ public class Turret extends SubsystemBase {
      *
      * @return Angle of the turret in degrees
      */
-    public static double getAngleDegrees() {
+    public double getAngleDegrees() {
         return m_turret.getSelectedSensorPosition() / RobotMap.kTurretTicksPerDegree;
     }
 
@@ -538,7 +539,7 @@ public class Turret extends SubsystemBase {
      *
      * @return Angle setpoint in degrees
      */
-    public static double getAngleSetpoint() {
+    public double getAngleSetpoint() {
         if (m_turret.getControlMode() == ControlMode.MotionMagic || m_turret.getControlMode() == ControlMode.Position) {
             return m_turret.getClosedLoopTarget() / RobotMap.kTurretTicksPerDegree;
         }
@@ -550,7 +551,7 @@ public class Turret extends SubsystemBase {
      *
      * @return Error of angle in degrees
      */
-    private static double getAngleError() {
+    private double getAngleError() {
         return getAngleSetpoint() - getAngleDegrees();
     }
 
@@ -559,11 +560,11 @@ public class Turret extends SubsystemBase {
      *
      * @return TurretState enum
      */
-    public static TurretState getState() {
+    public TurretState getState() {
         return m_controlState;
     }
 
-    public static boolean isFinished() { //TODO: needs other isFinished checks for other states
+    public boolean isFinished() { //TODO: needs other isFinished checks for other states
         if (m_controlState != m_lastState) return false;
         if ((m_controlState == TurretState.STOWED || m_controlState == TurretState.PREDICT || m_controlState == TurretState.SETPOINT)
                 && (Math.abs(output - getAngleDegrees()) < RobotMap.kTurretReadyToAimTolerance))
@@ -578,7 +579,7 @@ public class Turret extends SubsystemBase {
      *
      * @return If the turret is aimed on target and in correct mode
      */
-    public static boolean isOnTarget() {
+    public boolean isOnTarget() {
         if ((m_controlState == TurretState.AIMING && Limelight.GetInstance().hasTrack()) || m_controlState == TurretState.HOLD) {
             return Math.abs(output - getAngleDegrees()) < RobotMap.kTurretOnTargetTolerance;
         } else {
@@ -591,12 +592,12 @@ public class Turret extends SubsystemBase {
      *
      * @return
      */
-    public static boolean isTracking() {
+    public boolean isTracking() {
         return (m_controlState == TurretState.PREDICT || m_controlState == TurretState.AIMING || m_controlState == TurretState.HOLD);
     }
 
 
-    public static void outputToShuffleboard() {
+    public void outputToShuffleboard() {
         SmartDashboard.putNumber("Turret Angle", getAngleDegrees());
         SmartDashboard.putNumber("Turret Setpoint", getAngleSetpoint());
         SmartDashboard.putBoolean("Turret onTarget", isOnTarget());

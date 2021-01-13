@@ -28,7 +28,7 @@ public class AutoTurnTurret extends CommandBase {
      */
     @Override
     public void initialize() {
-        Turret.toAngle(angle);
+        m_turret.toAngle(angle);
     }
 
     /**
@@ -56,7 +56,7 @@ public class AutoTurnTurret extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return Turret.getState() != Turret.TurretState.SETPOINT;
+        return m_turret.getState() != Turret.TurretState.SETPOINT;
     }
 
     /**

@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3130.robot.RobotMap;
 
+//TODO: make not static
+
 public class Navx {
     //Instance Handling
     private static Navx m_pInstance;

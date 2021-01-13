@@ -48,7 +48,7 @@ public class ShootNear extends CommandBase {
         lastIndexTime = Timer.getFPGATimestamp();
 
         // Turret needs to reorient for near shot
-        Turret.nearShot();
+        m_turret.nearShot();
 
         // Open the hood and set flywheel to close shot speed
         //Hood.setPistons(true);

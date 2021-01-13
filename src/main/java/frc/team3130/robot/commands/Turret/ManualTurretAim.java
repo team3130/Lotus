@@ -35,10 +35,10 @@ public class ManualTurretAim extends CommandBase {
 
         if (Math.abs(turnSpeed) >= RobotMap.kTurretManualDeadband){
             double moveSpeed = RobotMap.kTurretManualMultipler * Utils.applyDeadband(turnSpeed, RobotMap.kTurretManualDeadband);
-            Turret.manualOp(moveSpeed);
+            m_turret.manualOp(moveSpeed);
             manualChanged = true;
         } else if (manualChanged){
-            Turret.aim(false);
+            m_turret.aim(false);
             manualChanged = false;
         }
 

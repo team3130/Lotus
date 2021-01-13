@@ -19,7 +19,7 @@ public class ToggleTurretAim extends CommandBase {
      */
     @Override
     public void initialize() {
-        Turret.toggleAimState();
+        m_turret.toggleAimState();
     }
 
     /**
