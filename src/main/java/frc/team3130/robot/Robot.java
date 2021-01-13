@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        Chassis.configBrakeMode(false);
+        m_robotContainer.getChassis().configBrakeMode(false);
         Intake.retractIntake();
         //Hood.setPistons(false);
         WheelOfFortune.retractWheel();
@@ -138,7 +138,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
 
-        Chassis.configBrakeMode(true);
+        m_robotContainer.getChassis().configBrakeMode(true);
     }
 
     /**

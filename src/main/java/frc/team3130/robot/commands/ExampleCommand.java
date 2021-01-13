@@ -8,8 +8,12 @@ import frc.team3130.robot.subsystems.ExampleSubsystem;
 import java.util.Set;
 
 public class ExampleCommand extends CommandBase {
+    // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
+    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public ExampleCommand() {
+    public ExampleCommand(ExampleSubsystem subsystem) {
+        //mapping to object passed through parameter
+        m_subsystem = subsystem;
     }
 
     /**

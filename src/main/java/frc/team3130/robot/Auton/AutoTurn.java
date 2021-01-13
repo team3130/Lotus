@@ -40,17 +40,17 @@ public class AutoTurn extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("StartAutoTurn");
-        Chassis.shift(false);
-        Chassis.ReleaseAngle(m_chassis);
+        m_chassis.shift(false);
+        m_chassis.ReleaseAngle(m_chassis);
         m_chassis.setAbsoluteTolerance(thresh);
-        Chassis.holdAngle(angle, smallAngle, m_chassis);
-        Chassis.driveStraight(0);
+        m_chassis.holdAngle(angle, smallAngle, m_chassis);
+        m_chassis.driveStraight(0);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println("Angle: " + Chassis.getAngle());
+        System.out.println("Angle: " + m_chassis.getAngle());
         System.out.println("Setpoint: " + m_chassis.getSetpoint());
         System.out.println();
     }
@@ -59,12 +59,12 @@ public class AutoTurn extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         System.out.println("ENDING");
-        Chassis.ReleaseAngle(m_chassis);
+        m_chassis.ReleaseAngle(m_chassis);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(Chassis.getAngle() - m_chassis.getSetpoint()) < thresh;
+        return Math.abs(m_chassis.getAngle() - m_chassis.getSetpoint()) < thresh;
     }
 }

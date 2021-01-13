@@ -56,13 +56,13 @@ public class AutoDriveStraightToPoint extends CommandBase {
         System.out.println("StartAutoDrive");
         m_controller.reset();
 
-        Chassis.shift(false);
-        Chassis.holdAngle(0,false, m_chassis);
-        m_controller.setSetpoint(m_distance+Chassis.getDistance());
+        m_chassis.shift(false);
+        m_chassis.holdAngle(0,false, m_chassis);
+        m_controller.setSetpoint(m_distance+m_chassis.getDistance());
         m_controller.setTolerance(m_threshold);
         setPID();
-        Chassis.configBrakeMode(true);
-        Chassis.configRampRate(3);
+        m_chassis.configBrakeMode(true);
+        m_chassis.configRampRate(3);
 
     }
 
@@ -70,7 +70,7 @@ public class AutoDriveStraightToPoint extends CommandBase {
         if(output>m_speed) output = m_speed;
         else if(output<-m_speed) output = -m_speed;
 
-        Chassis.driveStraight(output);
+        m_chassis.driveStraight(output);
     }
 
     private void setPID(){
@@ -83,26 +83,26 @@ public class AutoDriveStraightToPoint extends CommandBase {
 
     @Override
     public void execute() {
-        System.out.println("Pos: "+Chassis.getDistance());
+        System.out.println("Pos: "+m_chassis.getDistance());
         System.out.println("Setpoint: "+m_controller.getSetpoint());
         System.out.println();
         //Chassis.driveStraight(0.5);
-        useOutput(m_controller.calculate(Chassis.getDistance()));
+        useOutput(m_controller.calculate(m_chassis.getDistance()));
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         //return false;
-        return Math.abs(Chassis.getDistance() - m_controller.getSetpoint()) < m_threshold;
+        return Math.abs(m_chassis.getDistance() - m_controller.getSetpoint()) < m_threshold;
         //return m_controller.atSetpoint();
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("ENDING");
-        Chassis.ReleaseAngle(m_chassis);
-        Chassis.driveTank(0, 0, false);
-        Chassis.configRampRate(RobotMap.kDriveMaxRampRate);
+        m_chassis.ReleaseAngle(m_chassis);
+        m_chassis.driveTank(0, 0, false);
+        m_chassis.configRampRate(RobotMap.kDriveMaxRampRate);
     }
 }

@@ -23,7 +23,7 @@ public class SimpleDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-        Chassis.driveTank(.50,.50,false);
+        m_chassis.driveTank(.50,.50,false);
     }
 
     /**
@@ -64,6 +64,6 @@ public class SimpleDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Chassis.driveTank(0,0,true);
+        m_chassis.driveTank(0,0,true);
     }
 }

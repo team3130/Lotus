@@ -19,7 +19,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-        Chassis.configRampRate(RobotMap.kDriveMaxRampRate);
+        m_chassis.configRampRate(RobotMap.kDriveMaxRampRate);
     }
 
     /**
@@ -29,11 +29,11 @@ public class DefaultDrive extends CommandBase {
     @Override
     public void execute() {
         double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        if (!Chassis.isLowGear())
+        if (!m_chassis.isLowGear())
             moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
 
-        Chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
+        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -65,6 +65,6 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Chassis.configRampRate(0);
+        m_chassis.configRampRate(0);
     }
 }

@@ -24,8 +24,8 @@ public class ShiftToggle extends CommandBase {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         hasShifted = false;
-        currentShift = Chassis.isLowGear();
-        Chassis.driveTank(0, 0, false); 		//Cut all power to the motors so they aren't running during the shift
+        currentShift = m_chassis.isLowGear();
+        m_chassis.driveTank(0, 0, false); 		//Cut all power to the motors so they aren't running during the shift
     }
 
     /**
@@ -35,9 +35,9 @@ public class ShiftToggle extends CommandBase {
     @Override
     public void execute() {
         if(!hasShifted && (Timer.getFPGATimestamp() - startTime) > RobotMap.kChassisShiftWait){
-            currentShift = Chassis.getShift();
+            currentShift = m_chassis.getShift();
 
-            Chassis.shift(!currentShift); //toggle the gear to what it isn't currently
+            m_chassis.shift(!currentShift); //toggle the gear to what it isn't currently
             hasShifted = true;
 
             //Reset the timer so that the ending dead time is from shifting rather than from the start.

@@ -103,7 +103,7 @@ public class Chassis extends PIDSubsystem {
      * @param moveR         Right input throttle
      * @param squaredInputs Whether or not to use squared inputs
      */
-    public static void driveTank(double moveL, double moveR, boolean squaredInputs) {
+    public void driveTank(double moveL, double moveR, boolean squaredInputs) {
         //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
         m_drive.tankDrive(moveL, moveR, squaredInputs);
     }
@@ -116,7 +116,7 @@ public class Chassis extends PIDSubsystem {
      * @param turnThrottle  Turning velocity
      * @param squaredInputs Whether or not to use squared inputs
      */
-    public static void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
+    public void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
         //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
         m_drive.arcadeDrive(moveThrottle, turnThrottle, squaredInputs);
     }
@@ -126,7 +126,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @param shiftVal true is high gear, false is low gear
      */
-    public static void shift(boolean shiftVal) {
+    public void shift(boolean shiftVal) {
         m_shifter.set(shiftVal);
     }
 
@@ -135,14 +135,14 @@ public class Chassis extends PIDSubsystem {
      *
      * @param angle angle to hold in degrees
      */
-    public static void holdAngle(double angle) {
+    public void holdAngle(double angle) {
         // TODO: Rework
     }
 
     /**
      * Reset the drivetrain encoder positions to 0
      */
-    public static void reset() {
+    public void reset() {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
     }
@@ -153,11 +153,11 @@ public class Chassis extends PIDSubsystem {
      * @return true means the robot is in low gear, false if it's in high gear
      */
 
-    public static boolean getShift() {
+    public boolean getShift() {
         return m_shifter.get();
     }
 
-    public static boolean isLowGear() {
+    public boolean isLowGear() {
         return !m_shifter.get();
     }
 
@@ -166,7 +166,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @return The absolute distance of the left side in inches
      */
-    public static double getDistanceL() {
+    public double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition(0) / RobotMap.kLChassisTicksPerInch;
     }
 
@@ -175,7 +175,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @return The absolute distance of the right side in inches
      */
-    public static double getDistanceR() {
+    public double getDistanceR() {
         return m_rightMotorFront.getSelectedSensorPosition(0) / RobotMap.kRChassisTicksPerInch;
     }
 
@@ -184,7 +184,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @return The absolute distance traveled of robot in inches
      */
-    public static double getDistance() {
+    public double getDistance() {
         return (getDistanceL() + getDistanceR()) / 2.0; //the average of the left and right distances
     }
 
@@ -193,7 +193,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @return Current speed of the front left motor (ticks per 0.1 seconds)
      */
-    public static double getRawSpeedL() {
+    public double getRawSpeedL() {
         return m_leftMotorFront.getSelectedSensorVelocity(0);
     }
 
@@ -202,7 +202,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @return Current speed of the front left motor (ticks per 0.1 seconds)
      */
-    public static double getRawSpeedR() {
+    public double getRawSpeedR() {
         return m_rightMotorFront.getSelectedSensorVelocity(0);
     }
 
@@ -211,7 +211,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @return Current speed of the front left motor (inches per second)
      */
-    public static double getSpeedL() {
+    public double getSpeedL() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
         return 10.0 * getRawSpeedL() / RobotMap.kLChassisTicksPerInch;
     }
@@ -221,7 +221,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @return Current speed of the front right motor (inches per second)
      */
-    public static double getSpeedR() {
+    public double getSpeedR() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
         return 10.0 * getRawSpeedR() / RobotMap.kRChassisTicksPerInch;
     }
@@ -231,35 +231,35 @@ public class Chassis extends PIDSubsystem {
      *
      * @return Current speed of the robot
      */
-    public static double getSpeed() {
+    public double getSpeed() {
         return 0.5 * (getSpeedL() + getSpeedR());
     }
 
     /**
      * @return Raw absolute encoder ticks of the left side of the robot
      */
-    public static double getRawL() {
+    public double getRawL() {
         return m_leftMotorFront.getSelectedSensorPosition(0);
     }
 
     /**
      * @return Raw absolute encoder ticks of the right side of the robot
      */
-    public static double getRawR() {
+    public double getRawR() {
         return m_rightMotorFront.getSelectedSensorPosition(0);
     }
 
     /**
      * @return Returns the left master drive Talon
      */
-    public static WPI_TalonFX getFrontL() {
+    public WPI_TalonFX getFrontL() {
         return m_leftMotorFront;
     }
 
     /**
      * @return Returns the right master drive Talon
      */
-    public static WPI_TalonFX getFrontR() {
+    public WPI_TalonFX getFrontR() {
         return m_rightMotorFront;
     }
 
@@ -270,7 +270,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @param brake true for Brake mode, false for Coast mode
      */
-    public static void configBrakeMode(boolean brake) {
+    public void configBrakeMode(boolean brake) {
         if (brake) {
             m_leftMotorFront.setNeutralMode(NeutralMode.Brake);
             m_leftMotorRear.setNeutralMode(NeutralMode.Brake);
@@ -291,7 +291,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @param maxRampRateSeconds Minimum desired time to go from neutral to full throttle
      */
-    public static void configRampRate(double maxRampRateSeconds) {
+    public void configRampRate(double maxRampRateSeconds) {
         m_rightMotorFront.configOpenloopRamp(maxRampRateSeconds);
         m_leftMotorFront.configOpenloopRamp(maxRampRateSeconds);
     }
@@ -301,7 +301,7 @@ public class Chassis extends PIDSubsystem {
      *
      * @param duration fire rate of the motion profile in ms
      */
-    public static void configMP(int duration) {
+    public void configMP(int duration) {
 
         //left
         m_leftMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
@@ -346,11 +346,11 @@ public class Chassis extends PIDSubsystem {
         return getAngle();
     }
 
-    public static void driveStraight(double move){
+    public void driveStraight(double move){
         moveSpeed=move;
     }
 
-    public static double getAngle()
+    public double getAngle()
     {
         if(Navx.getNavxPresent()){
             return -Navx.getAngle(); //TODO: this CCW needs to be positive
@@ -365,19 +365,19 @@ public class Chassis extends PIDSubsystem {
      *
      * @param angle angle to hold in degrees
      */
-    public static void holdAngle(double angle, boolean smallAngle, Chassis subsystem) {
+    public void holdAngle(double angle, boolean smallAngle, Chassis subsystem) {
         setPIDValues(smallAngle, subsystem);
         subsystem.getController().reset();
         subsystem.setSetpoint(getAngle()+angle);
         subsystem.enable();
     }
 
-    public static void ReleaseAngle(Chassis subsystem){
+    public void ReleaseAngle(Chassis subsystem){
         subsystem.disable();
         driveTank(0, 0, false);//Clear motors
     }
 
-    private static void setPIDValues(boolean smallAngleTurn, Chassis subsystem){//TOD2O: Tune Pid
+    private void setPIDValues(boolean smallAngleTurn, Chassis subsystem){//TOD2O: Tune Pid
         if(smallAngleTurn){
             subsystem.getController().setPID(
                     Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
@@ -404,7 +404,7 @@ public class Chassis extends PIDSubsystem {
     }
 
 
-    public static void outputToShuffleboard() {
+    public void outputToShuffleboard() {
         SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
         SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
 
