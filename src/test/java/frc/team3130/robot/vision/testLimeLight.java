@@ -1,5 +1,6 @@
 package frc.team3130.robot.vision;
 
+import frc.team3130.robot.subsystems.Turret;
 import org.junit.Test;
 
 import edu.wpi.first.wpiutil.math.Matrix;
@@ -31,13 +32,13 @@ public class testLimeLight {
     }
 
     @Test
-    public void PositionTest() {
+    public void PositionTest(Turret turret) {
         double ay = 10;
         double distance = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight)
             / Math.tan(Math.toRadians(ay - RobotMap.kLimelightPitch - RobotMap.kTurretPitch))
             + RobotMap.kLimelightLength;
         System.out.println(String.format("distance = %8.5f", distance));
-        Matrix<N3,N1> realVec = Limelight.GetInstance().calcPosition(0, ay);
+        Matrix<N3,N1> realVec = Limelight.GetInstance().calcPosition(0, ay, turret);
         System.out.println(String.format("realVec = [%8.5f, %8.5f, %8.5f]",
             realVec.get(0,0),realVec.get(1,0),realVec.get(2,0)));
         assertEquals("Y is wrong",    98.25, realVec.get(1,0), 0.01);

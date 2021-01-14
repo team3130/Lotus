@@ -108,12 +108,12 @@ public class Limelight {
     /**
      * Read data from the Limelight and update local values
      */
-    public void updateData() {
+    public void updateData(Turret turret) {
         x_targetOffsetAngle = txFilter.calculate(getTx());
         y_targetOffsetAngle = tyFilter.calculate(getTy());
         area = getArea();
         skew = tsFilter.calculate(getSkew());
-        realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
+        realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle, turret);
 
         // A side vector is a point somewhere on the line that connects
         // the two top corners of the target, i.e. the top edge.
@@ -121,7 +121,7 @@ public class Limelight {
         double realSkew = Math.toRadians(skew < -45 ? skew + 90 : skew);
         double side_x = x_targetOffsetAngle + Math.cos(realSkew);
         double side_y = y_targetOffsetAngle + Math.sin(realSkew);
-        sideVector = calcPosition(side_x, side_y);
+        sideVector = calcPosition(side_x, side_y, turret);
     }
 
     /**
@@ -171,10 +171,10 @@ public class Limelight {
      * @param ay Vertical Offset From Crosshair To Target
      * @return resulting vector from the Turret's origin to the target
      */
-    public Matrix<N3, N1> calcPosition(double ax, double ay) {
+    public Matrix<N3, N1> calcPosition(double ax, double ay, Turret turret) {
 
         // Find where the vector is actually pointing
-        Matrix<N3, N1> v0 = levelVector(ax, ay, Turret.getAngleDegrees());
+        Matrix<N3, N1> v0 = levelVector(ax, ay, turret.getAngleDegrees());
 
         // Scaling ratio based on the known height of the vision target
         double c = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight) / v0.get(1, 0);
@@ -257,8 +257,8 @@ public class Limelight {
     /**
      * Calibrate the tilt angle of the Limelight
      */
-    public double calibrate() {
-        updateData();
+    public double calibrate(Turret turret) {
+        updateData(turret);
 
         double height = RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight;
         double distance = RobotMap.kLimelightCalibrationDist;
@@ -304,14 +304,14 @@ public class Limelight {
     }
 
 
-    public void outputToShuffleboard() {
+    public void outputToShuffleboard(Turret turret) {
         Limelight o = GetInstance();
         SmartDashboard.putNumber("Limelight X", o.x_targetOffsetAngle);
         SmartDashboard.putNumber("Limelight Y", o.y_targetOffsetAngle);
         SmartDashboard.putNumber("Limelight Distance", o.getDistanceToTarget());
         SmartDashboard.putNumber("Limelight Area", o.area);
         SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
-        SmartDashboard.putNumber("Limelight mounting angle", o.calibrate());
+        SmartDashboard.putNumber("Limelight mounting angle", o.calibrate(turret));
         SmartDashboard.putNumber("Limelight Target Rotation", o.getTargetRotationTan());
     }
 
