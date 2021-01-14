@@ -123,7 +123,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Limelight.GetInstance().updateData();
+        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
         writePeriodicOutputs();
     }
@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        Limelight.GetInstance().updateData();
+        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
         writePeriodicOutputs();
     }
@@ -170,7 +170,7 @@ public class Robot extends TimedRobot {
 //        Chassis.outputToShuffleboard();
         m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
-        Limelight.GetInstance().outputToShuffleboard();
+        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
         m_robotContainer.getFlywheel().outputToShuffleboard();
         WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
