@@ -8,9 +8,13 @@
 package frc.team3130.robot.Auton;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.team3130.robot.subsystems.Chassis;
 
-public class AutoDelay extends CommandBase {
+public class DriveS extends CommandBase {
+    private final RamseteController m_RamseteController;
+    private final Chassis m_chassis;
 
     double delay;
     double startTime;
@@ -18,7 +22,10 @@ public class AutoDelay extends CommandBase {
     /**
      * Creates a new AutoDelay.
      */
-    public AutoDelay(double seconds) {
+    public DriveS(double seconds, Chassis chassis) {
+        m_RamseteController = new RamseteController();
+        m_chassis = chassis;
+
         // Use addRequirements() here to declare subsystem dependencies.
         delay = seconds;
     }

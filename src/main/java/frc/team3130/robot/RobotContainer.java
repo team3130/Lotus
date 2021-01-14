@@ -2,6 +2,9 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
@@ -24,6 +27,7 @@ import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
 
 public class RobotContainer {
+    //see here for references if lost: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbottraditional/RobotContainer.java
 
     // define Subsystems
     private final Chassis m_chassis = new Chassis();
@@ -57,6 +61,13 @@ public class RobotContainer {
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
+    //TODO: make a simple auton command for this thing below
+
+    // private final m_simpleAuto = new
+
+    // chooser for auton commands (definitely not copied and pasted from wipilib repo)
+    SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
     // Binding the buttons and triggers that are defined above to respective commands
     public RobotContainer() {
@@ -68,6 +79,17 @@ public class RobotContainer {
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
+
+        //TODO: complete when you have made auton commands
+
+        /*
+        // Add commands to the autonomous command chooser
+        m_chooser.setDefaultOption("Simple Auto", m_simpleAuto);
+        m_chooser.addOption("Complex Auto", m_complexAuto);
+
+        // Put the chooser on the dashboard
+        Shuffleboard.getTab("Autonomous").add(m_chooser);
+         */
 
     }
 
