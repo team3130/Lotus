@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.subsystems.*;
+import frc.team3130.robot.subsystems.Navx;
 import frc.team3130.robot.vision.Limelight;
 import frc.team3130.robot.vision.WheelSpeedCalculations;
 

@@ -129,12 +129,10 @@ public class RobotContainer {
     }
 
 /*    private void setDefaultCommand() {
-        *//*
-        //TODO: fix this I have no fricking clue what is going on here
+        //TODO: fix this I have no frickin clue what is going on here
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis, () -> driverGamepad.getY(GenericHID.Hand.kLeft), () -> driverGamepad.getX(GenericHID.Hand.kRight)));
         m_climber.setDefaultCommand(new Climber(m_climber, () -> driverGamepad.));
         m_turret.setDefaultCommand(//I DONT KNOW WHATS GOIN OOOOONNNNNNNNNNNNNNNN SETTING DEFAULT COMMANDS ARE WWWWWEEEEEIIIIRRRRDDDD );
-         *//*
     }*/
 }
 

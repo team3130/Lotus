@@ -9,21 +9,30 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.team3130.robot.RobotMap;
 
 public class Chassis extends PIDSubsystem {
 
     //Create necessary objects
-    private static WPI_TalonFX m_leftMotorFront;
-    private static WPI_TalonFX m_leftMotorRear;
-    private static WPI_TalonFX m_rightMotorFront;
-    private static WPI_TalonFX m_rightMotorRear;
+    private WPI_TalonFX m_leftMotorFront;
+    private WPI_TalonFX m_leftMotorRear;
+    private WPI_TalonFX m_rightMotorFront;
+    private WPI_TalonFX m_rightMotorRear;
 
-    private static double moveSpeed;
+    private double moveSpeed;
 
-    private static DifferentialDrive m_drive;
+    private DifferentialDrive m_drive;
+
+    private DifferentialDriveKinematics m_kinematics;
+    private DifferentialDriveOdometry m_odometry;
+    private Pose2d pose;
 
     private static Solenoid m_shifter;
 
@@ -94,6 +103,17 @@ public class Chassis extends PIDSubsystem {
         m_drive.setSafetyEnabled(false); //feed() must be called to prevent motor disable TODO: check at GF
 
         moveSpeed=0;
+
+        m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
+        m_odometry = new DifferentialDriveOdometry(getHeading());
+    }
+
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(-Navx.getAngle());
+    }
+
+    public void periodic() {
+        pose = m_odometry.update(getHeading(), getDistanceL(), getDistanceR());
     }
 
     /**
