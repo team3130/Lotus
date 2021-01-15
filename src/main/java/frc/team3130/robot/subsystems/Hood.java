@@ -18,6 +18,7 @@ import frc.team3130.robot.RobotMap;
 public class Hood extends SubsystemBase {
 	private static WPI_TalonSRX m_hood;
 
+	private HoodState m_hoodControlState;
 
 	/**
 	 * Creates a new Hood.
@@ -39,5 +40,14 @@ public class Hood extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("Hood Position", m_hood.getSelectedSensorPosition());
+	}
+
+	public enum HoodState {
+		PREDICT,
+		AIMING,
+		HOLD,
+		MANUAL,
+		SETPOINT,
+		NEAR_SHOOT,
 	}
 }

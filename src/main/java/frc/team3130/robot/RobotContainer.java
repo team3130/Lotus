@@ -35,7 +35,7 @@ public class RobotContainer {
     private final Turret m_turret = new Turret();
     private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
 
-    // This section is here IF we need it later
+    // This section is here IF we need it later (Update: we needed it)
     public Chassis getChassis() {return m_chassis;}
     public Climber getClimber() {return m_climber;}
     public Flywheel getFlywheel() {return m_flyWheel;}
