@@ -89,4 +89,12 @@ public class WayPoints {
                 new Translation2d(255, 40)
         };
 
+        /** S path */
+        public static final Translation2d[] DriveS = {
+                new Translation2d(20, 10),
+                new Translation2d(0, 20),
+                new Translation2d(20, 30),
+                new Translation2d(0, 40)
+        };
+
 }
