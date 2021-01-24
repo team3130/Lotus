@@ -104,14 +104,14 @@ public class Flywheel extends SubsystemBase {
      *
      * @return Current speed of the flywheel motor (ticks per 0.1 seconds)
      */
-    public long getRawSpeed() {
+    public double getRawSpeed() {
         return m_flywheelMaster.getSelectedSensorVelocity();
     }
 
 
     public double getRPM() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, getRawSpeed());
+        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
     /**
@@ -141,7 +141,7 @@ public class Flywheel extends SubsystemBase {
      * @return number of revolutions
      */
     public double getRevolutions() {
-        return Util.scaleNativeUnitsToRotations(RobotMap.kFlywheelTicksPerRevolution, m_flywheelMaster.getSelectedSensorPosition());
+        return Util.scaleNativeUnitsToRotations(RobotMap.kFlywheelTicksPerRevolution, (long) m_flywheelMaster.getSelectedSensorPosition());
     }
 
     /**
