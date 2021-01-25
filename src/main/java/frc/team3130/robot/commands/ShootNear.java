@@ -1,18 +1,11 @@
 package frc.team3130.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Hopper;
 import frc.team3130.robot.subsystems.Turret;
-import frc.team3130.robot.vision.Limelight;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
-
-import java.util.Set;
 
 public class ShootNear extends CommandBase {
     private final Turret m_turret;

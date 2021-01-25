@@ -5,14 +5,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.util.Epsilon;
 import frc.team3130.robot.util.Utils;
-import frc.team3130.robot.vision.Limelight;
-
-import frc.team3130.robot.util.Utils.*;
+import frc.team3130.robot.sensors.vision.Limelight;
 
 public class Turret extends SubsystemBase {
 
