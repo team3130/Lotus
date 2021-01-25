@@ -13,6 +13,7 @@ public class SpinFlywheel extends CommandBase {
 
     public SpinFlywheel(Flywheel subsystem) {
         m_flywheel = subsystem;
+        m_requirements.add(m_flywheel);
     }
 
     /**

@@ -24,6 +24,7 @@ public class SimpleDrive extends CommandBase {
     @Override
     public void initialize() {
         m_chassis.driveTank(.50,.50,false);
+        m_requirements.add(m_chassis);
     }
 
     /**

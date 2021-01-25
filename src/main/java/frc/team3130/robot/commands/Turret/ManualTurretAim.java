@@ -14,6 +14,7 @@ public class ManualTurretAim extends CommandBase {
 
     public ManualTurretAim(Turret subsystem) {
         m_turret = subsystem;
+        m_requirements.add(m_turret);
     }
 
 
