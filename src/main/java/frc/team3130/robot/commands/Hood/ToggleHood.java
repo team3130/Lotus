@@ -14,6 +14,7 @@ public class ToggleHood extends CommandBase {
 
     public ToggleHood(Hood subsystem) {
         m_hood = subsystem;
+        m_requirements.add(m_hood);
     }
 
     /**

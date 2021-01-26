@@ -8,6 +8,7 @@ public class IntakeOut extends CommandBase {
 
     public IntakeOut(Intake subsystem) {
         m_intake = subsystem;
+        m_requirements.add(m_intake);
     }
 
     /**

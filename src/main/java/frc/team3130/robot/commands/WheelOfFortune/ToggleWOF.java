@@ -16,6 +16,8 @@ public class ToggleWOF extends CommandBase {
     public ToggleWOF(WheelOfFortune subsystemWof, Intake subsystemIn) {
         m_wof = subsystemWof;
         m_intake = subsystemIn;
+        m_requirements.add(m_wof);
+        m_requirements.add(m_intake);
     }
 
     /**

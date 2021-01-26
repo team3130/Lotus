@@ -12,6 +12,7 @@ public class DefaultDrive extends CommandBase {
 
     public DefaultDrive(Chassis subsystem, DoubleSupplier  forward, DoubleSupplier rotation) {
         m_chassis = subsystem;
+        m_requirements.add(m_chassis);
     }
 
     /**

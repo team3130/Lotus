@@ -13,6 +13,7 @@ public class HopperOut extends CommandBase {
 
     public HopperOut(Hopper subsystem) {
         m_hopper = subsystem;
+        m_requirements.add(m_hopper);
     }
 
     /**

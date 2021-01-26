@@ -7,9 +7,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.subsystems.Navx;
-import frc.team3130.robot.vision.Limelight;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
+import frc.team3130.robot.Auton.Shoot6;
+import frc.team3130.robot.sensors.Navx;
+import frc.team3130.robot.sensors.vision.Limelight;
+import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 

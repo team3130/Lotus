@@ -12,6 +12,7 @@ public class ToggleTurretAim extends CommandBase {
 
     public ToggleTurretAim(Turret subsystem) {
         m_turret = subsystem;
+        m_requirements.add(m_turret);
     }
 
     /**
