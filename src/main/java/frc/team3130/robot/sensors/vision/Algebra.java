@@ -1,4 +1,4 @@
-package frc.team3130.robot.vision;
+package frc.team3130.robot.sensors.vision;
 
 import org.ejml.simple.SimpleMatrix;
 

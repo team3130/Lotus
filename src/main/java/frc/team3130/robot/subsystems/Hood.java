@@ -18,21 +18,6 @@ import frc.team3130.robot.RobotMap;
 public class Hood extends SubsystemBase {
 	private static WPI_TalonSRX m_hood;
 
-	/**
-		 * The Singleton instance of this Chassis. External classes should use the
-		 * {@link #getInstance()} method to get the instance.
-		 */
-		private final static Hood INSTANCE = new Hood();
-
-		/**
-		 * Returns the Singleton instance of this Chassis. This static method should be
-		 * used -- {@code Chassis.getInstance();} -- by external classes, rather than
-		 * the constructor to get the instance of this class.
-		 */
-		public static Hood getInstance() {
-				return INSTANCE;
-		}
-
 
 	/**
 	 * Creates a new Hood.
@@ -46,7 +31,7 @@ public class Hood extends SubsystemBase {
 		m_hood.configReverseSoftLimitEnable(true);
 	}
 
-	public static void moveHood(double pVBus){
+	public void moveHood(double pVBus){
 		m_hood.set(pVBus);		
 	}
 

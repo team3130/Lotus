@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.commands.Intake.IntakeIn;
+import frc.team3130.robot.subsystems.*;
 
 public class Shoot5 extends SequentialCommandGroup {
     AutoDriveStraightToPoint driveToBalls;
@@ -14,11 +15,11 @@ public class Shoot5 extends SequentialCommandGroup {
     /**
      * Creates a new Shoot5.
      */
-    public Shoot5() {
-        driveToBalls = new AutoDriveStraightToPoint();
-        intake = new IntakeIn();
-        driveBack = new AutoDriveStraightToPoint();
-        shootAim = new AutoTurnTurret(-180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees());
+    public Shoot5(Intake subsystem, Turret subsystemT, Chassis subsystemChassis, Hopper subsystemHop, Flywheel subsystemF, Hood subsystemHood) {
+        driveToBalls = new AutoDriveStraightToPoint(subsystemChassis);
+        intake = new IntakeIn(subsystem);
+        driveBack = new AutoDriveStraightToPoint(subsystemChassis);
+        shootAim = new AutoTurnTurret(-180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees(), subsystemT);
 
         // Add your commands in the super() call, e.g.
         // super(new FooCommand(), new BarCommand());
@@ -27,7 +28,7 @@ public class Shoot5 extends SequentialCommandGroup {
                 new ParallelRaceGroup(driveBack, new AutoDelay(5)),
                 new ParallelRaceGroup(shootAim, new AutoDelay(1)),
                 new AutoDelay(0.5),
-                new AutoShootAll()
+                new AutoShootAll(subsystemT, subsystemHop, subsystemF, subsystemHood)
         );
     }
 

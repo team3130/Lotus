@@ -1,14 +1,15 @@
 package frc.team3130.robot.commands.WheelOfFortune;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.GameData;
 import frc.team3130.robot.subsystems.WheelOfFortune;
 
 import java.util.Set;
 
-public class ColorAlignment implements Command {
-    private final Set<Subsystem> subsystems;
+public class ColorAlignment extends CommandBase {
+    private final WheelOfFortune m_wof;
 
     private static String fieldColor;
     private static String targetColor;
@@ -18,10 +19,10 @@ public class ColorAlignment implements Command {
     //used to terminate the program
     private static boolean colorFound;
 
-    public ColorAlignment() {
-        this.subsystems = Set.of(WheelOfFortune.getInstance());
+    public ColorAlignment(WheelOfFortune subsystem) {
+        m_wof = subsystem;
         colorFound = false;
-
+        m_requirements.add(m_wof);
     }
 
     /**
@@ -31,7 +32,7 @@ public class ColorAlignment implements Command {
     public void initialize() {
         colorFound = false;
         fieldColor = GameData.getInstance().getControlColor();
-        targetColor = WheelOfFortune.getTargetColor(fieldColor);
+        targetColor = m_wof.getTargetColor(fieldColor, m_wof);
     }
 
     /**
@@ -40,23 +41,23 @@ public class ColorAlignment implements Command {
      */
     @Override
     public void execute() {
-        String color = WheelOfFortune.getInstance().determineColor();
+        String color = m_wof.determineColor();
 
         if (color.equals(targetColor)){
-            WheelOfFortune.motorSpin(0);
+            m_wof.motorSpin(0);
             System.out.println("color found");
 
         } else if(color.equals("Red")) {
 //            System.out.println("Looking at Red");
             switch (targetColor) {
                 case "Blue":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Green":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Yellow":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
             }
 
@@ -64,39 +65,39 @@ public class ColorAlignment implements Command {
 //            System.out.println("Looking at Green");
             switch (targetColor) {
                 case "Red":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
                 case "Blue":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Yellow":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
             }
         } else if (color.equals("Blue")){
 //            System.out.println("Looking at " + color);
             switch (targetColor) {
                 case "Red":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Green":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
                 case "Yellow":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
             }
         } else if (color.equals("Yellow")){
 //            System.out.println("Looking at Yellow");
             switch (targetColor) {
                 case "Red":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Green":
-                    WheelOfFortune.motorSpin(motorSpeed);
+                    m_wof.motorSpin(motorSpeed);
                     break;
                 case "Blue":
-                    WheelOfFortune.motorSpin(-motorSpeed);
+                    m_wof.motorSpin(-motorSpeed);
                     break;
             }
         }
@@ -118,10 +119,10 @@ public class ColorAlignment implements Command {
      */
     @Override
     public boolean isFinished() {
-        String color = WheelOfFortune.getInstance().determineColor();
+        String color = m_wof.determineColor();
         //Code should turn off now
         if (color.equals(targetColor)) {
-            WheelOfFortune.motorSpin(0);
+            m_wof.motorSpin(0);
             return true;
         }
         return false;
@@ -138,23 +139,5 @@ public class ColorAlignment implements Command {
     @Override
     public void end(boolean interrupted) {
 
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
     }
 }

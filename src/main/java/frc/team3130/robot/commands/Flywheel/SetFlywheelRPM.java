@@ -1,19 +1,17 @@
 package frc.team3130.robot.commands.Flywheel;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.vision.Limelight;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
+import frc.team3130.robot.sensors.vision.Limelight;
+import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
-import java.util.Set;
+public class SetFlywheelRPM extends CommandBase {
+    private final Flywheel m_flywheel;
 
-public class SetFlywheelRPM implements Command {
-    private final Set<Subsystem> subsystems;
-
-    public SetFlywheelRPM() {
-        this.subsystems = Set.of(Flywheel.getInstance(), Hood.getInstance());
+    public SetFlywheelRPM(Flywheel subsystem1) {
+        m_flywheel = subsystem1;
+        m_requirements.add(m_flywheel);
     }
 
     /**
@@ -22,15 +20,15 @@ public class SetFlywheelRPM implements Command {
     @Override
     public void initialize() {
         if (!Limelight.GetInstance().hasTrack()){
-            Flywheel.setSpeed(3500.0);
+            m_flywheel.setSpeed(3500.0);
         }else {
             double x = Limelight.GetInstance().getDistanceToTarget();
             if (71.0 <= x) {
                 //Hood.setPistons(false);
                 double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
-                Flywheel.setSpeed(speed);
+                m_flywheel.setSpeed(speed);
             } else{
-                Flywheel.setSpeed(3500);
+                m_flywheel.setSpeed(3500);
             }
         }
     }
@@ -72,24 +70,6 @@ public class SetFlywheelRPM implements Command {
      */
     @Override
     public void end(boolean interrupted) {
-        Flywheel.stop();
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
+        m_flywheel.stop();
     }
 }

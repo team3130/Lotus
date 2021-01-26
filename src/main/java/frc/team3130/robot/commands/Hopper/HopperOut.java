@@ -1,18 +1,19 @@
 package frc.team3130.robot.commands.Hopper;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.OI;
-import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Hopper;
 
 import java.util.Set;
 
-public class HopperOut implements Command {
-    private final Set<Subsystem> subsystems;
+public class HopperOut extends CommandBase {
+    private final Hopper m_hopper;
 
-    public HopperOut() {
-        this.subsystems = Set.of(Hopper.getInstance());
+    public HopperOut(Hopper subsystem) {
+        m_hopper = subsystem;
+        m_requirements.add(m_hopper);
     }
 
     /**
@@ -20,9 +21,9 @@ public class HopperOut implements Command {
      */
     @Override
     public void initialize() {
-        Hopper.runHopperLeft(-0.15);
-        Hopper.runHopperRight(0.15);
-        Hopper.runHopperTop(-0.2);
+        m_hopper.runHopperLeft(-0.15);
+        m_hopper.runHopperRight(0.15);
+        m_hopper.runHopperTop(-0.2);
     }
 
     /**
@@ -63,25 +64,7 @@ public class HopperOut implements Command {
      * @param interrupted whether the command was interrupted/canceled
      */
     @Override
-    public void end(boolean interrupted) { Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);}
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
-    }
+    public void end(boolean interrupted) { m_hopper.runHopperLeft(0.0);
+        m_hopper.runHopperRight(0.0);
+        m_hopper.runHopperTop(0.0);}
 }

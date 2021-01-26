@@ -2,29 +2,31 @@ package frc.team3130.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.Set;
 
-public class ShiftToggle implements Command {
-    private final Set<Subsystem> subsystems;
+public class ShiftToggle extends CommandBase {
+    private final Chassis m_chassis;
 
     private double startTime;
     private boolean hasShifted;
     private boolean currentShift;
 
-    public ShiftToggle() {
-        this.subsystems = Set.of(Chassis.getInstance());
+    public ShiftToggle(Chassis subsystem) {
+        m_chassis = subsystem;
     }
 
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         hasShifted = false;
-        currentShift = Chassis.isLowGear();
-        Chassis.driveTank(0, 0, false); 		//Cut all power to the motors so they aren't running during the shift
+        currentShift = m_chassis.isLowGear();
+        m_chassis.driveTank(0, 0, false); 		//Cut all power to the motors so they aren't running during the shift
+        m_requirements.add(m_chassis);
     }
 
     /**
@@ -34,9 +36,9 @@ public class ShiftToggle implements Command {
     @Override
     public void execute() {
         if(!hasShifted && (Timer.getFPGATimestamp() - startTime) > RobotMap.kChassisShiftWait){
-            currentShift = Chassis.getShift();
+            currentShift = m_chassis.getShift();
 
-            Chassis.shift(!currentShift); //toggle the gear to what it isn't currently
+            m_chassis.shift(!currentShift); //toggle the gear to what it isn't currently
             hasShifted = true;
 
             //Reset the timer so that the ending dead time is from shifting rather than from the start.
@@ -73,23 +75,5 @@ public class ShiftToggle implements Command {
     @Override
     public void end(boolean interrupted) {
         hasShifted = false;
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
     }
 }

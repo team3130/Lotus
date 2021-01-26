@@ -11,14 +11,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Hood;
 
 public class MoveHood extends CommandBase {
+	private final Hood m_hood;
 	private double speed;
 
 	/**
 	 * Creates a new MoveHood.
 	 */
-	public MoveHood(double pvBus) {
+	public MoveHood(double pvBus, Hood subsystem) {
+		m_hood = subsystem;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(Hood.getInstance());
+		m_requirements.add(m_hood);
 
 		speed=pvBus;
 	}
@@ -26,7 +28,7 @@ public class MoveHood extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		Hood.moveHood(speed);
+		m_hood.moveHood(speed);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +39,7 @@ public class MoveHood extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		Hood.moveHood(0);
+		m_hood.moveHood(0);
 	}
 
 	// Returns true when the command should end.

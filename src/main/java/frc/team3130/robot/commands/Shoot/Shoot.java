@@ -1,28 +1,32 @@
-package frc.team3130.robot.commands;
+package frc.team3130.robot.commands.Shoot;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Hopper;
 import frc.team3130.robot.subsystems.Turret;
-import frc.team3130.robot.vision.Limelight;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
+import frc.team3130.robot.sensors.vision.Limelight;
+import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
-import java.util.Set;
-
-public class ShootNear implements Command {
-    private final Set<Subsystem> subsystems;
+public class Shoot extends CommandBase {
+    private final Turret m_turret;
+    private final Hopper m_hopper;
+    private final Flywheel m_flywheel;
+    private final Hood m_hood;
 
     private boolean justShot;
     private boolean changedState;
     private boolean isShooting;
     private double lastIndexTime;
 
-    public ShootNear() {
-        this.subsystems = Set.of(Turret.getInstance(), Hopper.getInstance(), Flywheel.getInstance(), Hood.getInstance());
+    public Shoot(Turret subsystemT, Hopper subsystemHop, Flywheel subsystemF, Hood subsystemHood) {
+        m_turret = subsystemT;
+        m_hopper = subsystemHop;
+        m_flywheel = subsystemF;
+        m_hood = subsystemHood;
+
         justShot = true;
         isShooting = false;
         changedState = true;
@@ -39,13 +43,22 @@ public class ShootNear implements Command {
         isShooting = false;
         lastIndexTime = Timer.getFPGATimestamp();
 
-        // Turret needs to reorient for near shot
-        Turret.nearShot();
+        // Tell turret to hold angle
+        m_turret.hold();
 
-        // Open the hood and set flywheel to close shot speed
-        //Hood.setPistons(true);
-        Flywheel.setSpeed(2900.0);
-
+        // Find the flywheel speed
+        if (!Limelight.GetInstance().hasTrack()){
+            m_flywheel.setSpeed(3500.0);
+        }else {
+            double x = Limelight.GetInstance().getDistanceToTarget();
+            if (71.0 <= x) {
+                //Hood.setPistons(false);
+                double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
+                m_flywheel.setSpeed(speed);
+            } else{
+                m_flywheel.setSpeed(3500);
+            }
+        }
     }
 
     /**
@@ -59,32 +72,32 @@ public class ShootNear implements Command {
                 lastIndexTime = Timer.getFPGATimestamp();
                 changedState = false;
             }
-            if (Hopper.isEmpty()) {
+            if (m_hopper.isEmpty()) {
                 lastIndexTime = Timer.getFPGATimestamp();
-                Hopper.runHopperTop(0.20);
-                Hopper.runHopperLeft(-0.5);
-                Hopper.runHopperRight(-0.6);
+                m_hopper.runHopperTop(0.20);
+                m_hopper.runHopperLeft(-0.5);
+                m_hopper.runHopperRight(-0.6);
             } else {
-                Hopper.runHopperTop(0.0);
-                Hopper.runHopperLeft(0.0);
-                Hopper.runHopperRight(0.0);
-                if (Timer.getFPGATimestamp() - lastIndexTime > 0.1) {
+                m_hopper.runHopperTop(0.0);
+                m_hopper.runHopperLeft(0.0);
+                m_hopper.runHopperRight(0.0);
+                if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
                     justShot = false;
                     changedState = true;
                 }
             }
         } else {
-            if (changedState && Flywheel.getInstance().canShoot()) {
-                Hopper.runHopperTop(0.6);
+            if (changedState && m_flywheel.canShoot()) {
+                m_hopper.runHopperTop(0.6);
                 isShooting = true;
                 changedState = false;
             } else if(!changedState) {
                 if (isShooting) {
-                    if (!Flywheel.getInstance().canShoot()) {
+                    if (!m_flywheel.canShoot()) {
                         isShooting = false;
                     }
                 } else {
-                    Hopper.runHopperTop(0.0);
+                    m_hopper.runHopperTop(0.0);
                     justShot = true;
                     changedState = true;
                 }
@@ -125,35 +138,14 @@ public class ShootNear implements Command {
         changedState = true;
 
         // Turn off hopper
-        Hopper.runHopperLeft(0.0);
-        Hopper.runHopperRight(0.0);
-        Hopper.runHopperTop(0.0);
-
-        // Reset the hood
-        //Hood.setPistons(false);
+        m_hopper.runHopperLeft(0.0);
+        m_hopper.runHopperRight(0.0);
+        m_hopper.runHopperTop(0.0);
 
         // Stop flywheel
-        Flywheel.stop();
+        m_flywheel.stop();
 
-        // Tell turret to stow
-        Turret.stow();
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
+        // Tell turret to aim again
+        m_turret.aim(false);
     }
 }

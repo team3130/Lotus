@@ -6,35 +6,25 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
-public class Climber implements Subsystem {
+public class Climber extends SubsystemBase {
 
     //Create necessary objects
-    private static WPI_TalonSRX m_climberWinchLeft;
-    private static WPI_TalonSRX m_climberWinchRight;
+    private WPI_TalonSRX m_climberWinchLeft;
+    private WPI_TalonSRX m_climberWinchRight;
 
-    private static Solenoid m_smallClimberPnuematic;
-    private static Solenoid m_bigClimberPnuematic;
+    private Solenoid m_smallClimberPnuematic;
+    private Solenoid m_bigClimberPnuematic;
 
     //Create and define all standard data types needed
 
     /**
-     * The Singleton instance of this Climber. External classes should
-     * use the {@link #getInstance()} method to get the instance.
+     * used to be a singelton please use the public constructor/object defined in robotContainer
      */
-    private final static Climber INSTANCE = new Climber();
 
-    /**
-     * Returns the Singleton instance of this Climber. This static method
-     * should be used -- {@code Climber.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Climber getInstance() {
-        return INSTANCE;
-    }
-
-    private Climber() {
+    public Climber() {
         m_climberWinchLeft = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
         m_climberWinchRight = new WPI_TalonSRX(RobotMap.CAN_CLIMBER2);
 
@@ -44,30 +34,30 @@ public class Climber implements Subsystem {
         setWinchToBrake();
     }
 
-    public static void leftWinch(double spin) {
+    public void leftWinch(double spin) {
         m_climberWinchLeft.set(spin);
     }
 
-    public static void rightWinch(double spin) {
+    public void rightWinch(double spin) {
         m_climberWinchRight.set(spin);
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleSmall() {
+    public void toggleSmall() {
         m_smallClimberPnuematic.set(!m_smallClimberPnuematic.get());
     }
 
     //method for deploying wheel to be called in a command
-    public static void toggleBig() {
+    public void toggleBig() {
         m_bigClimberPnuematic.set(!m_bigClimberPnuematic.get());
     }
 
-    public static void retractClimb(){
+    public void retractClimb(){
         m_bigClimberPnuematic.set(false);
         m_smallClimberPnuematic.set(false);
     }
 
-    public static void setWinchToBrake(){
+    public void setWinchToBrake(){
         m_climberWinchLeft.setNeutralMode(NeutralMode.Brake);
         m_climberWinchRight.setNeutralMode(NeutralMode.Brake);}
 }

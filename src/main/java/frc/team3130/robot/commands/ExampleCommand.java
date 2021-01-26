@@ -1,16 +1,19 @@
 package frc.team3130.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
-public class ExampleCommand implements Command {
-    private final Set<Subsystem> subsystems;
+public class ExampleCommand extends CommandBase {
+    // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
+    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public ExampleCommand() {
-        this.subsystems = Set.of(ExampleSubsystem.getInstance());
+    public ExampleCommand(ExampleSubsystem subsystem) {
+        //mapping to object passed through parameter
+        m_subsystem = subsystem;
     }
 
     /**
@@ -61,23 +64,5 @@ public class ExampleCommand implements Command {
     @Override
     public void end(boolean interrupted) {
 
-    }
-
-    /**
-     * <p>
-     * Specifies the set of subsystems used by this command.  Two commands cannot use the same
-     * subsystem at the same time.  If the command is scheduled as interruptible and another
-     * command is scheduled that shares a requirement, the command will be interrupted.  Else,
-     * the command will not be scheduled. If no subsystems are required, return an empty set.
-     * </p><p>
-     * Note: it is recommended that user implementations contain the requirements as a field,
-     * and return that field here, rather than allocating a new set every time this is called.
-     * </p>
-     *
-     * @return the set of subsystems that are required
-     */
-    @Override
-    public Set<Subsystem> getRequirements() {
-        return this.subsystems;
     }
 }

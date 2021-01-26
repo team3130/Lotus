@@ -1,10 +1,12 @@
-package frc.team3130.robot.subsystems;
+package frc.team3130.robot.sensors;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3130.robot.RobotMap;
+
+//TODO: make not static
 
 public class Navx {
     //Instance Handling

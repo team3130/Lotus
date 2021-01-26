@@ -9,11 +9,12 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
 import static frc.team3130.robot.util.Utils.configPIDF;
 
-public class Flywheel implements Subsystem {
+public class Flywheel extends SubsystemBase {
 
 
     //Create necessary objects
@@ -29,27 +30,9 @@ public class Flywheel implements Subsystem {
 //            tab.add("Flywheel D", RobotMap.kFlywheelD)
 //                    .getEntry();
 
-    /**
-     * The Singleton instance of this Flywheel. External classes should
-     * use the {@link #getInstance()} method to get the instance.
-     */
-    private final static Flywheel INSTANCE = new Flywheel();
 
-    /**
-     * Returns the Singleton instance of this Flywheel. This static method
-     * should be used -- {@code Flywheel.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Flywheel getInstance() {
-        return INSTANCE;
-    }
 
-    /**
-     * Creates a new instance of this Flywheel.
-     * This constructor is private since this class is a Singleton. External classes
-     * should use the {@link #getInstance()} method to get the instance.
-     */
-    private Flywheel() {
+    public Flywheel() {
         // Map CAN devices
         m_flywheelMaster = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL1);
         m_flywheelSlave = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL2);
@@ -95,7 +78,7 @@ public class Flywheel implements Subsystem {
      *
      * @param spin percent of max voltage output
      */
-    public static void setOpenLoop(double spin) {
+    public void setOpenLoop(double spin) {
         m_flywheelMaster.set(ControlMode.PercentOutput, spin);
     }
 
@@ -105,14 +88,14 @@ public class Flywheel implements Subsystem {
      *
      * @param rpm flywheel RPM
      */
-    public static void setSpeed(double rpm) {
+    public void setSpeed(double rpm) {
 //        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
 
         m_flywheelMaster.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
     }
 
-    public static void stop() {
+    public void stop() {
         setOpenLoop(0.0);
     }
 
@@ -121,14 +104,14 @@ public class Flywheel implements Subsystem {
      *
      * @return Current speed of the flywheel motor (ticks per 0.1 seconds)
      */
-    public static long getRawSpeed() {
+    public double getRawSpeed() {
         return m_flywheelMaster.getSelectedSensorVelocity();
     }
 
 
-    public static double getRPM() {
+    public double getRPM() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, getRawSpeed());
+        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
     /**
@@ -136,7 +119,7 @@ public class Flywheel implements Subsystem {
      *
      * @return speed setpoint in RPM
      */
-    public static double getRPMSetpoint() {
+    public double getRPMSetpoint() {
         if(m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
             return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheelMaster.getClosedLoopTarget());
         }
@@ -148,7 +131,7 @@ public class Flywheel implements Subsystem {
      *
      * @return Error of speed in rpm
      */
-    private static double getRPMError() {
+    private double getRPMError() {
         return getRPMSetpoint() - getRPM();
     }
 
@@ -157,14 +140,14 @@ public class Flywheel implements Subsystem {
      *
      * @return number of revolutions
      */
-    public static double getRevolutions() {
-        return Util.scaleNativeUnitsToRotations(RobotMap.kFlywheelTicksPerRevolution, m_flywheelMaster.getSelectedSensorPosition());
+    public double getRevolutions() {
+        return Util.scaleNativeUnitsToRotations(RobotMap.kFlywheelTicksPerRevolution, (long) m_flywheelMaster.getSelectedSensorPosition());
     }
 
     /**
      * Get the status of the flywheel if it's ready to shoot
      */
-    public static boolean canShoot() {
+    public boolean canShoot() {
         // Check the velocity and return true when it is within the
         // velocity target.
         if (m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
@@ -174,7 +157,7 @@ public class Flywheel implements Subsystem {
         }
     }
 
-    public static void outputToShuffleboard() {
+    public void outputToShuffleboard() {
 //        SmartDashboard.putNumber("Flywheel Setpoint", getRPMSetpoint());
         SmartDashboard.putNumber("Flywheel RPM", getRPM());
 //        SmartDashboard.putNumber("Flywheel Raw speed", getRawSpeed());

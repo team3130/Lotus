@@ -5,9 +5,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
-public class Intake implements Subsystem {
+public class Intake extends SubsystemBase {
 
     //Create necessary objects
     private static WPI_VictorSPX m_intakeMotor;
@@ -16,22 +17,7 @@ public class Intake implements Subsystem {
 
     //Create and define all standard data types needed
 
-    /**
-     * The Singleton instance of this Intake. External classes should
-     * use the {@link #getInstance()} method to get the instance.
-     */
-    private final static Intake INSTANCE = new Intake();
-
-    /**
-     * Returns the Singleton instance of this ExampleSubsystem. This static method
-     * should be used -- {@code ExampleSubsystem.getInstance();} -- by external
-     * classes, rather than the constructor to get the instance of this class.
-     */
-    public static Intake getInstance() {
-        return INSTANCE;
-    }
-
-    private Intake() {
+    public Intake() {
         m_intakeMotor = new WPI_VictorSPX(RobotMap.CAN_INTAKE);
 
         m_intakeMotor.configFactoryDefault();
@@ -41,19 +27,19 @@ public class Intake implements Subsystem {
         m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
     }
 
-    public static void runIntake(double speed) {
+    public void runIntake(double speed) {
         m_intakeMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    public static void deployIntake() {
+    public void deployIntake() {
         m_intakeSolenoid.set(true);
     }
 
-    public static void retractIntake() {
+    public void retractIntake() {
         m_intakeSolenoid.set(false);
     }
 
-    public static void toggleIntake() {
+    public void toggleIntake() {
         m_intakeSolenoid.set(!m_intakeSolenoid.get());
     }
 }

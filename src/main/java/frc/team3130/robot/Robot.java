@@ -7,18 +7,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.Auton.RendezvousShoot5;
-import frc.team3130.robot.Auton.Shoot3;
-import frc.team3130.robot.Auton.Shoot5;
 import frc.team3130.robot.Auton.Shoot6;
-import frc.team3130.robot.commands.Chassis.DefaultDrive;
-import frc.team3130.robot.commands.Climber.SpinWinches;
-import frc.team3130.robot.commands.Turret.ManualTurretAim;
-import frc.team3130.robot.subsystems.*;
-import frc.team3130.robot.vision.Limelight;
-import frc.team3130.robot.vision.WheelSpeedCalculations;
+import frc.team3130.robot.sensors.Navx;
+import frc.team3130.robot.sensors.vision.Limelight;
+import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
-import static frc.team3130.robot.OI.driverGamepad;
+import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +22,8 @@ import static frc.team3130.robot.OI.driverGamepad;
  * project.
  */
 public class Robot extends TimedRobot {
+    public RobotContainer m_robotContainer;
+
     CommandScheduler scheduler = CommandScheduler.getInstance();
     CommandBase autonomousCommand = null;
     private SendableChooser<String> chooser = new SendableChooser<String>();
@@ -49,7 +45,7 @@ public class Robot extends TimedRobot {
         timer.start();
 
         //Instantiate operator interface
-        OI.GetInstance();
+        m_robotContainer = new RobotContainer();
 
         //Instantiate Limelight interface
         Limelight.GetInstance();
@@ -60,15 +56,6 @@ public class Robot extends TimedRobot {
         //Instantiate Wheel Speed interpolator
         WheelSpeedCalculations.GetInstance();
 
-        //Register and instantiate subsystems (optionally with default commands)
-        //Note: registerSubsystem is NOT needed if setDefaultCommand is used
-        scheduler.setDefaultCommand(Chassis.getInstance(), new DefaultDrive());
-        scheduler.setDefaultCommand(Climber.getInstance(), new SpinWinches());
-        scheduler.setDefaultCommand(Turret.getInstance(), new ManualTurretAim());
-        scheduler.registerSubsystem(Intake.getInstance());
-        scheduler.registerSubsystem(Hopper.getInstance());
-        scheduler.registerSubsystem(Flywheel.getInstance());
-        scheduler.registerSubsystem(WheelOfFortune.getInstance());
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
@@ -84,11 +71,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        Chassis.configBrakeMode(false);
-        Intake.retractIntake();
+        m_robotContainer.getChassis().configBrakeMode(false);
+        m_robotContainer.getIntake().retractIntake();
         //Hood.setPistons(false);
-        WheelOfFortune.retractWheel();
-        Climber.retractClimb();
+        m_robotContainer.getWOF().retractWheel();
+        m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
     }
 
@@ -136,7 +123,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Limelight.GetInstance().updateData();
+        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
         writePeriodicOutputs();
     }
@@ -151,7 +138,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
 
-        Chassis.configBrakeMode(true);
+        m_robotContainer.getChassis().configBrakeMode(true);
     }
 
     /**
@@ -159,7 +146,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        Limelight.GetInstance().updateData();
+        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
         writePeriodicOutputs();
     }
@@ -181,28 +168,28 @@ public class Robot extends TimedRobot {
 //        Navx.GetInstance().outputToShuffleboard();
 //        WheelOfFortune.outputToShuffleboard();
 //        Chassis.outputToShuffleboard();
-        Turret.outputToShuffleboard();
+        m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
-        Limelight.GetInstance().outputToShuffleboard();
-        Flywheel.outputToShuffleboard();
+        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
+        m_robotContainer.getFlywheel().outputToShuffleboard();
         WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
         //TODO: move this somewhere logical
-        if (RobotState.isEnabled() && Turret.isOnTarget() && checkif) {
+        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
             if (gettime == true) {
                 lastTimestamp = Timer.getFPGATimestamp();
                 gettime = false;
             }
-            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
-            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
             if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
                 checkif = false;
             }
         } else {
-            driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-            driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
             gettime = true;
-            if (Turret.isOnTarget() == false) {
+            if (m_robotContainer.getTurret().isOnTarget() == false) {
                 checkif = true;
             }
         }
@@ -214,11 +201,11 @@ public class Robot extends TimedRobot {
 //          autonomousCommand = new RendezvousShoot5();
 //        autonomousCommand = new Shoot3();
 //        autonomousCommand = new Shoot5();
-        autonomousCommand = new Shoot6();
+        autonomousCommand = new Shoot6(m_robotContainer.getIntake(), m_robotContainer.getChassis(), m_robotContainer.getTurret(), m_robotContainer.getHopper(), m_robotContainer.getFlywheel(), m_robotContainer.getHood());
     }
 
     public void writePeriodicOutputs() {
-        Turret.getInstance().writePeriodicOutputs();
+        m_robotContainer.getTurret().writePeriodicOutputs();
     }
 
     public void resetSubsystems() {
