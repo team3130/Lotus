@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
-    CommandBase autonomousCommand = null;
+    Command autonomousCommand = null;
     private SendableChooser<String> chooser = new SendableChooser<String>();
     private static Timer timer;
     private static double lastTimestamp;
@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
 
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
+
 
 
         /*
@@ -95,6 +96,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         outputToShuffleboard();
+
     }
 
     /**
@@ -110,7 +112,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        determineAuto();
+        autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         // Schedule autonomous command if it exists
         if (autonomousCommand != null) {
@@ -165,6 +167,7 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
+        CommandScheduler.getInstance().run();
 //        Navx.GetInstance().outputToShuffleboard();
 //        WheelOfFortune.outputToShuffleboard();
 //        Chassis.outputToShuffleboard();

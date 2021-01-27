@@ -2,11 +2,11 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.team3130.robot.Auton.BarrelRacing;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -63,10 +63,10 @@ public class RobotContainer {
 
     //TODO: make a simple auton command for this thing below
 
-    // private final m_simpleAuto = new
-
     // chooser for auton commands (definitely not copied and pasted from wipilib repo)
     SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+    private final Command m_BarrelRacing = new BarrelRacing(60, m_chassis);
 
 
     // Binding the buttons and triggers that are defined above to respective commands
@@ -126,6 +126,11 @@ public class RobotContainer {
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new SpinWOFLeft(m_wheelOfFortune));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinWOFRight(m_wheelOfFortune));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenPressed(new ColorAlignment(m_wheelOfFortune));
+
+
+
+
+
     }
 
 /*    private void setDefaultCommand() {
@@ -134,5 +139,11 @@ public class RobotContainer {
         m_climber.setDefaultCommand(new Climber(m_climber, () -> driverGamepad.));
         m_turret.setDefaultCommand(//I DONT KNOW WHATS GOIN OOOOONNNNNNNNNNNNNNNN SETTING DEFAULT COMMANDS ARE WWWWWEEEEEIIIIRRRRDDDD );
     }*/
+
+    public Command getAutonomousCommand() {
+        return m_chooser.getSelected();
+    }
+
+
 }
 
