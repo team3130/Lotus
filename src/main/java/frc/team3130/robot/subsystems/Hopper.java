@@ -5,9 +5,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
-public class Hopper implements Subsystem {
+public class Hopper extends SubsystemBase {
 
     //Create necessary objects
     private static WPI_VictorSPX m_hopperMotorL;

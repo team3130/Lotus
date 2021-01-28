@@ -9,6 +9,7 @@ public class ResetRPM extends CommandBase {
 
     public ResetRPM(Flywheel subsystem) {
         m_flywheel = subsystem;
+        m_requirements.add(m_flywheel);
     }
 
     /**

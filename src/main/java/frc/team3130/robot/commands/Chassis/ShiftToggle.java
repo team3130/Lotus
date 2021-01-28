@@ -26,6 +26,7 @@ public class ShiftToggle extends CommandBase {
         hasShifted = false;
         currentShift = m_chassis.isLowGear();
         m_chassis.driveTank(0, 0, false); 		//Cut all power to the motors so they aren't running during the shift
+        m_requirements.add(m_chassis);
     }
 
     /**

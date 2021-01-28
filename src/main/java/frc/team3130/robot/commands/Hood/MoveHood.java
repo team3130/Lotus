@@ -20,7 +20,7 @@ public class MoveHood extends CommandBase {
 	public MoveHood(double pvBus, Hood subsystem) {
 		m_hood = subsystem;
 		// Use addRequirements() here to declare subsystem dependencies.
-		addRequirements(m_hood);
+		m_requirements.add(m_hood);
 
 		speed=pvBus;
 	}

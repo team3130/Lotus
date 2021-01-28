@@ -12,6 +12,7 @@ public class SpinWOFLeft extends CommandBase {
 
     public SpinWOFLeft(WheelOfFortune subsystem) {
         m_wof = subsystem;
+        m_requirements.add(m_wof);
     }
 
     /**

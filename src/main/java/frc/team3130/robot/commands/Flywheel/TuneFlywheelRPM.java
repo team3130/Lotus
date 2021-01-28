@@ -21,6 +21,7 @@ public class TuneFlywheelRPM extends CommandBase {
 
     public TuneFlywheelRPM(Flywheel subsystem) {
         m_flywheel = subsystem;
+        m_requirements.add(m_flywheel);
     }
 
     /**
