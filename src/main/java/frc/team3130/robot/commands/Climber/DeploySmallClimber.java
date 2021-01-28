@@ -15,6 +15,7 @@ public class DeploySmallClimber extends CommandBase {
 
     public DeploySmallClimber(Climber subsystem) {
         m_climber = subsystem;
+        m_requirements.add(m_climber);
 
     }
 

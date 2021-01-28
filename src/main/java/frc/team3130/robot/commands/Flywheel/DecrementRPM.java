@@ -9,6 +9,7 @@ public class DecrementRPM extends CommandBase {
 
     public DecrementRPM(Flywheel subsystem) {
         m_flywheel = subsystem;
+        m_requirements.add(m_flywheel);
     }
 
     /**

@@ -22,7 +22,7 @@ public class ColorAlignment extends CommandBase {
     public ColorAlignment(WheelOfFortune subsystem) {
         m_wof = subsystem;
         colorFound = false;
-
+        m_requirements.add(m_wof);
     }
 
     /**

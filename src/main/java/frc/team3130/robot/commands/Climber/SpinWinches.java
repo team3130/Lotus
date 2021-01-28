@@ -10,6 +10,7 @@ public class SpinWinches extends CommandBase {
 
     public SpinWinches(Climber subsystem) {
         m_climber = subsystem;
+        m_requirements.add(m_climber);
     }
 
     /**

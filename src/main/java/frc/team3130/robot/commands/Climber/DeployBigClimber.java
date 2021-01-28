@@ -13,6 +13,7 @@ public class DeployBigClimber extends CommandBase {
 
     public DeployBigClimber(Climber subsystem) {
         m_climber = subsystem;
+        m_requirements.add(m_climber);
     }
 
     /**

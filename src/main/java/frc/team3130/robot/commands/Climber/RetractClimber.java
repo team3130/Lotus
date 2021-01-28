@@ -16,6 +16,7 @@ public class RetractClimber extends CommandBase {
 
     public RetractClimber(Climber subsystem) {
         m_climber = subsystem;
+        m_requirements.add(m_climber);
     }
 
     /**

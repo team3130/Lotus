@@ -12,6 +12,7 @@ public class ToggleIntake extends CommandBase {
 
     public ToggleIntake(Intake subsystem) {
         m_intake = subsystem;
+        m_requirements.add(m_intake);
     }
 
     /**
