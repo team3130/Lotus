@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.team3130.robot.Auton.BarrelRacing;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -66,7 +65,7 @@ public class RobotContainer {
     // chooser for auton commands (definitely not copied and pasted from wipilib repo)
     SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-    private final Command m_BarrelRacing = new BarrelRacing(60, m_chassis);
+    // private final Command m_BarrelRacing = new BarrelRacing(60, m_chassis);
 
 
     // Binding the buttons and triggers that are defined above to respective commands
