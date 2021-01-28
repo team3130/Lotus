@@ -30,6 +30,9 @@ public class Hood extends SubsystemBase {
 		m_hood.configReverseSoftLimitThreshold(0);
 		m_hood.configForwardSoftLimitEnable(true);
 		m_hood.configReverseSoftLimitEnable(true);
+
+		//intialization value for hoodstate. Currently arbitrary number, should change later
+		m_hoodControlState = HoodState.MAX_65;
 	}
 
 	public void moveHood(double pVBus){
@@ -43,11 +46,17 @@ public class Hood extends SubsystemBase {
 	}
 
 	public enum HoodState {
-		PREDICT,
-		AIMING,
-		HOLD,
-		MANUAL,
-		SETPOINT,
-		NEAR_SHOOT,
+		//all the angles are currently just estimated guesses. They should be refactored when we find the correct angles
+		//right positive, left negative, might change later
+		MIN_25, //(guessed) Minimum safe angle
+		ZONE1_66, //
+		ZONE2_63, //
+		ZONE3_60, //
+		ZONE4_57, //
+		ZONE5_54, //
+		ZONE6_51, //
+		ZONE7_48, //
+		ZONE8_45, //
+		MAX_65, //(guessed) maximum safe angle
 	}
 }
