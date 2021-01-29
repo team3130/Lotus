@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -36,6 +37,10 @@ public class Chassis extends PIDSubsystem {
     private Pose2d pose;
 
     private static Solenoid m_shifter;
+
+    private SimpleMotorFeedforward m_feedforward;
+    private PIDController m_leftPIDConttroller;
+    private PIDController m_rightPIDConttroller;
 
     //Create and define all standard data types needed
 
@@ -107,6 +112,11 @@ public class Chassis extends PIDSubsystem {
 
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
         m_odometry = new DifferentialDriveOdometry(getHeading());
+
+        //THESE ARE ARBITRARY NUMBERS //TODO: PLS PUT REAL STUFF IN HERE
+        m_feedforward = new SimpleMotorFeedforward(0.2, 1.9, 0.25);
+        m_leftPIDConttroller = new PIDController(9.95, 0, 0);
+        m_rightPIDConttroller = new PIDController(9.95, 0, 0);
     }
 
     public Rotation2d getHeading() {
@@ -180,6 +190,18 @@ public class Chassis extends PIDSubsystem {
 
     public boolean isLowGear() {
         return !m_shifter.get();
+    }
+
+    public SimpleMotorFeedforward getFeedforward() {
+        return m_feedforward;
+    }
+
+    public PIDController getleftPIDConttroller() {
+        return m_leftPIDConttroller;
+    }
+
+    public PIDController getRightPIDConttroller() {
+        return m_rightPIDConttroller;
     }
 
     /**

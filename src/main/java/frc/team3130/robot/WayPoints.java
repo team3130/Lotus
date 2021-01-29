@@ -4,6 +4,10 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 
 public class WayPoints {
 
+        //Fixed points
+        public static final Translation2d kWasRed = new Translation2d(20, 115);
+        public static final Translation2d kWasBlue = new Translation2d(185, 40);
+
         //TODO: Change all of these
         /** ------------------Galactic Search Challenge------ */
         public static final Translation2d path_A_Red1 = new Translation2d(90, 90);
