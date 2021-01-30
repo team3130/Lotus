@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
+import javax.swing.plaf.nimbus.State;
+
 
 /**
  * A command that will turn the robot to the specified angle using a motion profile.
@@ -28,7 +30,7 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
                 // Set reference to target
                 targetAngleDegrees,
                 // Pipe output to turn robot
-                (output, setpoint) -> drive.arcadeDrive(0, output),
+                (double output, State setpoint) -> drive.driveArcade(0, output, true),
                 // Require the drive
                 drive);
 

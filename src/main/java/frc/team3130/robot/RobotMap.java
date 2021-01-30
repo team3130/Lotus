@@ -59,6 +59,10 @@ public class RobotMap {
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
+    public static double kMaxTurnAccelerationDegPerSSquared = 0.0; //TODO: HAVE TOMAS DO MATH FOR THIS (line 27 TurnToAngleProfiled)
+    public static double kTurnToleranceDeg = 0.0;//TODO: DO this for all of these
+    public static double kTurnRateToleranceDegPerS = 0.0;//TODO: DO this for all of these
+
 
     //Climber
     public static double kClimberTriggerDeadband = 0.07;
