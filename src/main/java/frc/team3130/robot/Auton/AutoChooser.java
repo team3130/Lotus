@@ -2,7 +2,6 @@ package frc.team3130.robot.Auton;
 
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.team3130.robot.Action.*;
 
 import java.util.Optional;
 

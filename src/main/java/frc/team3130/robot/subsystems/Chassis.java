@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -15,12 +16,13 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.util.Units;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.Navx;
 
-public class Chassis extends PIDSubsystem {
+public class Chassis extends ProfiledPIDSubsystem {
 
     //Create necessary objects
     private WPI_TalonFX m_leftMotorFront;
@@ -39,7 +41,7 @@ public class Chassis extends PIDSubsystem {
     private static Solenoid m_shifter;
 
     private SimpleMotorFeedforward m_feedforward;
-    private PIDController m_leftPIDConttroller;
+    private PIDController m_leftPIDController;
     private PIDController m_rightPIDConttroller;
 
     //Create and define all standard data types needed
@@ -55,7 +57,14 @@ public class Chassis extends PIDSubsystem {
      */
 
     public Chassis() {
-        super(new PIDController(1, 0, 0));//TODO: Set Turn PID
+            super(
+                    // The ProfiledPIDController used by the subsystem
+                    new ProfiledPIDController(
+                            0,
+                            0,
+                            0,
+                            // The motion profile constraints
+                            new TrapezoidProfile.Constraints(0, 0)));
 
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
@@ -115,7 +124,7 @@ public class Chassis extends PIDSubsystem {
 
         //THESE ARE ARBITRARY NUMBERS //TODO: PLS PUT REAL STUFF IN HERE
         m_feedforward = new SimpleMotorFeedforward(0.2, 1.9, 0.25);
-        m_leftPIDConttroller = new PIDController(9.95, 0, 0);
+        m_leftPIDController = new PIDController(9.95, 0, 0);
         m_rightPIDConttroller = new PIDController(9.95, 0, 0);
     }
 
@@ -196,11 +205,11 @@ public class Chassis extends PIDSubsystem {
         return m_feedforward;
     }
 
-    public PIDController getleftPIDConttroller() {
-        return m_leftPIDConttroller;
+    public PIDController getleftPIDController() {
+        return m_leftPIDController;
     }
 
-    public PIDController getRightPIDConttroller() {
+    public PIDController getRightPIDController() {
         return m_rightPIDConttroller;
     }
 
@@ -371,17 +380,17 @@ public class Chassis extends PIDSubsystem {
 
 
     @Override
-    protected void useOutput(double output, double setpoint) {
+    protected void useOutput(double output, TrapezoidProfile.State setpoint) {
         //Chassis ramp rate is the limit on the voltage change per cycle to prevent skidding.
     	/*final double speedLimit = prevSpeedLimit + Preferences.getInstance().getDouble("ChassisRampRate", 0.25);
     	if (output >  speedLimit) bias = speedLimit;
         if (bias < -speedLimit) bias = -speedLimit;*/
         //System.out.println("UsingTurnPID");
-        double speed_L = moveSpeed+output;
-        double speed_R = moveSpeed-output;
+        double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
+
+        double speed_L = (output + feedforward) * 4096;
+        double speed_R = (output + feedforward) * 4096;
         driveTank(speed_L, speed_R, false);
-        //driveTank(0.1,-0.1,false);
-        //prevSpeedLimit = Math.abs(speedLimit);
     }
 
     @Override
@@ -408,26 +417,29 @@ public class Chassis extends PIDSubsystem {
      *
      * @param angle angle to hold in degrees
      */
-    public void holdAngle(double angle, boolean smallAngle, Chassis subsystem) {
-        setPIDValues(smallAngle, subsystem);
-        subsystem.getController().reset();
-        subsystem.setSetpoint(getAngle()+angle);
-        subsystem.enable();
+    public void holdAngle(double angle, boolean smallAngle) {
+        setPIDValues(smallAngle);
+        this.reset();
+        this.setSetpoint(getAngle()+angle);
+        this.enable();
     }
 
-    public void ReleaseAngle(Chassis subsystem){
-        subsystem.disable();
+    private void setSetpoint(double v) {
+    }
+
+    public void ReleaseAngle(){
+        this.disable();
         driveTank(0, 0, false);//Clear motors
     }
 
-    private void setPIDValues(boolean smallAngleTurn, Chassis subsystem){//TOD2O: Tune Pid
+    private void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
         if(smallAngleTurn){
-            subsystem.getController().setPID(
+            this.getController().setPID(
                     Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
                     Preferences.getInstance().getDouble("ChassisLowBigI", 0.015),
                     Preferences.getInstance().getDouble("ChassisLowD", 0));
         }else{
-            subsystem.getController().setPID(
+            this.getController().setPID(
                     Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
                     Preferences.getInstance().getDouble("ChassisLowI", 0.003),
                     Preferences.getInstance().getDouble("ChassisLowD", 0));
@@ -442,7 +454,7 @@ public class Chassis extends PIDSubsystem {
         return getController().atSetpoint();
     }
 
-    public double getSetpoint(){
+    public TrapezoidProfile.State getSetpoint(){
         return getController().getSetpoint();
     }
 
