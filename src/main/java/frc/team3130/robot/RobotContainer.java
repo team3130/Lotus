@@ -2,8 +2,17 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
@@ -24,6 +33,9 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
+
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class RobotContainer {
     //see here for references if lost: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbottraditional/RobotContainer.java
@@ -140,7 +152,28 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        return m_chooser.getSelected();
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
+                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
+
+        config.setKinematics(m_chassis.getmKinematics());
+
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+                Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())),
+                config
+        );
+
+        RamseteCommand command = new RamseteCommand(
+                trajectory,
+                m_chassis::getPose,
+                new RamseteController(2.0, 0.7),
+                m_chassis.getFeedforward(),
+                m_chassis.getmKinematics(),
+                (Supplier<DifferentialDriveWheelSpeeds>) m_chassis.getSpeeds(),
+                m_chassis.getleftPIDController(),
+                m_chassis.getRightPIDController(),
+                m_chassis::setOutput
+        );
+        return command;
     }
 
 

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.util.Units;
@@ -430,6 +431,26 @@ public class Chassis extends ProfiledPIDSubsystem {
     public void ReleaseAngle(){
         this.disable();
         driveTank(0, 0, false);//Clear motors
+    }
+
+    public DifferentialDriveKinematics getmKinematics() {
+        return m_kinematics;
+    }
+
+    public Pose2d getPose() {
+        return pose;
+    }
+
+    public void setOutput(double leftVolts, double rightVolts) {
+        m_leftMotorFront.set(leftVolts / 12);
+        m_rightMotorFront.set(rightVolts / 12);
+    }
+
+    public DifferentialDriveWheelSpeeds getSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+                m_leftMotorFront.getSelectedSensorVelocity() / 7.29 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
+                m_rightMotorFront.getSelectedSensorVelocity() / 7.29 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60
+        );
     }
 
     private void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
