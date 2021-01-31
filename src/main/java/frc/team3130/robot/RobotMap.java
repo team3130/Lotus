@@ -63,6 +63,9 @@ public class RobotMap {
     public static double kTurnToleranceDeg = 0.0;//TODO: DO this for all of these
     public static double kTurnRateToleranceDegPerS = 0.0;//TODO: DO this for all of these
 
+    public static double kMaxAccelerationPerSecond = 0.0; //TODO: DO this for all of these
+    public static double kMaxVelocityPerSecond = 0.0; //TODO: DO this for all of these
+
 
     //Climber
     public static double kClimberTriggerDeadband = 0.07;
