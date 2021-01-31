@@ -112,6 +112,7 @@ public class RobotMap {
 
     //Hood
     public static int kHoodForward = 17669;//TODO: FIND Real Number
+    public static double kHoodTicksPerDegree; //= (kUseCompbot ? *put comp gear ratio here* : *put practice ratio here* ;)
 
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;

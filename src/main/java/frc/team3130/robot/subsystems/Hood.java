@@ -7,12 +7,14 @@
 
 package frc.team3130.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.sensors.vision.Limelight;
 
 
 public class Hood extends SubsystemBase {
@@ -45,8 +47,9 @@ public class Hood extends SubsystemBase {
 		SmartDashboard.putNumber("Hood Position", m_hood.getSelectedSensorPosition());
 	}
 
+
 	public enum HoodState {
-		//all the angles are currently just estimated guesses. They should be refactored when we find the correct angles
+		//TODO: FIND Real Numbers for each position
 		//right positive, left negative, might change later
 		MIN_25, //(guessed) Minimum safe angle
 		ZONE1_66, //
@@ -59,4 +62,41 @@ public class Hood extends SubsystemBase {
 		ZONE8_45, //
 		MAX_65, //(guessed) maximum safe angle
 	}
+
+	public synchronized void setAngle(double angle_deg) {
+		// In Position mode, outputValue set is in rotations of the motor
+		m_hood.set(ControlMode.Position, angle_deg * RobotMap.kHoodTicksPerDegree);
+	}
+	
+
+
+	public void changeHoodAngle(){
+		switch (m_hoodControlState) {
+			case ZONE1_66:
+				setAngle(66);
+			case ZONE2_63:
+				setAngle(63);
+			case ZONE3_60:
+				setAngle(60);
+			case ZONE4_57:
+				setAngle(57);
+			case ZONE5_54:
+				setAngle(54);
+			case ZONE6_51:
+				setAngle(51);
+			case ZONE7_48:
+				setAngle(48);
+			case ZONE8_45:
+				setAngle(45);
+			case MIN_25:
+				setAngle(25);
+			case MAX_65:
+				setAngle(65);
+		}
+	}
+
+
+
+
+
 }
