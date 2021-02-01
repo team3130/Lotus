@@ -19,8 +19,8 @@ import frc.team3130.robot.sensors.vision.Limelight;
 
 public class Hood extends SubsystemBase {
 	private static WPI_TalonSRX m_hood;
-
 	private HoodState m_hoodControlState;
+
 
 	/**
 	 * Creates a new Hood.
@@ -52,13 +52,13 @@ public class Hood extends SubsystemBase {
 		//TODO: FIND Real Numbers for each position
 		//right positive, left negative, might change later
 		MIN_25, //(guessed) Minimum safe angle
-		ZONE1_66, //
+		ZONE1_66, //Target to marker A/E3 (green)
 		ZONE2_63, //
-		ZONE3_60, //
+		ZONE3_60, //A/E3 to A/E5 (yellow)
 		ZONE4_57, //
-		ZONE5_54, //
+		ZONE5_54, // A/E5 to A/E7 (blue)
 		ZONE6_51, //
-		ZONE7_48, //
+		ZONE7_48, // A/E7 to A/E9 (red)
 		ZONE8_45, //
 		MAX_65, //(guessed) maximum safe angle
 	}
@@ -67,8 +67,16 @@ public class Hood extends SubsystemBase {
 		// In Position mode, outputValue set is in rotations of the motor
 		m_hood.set(ControlMode.Position, angle_deg * RobotMap.kHoodTicksPerDegree);
 	}
-	
 
+	public void changeHoodState(double distance){
+		if (distance <= 90) {m_hoodControlState = HoodState.ZONE1_66;} //green
+
+		else if (distance <= 150){m_hoodControlState = HoodState.ZONE3_60;}//yellow
+
+		else if (distance <= 210){m_hoodControlState = HoodState.ZONE5_54;}//blue
+
+		else if (distance <= 270 ){m_hoodControlState = HoodState.ZONE7_48;}//red
+	}
 
 	public void changeHoodAngle(){
 		switch (m_hoodControlState) {
@@ -95,6 +103,11 @@ public class Hood extends SubsystemBase {
 		}
 	}
 
+	public double getAngleDegrees(){return m_hood.getSelectedSensorPosition()/RobotMap.kHoodTicksPerDegree;}
+
+	public void outputToShuffleboard(){
+		SmartDashboard.putNumber("Hood Angle", getAngleDegrees());
+	}
 
 
 

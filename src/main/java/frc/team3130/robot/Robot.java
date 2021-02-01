@@ -12,6 +12,7 @@ import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
+
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
 /**
@@ -173,6 +174,7 @@ public class Robot extends TimedRobot {
         Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
         m_robotContainer.getFlywheel().outputToShuffleboard();
         WheelSpeedCalculations.GetInstance().outputToShuffleboard();
+        m_robotContainer.getHood().outputToShuffleboard();
 
         //TODO: move this somewhere logical
         if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
