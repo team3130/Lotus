@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.team3130.robot.Auton.AutoChooser;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -60,6 +61,8 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
+    private final AutoChooser m_chooser = new AutoChooser();
+
 
     public static double getSkywalker() {
         double spin = 0;
@@ -71,11 +74,6 @@ public class RobotContainer {
     //Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
-
-    //TODO: make a simple auton command for this thing below
-
-    // chooser for auton commands (definitely not copied and pasted from wipilib repo)
-    SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     // private final Command m_BarrelRacing = new BarrelRacing(60, m_chassis);
 
@@ -152,30 +150,8 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
-                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
-
-        config.setKinematics(m_chassis.getmKinematics());
-
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())),
-                config
-        );
-
-        RamseteCommand command = new RamseteCommand(
-                trajectory,
-                m_chassis::getPose,
-                new RamseteController(2.0, 0.7),
-                m_chassis.getFeedforward(),
-                m_chassis.getmKinematics(),
-                (Supplier<DifferentialDriveWheelSpeeds>) m_chassis.getSpeeds(),
-                m_chassis.getleftPIDController(),
-                m_chassis.getRightPIDController(),
-                m_chassis::setOutput
-        );
-        return command;
+        return m_chooser.getCommand(m_chassis, 0);
     }
-
 
 }
 
