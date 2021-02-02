@@ -1,0 +1,9 @@
+{
+  "lengthUnit": "Inch",
+  "exportUnit": "Same as Project",
+  "maxVelocity": 135.0,
+  "maxAcceleration": 490.0,
+  "wheelBase": 28.0,
+  "gameName": "Galactic Search B",
+  "outputDir": "../../PathsOut"
+}
