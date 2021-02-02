@@ -27,7 +27,9 @@ public class AutoChooser {
         this.m_chooser = new ArrayList<Path>();
         m_chooser.add(new SlathomPath());
         m_chooser.add(new galacticSearchARed());
+        m_chooser.add(new galacticSearchABlue());
         m_chooser.add(new galacticSearchBRed());
+        m_chooser.add(new galacticSearchBBlue());
         m_chooser.add(new BarrelPoints());
         m_chooser.add(new BouncePath());
         this.m_path = null;

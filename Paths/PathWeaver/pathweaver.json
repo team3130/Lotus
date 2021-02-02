@@ -4,6 +4,6 @@
   "maxVelocity": 135.0,
   "maxAcceleration": 490.0,
   "wheelBase": 28.0,
-  "gameName": "Galactic Search B",
+  "gameName": "Bounce Path",
   "outputDir": "../../PathsOut"
 }
