@@ -30,7 +30,7 @@
     "rightEncoderPorts": [],
     # Set to True if encoders need to be inverted
     # If doing drive test, treat this as the left side of the drivetrain
-    "encoderInverted": True,
+    "encoderInverted": False,
     # Only if you are doing drive (set to False if not needed)
     "rightEncoderInverted": True,
     # ** The following is only if you are using a gyro for the DriveTrain test**
@@ -46,7 +46,6 @@
     # "" (NavX using default SPI, ADXRS450 using onboard CS0, or no gyro)
     "gyroPort": "SPI.Port.kMXP",
 }
-
 
 
 

@@ -107,7 +107,6 @@ public class Chassis extends ProfiledPIDSubsystem {
         m_rightMotorFront.setSensorPhase(true);
         m_leftMotorFront.setSensorPhase(true);
 
-
         m_leftMotorFront.overrideLimitSwitchesEnable(false);
         m_rightMotorFront.overrideLimitSwitchesEnable(false);
 
