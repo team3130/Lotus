@@ -23,6 +23,7 @@ public class Intake extends SubsystemBase {
         m_intakeMotor.configFactoryDefault();
         m_intakeMotor.setNeutralMode(NeutralMode.Coast);
         m_intakeMotor.overrideLimitSwitchesEnable(false);
+        m_intakeMotor.setInverted(true);
 
         m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
     }
