@@ -389,8 +389,8 @@ public class Chassis extends ProfiledPIDSubsystem {
         //System.out.println("UsingTurnPID");
         double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
 
-        double speed_L = (output + feedforward) * 4096;
-        double speed_R = (output + feedforward) * 4096;
+        int speed_L = (int) ((output + feedforward) * 4096);
+        int speed_R = (int) ((output + feedforward) * 4096);
         driveTank(speed_L, speed_R, false);
     }
 
