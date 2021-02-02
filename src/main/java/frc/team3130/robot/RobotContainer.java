@@ -2,10 +2,20 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.team3130.robot.Auton.AutoChooser;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -24,6 +34,9 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
+
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class RobotContainer {
     //see here for references if lost: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbottraditional/RobotContainer.java
@@ -48,6 +61,8 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
+    private final AutoChooser m_chooser = new AutoChooser();
+
 
     public static double getSkywalker() {
         double spin = 0;
@@ -59,11 +74,6 @@ public class RobotContainer {
     //Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
-
-    //TODO: make a simple auton command for this thing below
-
-    // chooser for auton commands (definitely not copied and pasted from wipilib repo)
-    SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     // private final Command m_BarrelRacing = new BarrelRacing(60, m_chassis);
 
@@ -140,9 +150,8 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        return m_chooser.getSelected();
+        return m_chooser.getCommand(m_chassis, 0);
     }
-
 
 }
 
