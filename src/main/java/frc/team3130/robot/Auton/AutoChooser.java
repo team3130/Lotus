@@ -5,20 +5,17 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class AutoChooser {
@@ -29,8 +26,8 @@ public class AutoChooser {
     public AutoChooser() {
         this.m_chooser = new ArrayList<Path>();
         m_chooser.add(new SlathomPath());
-        m_chooser.add(new galacticSearchA());
-        m_chooser.add(new galacticSearchB());
+        m_chooser.add(new galacticSearchARed());
+        m_chooser.add(new galacticSearchBRed());
         m_chooser.add(new BarrelPoints());
         m_chooser.add(new BouncePath());
         this.m_path = null;
@@ -88,10 +85,10 @@ public class AutoChooser {
         }
     }
 
-    private class galacticSearchA implements Path {
+    private class galacticSearchARed implements Path {
         private Translation2d[] galacticSearch;
 
-        public galacticSearchA() {
+        public galacticSearchARed() {
             this.galacticSearch = new Translation2d[] {
                     //TODO: getPoints for this
             };
@@ -108,10 +105,50 @@ public class AutoChooser {
         }
     }
 
-    private class galacticSearchB implements Path {
+    private class galacticSearchABlue implements Path {
         private Translation2d[] galacticSearch;
 
-        public galacticSearchB() {
+        public galacticSearchABlue() {
+            this.galacticSearch = new Translation2d[] {
+                    //TODO: getPoints for this
+            };
+        }
+
+        @Override
+        public Translation2d[] getWaypoints() {
+            return this.galacticSearch;
+        }
+
+        @Override
+        public void Start() {
+
+        }
+    }
+
+    private class galacticSearchBRed implements Path {
+        private Translation2d[] galacticSearch;
+
+        public galacticSearchBRed() {
+            this.galacticSearch = new Translation2d[] {
+                    //TODO: getPoints for this
+            };
+        }
+
+        @Override
+        public Translation2d[] getWaypoints() {
+            return this.galacticSearch;
+        }
+
+        @Override
+        public void Start() {
+
+        }
+    }
+
+    private class galacticSearchBBlue implements Path {
+        private Translation2d[] galacticSearch;
+
+        public galacticSearchBBlue() {
             this.galacticSearch = new Translation2d[] {
                     //TODO: getPoints for this
             };
