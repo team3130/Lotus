@@ -4,5 +4,5 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 
 public interface Path {
     public Translation2d[] getWaypoints();
-    public void startAuton();
+    public void Start();
 }
