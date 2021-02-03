@@ -25,19 +25,19 @@ public class AutoChooser {
 
     public AutoChooser() {
         this.m_chooser = new ArrayList<Path>();
-        m_chooser.add(new SlalomPath());
+        m_chooser.add(new salmonPath());
         m_chooser.add(new galacticSearchARed());
         m_chooser.add(new galacticSearchABlue());
         m_chooser.add(new galacticSearchBRed());
         m_chooser.add(new galacticSearchBBlue());
-        m_chooser.add(new BarrelPoints());
-        m_chooser.add(new BouncePath());
+        m_chooser.add(new barrelPoints());
+        m_chooser.add(new bouncePath());
         this.m_path = null;
     }
 
     public void determinePath(int path) {
         this.m_path = this.m_chooser.get(path);
-        this.m_path.Start();
+        this.m_path.startAuton();
     }
     public Command getCommand(Chassis m_chassis, int path) {
         this.determinePath(path);
@@ -67,10 +67,10 @@ public class AutoChooser {
         return command;
     }
 
-    private class SlalomPath implements Path {
+    private class salmonPath implements Path {
         private Translation2d[] slathom;
 
-        public SlalomPath() {
+        public salmonPath() {
             this.slathom = new Translation2d[] {
                     //TODO: getPoints for this
             };
@@ -82,7 +82,7 @@ public class AutoChooser {
         }
 
         @Override
-        public void Start() {
+        public void startAuton() {
 
         }
     }
@@ -102,7 +102,7 @@ public class AutoChooser {
         }
 
         @Override
-        public void Start() {
+        public void startAuton() {
 
         }
     }
@@ -122,7 +122,7 @@ public class AutoChooser {
         }
 
         @Override
-        public void Start() {
+        public void startAuton() {
 
         }
     }
@@ -142,7 +142,7 @@ public class AutoChooser {
         }
 
         @Override
-        public void Start() {
+        public void startAuton() {
 
         }
     }
@@ -162,15 +162,15 @@ public class AutoChooser {
         }
 
         @Override
-        public void Start() {
+        public void startAuton() {
 
         }
     }
 
-    private class BarrelPoints implements Path {
+    private class barrelPoints implements Path {
         private Translation2d[] BarrelPoints;
 
-        public BarrelPoints() {
+        public barrelPoints() {
             this.BarrelPoints = new Translation2d[] {
                     //TODO: getPoints for this
             };
@@ -182,15 +182,15 @@ public class AutoChooser {
         }
 
         @Override
-        public void Start() {
+        public void startAuton() {
 
         }
     }
 
-    private class BouncePath implements Path {
+    private class bouncePath implements Path {
         private Translation2d[] Bounce;
 
-        public BouncePath() {
+        public bouncePath() {
             this.Bounce = new Translation2d[] {
                     //TODO: getPoints for this
             };
@@ -202,7 +202,7 @@ public class AutoChooser {
         }
 
         @Override
-        public void Start() {
+        public void startAuton() {
 
         }
     }
