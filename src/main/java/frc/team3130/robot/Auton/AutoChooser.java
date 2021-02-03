@@ -1,5 +1,7 @@
 package frc.team3130.robot.Auton;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -8,36 +10,38 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
 public class AutoChooser {
-    private ArrayList<Path> m_chooser;
-    private Path m_path;
+    private ArrayList<PathsInterface> m_chooser;
+    private PathsInterface m_path;
     private RamseteCommand command;
 
     public AutoChooser() {
-        this.m_chooser = new ArrayList<Path>();
-        m_chooser.add(new SlalomPath());
+        this.m_chooser = new ArrayList<PathsInterface>();
+        m_chooser.add(new SlalomPathsInterface());
         m_chooser.add(new galacticSearchARed());
         m_chooser.add(new galacticSearchABlue());
         m_chooser.add(new galacticSearchBRed());
         m_chooser.add(new galacticSearchBBlue());
         m_chooser.add(new BarrelPoints());
-        m_chooser.add(new BouncePath());
+        m_chooser.add(new BouncePathsInterface());
         this.m_path = null;
     }
 
     public void determinePath(int path) {
         this.m_path = this.m_chooser.get(path);
-        this.m_path.Start();
     }
     public Command getCommand(Chassis m_chassis, int path) {
         this.determinePath(path);
@@ -46,14 +50,8 @@ public class AutoChooser {
 
         config.setKinematics(m_chassis.getmKinematics());
 
-        //TODO: make it generate a trajectory based off of this.m_path.getWaypoints();
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())),
-                config
-        );
-
         command = new RamseteCommand(
-                trajectory,
+                this.m_path.getWaypoints(),
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
@@ -67,17 +65,23 @@ public class AutoChooser {
         return command;
     }
 
-    private class SlalomPath implements Path {
-        private Translation2d[] slathom;
+    private class SlalomPathsInterface implements PathsInterface {
+        private Trajectory slathom;
 
-        public SlalomPath() {
-            this.slathom = new Translation2d[] {
-                    //TODO: getPoints for this
-            };
+        public SlalomPathsInterface() {
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.slathom = trajectory;
         }
 
         @Override
-        public Translation2d[] getWaypoints() {
+        public Trajectory getWaypoints() {
             return this.slathom;
         }
 
@@ -87,17 +91,24 @@ public class AutoChooser {
         }
     }
 
-    private class galacticSearchARed implements Path {
-        private Translation2d[] galacticSearch;
+    private class galacticSearchARed implements PathsInterface {
+        private Trajectory galacticSearch;
 
         public galacticSearchARed() {
-            this.galacticSearch = new Translation2d[] {
-                    //TODO: getPoints for this
-            };
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+
+            this.galacticSearch = trajectory;
         }
 
         @Override
-        public Translation2d[] getWaypoints() {
+        public Trajectory getWaypoints() {
             return this.galacticSearch;
         }
 
@@ -107,17 +118,23 @@ public class AutoChooser {
         }
     }
 
-    private class galacticSearchABlue implements Path {
-        private Translation2d[] galacticSearch;
+    private class galacticSearchABlue implements PathsInterface {
+        private Trajectory galacticSearch;
 
         public galacticSearchABlue() {
-            this.galacticSearch = new Translation2d[] {
-                    //TODO: getPoints for this
-            };
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.galacticSearch = trajectory;
         }
 
         @Override
-        public Translation2d[] getWaypoints() {
+        public Trajectory getWaypoints() {
             return this.galacticSearch;
         }
 
@@ -127,17 +144,23 @@ public class AutoChooser {
         }
     }
 
-    private class galacticSearchBRed implements Path {
-        private Translation2d[] galacticSearch;
+    private class galacticSearchBRed implements PathsInterface {
+        private Trajectory galacticSearch;
 
         public galacticSearchBRed() {
-            this.galacticSearch = new Translation2d[] {
-                    //TODO: getPoints for this
-            };
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.galacticSearch = trajectory;
         }
 
         @Override
-        public Translation2d[] getWaypoints() {
+        public Trajectory getWaypoints() {
             return this.galacticSearch;
         }
 
@@ -147,17 +170,23 @@ public class AutoChooser {
         }
     }
 
-    private class galacticSearchBBlue implements Path {
-        private Translation2d[] galacticSearch;
+    private class galacticSearchBBlue implements PathsInterface {
+        private Trajectory galacticSearch;
 
         public galacticSearchBBlue() {
-            this.galacticSearch = new Translation2d[] {
-                    //TODO: getPoints for this
-            };
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.galacticSearch = trajectory;
         }
 
         @Override
-        public Translation2d[] getWaypoints() {
+        public Trajectory getWaypoints() {
             return this.galacticSearch;
         }
 
@@ -167,17 +196,23 @@ public class AutoChooser {
         }
     }
 
-    private class BarrelPoints implements Path {
-        private Translation2d[] BarrelPoints;
+    private class BarrelPoints implements PathsInterface {
+        private Trajectory BarrelPoints;
 
         public BarrelPoints() {
-            this.BarrelPoints = new Translation2d[] {
-                    //TODO: getPoints for this
-            };
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.BarrelPoints = trajectory;
         }
 
         @Override
-        public Translation2d[] getWaypoints() {
+        public Trajectory getWaypoints() {
             return this.BarrelPoints;
         }
 
@@ -187,17 +222,23 @@ public class AutoChooser {
         }
     }
 
-    private class BouncePath implements Path {
-        private Translation2d[] Bounce;
+    private class BouncePathsInterface implements PathsInterface {
+        private Trajectory Bounce;
 
-        public BouncePath() {
-            this.Bounce = new Translation2d[] {
-                    //TODO: getPoints for this
-            };
+        public BouncePathsInterface() {
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.Bounce = trajectory;
         }
 
         @Override
-        public Translation2d[] getWaypoints() {
+        public Trajectory getWaypoints() {
             return this.Bounce;
         }
 
