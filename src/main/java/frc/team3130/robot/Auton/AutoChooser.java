@@ -25,7 +25,7 @@ public class AutoChooser {
 
     public AutoChooser() {
         this.m_chooser = new ArrayList<Path>();
-        m_chooser.add(new SlathomPath());
+        m_chooser.add(new SlalomPath());
         m_chooser.add(new galacticSearchARed());
         m_chooser.add(new galacticSearchABlue());
         m_chooser.add(new galacticSearchBRed());
@@ -67,10 +67,10 @@ public class AutoChooser {
         return command;
     }
 
-    private class SlathomPath implements Path {
+    private class SlalomPath implements Path {
         private Translation2d[] slathom;
 
-        public SlathomPath() {
+        public SlalomPath() {
             this.slathom = new Translation2d[] {
                     //TODO: getPoints for this
             };
