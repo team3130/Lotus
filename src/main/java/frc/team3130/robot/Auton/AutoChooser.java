@@ -51,7 +51,7 @@ public class AutoChooser {
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
                 m_chassis.getmKinematics(),
-                (Supplier<DifferentialDriveWheelSpeeds>) m_chassis.getSpeeds(),
+                m_chassis::getSpeeds,
                 m_chassis.getleftPIDController(),
                 m_chassis.getRightPIDController(),
                 m_chassis::setOutput
