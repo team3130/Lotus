@@ -123,10 +123,10 @@ public class Chassis extends ProfiledPIDSubsystem {
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
         m_odometry = new DifferentialDriveOdometry(getHeading());
 
-        //Updated 2/2/2021 @TODO update pid values
+        //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(0.66,.045,.0067);
-        m_leftPIDController = new PIDController(0, 0, 0);
-        m_rightPIDConttroller = new PIDController(0, 0, 0);
+        m_leftPIDController = new PIDController(0.308, 0, 0);
+        m_rightPIDConttroller = new PIDController(0.308, 0, 0);
     }
 
     public Rotation2d getHeading() {
