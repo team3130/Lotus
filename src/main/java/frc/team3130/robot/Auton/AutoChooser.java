@@ -3,13 +3,9 @@ package frc.team3130.robot.Auton;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,7 +16,6 @@ import frc.team3130.robot.subsystems.Chassis;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.function.Supplier;
 
 public class AutoChooser {
@@ -36,7 +31,7 @@ public class AutoChooser {
         m_chooser.add(new galacticSearchBRed());
         m_chooser.add(new galacticSearchBBlue());
         m_chooser.add(new BarrelPoints());
-        m_chooser.add(new BouncePathsInterface());
+        m_chooser.add(new BouncePaths());
         this.m_path = null;
     }
 
@@ -69,7 +64,7 @@ public class AutoChooser {
         private Trajectory slathom;
 
         public SlalomPathsInterface() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/Slalom.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -95,7 +90,7 @@ public class AutoChooser {
         private Trajectory galacticSearch;
 
         public galacticSearchARed() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchARed.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -122,7 +117,7 @@ public class AutoChooser {
         private Trajectory galacticSearch;
 
         public galacticSearchABlue() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchABlue.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -148,7 +143,7 @@ public class AutoChooser {
         private Trajectory galacticSearch;
 
         public galacticSearchBRed() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchBRed.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -174,7 +169,7 @@ public class AutoChooser {
         private Trajectory galacticSearch;
 
         public galacticSearchBBlue() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchBBlue";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -200,7 +195,7 @@ public class AutoChooser {
         private Trajectory BarrelPoints;
 
         public BarrelPoints() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/BarrelRacing.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -222,11 +217,11 @@ public class AutoChooser {
         }
     }
 
-    private class BouncePathsInterface implements PathsInterface {
+    private class BouncePaths implements PathsInterface {
         private Trajectory Bounce;
 
-        public BouncePathsInterface() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BouncePath";
+        public BouncePaths() {
+            String trajectoryJSON = "/home/lvuser/deploy/paths/Bounce.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
