@@ -54,7 +54,8 @@ public class AutoChooser {
                 m_chassis::getSpeeds,
                 m_chassis.getleftPIDController(),
                 m_chassis.getRightPIDController(),
-                m_chassis::setOutput
+                m_chassis::setOutput,
+                m_chassis
         );
 
         return command;
