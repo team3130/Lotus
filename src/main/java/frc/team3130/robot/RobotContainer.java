@@ -153,5 +153,9 @@ public class RobotContainer {
         return m_chooser.getCommand(m_chassis, 7);
     }
 
+    public void reset(){
+        m_chassis.reset();
+    }
+
 }
 

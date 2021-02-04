@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        m_robotContainer.reset();
         autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         // Schedule autonomous command if it exists
