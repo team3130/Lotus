@@ -170,7 +170,7 @@ public class AutoChooser {
         private Trajectory galacticSearch;
 
         public galacticSearchBBlue() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchBBlue";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchBBlue.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
