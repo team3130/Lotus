@@ -3,7 +3,6 @@ package frc.team3130.robot.Auton;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
@@ -16,7 +15,6 @@ import frc.team3130.robot.subsystems.Chassis;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class AutoChooser {
     private ArrayList<PathsInterface> m_chooser;
@@ -25,7 +23,7 @@ public class AutoChooser {
 
     public AutoChooser() {
         this.m_chooser = new ArrayList<PathsInterface>();
-        m_chooser.add(new SlalomPathsInterface());
+        m_chooser.add(new SlalomPaths());
         m_chooser.add(new galacticSearchARed());
         m_chooser.add(new galacticSearchABlue());
         m_chooser.add(new galacticSearchBRed());
@@ -63,10 +61,10 @@ public class AutoChooser {
         return command;
     }
 
-    private class SlalomPathsInterface implements PathsInterface {
+    private class SlalomPaths implements PathsInterface {
         private Trajectory slathom;
 
-        public SlalomPathsInterface() {
+        public SlalomPaths() {
             String trajectoryJSON = "/home/lvuser/deploy/paths/Slalom.wpilib.json";
             Trajectory trajectory = new Trajectory();
             try {
