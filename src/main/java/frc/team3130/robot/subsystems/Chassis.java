@@ -130,7 +130,7 @@ public class Chassis extends ProfiledPIDSubsystem {
     }
 
     public Rotation2d getHeading() {
-        return Rotation2d.fromDegrees(-Navx.getAngle());
+        return Rotation2d.fromDegrees(Navx.getAngle());
     }
 
     public void periodic() {
