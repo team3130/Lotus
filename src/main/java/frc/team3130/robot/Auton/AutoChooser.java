@@ -23,14 +23,15 @@ public class AutoChooser {
 
     public AutoChooser() {
         this.m_chooser = new ArrayList<PathsInterface>();
-        m_chooser.add(new SlalomPaths());
-        m_chooser.add(new galacticSearchARed());
-        m_chooser.add(new galacticSearchABlue());
-        m_chooser.add(new galacticSearchBRed());
-        m_chooser.add(new galacticSearchBBlue());
-        m_chooser.add(new BarrelPoints());
-        m_chooser.add(new BouncePaths());
-        m_chooser.add(new driveStraight());
+        m_chooser.add(new SlalomPaths()); // 0
+        m_chooser.add(new galacticSearchARed());// 1
+        m_chooser.add(new galacticSearchABlue()); // 2
+        m_chooser.add(new galacticSearchBRed()); // 3
+        m_chooser.add(new galacticSearchBBlue()); // 4
+        m_chooser.add(new BarrelPoints()); // 5
+        m_chooser.add(new BouncePaths()); // 6
+        m_chooser.add(new driveStraight()); // 7
+        m_chooser.add(new driveS());
         this.m_path = null;
     }
 
@@ -262,6 +263,32 @@ public class AutoChooser {
         @Override
         public Trajectory getWaypoints() {
             return this.galacticSearch;
+        }
+
+        @Override
+        public void Start() {
+
+        }
+    }
+
+    private class driveS implements PathsInterface {
+        private Trajectory s;
+
+        public driveS() {
+            String trajectoryJSON = "/home/lvuser/deploy/paths/S.wpilib.json";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.s = trajectory;
+        }
+
+        @Override
+        public Trajectory getWaypoints() {
+            return this.s;
         }
 
         @Override
