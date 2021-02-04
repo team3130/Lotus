@@ -150,7 +150,7 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        return m_chooser.getCommand(m_chassis, 0);
+        return m_chooser.getCommand(m_chassis, 7);
     }
 
 }

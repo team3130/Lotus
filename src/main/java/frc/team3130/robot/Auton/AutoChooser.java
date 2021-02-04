@@ -32,6 +32,7 @@ public class AutoChooser {
         m_chooser.add(new galacticSearchBBlue());
         m_chooser.add(new BarrelPoints());
         m_chooser.add(new BouncePaths());
+        m_chooser.add(new driveStraight());
         this.m_path = null;
     }
 
@@ -40,6 +41,7 @@ public class AutoChooser {
     }
     public Command getCommand(Chassis m_chassis, int path) {
         this.determinePath(path);
+        System.out.println("THE PATH IS "+ this.m_path);
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
@@ -236,6 +238,32 @@ public class AutoChooser {
         @Override
         public Trajectory getWaypoints() {
             return this.Bounce;
+        }
+
+        @Override
+        public void Start() {
+
+        }
+    }
+
+    private class driveStraight implements PathsInterface {
+        private Trajectory galacticSearch;
+
+        public driveStraight() {
+            String trajectoryJSON = "/home/lvuser/deploy/paths/DriveStraight.wpilib.json";
+            Trajectory trajectory = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+            this.galacticSearch = trajectory;
+        }
+
+        @Override
+        public Trajectory getWaypoints() {
+            return this.galacticSearch;
         }
 
         @Override

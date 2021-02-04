@@ -116,6 +116,7 @@ public class Robot extends TimedRobot {
         // Schedule autonomous command if it exists
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
+            System.out.println("Found autonomous Command");
         }
     }
 
