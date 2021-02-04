@@ -186,6 +186,7 @@ public class Chassis extends ProfiledPIDSubsystem {
     public void reset() {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
+        m_odometry.resetPosition(new Pose2d(), getHeading());
     }
 
     /**
