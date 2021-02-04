@@ -179,7 +179,7 @@ public class Chassis extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return Rotation2d.fromDegrees(Navx.getAngle());
+        return Rotation2d.fromDegrees(-Navx.getAngle());
     }
 
     public void periodic() {
