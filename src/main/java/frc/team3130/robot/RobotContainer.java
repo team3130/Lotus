@@ -1,11 +1,14 @@
 package frc.team3130.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
@@ -62,6 +65,8 @@ public class RobotContainer {
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
     private final AutoChooser m_chooser = new AutoChooser();
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Auton");
 
 
     public static double getSkywalker() {
@@ -150,7 +155,9 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        return m_chooser.getCommand(m_chassis, 7);
+        NetworkTableEntry path = tab.add("sensitivity", 1).getEntry();
+
+        return m_chooser.getCommand(m_chassis, (Integer) path.getNumber(1));
     }
 
     public void reset(){
