@@ -14,42 +14,24 @@ import frc.team3130.robot.subsystems.Chassis;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 
 public class AutoChooser {
-    private ArrayList<PathsInterface> m_chooser;
-    private PathsInterface m_path;
     private RamseteCommand command;
+    private String[] paths;
 
     public AutoChooser() {
-        this.m_chooser = new ArrayList<PathsInterface>();
-        m_chooser.add(new SlalomPaths()); // 0
-        m_chooser.add(new galacticSearchARed());// 1
-        m_chooser.add(new galacticSearchABlue()); // 2
-        m_chooser.add(new galacticSearchBRed()); // 3
-        m_chooser.add(new galacticSearchBBlue()); // 4
-        m_chooser.add(new BarrelPoints()); // 5
-        m_chooser.add(new BouncePaths()); // 6
-        m_chooser.add(new driveStraight()); // 7
-        m_chooser.add(new driveS()); // 8
-        m_chooser.add(new B1D2()); // 9
-        m_chooser.add(new B1B8()); // 10
-        this.m_path = null;
+        this.paths = new String[]{"B1D2", "B1toB8", "BarrelRacing", "Bounce", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "S", "Slalom"};
     }
 
-    public void determinePath(int path) {
-        this.m_path = this.m_chooser.get(path);
-    }
     public Command getCommand(Chassis m_chassis, int path) {
-        this.determinePath(path);
-        System.out.println("THE PATH IS "+ this.m_path);
+
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
         config.setKinematics(m_chassis.getmKinematics());
 
         command = new RamseteCommand(
-                this.m_path.getWaypoints(),
+                this.GenerateTrajectory(this.paths[path]),
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
@@ -64,291 +46,16 @@ public class AutoChooser {
         return command;
     }
 
-    private class SlalomPaths implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public SlalomPaths() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/Slalom.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
+    public Trajectory GenerateTrajectory(String file) {
+        String trajectoryJSON = "/home/lvuser/deploy/paths/" + file + ".wpilib.json";
+        Trajectory trajectory = new Trajectory();
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class galacticSearchARed implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public galacticSearchARed() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchARed.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class galacticSearchABlue implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public galacticSearchABlue() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchABlue.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class galacticSearchBRed implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public galacticSearchBRed() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchBRed.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class galacticSearchBBlue implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public galacticSearchBBlue() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/GalacticSearchBBlue.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class BarrelPoints implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public BarrelPoints() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/BarrelRacing.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class BouncePaths implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public BouncePaths() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/Bounce.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class driveStraight implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public driveStraight() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/DriveStraight.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class driveS implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public driveS() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/S.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class B1D2 implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public B1D2() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/B1D2Markers.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
-    }
-
-    private class B1B8 implements PathsInterface {
-        private Trajectory m_trajectory;
-
-        public B1B8() {
-            String trajectoryJSON = "/home/lvuser/deploy/paths/B1toB8.wpilib.json";
-            Trajectory trajectory = new Trajectory();
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
-            this.m_trajectory = trajectory;
-        }
-
-        @Override
-        public Trajectory getWaypoints() {
-            return this.m_trajectory;
-        }
-
-        @Override
-        public void Start() {
-
-        }
+        return trajectory;
     }
 
 }
