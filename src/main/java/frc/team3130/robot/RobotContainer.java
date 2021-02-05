@@ -66,7 +66,7 @@ public class RobotContainer {
 
     private final AutoChooser m_chooser = new AutoChooser();
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Auton");
+    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
 
     public static double getSkywalker() {
