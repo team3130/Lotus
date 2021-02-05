@@ -155,7 +155,7 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        NetworkTableEntry path = tab.add("sensitivity", 1).getEntry();
+        NetworkTableEntry path = tab.add("Path", 1).getEntry();
 
         return m_chooser.getCommand(m_chassis, (Integer) path.getNumber(1));
     }
