@@ -68,7 +68,7 @@ public class AutoChooser {
 
     public void outputToShuffleboard() {
         SimpleWidget path = tab.add("Path", 1);
-        this.number = Integer.parseInt(path.getEntry().toString());
+        this.number = Integer.parseInt(String.valueOf(path.getEntry()));
     }
 
 }
