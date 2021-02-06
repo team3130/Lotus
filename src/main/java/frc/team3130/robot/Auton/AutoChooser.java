@@ -38,8 +38,18 @@ public class AutoChooser {
 
         config.setKinematics(m_chassis.getmKinematics());
 
+        //here to be default in case exception needs handling
+        Trajectory trajectory = this.GenerateTrajectory(this.paths[4]);
+
+        try {
+            trajectory = this.GenerateTrajectory(this.paths[this.number]);
+        } catch (ArrayIndexOutOfBoundsException ref) {
+            DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
+        }
+
+
         command = new RamseteCommand(
-                this.GenerateTrajectory(this.paths[this.number]),
+                trajectory,
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
