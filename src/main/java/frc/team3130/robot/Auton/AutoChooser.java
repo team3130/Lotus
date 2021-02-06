@@ -24,10 +24,12 @@ public class AutoChooser {
     private RamseteCommand command;
     private String[] paths;
     private int number = 0;
+    private SimpleWidget widget;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
     public AutoChooser() {
+        widget = tab.add("Path", 1);
         this.paths = new String[]{"B1D2", "B1toB8", "BarrelRacing", "Bounce", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "S", "Slalom"};
     }
 
@@ -77,7 +79,7 @@ public class AutoChooser {
     }
 
     public void outputToShuffleboard() {
-        this.number = (int) tab.add("Path", 1).getEntry().getDouble(1.0);
+        this.number = (int) widget.getEntry().getDouble(1.0);
     }
 
 }
