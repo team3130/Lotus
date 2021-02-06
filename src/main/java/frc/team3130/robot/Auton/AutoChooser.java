@@ -1,8 +1,13 @@
 package frc.team3130.robot.Auton;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
@@ -18,12 +23,15 @@ import java.nio.file.Path;
 public class AutoChooser {
     private RamseteCommand command;
     private String[] paths;
+    private int number = 0;
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
     public AutoChooser() {
         this.paths = new String[]{"B1D2", "B1toB8", "BarrelRacing", "Bounce", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "S", "Slalom"};
     }
 
-    public Command getCommand(Chassis m_chassis, int path) {
+    public Command getCommand(Chassis m_chassis) {
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
@@ -31,7 +39,7 @@ public class AutoChooser {
         config.setKinematics(m_chassis.getmKinematics());
 
         command = new RamseteCommand(
-                this.GenerateTrajectory(this.paths[path]),
+                this.GenerateTrajectory(this.paths[this.number]),
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
@@ -56,6 +64,11 @@ public class AutoChooser {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
         return trajectory;
+    }
+
+    public void outputToShuffleboard() {
+        SimpleWidget path = tab.add("Path", 1);
+        this.number = Integer.parseInt(path.getEntry().toString());
     }
 
 }

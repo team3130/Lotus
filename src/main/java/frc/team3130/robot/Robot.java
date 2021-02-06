@@ -198,6 +198,8 @@ public class Robot extends TimedRobot {
             }
         }
 
+        m_robotContainer.getAutoChooser().outputToShuffleboard();
+
 
     }
 

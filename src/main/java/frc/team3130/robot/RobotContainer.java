@@ -66,7 +66,9 @@ public class RobotContainer {
 
     private final AutoChooser m_chooser = new AutoChooser();
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+    public AutoChooser getAutoChooser() {
+        return m_chooser;
+    }
 
 
     public static double getSkywalker() {
@@ -155,9 +157,8 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        NetworkTableEntry path = tab.add("Path", 1).getEntry();
 
-        return m_chooser.getCommand(m_chassis, (Integer) path.getNumber(1));
+        return m_chooser.getCommand(m_chassis);
     }
 
     public void reset(){
