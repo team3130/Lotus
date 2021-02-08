@@ -203,12 +203,6 @@ public class Robot extends TimedRobot {
 
     }
 
-    private void determineAuto() {
-//          autonomousCommand = new RendezvousShoot5();
-//        autonomousCommand = new Shoot3();
-//        autonomousCommand = new Shoot5();
-        // autonomousCommand = new Shoot6(m_robotContainer.getIntake(), m_robotContainer.getChassis(), m_robotContainer.getTurret(), m_robotContainer.getHopper(), m_robotContainer.getFlywheel(), m_robotContainer.getHood());
-    }
 
     public void writePeriodicOutputs() {
         m_robotContainer.getTurret().writePeriodicOutputs();

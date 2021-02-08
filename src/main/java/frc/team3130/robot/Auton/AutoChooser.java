@@ -29,8 +29,8 @@ public class AutoChooser {
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
     public AutoChooser() {
-        widget = tab.add("Path", 1);
-        this.paths = new String[]{"B1D2", "B1toB8", "BarrelRacing", "Bounce", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+        widget = tab.add("Path", 0);
+        this.paths = new String[]{"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     }
 
     public Command getCommand(Chassis m_chassis) {
@@ -41,9 +41,10 @@ public class AutoChooser {
         config.setKinematics(m_chassis.getmKinematics());
 
         //here to be default in case exception needs handling
-        Trajectory trajectory = this.GenerateTrajectory(this.paths[4]);
+        Trajectory trajectory = this.GenerateTrajectory(this.paths[0]);
 
         try {
+            System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             trajectory = this.GenerateTrajectory(this.paths[this.number]);
         } catch (ArrayIndexOutOfBoundsException ref) {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
