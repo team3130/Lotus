@@ -30,7 +30,7 @@ public class AutoChooser {
 
     public AutoChooser() {
         widget = tab.add("Path", 1);
-        this.paths = new String[]{"B1D2", "B1toB8", "BarrelRacing", "Bounce", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "S", "Slalom"};
+        this.paths = new String[]{"B1D2", "B1toB8", "BarrelRacing", "Bounce", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     }
 
     public Command getCommand(Chassis m_chassis) {
