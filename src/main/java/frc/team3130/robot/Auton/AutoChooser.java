@@ -26,10 +26,10 @@ public class AutoChooser {
     private int number = 0;
     private SimpleWidget widget;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+//    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
     public AutoChooser() {
-        widget = tab.add("Path", 0);
+//        widget = tab.add("Path", 0);
         this.paths = new String[]{"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     }
 
@@ -44,8 +44,8 @@ public class AutoChooser {
         Trajectory trajectory = this.GenerateTrajectory(this.paths[0]);
 
         try {
-            System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            trajectory = this.GenerateTrajectory(this.paths[this.number]);
+//            System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            trajectory = this.GenerateTrajectory(this.paths[0]);
         } catch (ArrayIndexOutOfBoundsException ref) {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
         }
@@ -79,8 +79,8 @@ public class AutoChooser {
         return trajectory;
     }
 
-    public void outputToShuffleboard() {
-        this.number = (int) widget.getEntry().getDouble(1.0);
-    }
+//    public void outputToShuffleboard() {
+//        this.number = (int) widget.getEntry().getDouble(1.0);
+//    }
 
 }

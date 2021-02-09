@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
+import frc.team3130.robot.subsystems.Chassis;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
@@ -22,6 +23,7 @@ import static frc.team3130.robot.RobotContainer.m_driverGamepad;
  */
 public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
+    public Chassis m_chassis;
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
@@ -95,7 +97,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         outputToShuffleboard();
-
     }
 
     /**
@@ -128,7 +129,6 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
@@ -151,7 +151,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
@@ -169,9 +168,10 @@ public class Robot extends TimedRobot {
 
     public void outputToShuffleboard() {
         CommandScheduler.getInstance().run();
-//        Navx.GetInstance().outputToShuffleboard();
+        Navx.GetInstance().outputToShuffleboard();
 //        WheelOfFortune.outputToShuffleboard();
-//        Chassis.outputToShuffleboard();
+        m_chassis.outputToShuffleboard();
+
         m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
         Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
@@ -197,8 +197,6 @@ public class Robot extends TimedRobot {
                 checkif = true;
             }
         }
-
-        m_robotContainer.getAutoChooser().outputToShuffleboard();
 
 
     }

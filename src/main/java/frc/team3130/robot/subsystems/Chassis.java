@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -16,12 +17,17 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.Navx;
+
+import java.util.Map;
 
 public class Chassis extends ProfiledPIDSubsystem {
 
@@ -30,6 +36,35 @@ public class Chassis extends ProfiledPIDSubsystem {
     private WPI_TalonFX m_leftMotorRear;
     private WPI_TalonFX m_rightMotorFront;
     private WPI_TalonFX m_rightMotorRear;
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+
+    private NetworkTableEntry LeftP =
+            tab.add("Left P", .3)
+                    .withWidget(BuiltInWidgets.kNumberSlider)
+                    .withProperties(Map.of("min", 0, "max", 1))
+                    .getEntry();
+    private NetworkTableEntry LeftI =
+            tab.add("Left I", 0)
+                    .withProperties(Map.of("min", 0, "max", 1))
+                    .getEntry();
+    private NetworkTableEntry LeftD =
+            tab.add("Left D", 0)
+                    .withProperties(Map.of("min", 0, "max", 1))
+                    .getEntry();
+
+    private NetworkTableEntry RightP =
+            tab.add("Right P", .3)
+                    .withProperties(Map.of("min", 0, "max", 1))
+                    .getEntry();
+    private NetworkTableEntry RightI =
+            tab.add("Right I", 0)
+                    .withProperties(Map.of("min", 0, "max", 1))
+                    .getEntry();
+    private NetworkTableEntry RightD =
+            tab.add("Right D", 0)
+                    .withProperties(Map.of("min", 0, "max", 1))
+                    .getEntry();
 
     private double moveSpeed;
 
@@ -123,10 +158,18 @@ public class Chassis extends ProfiledPIDSubsystem {
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
         m_odometry = new DifferentialDriveOdometry(getHeading());
 
+        double LP = LeftP.getDouble(.3);
+        double LI = LeftI.getDouble(0);
+        double LD = LeftD.getDouble(0);
+
+        double RP = RightP.getDouble(.3);
+        double RI = RightI.getDouble(0);
+        double RD = RightD.getDouble(0);
+
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(0.66,.045,.0067);
-        m_leftPIDController = new PIDController(0.308, 0, 0);
-        m_rightPIDConttroller = new PIDController(0.308, 0, 0);
+        m_leftPIDController = new PIDController(LP, LI, LD);
+        m_rightPIDConttroller = new PIDController(RP, RI, RD);
     }
 
     public Rotation2d getHeading() {
@@ -485,10 +528,8 @@ public class Chassis extends ProfiledPIDSubsystem {
         SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
         SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
 
-        //SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
-        //SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
-        SmartDashboard.putNumber("Chassis Right Speed", getSpeedR());
-        SmartDashboard.putNumber("Chassis Left Speed", getSpeedL());
+        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
+        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
 
         SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
         SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
