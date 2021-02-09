@@ -25,6 +25,8 @@ public class AutoChooser {
     private String[] paths;
     private int number = 0;
     private SimpleWidget widget;
+    
+    private Trajectory trajectory;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
@@ -41,18 +43,18 @@ public class AutoChooser {
         config.setKinematics(m_chassis.getmKinematics());
 
         //here to be default in case exception needs handling
-        Trajectory trajectory = this.GenerateTrajectory(this.paths[0]);
+        this.trajectory = this.GenerateTrajectory(this.paths[0]);
 
         try {
             System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            trajectory = this.GenerateTrajectory(this.paths[this.number]);
+            this.trajectory = this.GenerateTrajectory(this.paths[this.number]);
         } catch (ArrayIndexOutOfBoundsException ref) {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
         }
 
 
         command = new RamseteCommand(
-                trajectory,
+                this.trajectory,
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
@@ -69,14 +71,14 @@ public class AutoChooser {
 
     public Trajectory GenerateTrajectory(String file) {
         String trajectoryJSON = "/home/lvuser/deploy/paths/" + file + ".wpilib.json";
-        Trajectory trajectory = new Trajectory();
+        Trajectory trajectoryTemp = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            trajectoryTemp = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-        return trajectory;
+        return trajectoryTemp;
     }
 
     public void outputToShuffleboard() {
