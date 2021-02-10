@@ -5,11 +5,14 @@ import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,7 +44,11 @@ public class AutoChooser {
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
-        config.setKinematics(m_chassis.getmKinematics());
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+                Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d()),
+                        new Pose2d(5, 0, Rotation2d.fromDegrees(0))),
+                config
+        );
 
         // here to be default in case exception needs handling
         this.trajectory =this.GenerateTrajectory(this.paths[0]);
