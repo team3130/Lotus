@@ -59,8 +59,8 @@ public class RobotMap {
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
-    public static double kMaxAccelerationPerSecond = 518 / 12; //Feet per second squared
-    public static double kMaxVelocityPerSecond = 129 / 12; //Feet per second
+    public static double kMaxAccelerationPerSecond = 11.25; //TODO: Have Tomas check these
+    public static double kMaxVelocityPerSecond = 40.833333334;
 
 
     //Climber

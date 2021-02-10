@@ -24,13 +24,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.Navx;
 
 import java.util.Map;
 
-public class Chassis extends SubsystemBase {
+public class Chassis extends ProfiledPIDSubsystem {
 
     //Create necessary objects
     private WPI_TalonFX m_leftMotorFront;
@@ -47,28 +46,23 @@ public class Chassis extends SubsystemBase {
                     .getEntry();
     private NetworkTableEntry LeftI =
             tab.add("Left I", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
                     .withProperties(Map.of("min", 0, "max", 1))
                     .getEntry();
     private NetworkTableEntry LeftD =
             tab.add("Left D", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
                     .withProperties(Map.of("min", 0, "max", 1))
                     .getEntry();
 
     private NetworkTableEntry RightP =
             tab.add("Right P", .3)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
                     .withProperties(Map.of("min", 0, "max", 1))
                     .getEntry();
     private NetworkTableEntry RightI =
             tab.add("Right I", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
                     .withProperties(Map.of("min", 0, "max", 1))
                     .getEntry();
     private NetworkTableEntry RightD =
             tab.add("Right D", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
                     .withProperties(Map.of("min", 0, "max", 1))
                     .getEntry();
 
@@ -99,14 +93,14 @@ public class Chassis extends SubsystemBase {
      */
 
     public Chassis() {
-//            super(
-//                    // The ProfiledPIDController used by the subsystem
-//                    new ProfiledPIDController(
-//                            0,
-//                            0,
-//                            0,
-//                            // The motion profile constraints
-//                            new TrapezoidProfile.Constraints(0, 0)));
+            super(
+                    // The ProfiledPIDController used by the subsystem
+                    new ProfiledPIDController(
+                            0,
+                            0,
+                            0,
+                            // The motion profile constraints
+                            new TrapezoidProfile.Constraints(0, 0)));
 
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
@@ -174,8 +168,8 @@ public class Chassis extends SubsystemBase {
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(0.66,.045,.0067);
-        m_leftPIDController = new PIDController(.3, 0, 0);
-        m_rightPIDConttroller = new PIDController(.3, 0, 0);
+        m_leftPIDController = new PIDController(LP, LI, LD);
+        m_rightPIDConttroller = new PIDController(RP, RI, RD);
     }
 
     public Rotation2d getHeading() {
@@ -399,52 +393,52 @@ public class Chassis extends SubsystemBase {
         m_leftMotorFront.configOpenloopRamp(maxRampRateSeconds);
     }
 
-//    /**
-//     * Configure the drivetrain for motion profiling
-//     *
-//     * @param duration fire rate of the motion profile in ms
-//     */
-//    public void configMP(int duration) {
-//
-//        //left
-//        m_leftMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
-//        m_leftMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
-//        m_leftMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
-//        m_leftMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
-//        m_leftMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
-//        // Status 10 provides the trajectory target for motion profile AND motion magic
-//        m_leftMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
-//        //Profile already assumes base time is 0
-//        m_leftMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
-//
-//        //right
-//        m_rightMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
-//        m_rightMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
-//        m_rightMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
-//        m_rightMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
-//        m_rightMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
-//        // Status 10 provides the trajectory target for motion profile AND motion magic
-//        m_rightMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
-//        //Profile already assumes base time is 0
-//        m_rightMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
-//    }
+    /**
+     * Configure the drivetrain for motion profiling
+     *
+     * @param duration fire rate of the motion profile in ms
+     */
+    public void configMP(int duration) {
+
+        //left
+        m_leftMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
+        m_leftMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
+        m_leftMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
+        m_leftMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
+        m_leftMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
+        // Status 10 provides the trajectory target for motion profile AND motion magic
+        m_leftMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
+        //Profile already assumes base time is 0
+        m_leftMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
+
+        //right
+        m_rightMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
+        m_rightMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
+        m_rightMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
+        m_rightMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
+        m_rightMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
+        // Status 10 provides the trajectory target for motion profile AND motion magic
+        m_rightMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
+        //Profile already assumes base time is 0
+        m_rightMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
+    }
 
 
-//    @Override
-//    protected void useOutput(double output, TrapezoidProfile.State setpoint) {
-//        //Chassis ramp rate is the limit on the voltage change per cycle to prevent skidding.
-//    	/*final double speedLimit = prevSpeedLimit + Preferences.getInstance().getDouble("ChassisRampRate", 0.25);
-//    	if (output >  speedLimit) bias = speedLimit;
-//        if (bias < -speedLimit) bias = -speedLimit;*/
-//        //System.out.println("UsingTurnPID");
-//        double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
-//
-//        int speed_L = (int) ((output + feedforward) * 4096);
-//        int speed_R = (int) ((output + feedforward) * 4096);
-//        driveTank(speed_L, speed_R, false);
-//    }
+    @Override
+    protected void useOutput(double output, TrapezoidProfile.State setpoint) {
+        //Chassis ramp rate is the limit on the voltage change per cycle to prevent skidding.
+    	/*final double speedLimit = prevSpeedLimit + Preferences.getInstance().getDouble("ChassisRampRate", 0.25);
+    	if (output >  speedLimit) bias = speedLimit;
+        if (bias < -speedLimit) bias = -speedLimit;*/
+        //System.out.println("UsingTurnPID");
+        double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
 
-    
+        int speed_L = (int) ((output + feedforward) * 4096);
+        int speed_R = (int) ((output + feedforward) * 4096);
+        driveTank(speed_L, speed_R, false);
+    }
+
+    @Override
     protected double getMeasurement() {
         return getAngle();
     }
@@ -463,24 +457,25 @@ public class Chassis extends SubsystemBase {
         }
     }
 
-//    /**
-//     * Tell the Chassis to hold a relative angle
-//     *
-//     * @param angle angle to hold in degrees
-//     */
-//    public void holdAngle(double angle, boolean smallAngle) {
-//        setPIDValues(smallAngle);
-//        this.reset();
-//        this.setSetpoint(getAngle()+angle);
-//        this.enable();
-//    }
+    /**
+     * Tell the Chassis to hold a relative angle
+     *
+     * @param angle angle to hold in degrees
+     */
+    public void holdAngle(double angle, boolean smallAngle) {
+        setPIDValues(smallAngle);
+        this.reset();
+        this.setSetpoint(getAngle()+angle);
+        this.enable();
+    }
 
+    private void setSetpoint(double v) {
+    }
 
-
-//    public void ReleaseAngle(){
-//        this.disable();
-//        driveTank(0, 0, false);//Clear motors
-//    }
+    public void ReleaseAngle(){
+        this.disable();
+        driveTank(0, 0, false);//Clear motors
+    }
 
     public DifferentialDriveKinematics getmKinematics() {
         return m_kinematics;
@@ -502,39 +497,39 @@ public class Chassis extends SubsystemBase {
         );
     }
 
-//    private void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
-//        if(smallAngleTurn){
-//            this.getController().setPID(
-//                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
-//                    Preferences.getInstance().getDouble("ChassisLowBigI", 0.015),
-//                    Preferences.getInstance().getDouble("ChassisLowD", 0));
-//        }else{
-//            this.getController().setPID(
-//                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
-//                    Preferences.getInstance().getDouble("ChassisLowI", 0.003),
-//                    Preferences.getInstance().getDouble("ChassisLowD", 0));
-//        }
-//    }
+    private void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
+        if(smallAngleTurn){
+            this.getController().setPID(
+                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
+                    Preferences.getInstance().getDouble("ChassisLowBigI", 0.015),
+                    Preferences.getInstance().getDouble("ChassisLowD", 0));
+        }else{
+            this.getController().setPID(
+                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
+                    Preferences.getInstance().getDouble("ChassisLowI", 0.003),
+                    Preferences.getInstance().getDouble("ChassisLowD", 0));
+        }
+    }
 
-//    public void setAbsoluteTolerance(double tolerance){
-//        getController().setTolerance(tolerance);
-//    }
-//
-//    public boolean onTarget(){
-//        return getController().atSetpoint();
-//    }
-//
-//    public TrapezoidProfile.State getSetpoint(){
-//        return getController().getSetpoint();
-//    }
+    public void setAbsoluteTolerance(double tolerance){
+        getController().setTolerance(tolerance);
+    }
+
+    public boolean onTarget(){
+        return getController().atSetpoint();
+    }
+
+    public TrapezoidProfile.State getSetpoint(){
+        return getController().getSetpoint();
+    }
 
 
     public void outputToShuffleboard() {
         SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
         SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
 
-//        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
-//        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
+        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
+        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
 
         SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
         SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
