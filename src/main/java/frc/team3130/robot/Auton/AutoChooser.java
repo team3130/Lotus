@@ -44,7 +44,7 @@ public class AutoChooser {
         config.setKinematics(m_chassis.getmKinematics());
 
         // here to be default in case exception needs handling
-        this.trajectory = new Trajectory((List<Trajectory.State>) this.GenerateTrajectory(this.paths[4]));
+        this.trajectory = this.GenerateTrajectory(this.paths[4]);
 
         try {
             System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
