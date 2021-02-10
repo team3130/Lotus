@@ -26,12 +26,14 @@ public class AutoChooser {
     private String[] paths;
     private int number = 0;
     private SimpleWidget widget;
+    
+    private Trajectory trajectory;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
     public AutoChooser() {
-        widget = tab.add("Path", 1);
-        this.paths = new String[]{"B1D2", "B1toB8", "BarrelRacing", "Bounce", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+        widget = tab.add("Path", 0);
+        this.paths = new String[]{"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     }
 
     public Command getCommand(Chassis m_chassis) {
@@ -45,14 +47,15 @@ public class AutoChooser {
         Trajectory trajectory = new Trajectory((List<Trajectory.State>) this.GenerateTrajectory(this.paths[4]));
 
         try {
-            trajectory = this.GenerateTrajectory(this.paths[this.number]);
+            System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            this.trajectory = this.GenerateTrajectory(this.paths[this.number]);
         } catch (ArrayIndexOutOfBoundsException ref) {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
         }
 
         // creating a Ramsete command which is used in AutonInit
         command = new RamseteCommand(
-                trajectory,
+                this.trajectory,
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
@@ -70,14 +73,14 @@ public class AutoChooser {
     public Trajectory GenerateTrajectory(String file) {
         // variably call Json file
         String trajectoryJSON = "/home/lvuser/deploy/paths/" + file + ".wpilib.json";
-        Trajectory trajectory = new Trajectory();
+        Trajectory trajectoryTemp = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            trajectoryTemp = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-        return trajectory;
+        return trajectoryTemp;
     }
     // get and store shuffleboard data
     public void outputToShuffleboard() {
