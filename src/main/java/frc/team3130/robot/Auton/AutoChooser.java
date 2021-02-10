@@ -19,6 +19,7 @@ import frc.team3130.robot.subsystems.Chassis;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 public class AutoChooser {
     private RamseteCommand command;
@@ -42,8 +43,8 @@ public class AutoChooser {
 
         config.setKinematics(m_chassis.getmKinematics());
 
-        //here to be default in case exception needs handling
-        this.trajectory = this.GenerateTrajectory(this.paths[0]);
+        // here to be default in case exception needs handling
+        this.trajectory = new Trajectory((List<Trajectory.State>) this.GenerateTrajectory(this.paths[4]));
 
         try {
             System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -52,7 +53,7 @@ public class AutoChooser {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
         }
 
-
+        // creating a Ramsete command which is used in AutonInit
         command = new RamseteCommand(
                 this.trajectory,
                 m_chassis::getPose,
@@ -70,6 +71,7 @@ public class AutoChooser {
     }
 
     public Trajectory GenerateTrajectory(String file) {
+        // variably call Json file
         String trajectoryJSON = "/home/lvuser/deploy/paths/" + file + ".wpilib.json";
         Trajectory trajectoryTemp = new Trajectory();
         try {
