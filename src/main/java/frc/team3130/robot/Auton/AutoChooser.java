@@ -19,6 +19,7 @@ import frc.team3130.robot.subsystems.Chassis;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 public class AutoChooser {
     private RamseteCommand command;
@@ -40,8 +41,8 @@ public class AutoChooser {
 
         config.setKinematics(m_chassis.getmKinematics());
 
-        //here to be default in case exception needs handling
-        Trajectory trajectory = this.GenerateTrajectory(this.paths[4]);
+        // here to be default in case exception needs handling
+        Trajectory trajectory = new Trajectory((List<Trajectory.State>) this.GenerateTrajectory(this.paths[4]));
 
         try {
             trajectory = this.GenerateTrajectory(this.paths[this.number]);
@@ -49,7 +50,7 @@ public class AutoChooser {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
         }
 
-
+        // creating a Ramsete command which is used in AutonInit
         command = new RamseteCommand(
                 trajectory,
                 m_chassis::getPose,
@@ -67,6 +68,7 @@ public class AutoChooser {
     }
 
     public Trajectory GenerateTrajectory(String file) {
+        // variably call Json file
         String trajectoryJSON = "/home/lvuser/deploy/paths/" + file + ".wpilib.json";
         Trajectory trajectory = new Trajectory();
         try {
@@ -77,7 +79,7 @@ public class AutoChooser {
         }
         return trajectory;
     }
-
+    // get and store shuffleboard data
     public void outputToShuffleboard() {
         this.number = (int) widget.getEntry().getDouble(1.0);
     }
