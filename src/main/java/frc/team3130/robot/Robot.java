@@ -28,7 +28,6 @@ public class Robot extends TimedRobot {
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
     private SendableChooser<String> chooser = new SendableChooser<String>();
-    private static Timer timer;
     private static double lastTimestamp;
 
     boolean gettime = true;
@@ -41,9 +40,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        timer = new Timer();
-        timer.reset();
-        timer.start();
 
         //Instantiate operator interface
         m_robotContainer = new RobotContainer();
@@ -62,13 +58,7 @@ public class Robot extends TimedRobot {
 
 
 
-        /*
-         chooser = new SendableChooser<>();
-         chooser.setDefaultOption("No Auton", "None");
-         chooser.addOption("3Ball", "3Ball");
-         chooser.addOption("6Ball", "6Ball");
-         SmartDashboard.putData("Auto mode", chooser);
-         */
+
     }
 
     @Override
@@ -112,7 +102,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        m_robotContainer.reset();
+        m_robotContainer.getChassis().reset();
         autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         // Schedule autonomous command if it exists
@@ -172,38 +162,38 @@ public class Robot extends TimedRobot {
         m_robotContainer.getChassis().outputToShuffleboard();
 //        m_chassis.outputToShuffleboard();
 
-        m_robotContainer.getTurret().outputToShuffleboard();
+//        m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
-        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
-        m_robotContainer.getFlywheel().outputToShuffleboard();
-        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
+//        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
+//        m_robotContainer.getFlywheel().outputToShuffleboard();
+//        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
-        //TODO: move this somewhere logical
-        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
-            if (gettime == true) {
-                lastTimestamp = Timer.getFPGATimestamp();
-                gettime = false;
-            }
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
-                checkif = false;
-            }
-        } else {
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-            gettime = true;
-            if (m_robotContainer.getTurret().isOnTarget() == false) {
-                checkif = true;
-            }
-        }
+//        //TODO: move this somewhere logical
+//        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
+//            if (gettime == true) {
+//                lastTimestamp = Timer.getFPGATimestamp();
+//                gettime = false;
+//            }
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+//            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
+//                checkif = false;
+//            }
+//        } else {
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+//            gettime = true;
+//            if (m_robotContainer.getTurret().isOnTarget() == false) {
+//                checkif = true;
+//            }
+//        }
 
 
     }
 
 
     public void writePeriodicOutputs() {
-        m_robotContainer.getTurret().writePeriodicOutputs();
+        
     }
 
     public void resetSubsystems() {

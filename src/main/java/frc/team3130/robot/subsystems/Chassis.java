@@ -38,39 +38,39 @@ public class Chassis extends SubsystemBase {
     private WPI_TalonFX m_rightMotorFront;
     private WPI_TalonFX m_rightMotorRear;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
-
-    private NetworkTableEntry LeftP =
-            tab.add("Left P", .3)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0, "max", 1))
-                    .getEntry();
-    private NetworkTableEntry LeftI =
-            tab.add("Left I", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0, "max", 1))
-                    .getEntry();
-    private NetworkTableEntry LeftD =
-            tab.add("Left D", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0, "max", 1))
-                    .getEntry();
-
-    private NetworkTableEntry RightP =
-            tab.add("Right P", .3)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0, "max", 1))
-                    .getEntry();
-    private NetworkTableEntry RightI =
-            tab.add("Right I", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0, "max", 1))
-                    .getEntry();
-    private NetworkTableEntry RightD =
-            tab.add("Right D", 0)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0, "max", 1))
-                    .getEntry();
+//    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+//
+//    private NetworkTableEntry LeftP =
+//            tab.add("Left P", .3)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry LeftI =
+//            tab.add("Left I", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry LeftD =
+//            tab.add("Left D", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//
+//    private NetworkTableEntry RightP =
+//            tab.add("Right P", .3)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry RightI =
+//            tab.add("Right I", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry RightD =
+//            tab.add("Right D", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
 
     private double moveSpeed;
 
@@ -164,13 +164,13 @@ public class Chassis extends SubsystemBase {
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
         m_odometry = new DifferentialDriveOdometry(getHeading());
 
-        double LP = LeftP.getDouble(.3);
-        double LI = LeftI.getDouble(0);
-        double LD = LeftD.getDouble(0);
-
-        double RP = RightP.getDouble(.3);
-        double RI = RightI.getDouble(0);
-        double RD = RightD.getDouble(0);
+//        double LP = LeftP.getDouble(.3);
+//        double LI = LeftI.getDouble(0);
+//        double LD = LeftD.getDouble(0);
+//
+//        double RP = RightP.getDouble(.3);
+//        double RI = RightI.getDouble(0);
+//        double RD = RightD.getDouble(0);
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(0.66,.045,.0067);
