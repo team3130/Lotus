@@ -23,11 +23,9 @@ import static frc.team3130.robot.RobotContainer.m_driverGamepad;
  */
 public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
-    public Chassis m_chassis;
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
-    private SendableChooser<String> chooser = new SendableChooser<String>();
     private static double lastTimestamp;
 
     boolean gettime = true;
