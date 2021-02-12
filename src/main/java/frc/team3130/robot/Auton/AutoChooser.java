@@ -36,15 +36,35 @@ public class AutoChooser {
         this.paths = new String[]{"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     }
 
-    public Command getCommand(Chassis m_chassis) {
+    public Command getCommand() {
+        return command;
+    }
 
+    public Trajectory GenerateTrajectory(String file) {
+        // variably call Json file
+        String trajectoryJSON = "/home/lvuser/deploy/paths/" + file + ".wpilib.json";
+        Trajectory trajectoryTemp = new Trajectory();
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            trajectoryTemp = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        }
+        return trajectoryTemp;
+    }
+
+//    public void outputToShuffleboard() {
+//        this.number = (int) widget.getEntry().getDouble(1.0);
+//    }
+
+    public void setAutonCommand(Chassis m_chassis) {
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
         config.setKinematics(m_chassis.getmKinematics());
 
         // here to be default in case exception needs handling
-        this.trajectory =this.GenerateTrajectory(this.paths[0]);
+        this.trajectory = this.GenerateTrajectory(this.paths[0]);
 
         try {
             System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -66,25 +86,6 @@ public class AutoChooser {
                 m_chassis::setOutput,
                 m_chassis
         );
-
-        return command;
     }
-
-    public Trajectory GenerateTrajectory(String file) {
-        // variably call Json file
-        String trajectoryJSON = "/home/lvuser/deploy/paths/" + file + ".wpilib.json";
-        Trajectory trajectoryTemp = new Trajectory();
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            trajectoryTemp = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-        }
-        return trajectoryTemp;
-    }
-
-//    public void outputToShuffleboard() {
-//        this.number = (int) widget.getEntry().getDouble(1.0);
-//    }
 
 }

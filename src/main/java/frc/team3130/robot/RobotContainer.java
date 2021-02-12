@@ -157,12 +157,15 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-
-        return m_chooser.getCommand(m_chassis);
+        return m_chooser.getCommand();
     }
 
     public void reset(){
         m_chassis.reset();
+    }
+
+    public void setAutonCommand() {
+        m_chooser.setAutonCommand(m_chassis);
     }
 
 }

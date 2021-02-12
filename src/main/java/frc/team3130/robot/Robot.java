@@ -44,6 +44,8 @@ public class Robot extends TimedRobot {
         //Instantiate operator interface
         m_robotContainer = new RobotContainer();
 
+        m_robotContainer.setAutonCommand();
+
         //Instantiate Limelight interface
         Limelight.GetInstance();
 
