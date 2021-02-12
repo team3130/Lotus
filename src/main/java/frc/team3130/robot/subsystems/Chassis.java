@@ -4,15 +4,21 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.Navx;
+
+import java.util.Map;
 
 public class Chassis extends PIDSubsystem {
 
@@ -27,6 +33,18 @@ public class Chassis extends PIDSubsystem {
     private static DifferentialDrive m_drive;
 
     private static Solenoid m_shifter;
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+    private NetworkTableEntry leftOutput =
+            tab.add("Left Output", 0.5)
+                    .withWidget(BuiltInWidgets.kNumberSlider)
+                    .withProperties(Map.of("min", 0.01, "max", 1))
+                    .getEntry();
+    private NetworkTableEntry rightOutput =
+            tab.add("Right Output", 0.5)
+                    .withWidget(BuiltInWidgets.kNumberSlider)
+                    .withProperties(Map.of("min", 0.01, "max", 1))
+                    .getEntry();
 
     //Create and define all standard data types needed
 
@@ -161,6 +179,10 @@ public class Chassis extends PIDSubsystem {
     public boolean isLowGear() {
         return !m_shifter.get();
     }
+
+    public double getSetLeftOutput(){return leftOutput.getDouble(0);}
+    public double getSetRightOutput(){return rightOutput.getDouble(0);}
+
 
     /**
      * Gets absolute distance traveled by the left side of the robot

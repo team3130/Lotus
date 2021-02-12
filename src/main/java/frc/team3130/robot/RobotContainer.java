@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
+import frc.team3130.robot.commands.Chassis.DriveFoward;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
@@ -89,6 +90,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new ToggleIntake(m_intake));; //Menu button
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new ShootNear(m_turret, m_hoppper, m_flyWheel, m_hood)); //Button A
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new DriveFoward(m_chassis));
 
 
         /*
