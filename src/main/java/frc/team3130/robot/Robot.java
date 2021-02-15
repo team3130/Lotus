@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
         m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
+        m_robotContainer.getHood().setAngle(0);
     }
 
     @Override

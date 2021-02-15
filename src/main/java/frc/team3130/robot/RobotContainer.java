@@ -9,6 +9,7 @@ import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
 import frc.team3130.robot.commands.Hood.MoveHood;
+import frc.team3130.robot.commands.Hood.SetHoodState;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Intake.IntakeIn;
@@ -89,7 +90,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new ToggleIntake(m_intake));; //Menu button
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new ShootNear(m_turret, m_hoppper, m_flyWheel, m_hood)); //Button A
-
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodState(m_hood));
 
         /*
          * Weapons
@@ -104,6 +105,7 @@ public class RobotContainer {
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new SpinWOFLeft(m_wheelOfFortune));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinWOFRight(m_wheelOfFortune));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenPressed(new ColorAlignment(m_wheelOfFortune));
+
     }
 
 /*    private void setDefaultCommand() {

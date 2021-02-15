@@ -81,7 +81,7 @@ public class Hood extends SubsystemBase {
 	public void changeHoodAngle(){
 		switch (m_hoodControlState) {
 			case ZONE1_66:
-				setAngle(66);
+				setAngle(5);
 			case ZONE2_63:
 				setAngle(63);
 			case ZONE3_60:
@@ -102,6 +102,8 @@ public class Hood extends SubsystemBase {
 				setAngle(65);
 		}
 	}
+
+
 
 	public double getAngleDegrees(){return m_hood.getSelectedSensorPosition()/RobotMap.kHoodTicksPerDegree;}
 
