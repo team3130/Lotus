@@ -42,6 +42,10 @@ public class Chassis extends PIDSubsystem {
             tab.add("Right Output", 0.5)
                     .getEntry();
 
+    private NetworkTableEntry turnSensitivity =
+            tab.add("Turning Sensitivity", 1.0)
+                    .getEntry();
+
     //Create and define all standard data types needed
 
     /**
@@ -178,6 +182,8 @@ public class Chassis extends PIDSubsystem {
 
     public double getSetLeftOutput(){return leftOutput.getDouble(0);}
     public double getSetRightOutput(){return rightOutput.getDouble(0);}
+
+    public double getTurnSensitivity(){return turnSensitivity.getDouble(1);}
 
 
     /**
