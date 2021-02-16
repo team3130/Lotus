@@ -173,7 +173,7 @@ public class Chassis extends SubsystemBase {
 //        double RD = RightD.getDouble(0);
 
         //Updated 2/2/2021 TODO tune PID values
-        m_feedforward = new SimpleMotorFeedforward(0.66,.045,.0067);
+        m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
         m_leftPIDController = new PIDController(.3, 0, 0);
         m_rightPIDConttroller = new PIDController(.3, 0, 0);
     }
