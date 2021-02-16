@@ -37,13 +37,9 @@ public class Chassis extends PIDSubsystem {
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
     private NetworkTableEntry leftOutput =
             tab.add("Left Output", 0.5)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0.01, "max", 1))
                     .getEntry();
     private NetworkTableEntry rightOutput =
             tab.add("Right Output", 0.5)
-                    .withWidget(BuiltInWidgets.kNumberSlider)
-                    .withProperties(Map.of("min", 0.01, "max", 1))
                     .getEntry();
 
     //Create and define all standard data types needed
