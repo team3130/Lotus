@@ -90,7 +90,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new ToggleIntake(m_intake));; //Menu button
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new ShootNear(m_turret, m_hoppper, m_flyWheel, m_hood)); //Button A
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodState(m_hood));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new SetHoodState(m_hood));
 
         /*
          * Weapons

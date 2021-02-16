@@ -171,7 +171,7 @@ public class RobotMap {
     public static final int CAN_HOPPERL = 8;
     public static final int CAN_HOPPERR = 9;
     public static final int CAN_HOPPERTOP = 12;
-    public static final int CAN_HOOD = 16;
+    public static final int CAN_HOOD = 17;
     /**
      * Pneumatics ports
      */

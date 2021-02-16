@@ -11,6 +11,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
@@ -21,6 +24,12 @@ public class Hood extends SubsystemBase {
 	private static WPI_TalonSRX m_hood;
 	private HoodState m_hoodControlState;
 
+	private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
+
+	private NetworkTableEntry hoodAngle =
+			tab.add("angle", 1.0)
+					.getEntry();
+
 
 	/**
 	 * Creates a new Hood.
@@ -28,17 +37,17 @@ public class Hood extends SubsystemBase {
 	public Hood() {
 		m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD);
 		m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
-		m_hood.configReverseSoftLimitThreshold(0);
-		m_hood.configForwardSoftLimitEnable(true);
-		m_hood.configReverseSoftLimitEnable(true);
+//		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
+//		m_hood.configReverseSoftLimitThreshold(0);
+		m_hood.configForwardSoftLimitEnable(false);
+		m_hood.configReverseSoftLimitEnable(false);
 
 		//intialization value for hoodstate. Currently arbitrary number, should change later
 		m_hoodControlState = HoodState.MAX_65;
 	}
 
-	public void moveHood(double pVBus){
-		m_hood.set(pVBus);		
+	public void moveHood(double angle){
+		m_hood.set(angle);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ public class SetHoodState extends CommandBase {
     public void initialize() {
         //m_hood.changeHoodState(Limelight.GetInstance().getDistanceToTarget());
         //m_hood.changeHoodAngle();
+        System.out.println("RAN SETHOODSTATE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         m_hood.setAngle(5);
 
 

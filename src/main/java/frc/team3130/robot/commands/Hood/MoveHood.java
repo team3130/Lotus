@@ -17,11 +17,6 @@ public class MoveHood extends CommandBase {
 	private final Hood m_hood;
 	private double speed;
 
-	private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
-
-	private NetworkTableEntry hoodAngle =
-			tab.add("angle", 1.0)
-					.getEntry();
 
 	/**
 	 * Creates a new MoveHood.
