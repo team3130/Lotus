@@ -456,7 +456,7 @@ public class Chassis extends SubsystemBase {
     public double getAngle()
     {
         if(Navx.getNavxPresent()){
-            return -Navx.getAngle(); //TODO: this CCW needs to be positive
+            return Navx.getAngle(); //TODO: this CCW needs to be positive
         }else{
             //TODO:Encoder Angle, if wanted
             return 0;
