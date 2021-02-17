@@ -529,22 +529,22 @@ public class Chassis extends SubsystemBase {
 //    }
 
 
-    public void outputToShuffleboard() {
-        SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
-        SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
+//    public void outputToShuffleboard() {
+//        SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
+//        SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
 
 //        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
 //        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
+//
+//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
-        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
-        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+//        SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
+//        SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
 
-        SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
-        SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
+//      SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
+//        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
-        SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
-        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
-
-    }
+//    }
 
 }
