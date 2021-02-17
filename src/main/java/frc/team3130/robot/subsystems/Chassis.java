@@ -78,7 +78,6 @@ public class Chassis extends SubsystemBase {
 
     private DifferentialDriveKinematics m_kinematics;
     private DifferentialDriveOdometry m_odometry;
-    private Pose2d pose;
 
     private static Solenoid m_shifter;
 
@@ -179,11 +178,12 @@ public class Chassis extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return Rotation2d.fromDegrees(-Navx.getAngle());
+        return Rotation2d.fromDegrees(Navx.getAngle());
     }
 
+    @Override
     public void periodic() {
-        pose = m_odometry.update(getHeading(), getDistanceL(), getDistanceR());
+        m_odometry.update(getHeading(), getDistanceL(), getDistanceR());
     }
 
     /**
@@ -487,7 +487,7 @@ public class Chassis extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return pose;
+        return m_odometry.getPoseMeters();
     }
 
     public void setOutput(double leftVolts, double rightVolts) {
