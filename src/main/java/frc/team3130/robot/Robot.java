@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        outputToShuffleboard();
+        // outputToShuffleboard();
     }
 
     /**
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
 
         // Schedule autonomous command if it exists
         if (autonomousCommand != null) {
-            autonomousCommand.schedule();
+            scheduler.schedule(true, autonomousCommand);
             System.out.println("Found autonomous Command");
         }
     }
