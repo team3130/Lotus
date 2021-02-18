@@ -86,6 +86,7 @@ public class AutoChooser {
                 m_chassis::setOutput,
                 m_chassis
         );
+        command.addRequirements(m_chassis);
     }
 
 }
