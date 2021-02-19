@@ -184,7 +184,7 @@ public class Chassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_odometry.update(getHeading(), getDistanceL(), getDistanceR());
+        m_odometry.update(getHeading(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters( getDistanceR()));
     }
 
     /**

@@ -15,7 +15,7 @@ public class RobotMap {
      * Constants
      */
     //Which Robot
-    public static boolean kUseCompbot = true;
+    public static boolean kUseCompbot = false;
 
     //NavX
     public static boolean kNavxReversed = true;
