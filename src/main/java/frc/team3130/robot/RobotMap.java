@@ -49,6 +49,8 @@ public class RobotMap {
     public static double kChassisMPOutputDeadband = 0.01;
     public static int kChassisMPDefaultFireRate = 20;
 
+    public static double kChassisGearRatio = 6.25;
+
     public static double kMPChassisP = 5.47;
     public static double kMPChassisI = 0.0;
     public static double kMPChassisD = 0.0;

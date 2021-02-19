@@ -120,8 +120,6 @@ public class Chassis extends SubsystemBase {
 
         configBrakeMode(false); // Set to coast on cstr
 
-        m_leftMotorRear.set(ControlMode.Follower, RobotMap.CAN_LEFTMOTORFRONT);
-        m_rightMotorRear.set(ControlMode.Follower, RobotMap.CAN_RIGHTMOTORFRONT);
 
         /**
          * For all motors, forward is the positive direction
@@ -175,6 +173,9 @@ public class Chassis extends SubsystemBase {
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
         m_leftPIDController = new PIDController(.3, 0, 0);
         m_rightPIDConttroller = new PIDController(.3, 0, 0);
+
+        m_leftMotorRear.follow(m_leftMotorFront);
+        m_rightMotorRear.follow(m_rightMotorFront);
     }
 
     public Rotation2d getHeading() {
@@ -497,8 +498,8 @@ public class Chassis extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                m_leftMotorFront.getSelectedSensorVelocity() / 7.29 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
-                m_rightMotorFront.getSelectedSensorVelocity() / 7.29 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60
+                m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
+                m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60
         );
     }
 
