@@ -36,6 +36,7 @@ public class Hood extends SubsystemBase {
 	 */
 	public Hood() {
 		m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD);
+		m_hood.configFactoryDefault();
 		m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 //		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
 //		m_hood.configReverseSoftLimitThreshold(0);
