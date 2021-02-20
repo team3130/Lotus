@@ -85,6 +85,9 @@ public class Chassis extends SubsystemBase {
     private PIDController m_leftPIDController;
     private PIDController m_rightPIDConttroller;
 
+    private SpeedControllerGroup m_left;
+    private SpeedControllerGroup m_right;
+
     //Create and define all standard data types needed
 
     /**
@@ -148,8 +151,8 @@ public class Chassis extends SubsystemBase {
         m_leftMotorFront.overrideLimitSwitchesEnable(false);
         m_rightMotorFront.overrideLimitSwitchesEnable(false);
 
-        SpeedControllerGroup m_left = new SpeedControllerGroup(m_leftMotorFront, m_leftMotorRear);
-        SpeedControllerGroup m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
+        m_left = new SpeedControllerGroup(m_leftMotorFront, m_leftMotorRear);
+        m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
 
         m_drive = new DifferentialDrive(m_left, m_right);
         m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
@@ -492,8 +495,9 @@ public class Chassis extends SubsystemBase {
     }
 
     public void setOutput(double leftVolts, double rightVolts) {
-        m_leftMotorFront.set(leftVolts / 12);
-        m_rightMotorFront.set(rightVolts / 12);
+        m_left.setVoltage(leftVolts);
+        m_right.setVoltage(rightVolts);
+        m_drive.feed();
     }
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
