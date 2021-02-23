@@ -158,11 +158,11 @@ public class RobotContainer {
         config.setKinematics(m_chassis.getmKinematics());
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(0, 0, new Rotation2d(0)),
-                        new Pose2d(0, 0, new Rotation2d(Math.PI/2)),
-                        new Pose2d(0, 0, new Rotation2d(Math.PI)),
-                        new Pose2d(0, 0, new Rotation2d(Math.PI + Math.PI/2)),
-                        new Pose2d(0, 0, new Rotation2d(Math.PI*2)
+                List.of(new Pose2d(1, 0, new Rotation2d(0)),
+                        new Pose2d(0, -1, new Rotation2d(Math.PI/2)),
+                        new Pose2d(-1, 0, new Rotation2d(Math.PI)),
+                        new Pose2d(0, 1, new Rotation2d(Math.PI + Math.PI/2)),
+                        new Pose2d(0, 0, new Rotation2d(Math.PI*2))
 
                 ), config);
 
