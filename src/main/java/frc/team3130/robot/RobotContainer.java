@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.team3130.robot.Auton.AutoChooser;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -64,12 +63,6 @@ public class RobotContainer {
     public Intake getIntake() {return m_intake;}
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
-
-    private final AutoChooser m_chooser = new AutoChooser(m_chassis);
-
-    public AutoChooser getAutoChooser() {
-        return m_chooser;
-    }
 
 
     public static double getSkywalker() {
