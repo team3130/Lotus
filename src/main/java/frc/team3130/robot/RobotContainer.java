@@ -39,6 +39,7 @@ import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -64,7 +65,7 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
-    private final AutoChooser m_chooser = new AutoChooser();
+    private final AutoChooser m_chooser = new AutoChooser(m_chassis);
 
     public AutoChooser getAutoChooser() {
         return m_chooser;
@@ -157,15 +158,71 @@ public class RobotContainer {
     }*/
 
     public Command getAutonomousCommand() {
-        return m_chooser.getCommand();
+        //@Tomas this is the circly boi
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
+                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
+
+        config.setKinematics(m_chassis.getmKinematics());
+
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, new Rotation2d(0)),
+                        new Pose2d(0, 0, new Rotation2d(Math.PI/4)),
+                        new Pose2d(0, 0, new Rotation2d(Math.PI/2)),
+                        new Pose2d(0, 0, new Rotation2d((Math.PI/4)*3))
+
+                ), config);
+
+        // creating a Ramsete command which is used in AutonInit
+        RamseteCommand command = new RamseteCommand(
+                trajectory,
+                m_chassis::getPose,
+                new RamseteController(2.0, 0.7),
+                m_chassis.getFeedforward(),
+                m_chassis.getmKinematics(),
+                m_chassis::getSpeeds,
+                m_chassis.getleftPIDController(),
+                m_chassis.getRightPIDController(),
+                m_chassis::setOutput,
+                m_chassis
+        );
+
+
+
+/*        //@Tomas this is the best drive S boy I could make
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
+                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
+
+        config.setKinematics(m_chassis.getmKinematics());
+
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, new Rotation2d(0)),
+                        new Pose2d(2, 2, new Rotation2d(0)),
+                        new Pose2d(-2, -2, new Rotation2d(45))
+
+                ), config);
+
+        // creating a Ramsete command which is used in AutonInit
+        RamseteCommand command = new RamseteCommand(
+                trajectory,
+                m_chassis::getPose,
+                new RamseteController(2.0, 0.7),
+                m_chassis.getFeedforward(),
+                m_chassis.getmKinematics(),
+                m_chassis::getSpeeds,
+                m_chassis.getleftPIDController(),
+                m_chassis.getRightPIDController(),
+                m_chassis::setOutput,
+                m_chassis
+        );*/
+
+
+        command.addRequirements(m_chassis);
+
+        return command;
     }
 
     public void reset(){
         m_chassis.reset();
-    }
-
-    public void setAutonCommand() {
-        m_chooser.setAutonCommand(m_chassis);
     }
 
 }
