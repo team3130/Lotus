@@ -26,14 +26,25 @@ public class AutoChooser {
     private String[] paths;
     private int number = 0;
     private SimpleWidget widget;
+
+    private String GalacticSearchA, GalacticSearchB;
     
     private Trajectory trajectory;
 
 //    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
-    public AutoChooser() {
+    public AutoChooser(Boolean ballIsThere) {
+        if (ballIsThere) {
+            GalacticSearchA = "GalacticSearchARed";
+            GalacticSearchB = "GalacticSearchBRed";
+        }
+
+        else {
+            GalacticSearchA = "GalacticSearchABlue";
+            GalacticSearchB = "GalacticSearchBBlue";
+        }
 //        widget = tab.add("Path", 0);
-        this.paths = new String[]{"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+        this.paths = new String[]{"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  GalacticSearchA, GalacticSearchB, "QuestionMark", "Slalom"};
     }
 
     public Command getCommand() {

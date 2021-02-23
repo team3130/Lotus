@@ -64,7 +64,7 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
-    private final AutoChooser m_chooser = new AutoChooser();
+    private final AutoChooser m_chooser;
 
     public AutoChooser getAutoChooser() {
         return m_chooser;
@@ -87,6 +87,7 @@ public class RobotContainer {
 
     // Binding the buttons and triggers that are defined above to respective commands
     public RobotContainer() {
+        m_chooser = new AutoChooser(false); //TODO: write conditional above to change this to depend on if there is a ball @Dev
         configureButtonBindings();
         m_chassis.setDefaultCommand(
                 new DefaultDrive(
@@ -95,8 +96,6 @@ public class RobotContainer {
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
-
-        //TODO: complete when you have made auton commands
 
         /*
         // Add commands to the autonomous command chooser
@@ -148,13 +147,6 @@ public class RobotContainer {
 
 
     }
-
-/*    private void setDefaultCommand() {
-        //TODO: fix this I have no frickin clue what is going on here
-        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis, () -> driverGamepad.getY(GenericHID.Hand.kLeft), () -> driverGamepad.getX(GenericHID.Hand.kRight)));
-        m_climber.setDefaultCommand(new Climber(m_climber, () -> driverGamepad.));
-        m_turret.setDefaultCommand(//I DONT KNOW WHATS GOIN OOOOONNNNNNNNNNNNNNNN SETTING DEFAULT COMMANDS ARE WWWWWEEEEEIIIIRRRRDDDD );
-    }*/
 
     public Command getAutonomousCommand() {
         return m_chooser.getCommand();
