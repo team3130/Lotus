@@ -4,29 +4,89 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.Navx;
 
-public class Chassis extends PIDSubsystem {
+import java.util.Map;
+
+public class Chassis extends SubsystemBase {
 
     //Create necessary objects
-    private static WPI_TalonFX m_leftMotorFront;
-    private static WPI_TalonFX m_leftMotorRear;
-    private static WPI_TalonFX m_rightMotorFront;
-    private static WPI_TalonFX m_rightMotorRear;
+    private WPI_TalonFX m_leftMotorFront;
+    private WPI_TalonFX m_leftMotorRear;
+    private WPI_TalonFX m_rightMotorFront;
+    private WPI_TalonFX m_rightMotorRear;
 
-    private static double moveSpeed;
+//    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+//
+//    private NetworkTableEntry LeftP =
+//            tab.add("Left P", .3)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry LeftI =
+//            tab.add("Left I", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry LeftD =
+//            tab.add("Left D", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//
+//    private NetworkTableEntry RightP =
+//            tab.add("Right P", .3)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry RightI =
+//            tab.add("Right I", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
+//    private NetworkTableEntry RightD =
+//            tab.add("Right D", 0)
+//                    .withWidget(BuiltInWidgets.kNumberSlider)
+//                    .withProperties(Map.of("min", 0, "max", 1))
+//                    .getEntry();
 
-    private static DifferentialDrive m_drive;
+    private double moveSpeed;
+
+    private DifferentialDrive m_drive;
+
+    private DifferentialDriveKinematics m_kinematics;
+    private DifferentialDriveOdometry m_odometry;
 
     private static Solenoid m_shifter;
+
+    private SimpleMotorFeedforward m_feedforward;
+    private PIDController m_leftPIDController;
+    private PIDController m_rightPIDConttroller;
+
+    private SpeedControllerGroup m_left;
+    private SpeedControllerGroup m_right;
 
     //Create and define all standard data types needed
 
@@ -41,7 +101,14 @@ public class Chassis extends PIDSubsystem {
      */
 
     public Chassis() {
-        super(new PIDController(1, 0, 0));//TODO: Set Turn PID
+//            super(
+//                    // The ProfiledPIDController used by the subsystem
+//                    new ProfiledPIDController(
+//                            0,
+//                            0,
+//                            0,
+//                            // The motion profile constraints
+//                            new TrapezoidProfile.Constraints(0, 0)));
 
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
@@ -56,8 +123,6 @@ public class Chassis extends PIDSubsystem {
 
         configBrakeMode(false); // Set to coast on cstr
 
-        m_leftMotorRear.set(ControlMode.Follower, RobotMap.CAN_LEFTMOTORFRONT);
-        m_rightMotorRear.set(ControlMode.Follower, RobotMap.CAN_RIGHTMOTORFRONT);
 
         /**
          * For all motors, forward is the positive direction
@@ -80,14 +145,14 @@ public class Chassis extends PIDSubsystem {
         m_rightMotorRear.setInverted(true);
         m_leftMotorRear.setInverted(false);
 
-        m_rightMotorFront.setSensorPhase(true);
-        m_leftMotorFront.setSensorPhase(true);
+//        m_rightMotorFront.setSensorPhase(true);
+//        m_leftMotorFront.setSensorPhase(true);
 
         m_leftMotorFront.overrideLimitSwitchesEnable(false);
         m_rightMotorFront.overrideLimitSwitchesEnable(false);
 
-        SpeedControllerGroup m_left = new SpeedControllerGroup(m_leftMotorFront, m_leftMotorRear);
-        SpeedControllerGroup m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
+        m_left = new SpeedControllerGroup(m_leftMotorFront, m_leftMotorRear);
+        m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
 
         m_drive = new DifferentialDrive(m_left, m_right);
         m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
@@ -95,6 +160,34 @@ public class Chassis extends PIDSubsystem {
         m_drive.setSafetyEnabled(false); //feed() must be called to prevent motor disable TODO: check at GF
 
         moveSpeed=0;
+
+        m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
+        m_odometry = new DifferentialDriveOdometry(getHeading());
+
+//        double LP = LeftP.getDouble(.3);
+//        double LI = LeftI.getDouble(0);
+//        double LD = LeftD.getDouble(0);
+//
+//        double RP = RightP.getDouble(.3);
+//        double RI = RightI.getDouble(0);
+//        double RD = RightD.getDouble(0);
+
+        //Updated 2/2/2021 TODO tune PID values
+        m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
+        m_leftPIDController = new PIDController(.3, 0, 0);
+        m_rightPIDConttroller = new PIDController(.3, 0, 0);
+
+        m_leftMotorRear.follow(m_leftMotorFront);
+        m_rightMotorRear.follow(m_rightMotorFront);
+    }
+
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(Navx.getAngle());
+    }
+
+    @Override
+    public void periodic() {
+        m_odometry.update(getHeading(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters( getDistanceR()));
     }
 
     /**
@@ -146,6 +239,7 @@ public class Chassis extends PIDSubsystem {
     public void reset() {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
+        m_odometry.resetPosition(new Pose2d(), getHeading());
     }
 
     /**
@@ -160,6 +254,18 @@ public class Chassis extends PIDSubsystem {
 
     public boolean isLowGear() {
         return !m_shifter.get();
+    }
+
+    public SimpleMotorFeedforward getFeedforward() {
+        return m_feedforward;
+    }
+
+    public PIDController getleftPIDController() {
+        return m_leftPIDController;
+    }
+
+    public PIDController getRightPIDController() {
+        return m_rightPIDConttroller;
     }
 
     /**
@@ -297,52 +403,52 @@ public class Chassis extends PIDSubsystem {
         m_leftMotorFront.configOpenloopRamp(maxRampRateSeconds);
     }
 
-    /**
-     * Configure the drivetrain for motion profiling
-     *
-     * @param duration fire rate of the motion profile in ms
-     */
-    public void configMP(int duration) {
+//    /**
+//     * Configure the drivetrain for motion profiling
+//     *
+//     * @param duration fire rate of the motion profile in ms
+//     */
+//    public void configMP(int duration) {
+//
+//        //left
+//        m_leftMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
+//        m_leftMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
+//        m_leftMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
+//        m_leftMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
+//        m_leftMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
+//        // Status 10 provides the trajectory target for motion profile AND motion magic
+//        m_leftMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
+//        //Profile already assumes base time is 0
+//        m_leftMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
+//
+//        //right
+//        m_rightMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
+//        m_rightMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
+//        m_rightMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
+//        m_rightMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
+//        m_rightMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
+//        // Status 10 provides the trajectory target for motion profile AND motion magic
+//        m_rightMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
+//        //Profile already assumes base time is 0
+//        m_rightMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
+//    }
 
-        //left
-        m_leftMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
-        m_leftMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
-        m_leftMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
-        m_leftMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
-        m_leftMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
-        // Status 10 provides the trajectory target for motion profile AND motion magic
-        m_leftMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
-        //Profile already assumes base time is 0
-        m_leftMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
 
-        //right
-        m_rightMotorFront.config_kP(0, RobotMap.kMPChassisP, 0);
-        m_rightMotorFront.config_kI(0, RobotMap.kMPChassisI, 0);
-        m_rightMotorFront.config_kD(0, RobotMap.kMPChassisD, 0);
-        m_rightMotorFront.config_kF(0, RobotMap.kMPChassisF, 0);
-        m_rightMotorFront.configNeutralDeadband(RobotMap.kChassisMPOutputDeadband, 0);
-        // Status 10 provides the trajectory target for motion profile AND motion magic
-        m_rightMotorFront.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, duration, 0);
-        //Profile already assumes base time is 0
-        m_rightMotorFront.configMotionProfileTrajectoryPeriod(0, 0);
-    }
+//    @Override
+//    protected void useOutput(double output, TrapezoidProfile.State setpoint) {
+//        //Chassis ramp rate is the limit on the voltage change per cycle to prevent skidding.
+//    	/*final double speedLimit = prevSpeedLimit + Preferences.getInstance().getDouble("ChassisRampRate", 0.25);
+//    	if (output >  speedLimit) bias = speedLimit;
+//        if (bias < -speedLimit) bias = -speedLimit;*/
+//        //System.out.println("UsingTurnPID");
+//        double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
+//
+//        int speed_L = (int) ((output + feedforward) * 4096);
+//        int speed_R = (int) ((output + feedforward) * 4096);
+//        driveTank(speed_L, speed_R, false);
+//    }
 
-
-    @Override
-    protected void useOutput(double output, double setpoint) {
-        //Chassis ramp rate is the limit on the voltage change per cycle to prevent skidding.
-    	/*final double speedLimit = prevSpeedLimit + Preferences.getInstance().getDouble("ChassisRampRate", 0.25);
-    	if (output >  speedLimit) bias = speedLimit;
-        if (bias < -speedLimit) bias = -speedLimit;*/
-        //System.out.println("UsingTurnPID");
-        double speed_L = moveSpeed+output;
-        double speed_R = moveSpeed-output;
-        driveTank(speed_L, speed_R, false);
-        //driveTank(0.1,-0.1,false);
-        //prevSpeedLimit = Math.abs(speedLimit);
-    }
-
-    @Override
+    
     protected double getMeasurement() {
         return getAngle();
     }
@@ -354,75 +460,96 @@ public class Chassis extends PIDSubsystem {
     public double getAngle()
     {
         if(Navx.getNavxPresent()){
-            return -Navx.getAngle(); //TODO: this CCW needs to be positive
+            return Navx.getAngle(); //TODO: this CCW needs to be positive
         }else{
             //TODO:Encoder Angle, if wanted
             return 0;
         }
     }
 
-    /**
-     * Tell the Chassis to hold a relative angle
-     *
-     * @param angle angle to hold in degrees
-     */
-    public void holdAngle(double angle, boolean smallAngle, Chassis subsystem) {
-        setPIDValues(smallAngle, subsystem);
-        subsystem.getController().reset();
-        subsystem.setSetpoint(getAngle()+angle);
-        subsystem.enable();
+//    /**
+//     * Tell the Chassis to hold a relative angle
+//     *
+//     * @param angle angle to hold in degrees
+//     */
+//    public void holdAngle(double angle, boolean smallAngle) {
+//        setPIDValues(smallAngle);
+//        this.reset();
+//        this.setSetpoint(getAngle()+angle);
+//        this.enable();
+//    }
+
+
+
+//    public void ReleaseAngle(){
+//        this.disable();
+//        driveTank(0, 0, false);//Clear motors
+//    }
+
+    public DifferentialDriveKinematics getmKinematics() {
+        return m_kinematics;
     }
 
-    public void ReleaseAngle(Chassis subsystem){
-        subsystem.disable();
-        driveTank(0, 0, false);//Clear motors
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
     }
 
-    private void setPIDValues(boolean smallAngleTurn, Chassis subsystem){//TOD2O: Tune Pid
-        if(smallAngleTurn){
-            subsystem.getController().setPID(
-                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
-                    Preferences.getInstance().getDouble("ChassisLowBigI", 0.015),
-                    Preferences.getInstance().getDouble("ChassisLowD", 0));
-        }else{
-            subsystem.getController().setPID(
-                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
-                    Preferences.getInstance().getDouble("ChassisLowI", 0.003),
-                    Preferences.getInstance().getDouble("ChassisLowD", 0));
-        }
+    public void setOutput(double leftVolts, double rightVolts) {
+        m_left.setVoltage(leftVolts);
+        m_right.setVoltage(rightVolts);
+        m_drive.feed();
     }
 
-    public void setAbsoluteTolerance(double tolerance){
-        getController().setTolerance(tolerance);
+    public DifferentialDriveWheelSpeeds getSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+                m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
+                m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60
+        );
     }
 
-    public boolean onTarget(){
-        return getController().atSetpoint();
-    }
+//    private void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
+//        if(smallAngleTurn){
+//            this.getController().setPID(
+//                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
+//                    Preferences.getInstance().getDouble("ChassisLowBigI", 0.015),
+//                    Preferences.getInstance().getDouble("ChassisLowD", 0));
+//        }else{
+//            this.getController().setPID(
+//                    Preferences.getInstance().getDouble("ChassisLowP", 0.0055),
+//                    Preferences.getInstance().getDouble("ChassisLowI", 0.003),
+//                    Preferences.getInstance().getDouble("ChassisLowD", 0));
+//        }
+//    }
 
-    public double getSetpoint(){
-        return getController().getSetpoint();
-    }
+//    public void setAbsoluteTolerance(double tolerance){
+//        getController().setTolerance(tolerance);
+//    }
+//
+//    public boolean onTarget(){
+//        return getController().atSetpoint();
+//    }
+//
+//    public TrapezoidProfile.State getSetpoint(){
+//        return getController().getSetpoint();
+//    }
 
 
-    public void outputToShuffleboard() {
-        SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
-        SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
+//    public void outputToShuffleboard() {
+//        SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
+//        SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
 
-        //SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
-        //SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
-        SmartDashboard.putNumber("Chassis Right Speed", getSpeedR());
-        SmartDashboard.putNumber("Chassis Left Speed", getSpeedL());
+//        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
+//        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
+//
+//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
-        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
-        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+//        SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
+//        SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
 
-        SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
-        SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
+//      SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
+//        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
-        SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
-        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
-
-    }
+//    }
 
 }

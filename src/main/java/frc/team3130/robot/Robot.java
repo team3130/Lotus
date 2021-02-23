@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
+import frc.team3130.robot.subsystems.Chassis;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
@@ -25,9 +25,7 @@ public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
-    CommandBase autonomousCommand = null;
-    private SendableChooser<String> chooser = new SendableChooser<String>();
-    private static Timer timer;
+    Command autonomousCommand = null;
     private static double lastTimestamp;
 
     boolean gettime = true;
@@ -40,12 +38,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        timer = new Timer();
-        timer.reset();
-        timer.start();
 
         //Instantiate operator interface
         m_robotContainer = new RobotContainer();
+
+        m_robotContainer.setAutonCommand();
 
         //Instantiate Limelight interface
         Limelight.GetInstance();
@@ -59,24 +56,17 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
-
-        /*
-         chooser = new SendableChooser<>();
-         chooser.setDefaultOption("No Auton", "None");
-         chooser.addOption("3Ball", "3Ball");
-         chooser.addOption("6Ball", "6Ball");
-         SmartDashboard.putData("Auto mode", chooser);
-         */
     }
 
     @Override
     public void disabledInit() {
-        m_robotContainer.getChassis().configBrakeMode(false);
+        m_robotContainer.getChassis().configBrakeMode(true);
         m_robotContainer.getIntake().retractIntake();
         //Hood.setPistons(false);
         m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
+        m_robotContainer.getChassis().reset();
     }
 
     @Override
@@ -94,7 +84,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        outputToShuffleboard();
+        // outputToShuffleboard();
     }
 
     /**
@@ -110,11 +100,13 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        determineAuto();
+        m_robotContainer.getChassis().reset();
+        autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         // Schedule autonomous command if it exists
         if (autonomousCommand != null) {
-            autonomousCommand.schedule();
+            scheduler.schedule(true, autonomousCommand);
+            System.out.println("Found autonomous Command");
         }
     }
 
@@ -123,9 +115,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
+//        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
@@ -148,7 +139,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
@@ -165,47 +155,43 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
+        CommandScheduler.getInstance().run();
 //        Navx.GetInstance().outputToShuffleboard();
-//        WheelOfFortune.outputToShuffleboard();
-//        Chassis.outputToShuffleboard();
-        m_robotContainer.getTurret().outputToShuffleboard();
+//        m_robotContainer.getChassis().outputToShuffleboard();
+//        m_chassis.outputToShuffleboard();
+
+//        m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
-        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
-        m_robotContainer.getFlywheel().outputToShuffleboard();
-        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
+//        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
+//        m_robotContainer.getFlywheel().outputToShuffleboard();
+//        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
-        //TODO: move this somewhere logical
-        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
-            if (gettime == true) {
-                lastTimestamp = Timer.getFPGATimestamp();
-                gettime = false;
-            }
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
-                checkif = false;
-            }
-        } else {
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-            gettime = true;
-            if (m_robotContainer.getTurret().isOnTarget() == false) {
-                checkif = true;
-            }
-        }
+//        //TODO: move this somewhere logical
+//        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
+//            if (gettime == true) {
+//                lastTimestamp = Timer.getFPGATimestamp();
+//                gettime = false;
+//            }
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+//            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
+//                checkif = false;
+//            }
+//        } else {
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+//            gettime = true;
+//            if (m_robotContainer.getTurret().isOnTarget() == false) {
+//                checkif = true;
+//            }
+//        }
 
 
     }
 
-    private void determineAuto() {
-//          autonomousCommand = new RendezvousShoot5();
-//        autonomousCommand = new Shoot3();
-//        autonomousCommand = new Shoot5();
-        autonomousCommand = new Shoot6(m_robotContainer.getIntake(), m_robotContainer.getChassis(), m_robotContainer.getTurret(), m_robotContainer.getHopper(), m_robotContainer.getFlywheel(), m_robotContainer.getHood());
-    }
 
     public void writePeriodicOutputs() {
-        m_robotContainer.getTurret().writePeriodicOutputs();
+        
     }
 
     public void resetSubsystems() {
