@@ -182,7 +182,11 @@ public class Chassis extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return Rotation2d.fromDegrees(Navx.getAngle());
+        double angle = Navx.getAngle();
+        if (angle < 0) {
+            angle = 180 - Math.abs(angle) + 180;
+        }
+        return Rotation2d.fromDegrees(angle);
     }
 
     @Override
