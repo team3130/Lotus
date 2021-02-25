@@ -3,7 +3,9 @@ package frc.team3130.robot.sensors;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.team3130.robot.RobotMap;
 
 //TODO: make not static
@@ -43,7 +45,13 @@ public class Navx {
      * @return angle in degrees
      */
     public static double getAngle() {
-        if (m_bNavXPresent) return m_navX.getAngle() * (RobotMap.kNavxReversed ? -1.0 : 1.0);
+        if (m_bNavXPresent) {
+            double angle = m_navX.getAngle();
+            if (angle < 0) {
+                angle = 180 - Math.abs(angle) + 180;
+            }
+            return angle;
+        }
         return -1;
     }
 
