@@ -15,7 +15,7 @@ public class PixyCam {
     private final int yC3 = 167;  //y-val of C3
     private final int xD5 = 0; //TODO: find real values/real ball
     private final int yD5 = 0;
-
+    //pixy cam res is 315 x 207 (horizontal x vertical)
 
     public PixyCam(Link link){
         pixy = Pixy2.createInstance(link);
@@ -46,7 +46,7 @@ public class PixyCam {
             else{return false;}
         }
         else if (path.equals("B")){
-            if(isBallHere(largestBlock,xD5,xD5)){
+            if(isBallHere(largestBlock,xD5,yD5)){
                 return true;
             }
             else{return false;}
