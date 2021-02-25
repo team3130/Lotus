@@ -4,6 +4,7 @@ package frc.team3130.robot.commands.Hood;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
 import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.sensors.vision.Limelight;
@@ -13,10 +14,12 @@ import java.util.Set;
 public class SetHoodState extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Hood m_hood;
+    int angle;
 
-    public SetHoodState(Hood subsystem) {
+    public SetHoodState(int angle, Hood subsystem) {
         //mapping to object passed through parameter
         m_hood = subsystem;
+        this.angle = angle;
     }
 
     /**
@@ -24,10 +27,9 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public void initialize() {
-        //m_hood.changeHoodState(Limelight.GetInstance().getDistanceToTarget());
-        //m_hood.changeHoodAngle();
-        System.out.println("RAN SETHOODSTATE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        m_hood.setAngle(5);
+//        System.out.println("RAN SETHOODSTATE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        m_hood.setAngle(angle);
+
 
 
     }
@@ -38,7 +40,7 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public void execute() {
-
+        m_hood.setAngle(angle);
     }
 
     /**
@@ -57,8 +59,8 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return Math.abs(Hood.getRelativeHoodAngle() - angle) < 1.0;
+
     }
 
     /**

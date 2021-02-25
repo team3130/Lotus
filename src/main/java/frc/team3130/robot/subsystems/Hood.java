@@ -8,6 +8,7 @@
 package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -38,6 +39,7 @@ public class Hood extends SubsystemBase {
 		m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD);
 		m_hood.configFactoryDefault();
 		m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		m_hood.setSelectedSensorPosition(0,0,10);
 //		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
 //		m_hood.configReverseSoftLimitThreshold(0);
 		m_hood.configForwardSoftLimitEnable(false);
@@ -115,10 +117,11 @@ public class Hood extends SubsystemBase {
 
 
 
-	public double getAngleDegrees(){return m_hood.getSelectedSensorPosition()/RobotMap.kHoodTicksPerDegree;}
-
+	public synchronized static double getRelativeHoodAngle(){
+		return m_hood.getSelectedSensorPosition(0) / RobotMap.kHoodTicksPerDegree;
+	}
 	public void outputToShuffleboard(){
-		SmartDashboard.putNumber("Hood Angle", getAngleDegrees());
+		SmartDashboard.putNumber("Hood Angle", getRelativeHoodAngle());
 	}
 
 
