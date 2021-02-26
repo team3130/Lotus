@@ -182,9 +182,9 @@ public class Chassis extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        double angle = Navx.getAngle();
+        double angle = Navx.getHeading();
         if (angle < 0) {
-            angle = 180 - Math.abs(angle) + 180;
+            angle +=360;
         }
         return Rotation2d.fromDegrees(angle);
     }
@@ -550,6 +550,8 @@ public class Chassis extends SubsystemBase {
 
         SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
         SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
+
+        SmartDashboard.putNumber("NavX local angle value", getHeading().getDegrees());
 
       SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());

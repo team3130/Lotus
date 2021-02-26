@@ -45,13 +45,7 @@ public class Navx {
      * @return angle in degrees
      */
     public static double getAngle() {
-        if (m_bNavXPresent) {
-            double angle = m_navX.getAngle();
-            if (angle < 0) {
-                angle = 180 - Math.abs(angle) + 180;
-            }
-            return angle;
-        }
+        if (m_bNavXPresent) return m_navX.getAngle() * (RobotMap.kNavxReversed ? -1.0 : 1.0);
         return -1;
     }
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -157,18 +158,23 @@ public class RobotContainer {
 
         config.setKinematics(m_chassis.getmKinematics());
 
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(1, 0, new Rotation2d(0)),
-                        new Pose2d(0, -1, new Rotation2d(3*Math.PI/2)),
-                        new Pose2d(-1, 0, new Rotation2d(Math.PI/2)),
-                        new Pose2d(0, 1, new Rotation2d(0)),
-                        new Pose2d(0, 0, new Rotation2d(3*Math.PI/2))
-
-                ), config);
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                new Pose2d(0, 0, new Rotation2d(0)),
+                // Pass through these two interior waypoints, making an 's' curve path
+                List.of(
+                        new Translation2d(1, 1),
+                        new Translation2d(2, -1)
+                ),
+                // End 3 meters straight ahead of where we started, facing forward
+                new Pose2d(3, 0, new Rotation2d(0)),
+                // Pass config
+                config
+        );
 
         // creating a Ramsete command which is used in AutonInit
         RamseteCommand command = new RamseteCommand(
-                trajectory,
+                exampleTrajectory,
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),
