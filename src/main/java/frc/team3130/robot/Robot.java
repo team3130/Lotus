@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        // outputToShuffleboard();
+         outputToShuffleboard();
     }
 
     /**
@@ -157,8 +157,7 @@ public class Robot extends TimedRobot {
     public void outputToShuffleboard() {
         CommandScheduler.getInstance().run();
         Navx.GetInstance().outputToShuffleboard();
-//        m_robotContainer.getChassis().outputToShuffleboard();
-//        m_chassis.outputToShuffleboard();
+        m_robotContainer.getChassis().outputToShuffleboard();
 
 //        m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();

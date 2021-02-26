@@ -33,7 +33,7 @@ public class AutoChooser {
 
     public AutoChooser() {
 //        widget = tab.add("Path", 0);
-        this.paths = new String[]{"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+        paths = new String[]{"Straight" ,"DriveStraight", "B1D2Markers", "B1toB8", "BarrelRacing", "Bounce",  "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     }
 
     public Command getCommand() {
@@ -64,18 +64,18 @@ public class AutoChooser {
         config.setKinematics(m_chassis.getmKinematics());
 
         // here to be default in case exception needs handling
-        this.trajectory = this.GenerateTrajectory(this.paths[0]);
+        trajectory = this.GenerateTrajectory(paths[0]);
 
         try {
-            System.out.println("THE PATH IS" + this.paths[this.number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            this.trajectory = this.GenerateTrajectory(this.paths[this.number]);
+            System.out.println("THE PATH IS" + paths[number] + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            trajectory = this.GenerateTrajectory(paths[number]);
         } catch (ArrayIndexOutOfBoundsException ref) {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
         }
 
         // creating a Ramsete command which is used in AutonInit
         command = new RamseteCommand(
-                this.trajectory,
+                trajectory,
                 m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 m_chassis.getFeedforward(),

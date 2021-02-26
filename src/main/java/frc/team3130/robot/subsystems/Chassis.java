@@ -38,13 +38,13 @@ public class Chassis extends SubsystemBase {
     private WPI_TalonFX m_rightMotorFront;
     private WPI_TalonFX m_rightMotorRear;
 
-//    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
-//
-//    private NetworkTableEntry LeftP =
-//            tab.add("Left P", .3)
-//                    .withWidget(BuiltInWidgets.kNumberSlider)
-//                    .withProperties(Map.of("min", 0, "max", 1))
-//                    .getEntry();
+    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+
+    private NetworkTableEntry LeftP =
+            tab.add("Left P", .3)
+                    .withWidget(BuiltInWidgets.kGraph)
+                    .withProperties(Map.of("min", 0, "max", 1))
+                    .getEntry();
 //    private NetworkTableEntry LeftI =
 //            tab.add("Left I", 0)
 //                    .withWidget(BuiltInWidgets.kNumberSlider)
