@@ -1,15 +1,11 @@
 package frc.team3130.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -17,18 +13,13 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.util.Units;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.Navx;
-
-import java.util.Map;
 
 public class Chassis extends SubsystemBase {
 
@@ -81,6 +72,8 @@ public class Chassis extends SubsystemBase {
 
     private SpeedControllerGroup m_left;
     private SpeedControllerGroup m_right;
+
+    private Pose2d m_position = new Pose2d(0.762, -3.81, new Rotation2d(0.00));
 
     //Create and define all standard data types needed
 
@@ -156,7 +149,7 @@ public class Chassis extends SubsystemBase {
         moveSpeed=0;
 
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
-        m_odometry = new DifferentialDriveOdometry(getHeading());
+        m_odometry = new DifferentialDriveOdometry(getHeading(), m_position);
 
         double LP = LeftP.getDouble(.3);
 //        double LI = LeftI.getDouble(0);
@@ -185,7 +178,7 @@ public class Chassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_odometry.update(getHeading(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters( getDistanceR()));
+        m_position = m_odometry.update(getHeading(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters( getDistanceR()));
     }
 
     /**
@@ -238,7 +231,7 @@ public class Chassis extends SubsystemBase {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
         Navx.resetNavX();
-        m_odometry.resetPosition(new Pose2d(), getHeading());
+        m_odometry.resetPosition(m_position, getHeading());
     }
 
     /**
@@ -490,7 +483,7 @@ public class Chassis extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return m_odometry.getPoseMeters();
+        return m_position;
     }
 
     public void setOutput(double leftVolts, double rightVolts) {
@@ -504,6 +497,10 @@ public class Chassis extends SubsystemBase {
                 m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
                 m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60
         );
+    }
+
+    public void setPosition(Pose2d position){
+        this.m_position = position;
     }
 
 //    private void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
@@ -551,9 +548,7 @@ public class Chassis extends SubsystemBase {
         SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
         SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
 
-    }
-
-      SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
+        SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
     }
