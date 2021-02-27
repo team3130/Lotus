@@ -4,13 +4,17 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 import frc.team3130.robot.subsystems.Chassis;
+
+import java.util.ArrayList;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
@@ -30,6 +34,8 @@ public class Robot extends TimedRobot {
 
     boolean gettime = true;
     boolean checkif = true;
+
+    SendableChooser<String> chooser = new SendableChooser<>();
 
 
     /**
@@ -53,6 +59,21 @@ public class Robot extends TimedRobot {
 
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
+
+        chooser.addOption("DriveStraight", "DriveStraight");
+        chooser.addOption("DriveS", "DriveS");
+
+        SmartDashboard.putData("Auto mode", chooser);
+
+        String autoSelection = "";
+        ArrayList<String> trajectoryPaths = new ArrayList<String>();
+
+        if (chooser.getSelected() == null || chooser.getSelected().isEmpty()) {
+            System.out.println("dashboard is null!");
+            autoSelection = "startmidfar3balltrench";
+        } else {
+            autoSelection = chooser.getSelected();
+        }
 
     }
 
