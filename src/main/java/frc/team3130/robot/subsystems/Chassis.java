@@ -41,10 +41,7 @@ public class Chassis extends SubsystemBase {
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
     private NetworkTableEntry LeftP =
-            tab.add("Left P", .3)
-                    .withWidget(BuiltInWidgets.kGraph)
-                    .withProperties(Map.of("min", 0, "max", 1))
-                    .getEntry();
+            tab.add("Left P", .3).getEntry();
 //    private NetworkTableEntry LeftI =
 //            tab.add("Left I", 0)
 //                    .withWidget(BuiltInWidgets.kNumberSlider)
@@ -56,11 +53,8 @@ public class Chassis extends SubsystemBase {
 //                    .withProperties(Map.of("min", 0, "max", 1))
 //                    .getEntry();
 //
-//    private NetworkTableEntry RightP =
-//            tab.add("Right P", .3)
-//                    .withWidget(BuiltInWidgets.kNumberSlider)
-//                    .withProperties(Map.of("min", 0, "max", 1))
-//                    .getEntry();
+    private NetworkTableEntry RightP =
+            tab.add("Right P", .3).getEntry();
 //    private NetworkTableEntry RightI =
 //            tab.add("Right I", 0)
 //                    .withWidget(BuiltInWidgets.kNumberSlider)
@@ -164,18 +158,18 @@ public class Chassis extends SubsystemBase {
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
         m_odometry = new DifferentialDriveOdometry(getHeading());
 
-//        double LP = LeftP.getDouble(.3);
+        double LP = LeftP.getDouble(.3);
 //        double LI = LeftI.getDouble(0);
 //        double LD = LeftD.getDouble(0);
 //
-//        double RP = RightP.getDouble(.3);
+        double RP = RightP.getDouble(.3);
 //        double RI = RightI.getDouble(0);
 //        double RD = RightD.getDouble(0);
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
-        m_leftPIDController = new PIDController(.32, 0, 0);
-        m_rightPIDConttroller = new PIDController(.32, 0, 0);
+        m_leftPIDController = new PIDController(LP, 0, 0);
+        m_rightPIDConttroller = new PIDController(RP, 0, 0);
 
         m_leftMotorRear.follow(m_leftMotorFront);
         m_rightMotorRear.follow(m_rightMotorFront);
@@ -243,6 +237,7 @@ public class Chassis extends SubsystemBase {
     public void reset() {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
+        Navx.resetNavX();
         m_odometry.resetPosition(new Pose2d(), getHeading());
     }
 
@@ -538,15 +533,17 @@ public class Chassis extends SubsystemBase {
 //    }
 
 
-//    public void outputToShuffleboard() {
-//        SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
-//        SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
+    public void outputToShuffleboard() {
+        SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
+        SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
 
-//        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
-//        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
-//
+        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
+        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
+
 //        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
 //        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+        SmartDashboard.putNumber("Chassis Distance", getDistance());
+        SmartDashboard.putNumber("NavX angle", getHeading().getDegrees());
 
 //        SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
 //        SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
@@ -554,6 +551,6 @@ public class Chassis extends SubsystemBase {
 //      SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
 //        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
-//    }
+    }
 
 }

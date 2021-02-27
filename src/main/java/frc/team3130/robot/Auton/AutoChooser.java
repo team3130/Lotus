@@ -5,11 +5,15 @@ import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,7 +63,7 @@ public class AutoChooser {
 
     public void setAutonCommand(Chassis m_chassis) {
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
-                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
+                Units.feetToMeters(RobotMap.kMaxVelocityPerSecond));
 
         config.setKinematics(m_chassis.getmKinematics());
 
@@ -72,6 +76,21 @@ public class AutoChooser {
         } catch (ArrayIndexOutOfBoundsException ref) {
             DriverStation.reportError("Invalid Path, defaulting to DriveStraight", ref.getStackTrace());
         }
+
+//        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+//                // Start at the origin facing the +X direction
+//                new Pose2d(0, 0, new Rotation2d(0)),
+//                // Pass through these two interior waypoints, making an 's' curve path
+//                List.of(
+//                        new Translation2d(1, 1),
+//                        new Translation2d(2, -1)
+//                ),
+//                // End 3 meters straight ahead of where we started, facing forward
+//                new Pose2d(3, 0, new Rotation2d(0)),
+//                // Pass config
+//                config
+//        );
+
 
         // creating a Ramsete command which is used in AutonInit
         command = new RamseteCommand(
