@@ -64,7 +64,6 @@ public class Robot extends TimedRobot {
         m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
-        m_robotContainer.getChassis().reset();
     }
 
     @Override
@@ -154,9 +153,8 @@ public class Robot extends TimedRobot {
 
     public void outputToShuffleboard() {
         CommandScheduler.getInstance().run();
-        Navx.GetInstance().outputToShuffleboard();
+//        Navx.GetInstance().outputToShuffleboard();
         m_robotContainer.getChassis().outputToShuffleboard();
-//        m_chassis.outputToShuffleboard();
 
         m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();

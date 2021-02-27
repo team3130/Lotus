@@ -39,6 +39,10 @@ public class Navx {
         }
     }
 
+    public static void resetNavX(){
+        m_navX.reset();
+    }
+
     /**
      * Returns the current angle of the Navx. If the Navx is not present, will return -1.
      *

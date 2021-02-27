@@ -41,8 +41,7 @@ public class Chassis extends SubsystemBase {
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
     private NetworkTableEntry LeftP =
-            tab.add("Left P", .3)
-                    .getEntry();
+            tab.add("Left P", .3).getEntry();
 //    private NetworkTableEntry LeftI =
 //            tab.add("Left I", 0)
 //                    .withWidget(BuiltInWidgets.kNumberSlider)
@@ -55,8 +54,7 @@ public class Chassis extends SubsystemBase {
 //                    .getEntry();
 //
     private NetworkTableEntry RightP =
-            tab.add("Right P", .3)
-                    .getEntry();
+            tab.add("Right P", .3).getEntry();
 //    private NetworkTableEntry RightI =
 //            tab.add("Right I", 0)
 //                    .withWidget(BuiltInWidgets.kNumberSlider)
@@ -239,6 +237,7 @@ public class Chassis extends SubsystemBase {
     public void reset() {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
+        Navx.resetNavX();
         m_odometry.resetPosition(new Pose2d(), getHeading());
     }
 
@@ -541,13 +540,18 @@ public class Chassis extends SubsystemBase {
         SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
         SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
 
+//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+        SmartDashboard.putNumber("Chassis Distance", getDistance());
+        SmartDashboard.putNumber("NavX angle", getHeading().getDegrees());
+
         SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
         SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
         SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
         SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
 
-        SmartDashboard.putNumber("NavX local angle value", getHeading().getDegrees());
+    }
 
       SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());

@@ -1,9 +1,9 @@
 {
   "lengthUnit": "Inch",
-  "exportUnit": "Same as Project",
-  "maxVelocity": 135.0,
-  "maxAcceleration": 490.0,
+  "exportUnit": "Always Meters",
+  "maxVelocity": 100.0,
+  "maxAcceleration": 210.0,
   "wheelBase": 28.0,
-  "gameName": "Bounce Path",
+  "gameName": "Slalom Path",
   "outputDir": "../../PathsOut"
 }
