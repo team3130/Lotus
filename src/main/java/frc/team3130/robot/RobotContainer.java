@@ -1,6 +1,8 @@
 package frc.team3130.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.RamseteController;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -38,6 +41,9 @@ import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -65,6 +71,9 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
+    private ArrayList<String> paths = new ArrayList<>();
+    private ArrayList<RamseteCommand> commands = new ArrayList<>();
+
 
     public static double getSkywalker() {
         double spin = 0;
@@ -82,6 +91,7 @@ public class RobotContainer {
 
     // Binding the buttons and triggers that are defined above to respective commands
     public RobotContainer() {
+        generateTrajectories();
         configureButtonBindings();
         m_chassis.setDefaultCommand(
                 new DefaultDrive(
@@ -151,74 +161,62 @@ public class RobotContainer {
         m_turret.setDefaultCommand(//I DONT KNOW WHATS GOIN OOOOONNNNNNNNNNNNNNNN SETTING DEFAULT COMMANDS ARE WWWWWEEEEEIIIIRRRRDDDD );
     }*/
 
-    public Command getAutonomousCommand() {
-        //@Tomas this is the circly boi
+    public void generateTrajectories() {
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
         config.setKinematics(m_chassis.getmKinematics());
 
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(
-                        new Translation2d(1, 1),
-                        new Translation2d(2, -1)
-                ),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-                // Pass config
-                config
-        );
+        paths.add("Straight");
+        paths.add("DriveStraight");
+        paths.add("B1D2Markers");
+        paths.add("B1toB8");
+        paths.add("BarrelRacing");
+        paths.add("Bounce");
+        paths.add("GalacticSearchABlue");
+        paths.add("GalacticSearchARed");
+        paths.add("GalacticSearchBBlue");
+        paths.add("GalacticSearchBRed");
+        paths.add("QuestionMark");
+        paths.add("Slalom");
 
-        // creating a Ramsete command which is used in AutonInit
-        RamseteCommand command = new RamseteCommand(
-                exampleTrajectory,
-                m_chassis::getPose,
-                new RamseteController(2.0, 0.7),
-                m_chassis.getFeedforward(),
-                m_chassis.getmKinematics(),
-                m_chassis::getSpeeds,
-                m_chassis.getleftPIDController(),
-                m_chassis.getRightPIDController(),
-                m_chassis::setOutput,
-                m_chassis
-        );
+        for (int looper = 0; looper != paths.size(); looper++) {
+
+            // variably call Json file
+            String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths.get(looper) + ".wpilib.json";
+            Trajectory trajectoryTemp = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectoryTemp = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
 
 
+            // creating a Ramsete command which is used in AutonInit
+            RamseteCommand command = new RamseteCommand(
+                    trajectoryTemp,
+                    m_chassis::getPose,
+                    new RamseteController(2.0, 0.7),
+                    m_chassis.getFeedforward(),
+                    m_chassis.getmKinematics(),
+                    m_chassis::getSpeeds,
+                    m_chassis.getleftPIDController(),
+                    m_chassis.getRightPIDController(),
+                    m_chassis::setOutput,
+                    m_chassis
+            );
+            command.addRequirements(m_chassis);
+            commands.add(command);
+        }
+    }
 
-/*        //@Tomas this is the best drive S boy I could make
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
-                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
+    public ArrayList<RamseteCommand> getAutonomousCommands() {
+        return commands;
+    }
 
-        config.setKinematics(m_chassis.getmKinematics());
-
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(0, 0, new Rotation2d(0)),
-                        new Pose2d(2, 2, new Rotation2d(0)),
-                        new Pose2d(-2, -2, new Rotation2d(45))
-
-                ), config);
-
-        // creating a Ramsete command which is used in AutonInit
-        RamseteCommand command = new RamseteCommand(
-                trajectory,
-                m_chassis::getPose,
-                new RamseteController(2.0, 0.7),
-                m_chassis.getFeedforward(),
-                m_chassis.getmKinematics(),
-                m_chassis::getSpeeds,
-                m_chassis.getleftPIDController(),
-                m_chassis.getRightPIDController(),
-                m_chassis::setOutput,
-                m_chassis
-        );*/
-
-
-        command.addRequirements(m_chassis);
-
-        return command;
+    public ArrayList<String> getPaths() {
+        return paths;
     }
 
     public void reset(){

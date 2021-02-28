@@ -60,13 +60,16 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
+        for (int loop = 0; loop != m_robotContainer.getAutonomousCommands().size(); loop++) {
+            chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getPaths().get(loop));
+        }
+
         chooser.addOption("DriveStraight", "DriveStraight");
         chooser.addOption("DriveS", "DriveS");
 
         SmartDashboard.putData("Auto mode", chooser);
 
         String autoSelection = "";
-        ArrayList<String> trajectoryPaths = new ArrayList<String>();
 
         if (chooser.getSelected() == null || chooser.getSelected().isEmpty()) {
             System.out.println("dashboard is null!");
