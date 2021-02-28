@@ -1,9 +1,6 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,7 +32,8 @@ public class Robot extends TimedRobot {
     boolean gettime = true;
     boolean checkif = true;
 
-    SendableChooser<String> chooser = new SendableChooser<>();
+    private SendableChooser<Command> chooser = new SendableChooser<>();
+    private Command autoSelection;
 
 
     /**
@@ -61,22 +59,10 @@ public class Robot extends TimedRobot {
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
         for (int loop = 0; loop != m_robotContainer.getAutonomousCommands().size(); loop++) {
-            chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getPaths().get(loop));
+            chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
         }
-
-        chooser.addOption("DriveStraight", "DriveStraight");
-        chooser.addOption("DriveS", "DriveS");
 
         SmartDashboard.putData("Auto mode", chooser);
-
-        String autoSelection = "";
-
-        if (chooser.getSelected() == null || chooser.getSelected().isEmpty()) {
-            System.out.println("dashboard is null!");
-            autoSelection = "startmidfar3balltrench";
-        } else {
-            autoSelection = chooser.getSelected();
-        }
 
     }
 
@@ -122,7 +108,14 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
-        autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+        if (chooser.getSelected() == null) {
+            System.out.println("dashboard is null!");
+            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1);
+            DriverStation.reportError("selected path was null", false);
+        } else {
+            autonomousCommand = chooser.getSelected();
+        }
 
         // Schedule autonomous command if it exists
         if (autonomousCommand != null) {
