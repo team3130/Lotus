@@ -94,7 +94,7 @@ public class RobotMap {
     public static double kTurretHoldD = 17.0;
     public static double kTurretHoldF = 0;
 
-    public static double kTurretTicksPerDegree = (kUseCompbot ? (1.0 / 360.0) * 4096.0 * (204.0 / 32.0) : (1.0 / 360.0) * 4096.0 * (204.0 / 30.0)); // Checked 1/31
+    public static double kTurretTicksPerDegree = ( (1.0 / 360.0) * 4096.0 * (204.0 / 30.0)); // Checked 1/31
     public static double kTurretOnTargetTolerance = 0.5; // In degrees
 
     public static double kTurretReadyToAimTolerance = 5.0; // In degrees
@@ -102,8 +102,8 @@ public class RobotMap {
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static double kLimelightPitch = (kUseCompbot ? -39.025 : -31.625);   // Facing up is negative Checked: 2/21
-    public static double kLimelightYaw = (kUseCompbot ? 1.8 : 3.1);        // Aiming bias, facing left is positive
+    public static double kLimelightPitch = -43.5;   // Facing up is negative Checked: 2/21
+    public static double kLimelightYaw = ( 3.1);        // Aiming bias, facing left is positive
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
     public static double kLimelightLength = 9.5;    // Distance to the turret's rotation axis
@@ -126,7 +126,7 @@ public class RobotMap {
 
     public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
     public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
-    public static double kFlywheelReadyTolerance = 20.0; // In RPM
+    public static double kFlywheelReadyTolerance = 40; // In RPM
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;

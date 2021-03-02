@@ -158,11 +158,12 @@ public class Flywheel extends SubsystemBase {
     }
 
     public void outputToShuffleboard() {
-//        SmartDashboard.putNumber("Flywheel Setpoint", getRPMSetpoint());
+        SmartDashboard.putNumber("Flywheel Setpoint", getRPMSetpoint());
         SmartDashboard.putNumber("Flywheel RPM", getRPM());
 //        SmartDashboard.putNumber("Flywheel Raw speed", getRawSpeed());
         SmartDashboard.putNumber("Flywheel Error", getRPMError());
 //        SmartDashboard.putBoolean("Flywheel canShoot", canShoot());
+        SmartDashboard.putBoolean("Can Shoot",canShoot());
     }
 
 }

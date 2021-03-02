@@ -79,11 +79,8 @@ public class WheelSpeedCalculations {
 
 
     public WheelSpeedCalculations() {
-        if (RobotMap.kUseCompbot) {
-            FILEPATH = Filesystem.getDeployDirectory() + File.separator + "shooter_data_comp.csv";
-        } else {
-            FILEPATH = Filesystem.getDeployDirectory() + File.separator + "shooter_data_practice.csv";
-        }
+        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "shooter_data_comp.csv";
+
 
         RPMOffset = RobotMap.kRPMChange;
 
