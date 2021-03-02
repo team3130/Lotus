@@ -11,6 +11,7 @@ import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 import frc.team3130.robot.subsystems.Chassis;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
@@ -59,7 +60,12 @@ public class Robot extends TimedRobot {
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
         for (int loop = 0; loop != m_robotContainer.getAutonomousCommands().size(); loop++) {
-            chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
+            try {
+                chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
+            }
+            catch (IndexOutOfBoundsException e) {
+                DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + loop, false);
+            }
         }
 
         SmartDashboard.putData("Auto mode", chooser);
