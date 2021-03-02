@@ -28,7 +28,7 @@ public class Hood extends SubsystemBase {
 	private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
 
 	private NetworkTableEntry hoodAngle =
-			tab.add("angle", 1.0)
+			tab.add("angle", 0.0)
 					.getEntry();
 
 
@@ -40,10 +40,12 @@ public class Hood extends SubsystemBase {
 		m_hood.configFactoryDefault();
 		m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		m_hood.setSelectedSensorPosition(0,0,10);
-//		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
-//		m_hood.configReverseSoftLimitThreshold(0);
+		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
+		m_hood.configReverseSoftLimitThreshold(0);
 		m_hood.configForwardSoftLimitEnable(false);
 		m_hood.configReverseSoftLimitEnable(false);
+
+
 
 		//intialization value for hoodstate. Currently arbitrary number, should change later
 		m_hoodControlState = HoodState.MAX_65;
@@ -90,6 +92,7 @@ public class Hood extends SubsystemBase {
 		else if (distance <= 270 ){m_hoodControlState = HoodState.ZONE7_48;}//red
 	}
 
+
 	public void changeHoodAngle(){
 		switch (m_hoodControlState) {
 			case ZONE1_66:
@@ -121,7 +124,9 @@ public class Hood extends SubsystemBase {
 		return m_hood.getSelectedSensorPosition(0) / RobotMap.kHoodTicksPerDegree;
 	}
 	public void outputToShuffleboard(){
+
 		SmartDashboard.putNumber("Hood Angle", getRelativeHoodAngle());
+		SmartDashboard.putNumber("Encoder value", m_hood.getSelectedSensorPosition());
 	}
 
 

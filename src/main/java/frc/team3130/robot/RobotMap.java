@@ -112,7 +112,7 @@ public class RobotMap {
 
     //Hood
     public static int kHoodForward = 17669;//TODO: FIND Real Number
-    public static double kHoodTicksPerDegree = (1.0 / 360.0) * 2048 * (2211.0 / 145.0); //= (kUseCompbot ? *put comp gear ratio here* : *put practice ratio here* ;)
+    public static double kHoodTicksPerDegree = (1.0 / 360.0) * 4096 * (2211.0 / 145.0); //= (kUseCompbot ? *put comp gear ratio here* : *put practice ratio here* ;)
 
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
@@ -127,7 +127,7 @@ public class RobotMap {
 
     public static double kFlywheelTicksPerRevolution = 2048.0 * (24.0 / 60.0); // Checked 2/11
     public static double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
-    public static double kFlywheelReadyTolerance = 20.0; // In RPM
+    public static double kFlywheelReadyTolerance = 80.0; // In RPM
 
     //Hopper
     public static double kHopperMaxVoltage = 12.0;
