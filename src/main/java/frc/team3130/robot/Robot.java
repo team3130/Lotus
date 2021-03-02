@@ -121,10 +121,6 @@ public class Robot extends TimedRobot {
             DriverStation.reportError("selected path was null", false);
         } else {
             autonomousCommand = chooser.getSelected();
-        }
-
-        // Schedule autonomous command if it exists
-        if (autonomousCommand != null) {
             scheduler.schedule(true, autonomousCommand);
             System.out.println("Found autonomous Command");
         }
