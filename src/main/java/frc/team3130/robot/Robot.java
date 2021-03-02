@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
                 chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
             }
             catch (IndexOutOfBoundsException e) {
-                DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + loop, false);
+                DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
             }
         }
 
