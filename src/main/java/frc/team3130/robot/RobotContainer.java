@@ -71,7 +71,7 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
-    private ArrayList<String> paths = new ArrayList<>();
+    private ArrayList<String> paths;
     private ArrayList<RamseteCommand> commands = new ArrayList<>();
 
 
@@ -162,23 +162,12 @@ public class RobotContainer {
     }*/
 
     public void generateTrajectories() {
+        paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBRed", "QuestionMark", "Slalom"));
+
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
         config.setKinematics(m_chassis.getmKinematics());
-
-        paths.add("Straight");
-        paths.add("DriveStraight");
-        paths.add("B1D2Markers");
-        paths.add("B1toB8");
-        paths.add("BarrelRacing");
-        paths.add("Bounce");
-        paths.add("GalacticSearchABlue");
-        paths.add("GalacticSearchARed");
-        paths.add("GalacticSearchBBlue");
-        paths.add("GalacticSearchBRed");
-        paths.add("QuestionMark");
-        paths.add("Slalom");
 
         for (int looper = 0; looper != paths.size(); looper++) {
 
