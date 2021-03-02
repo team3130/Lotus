@@ -11,11 +11,11 @@ import java.util.ArrayList;
 public class PixyCam {
 
     private Pixy2 m_pixy;
-    private boolean isPixyConnected;
-    private final int targetError = 10;
-    private final int xC3 = 215; //x-value of point C3 (ball we look at for Path A red)
-    private final int yC3 = 167;  //y-val of C3
-    private final int xD5 = 0; //TODO: find real values/real ball
+    private boolean m_isPixyConnected;
+    private final int m_targetError = 10; //10 pixels of lenience for checking where ball is
+    private final int xB3 = 215; //x-value of point B3 (ball we look at for Path B red)
+    private final int yB3 = 167;  //y-val of B3
+    private final int xD5 = 0; //TODO: find real values
     private final int yD5 = 0;
     //pixy cam res is 315 x 207 (horizontal x vertical)
 
@@ -23,13 +23,13 @@ public class PixyCam {
         try{
         m_pixy = Pixy2.createInstance(link);
         m_pixy.init();
-        isPixyConnected = true;
+        m_isPixyConnected = true;
         }
         catch (Exception ex) {
-            //If connection fails log the error and fall back to encoder based angles.
+            //If connection fails log the error
             String str_error = "Pixy didn't get constructed right. This is a [REDACTED] moment " + ex.getLocalizedMessage();
             DriverStation.reportError(str_error, true);
-            isPixyConnected = false;
+            m_isPixyConnected = false;
         }
     }
 
@@ -37,20 +37,20 @@ public class PixyCam {
         try{
             m_pixy = Pixy2.createInstance(link);
             m_pixy.init(arg);
-            isPixyConnected = true;
+            m_isPixyConnected = true;
         }
         catch (Exception ex) {
             //If connection fails log the error and fall back to encoder based angles.
             String str_error = "Pixy didn't get constructed right. This is a [REDACTED] moment " + ex.getLocalizedMessage();
             DriverStation.reportError(str_error, true);
-            isPixyConnected = false;
+            m_isPixyConnected = false;
         }
     }
 
     private boolean isBallHere(Block targetBlock, int xTarget, int yTarget){
-       if(isPixyConnected) {
-           if (targetBlock.getX() >= xTarget - targetError && targetBlock.getX() <= xTarget + targetError) {
-               if (targetBlock.getY() >= yTarget - targetError && targetBlock.getY() <= yTarget + targetError) {
+       if(m_isPixyConnected) {
+           if (targetBlock.getX() >= xTarget - m_targetError && targetBlock.getX() <= xTarget + m_targetError) {
+               if (targetBlock.getY() >= yTarget - m_targetError && targetBlock.getY() <= yTarget + m_targetError) {
                    return true;
 
                }
@@ -63,34 +63,43 @@ public class PixyCam {
     //path should be either "A" or "B" depending on the path
     Block largestBlock = largestBlock();
     public boolean isRedPath(String path){
-       if(isPixyConnected){
-        if (path.equals("A")){
-            if(isBallHere(largestBlock, xC3,yC3)){
-                return true;
+        if(m_isPixyConnected) {
+
+            try {
+                if (path.equals("A")) {
+                    if (isBallHere(largestBlock, xD5, yD5)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else if (path.equals("B")) {
+                    if (isBallHere(largestBlock, xB3, yB3)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    System.out.println("Either: Neither A nor B was input for the method or my code broke. returning false (path blue) YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+                    return false;
+                }
             }
-            else{return false;}
-        }
-        else if (path.equals("B")){
-            if(isBallHere(largestBlock,xD5,yD5)){
-                return true;
+
+            catch(NullPointerException ex){
+                String str_error = "Pixy didn't detect any blocks. Returning false (blue path). " + ex.getLocalizedMessage();
+                DriverStation.reportError(str_error, true);
+                return false;
             }
-            else{return false;}
         }
         else{
-            System.out.println("Either: Neither A nor B was input for the method or my code broke. returning false (path blue) YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+            System.out.println("Pixy isn't connected. Returning false(isRedPath()) (blue has been set to path). This is a [REDACTED] moment");
             return false;
         }
-       }
-       else{
-           System.out.println("Pixy isn't connected. Returning false(isRedPath()) (blue has been set to path). This is a [REDACTED] moment");
-           return false;
-       }
 
     }
 
     private Block largestBlock() {
 
-        if (isPixyConnected){
+        if (m_isPixyConnected){
             // System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
 
             int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 12);
