@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Chassis;
 import frc.team3130.robot.subsystems.ExampleSubsystem;
 
-public class DriveFoward extends CommandBase {
+public class DriveRight extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
 
-    public DriveFoward(Chassis subsystem) {
+    public DriveRight(Chassis subsystem) {
         //mapping to object passed through parameter
         m_chassis = subsystem;
     }
@@ -29,7 +29,7 @@ public class DriveFoward extends CommandBase {
      */
     @Override
     public void execute() {
-        m_chassis.driveTank(m_chassis.getSetLeftOutput(), m_chassis.getSetRightOutput(), false);
+        m_chassis.driveTank(m_chassis.getSetLeftOutput(), 0, false);
 
     }
 
