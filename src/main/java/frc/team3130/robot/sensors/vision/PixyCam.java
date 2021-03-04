@@ -57,7 +57,8 @@ public class PixyCam {
            }
            return false;
        }
-       System.out.println("Pixy isn't connected. Returning false(isBallHere()) This is a [REDACTED] moment");
+       String str_err = "Pixy isn't connected. Returning false(isBallHere()) This is a [REDACTED] moment";
+        DriverStation.reportError(str_err, false);
        return false;
     }
     //path should be either "A" or "B" depending on the path
@@ -71,7 +72,7 @@ public class PixyCam {
 
             if(blockCount <= 0){
                 String str_error = "Pixy didn't detect any blocks returning false (blue path)";
-                DriverStation.reportError(str_error, true);
+                DriverStation.reportError(str_error, false);
             }
 
                for (Block block: blocks) {
@@ -93,14 +94,15 @@ public class PixyCam {
                 }
                     } catch (Exception ex) {
                     String str_error = "Pixy or one of its objects was null. Returning false (blue path). " + ex.getLocalizedMessage();
-                    DriverStation.reportError(str_error, true);
+                    DriverStation.reportError(str_error, false);
                     return false;
                 }
             }
 
 
         else{
-            System.out.println("Pixy isn't connected. Returning false(isRedPath()) (blue has been set to path). This is a [REDACTED] moment");
+           String str_err = "Pixy isn't connected. Returning false(isRedPath()) (blue has been set to path). This is a [REDACTED] moment";
+           DriverStation.reportError(str_err, false);
             return false;
         }
 
@@ -129,7 +131,9 @@ public class PixyCam {
         return largestBlock;
     }
         else {
-            System.out.println("Pixy isn't connected. Returning null (largestBlock()). This is a [REDACTED] moment");
+            String str_err = "Pixy isn't connected. Returning null (largestBlock()). This is a [REDACTED] moment";
+            DriverStation.reportError(str_err, false);
+
             return null;
         }
     }
