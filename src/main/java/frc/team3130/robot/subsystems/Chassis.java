@@ -494,8 +494,8 @@ public class Chassis extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
-                m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(3.0) / 60
+                m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(RobotMap.kLWheelDiameter) / 60,
+                m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(RobotMap.kRWheelDiameter) / 60
         );
     }
 
