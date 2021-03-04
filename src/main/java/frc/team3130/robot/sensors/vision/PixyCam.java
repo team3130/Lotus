@@ -61,39 +61,50 @@ public class PixyCam {
        return false;
     }
     //path should be either "A" or "B" depending on the path
-    Block largestBlock = largestBlock();
+    //Block largestBlock = largestBlock();
+
     public boolean isRedPath(String path){
         if(m_isPixyConnected) {
+           try{
+               int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 3);
+               ArrayList<Block> blocks = m_pixy.getCCC().getBlockCache();
 
-            try {
-                if (path.equals("A")) {
-                    if (isBallHere(largestBlock, xD5, yD5)) {
-                        return true;
+            if(blockCount <= 0){
+                String str_error = "Pixy didn't detect any blocks returning false (blue path)";
+                DriverStation.reportError(str_error, true);
+            }
+
+               for (Block block: blocks) {
+
+                    if (path.equals("A")) {
+                        if (isBallHere(block, xD5, yD5)) {
+                            return true;
+                        }
+                    } else if (path.equals("B")) {
+                        if (isBallHere(block, xB3, yB3)) {
+                            return true;
+                        }
                     } else {
+                        System.out.println("Either: Neither A nor B was input for the method or my code broke. returning false (path blue) YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
                         return false;
                     }
-                } else if (path.equals("B")) {
-                    if (isBallHere(largestBlock, xB3, yB3)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    System.out.println("Either: Neither A nor B was input for the method or my code broke. returning false (path blue) YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+
+
+                }
+                    } catch (Exception ex) {
+                    String str_error = "Pixy or one of its objects was null. Returning false (blue path). " + ex.getLocalizedMessage();
+                    DriverStation.reportError(str_error, true);
                     return false;
                 }
             }
 
-            catch(NullPointerException ex){
-                String str_error = "Pixy didn't detect any blocks. Returning false (blue path). " + ex.getLocalizedMessage();
-                DriverStation.reportError(str_error, true);
-                return false;
-            }
-        }
+
         else{
             System.out.println("Pixy isn't connected. Returning false(isRedPath()) (blue has been set to path). This is a [REDACTED] moment");
             return false;
         }
+
+        return false; //returns false if no block was found in the indicated position
 
     }
 
@@ -122,6 +133,8 @@ public class PixyCam {
             return null;
         }
     }
+
+
 
     public Pixy2 getPixy(){return m_pixy;}
 
