@@ -120,9 +120,9 @@ public class Robot extends TimedRobot {
             System.out.println("dashboard is null!");
             autonomousCommand = m_robotContainer.getAutonomousCommands().get(1);
             DriverStation.reportError("selected path was null", false);
-            System.out.println(autonomousCommand.getName());
         } else {
             autonomousCommand = chooser.getSelected();
+            System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             scheduler.schedule(true, autonomousCommand);
             System.out.println("Found autonomous Command");
         }
