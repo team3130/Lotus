@@ -197,6 +197,7 @@ public class RobotContainer {
             );
             command.addRequirements(m_chassis);
             commands.add(command);
+            command.setName(paths.get(looper));
         }
     }
 
