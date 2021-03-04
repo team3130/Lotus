@@ -162,7 +162,7 @@ public class RobotContainer {
     }*/
 
     public void generateTrajectories() {
-        paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBRed", "QuestionMark", "Slalom"));
+        paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBRed", "GalacticSearchBBlue", "QuestionMark", "Slalom"));
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
