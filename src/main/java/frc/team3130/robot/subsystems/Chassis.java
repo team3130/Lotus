@@ -161,8 +161,8 @@ public class Chassis extends SubsystemBase {
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
-        m_leftPIDController = new PIDController(LP, 0, 0);
-        m_rightPIDConttroller = new PIDController(RP, 0, 0);
+        m_leftPIDController = new PIDController(.32, 0, 0);
+        m_rightPIDConttroller = new PIDController(.32, 0, 0);
 
         m_leftMotorRear.follow(m_leftMotorFront);
         m_rightMotorRear.follow(m_rightMotorFront);
