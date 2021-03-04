@@ -59,9 +59,10 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
-        for (int loop = 0; loop != m_robotContainer.getAutonomousCommands().size(); loop++) {
+        for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
                 chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
+
             }
             catch (IndexOutOfBoundsException e) {
                 DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
