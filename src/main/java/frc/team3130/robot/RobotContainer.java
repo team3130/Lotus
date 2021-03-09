@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -161,7 +164,7 @@ public class RobotContainer {
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
         config.setKinematics(m_chassis.getmKinematics());
-
+        /*
         for (int looper = 0; looper != paths.size(); looper++) {
 
             // variably call Json file
@@ -173,6 +176,22 @@ public class RobotContainer {
             } catch (IOException ex) {
                 DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
             }
+
+         */
+
+        Trajectory trajectoryTemp = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                new Pose2d(0, 0, new Rotation2d(0)),
+                // Pass through these two interior waypoints, making an 's' curve path
+                List.of(
+                        new Translation2d(1, 1),
+                        new Translation2d(2, -1)
+                ),
+                // End 3 meters straight ahead of where we started, facing forward
+                new Pose2d(3, 0, new Rotation2d(0)),
+                // Pass config
+                config
+        );
 
 
             // creating a Ramsete command which is used in AutonInit
@@ -188,11 +207,13 @@ public class RobotContainer {
                     m_chassis::setOutput,
                     m_chassis
             );
+            /*
             command.addRequirements(m_chassis);
             commands.add(command);
             command.setName(paths.get(looper));
+             */
+        commands.add(command);
         }
-    }
 
     public ArrayList<RamseteCommand> getAutonomousCommands() {
         return commands;

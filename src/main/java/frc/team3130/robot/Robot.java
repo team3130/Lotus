@@ -115,14 +115,14 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
+        autonomousCommand = m_robotContainer.getAutonomousCommands().get(0);
+        if (autonomousCommand == null) {
 
-        if (chooser.getSelected() == null) {
-            System.out.println("dashboard is null!");
-            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1);
+            /*System.out.println("dashboard is null!");
+            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1); */
             DriverStation.reportError("selected path was null", false);
         } else {
-            autonomousCommand = chooser.getSelected();
-            System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            // System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             scheduler.schedule(true, autonomousCommand);
             System.out.println("Found autonomous Command");
         }
