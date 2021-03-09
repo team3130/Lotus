@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     boolean gettime = true;
     boolean checkif = true;
 
-    private SendableChooser<Command> chooser = new SendableChooser<>();
+    // private SendableChooser<Command> chooser = new SendableChooser<>();
     private Command autoSelection;
 
 
@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
-
+        /*
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
                 chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
@@ -70,6 +70,7 @@ public class Robot extends TimedRobot {
         }
 
         SmartDashboard.putData("Auto mode", chooser);
+         */
 
     }
 
