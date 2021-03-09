@@ -73,7 +73,7 @@ public class Chassis extends SubsystemBase {
     private SpeedControllerGroup m_left;
     private SpeedControllerGroup m_right;
 
-    private Pose2d m_position = new Pose2d(0.762, -3.81, new Rotation2d(0.00));
+    private Pose2d m_position = new Pose2d(0, 8, new Rotation2d(0.00));
 
     //Create and define all standard data types needed
 
@@ -494,9 +494,8 @@ public class Chassis extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(RobotMap.kLWheelDiameter) / 60,
-                m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisGearRatio * 2 * Math.PI * Units.inchesToMeters(RobotMap.kRWheelDiameter) / 60
-        );
+                ((m_leftMotorFront.getSelectedSensorVelocity(0) * Math.PI * Units.inchesToMeters(RobotMap.kLWheelDiameter)) / (4096/RobotMap.kChassisGearRatio) * 10),
+                ((m_rightMotorFront.getSelectedSensorPosition(0) * Math.PI * Units.inchesToMeters(RobotMap.kRWheelDiameter)) / (4096/RobotMap.kChassisGearRatio) * 10));
     }
 
     public void setPosition(Pose2d position){
