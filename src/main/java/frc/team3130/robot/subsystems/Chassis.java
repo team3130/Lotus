@@ -2,7 +2,9 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.fasterxml.jackson.core.JsonParser;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -20,6 +22,12 @@ import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.Navx;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.FileReader;
 
 public class Chassis extends SubsystemBase {
 
@@ -73,7 +81,7 @@ public class Chassis extends SubsystemBase {
     private SpeedControllerGroup m_left;
     private SpeedControllerGroup m_right;
 
-    private Pose2d m_position = new Pose2d(0.762, -3.81, new Rotation2d(0.00));
+    private Pose2d m_position;
 
     //Create and define all standard data types needed
 
@@ -88,6 +96,7 @@ public class Chassis extends SubsystemBase {
      */
 
     public Chassis() {
+        m_position = new Pose2d(0, 0, new Rotation2d(0.00));
 //            super(
 //                    // The ProfiledPIDController used by the subsystem
 //                    new ProfiledPIDController(
@@ -179,6 +188,21 @@ public class Chassis extends SubsystemBase {
     @Override
     public void periodic() {
         m_position = m_odometry.update(getHeading(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters( getDistanceR()));
+    }
+
+    public void setInitPose(String commandName) {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("/home/lvuser/deploy/paths/" + commandName + ".wpilib.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray x = (JSONArray) jsonObject.get("x");
+            JSONArray y = (JSONArray) jsonObject.get("y");
+
+            m_position = new Pose2d(x.getDouble(0), y.getDouble(0), new Rotation2d(0.00));
+        }
+        catch (Exception e) {
+            DriverStation.reportError("Could not generate an initial POSE from the JSON. Using 0,0 as default", false);
+        }
     }
 
     /**

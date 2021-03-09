@@ -164,9 +164,9 @@ public class RobotContainer {
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
 
         config.setKinematics(m_chassis.getmKinematics());
-        /*
-        for (int looper = 0; looper != paths.size(); looper++) {
 
+        for (int looper = 0; looper != paths.size(); looper++) {
+            /*
             // variably call Json file
             String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths.get(looper) + ".wpilib.json";
             Trajectory trajectoryTemp = new Trajectory();
@@ -178,6 +178,7 @@ public class RobotContainer {
             }
 
          */
+        }
 
         Trajectory trajectoryTemp = TrajectoryGenerator.generateTrajectory(
                 List.of(
