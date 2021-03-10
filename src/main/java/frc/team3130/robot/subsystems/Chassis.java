@@ -290,7 +290,7 @@ public class Chassis extends SubsystemBase {
      * @return The absolute distance of the left side in inches
      */
     public double getDistanceL() {
-        return m_leftMotorFront.getSelectedSensorPosition(0) / RobotMap.kLChassisTicksPerInch;
+        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
     }
 
     /**
@@ -299,7 +299,7 @@ public class Chassis extends SubsystemBase {
      * @return The absolute distance of the right side in inches
      */
     public double getDistanceR() {
-        return m_rightMotorFront.getSelectedSensorPosition(0) / RobotMap.kRChassisTicksPerInch;
+        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kRWheelDiameter)* Math.PI);
     }
 
     /**
