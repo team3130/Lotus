@@ -487,15 +487,15 @@ public class Chassis extends SubsystemBase {
     }
 
     public void setOutput(double leftVolts, double rightVolts) {
-        m_left.setVoltage(leftVolts);
-        m_right.setVoltage(rightVolts);
-        m_drive.feed();
+        m_leftMotorFront.setVoltage(leftVolts);
+        m_rightMotorFront.setVoltage(rightVolts);
+//        m_drive.feed();
     }
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                ((m_leftMotorFront.getSelectedSensorVelocity(0) * Math.PI * Units.inchesToMeters(RobotMap.kLWheelDiameter)) / (4096/RobotMap.kChassisGearRatio) * 10),
-                ((m_rightMotorFront.getSelectedSensorPosition(0) * Math.PI * Units.inchesToMeters(RobotMap.kRWheelDiameter)) / (4096/RobotMap.kChassisGearRatio) * 10));
+                ((m_leftMotorFront.getSelectedSensorVelocity(0) /4096 * Math.PI * Units.inchesToMeters(RobotMap.kLWheelDiameter)) * (1/RobotMap.kChassisGearRatio) * 10),
+                ((m_rightMotorFront.getSelectedSensorPosition(0) /4096 * Math.PI * Units.inchesToMeters(RobotMap.kRWheelDiameter)) * (1/RobotMap.kChassisGearRatio) * 10));
     }
 
     public void setPosition(Pose2d position){
