@@ -81,7 +81,7 @@ public class Chassis extends SubsystemBase {
     private SpeedControllerGroup m_left;
     private SpeedControllerGroup m_right;
 
-    private Pose2d m_position = new Pose2d(0, 8, new Rotation2d(0.00));
+    private Pose2d m_position;
 
     //Create and define all standard data types needed
 
@@ -96,7 +96,6 @@ public class Chassis extends SubsystemBase {
      */
 
     public Chassis() {
-        m_position = new Pose2d(0, 0, new Rotation2d(0.00));
 //            super(
 //                    // The ProfiledPIDController used by the subsystem
 //                    new ProfiledPIDController(
@@ -158,7 +157,8 @@ public class Chassis extends SubsystemBase {
         moveSpeed=0;
 
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
-        m_odometry = new DifferentialDriveOdometry(getHeading(), m_position);
+        m_position = new Pose2d(0, 0, new Rotation2d(0.00));
+        m_odometry = new DifferentialDriveOdometry(Navx.getHeadingTwoElectricBogoloo(), m_position);
 
         double LP = LeftP.getDouble(.3);
 //        double LI = LeftI.getDouble(0);
@@ -187,7 +187,7 @@ public class Chassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_position = m_odometry.update(getHeading(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters( getDistanceR()));
+        m_position = m_odometry.update(Navx.getHeadingTwoElectricBogoloo(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters(getDistanceR()));
     }
 
     public void setInitPose(String commandName) {
@@ -254,8 +254,10 @@ public class Chassis extends SubsystemBase {
     public void reset() {
         m_leftMotorFront.setSelectedSensorPosition(0);
         m_rightMotorFront.setSelectedSensorPosition(0);
+        m_leftMotorRear.setSelectedSensorPosition(0);
+        m_rightMotorRear.setSelectedSensorPosition(0);
         Navx.resetNavX();
-        m_odometry.resetPosition(m_position, getHeading());
+        m_odometry.resetPosition(new Pose2d(), Navx.getHeadingTwoElectricBogoloo());
     }
 
     /**
@@ -336,7 +338,7 @@ public class Chassis extends SubsystemBase {
      */
     public double getSpeedL() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return 10.0 * getRawSpeedL() / RobotMap.kLChassisTicksPerInch;
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kLWheelDiameter)))  * 10);
     }
 
     /**
@@ -345,8 +347,7 @@ public class Chassis extends SubsystemBase {
      * @return Current speed of the front right motor (inches per second)
      */
     public double getSpeedR() {
-        // The raw speed units will be in the sensor's native ticks per 100ms.
-        return 10.0 * getRawSpeedR() / RobotMap.kRChassisTicksPerInch;
+        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kRWheelDiameter))  * 10);
     }
 
     /**
@@ -518,8 +519,9 @@ public class Chassis extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                ((m_leftMotorFront.getSelectedSensorVelocity(0) /4096 * Math.PI * Units.inchesToMeters(RobotMap.kLWheelDiameter)) * (1/RobotMap.kChassisGearRatio) * 10),
-                ((m_rightMotorFront.getSelectedSensorPosition(0) /4096 * Math.PI * Units.inchesToMeters(RobotMap.kRWheelDiameter)) * (1/RobotMap.kChassisGearRatio) * 10));
+                ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kLWheelDiameter))))  * 10),
+                ((m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kRWheelDiameter))))  * 10)
+        );
     }
 
     public void setPosition(Pose2d position){
@@ -554,16 +556,15 @@ public class Chassis extends SubsystemBase {
 
 
     public void outputToShuffleboard() {
-        SmartDashboard.putNumber("Chassis Right Velocity", getRawSpeedR());
-        SmartDashboard.putNumber("Chassis Left Velocity", getRawSpeedL());
+        SmartDashboard.putNumber("Chassis Right Velocity", getSpeedR());
+        SmartDashboard.putNumber("Chassis Left Velocity", getSpeedL());
 
-        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
-        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
+//        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
+//        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
 
-//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
-//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+
         SmartDashboard.putNumber("Chassis Distance", getDistance());
-        SmartDashboard.putNumber("NavX angle", getHeading().getDegrees());
+//        SmartDashboard.putNumber("NavX angle", getHeading().getDegrees());
 
         SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
         SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
@@ -573,6 +574,10 @@ public class Chassis extends SubsystemBase {
 
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
+
+        SmartDashboard.putNumber("Robot position X", m_position.getX());
+        SmartDashboard.putNumber("Robot position Y", m_position.getY());
+        SmartDashboard.putNumber("Robot rotation", m_position.getRotation().getDegrees());
 
     }
 

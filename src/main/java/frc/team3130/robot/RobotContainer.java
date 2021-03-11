@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -36,6 +35,7 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
+
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -160,13 +160,12 @@ public class RobotContainer {
     public void generateTrajectories() {
         paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBRed", "GalacticSearchBBlue", "QuestionMark", "Slalom"));
 
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond),
-                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond));
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
+                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
 
         config.setKinematics(m_chassis.getmKinematics());
 
         for (int looper = 0; looper != paths.size(); looper++) {
-            /*
             // variably call Json file
             String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths.get(looper) + ".wpilib.json";
             Trajectory trajectoryTemp = new Trajectory();
@@ -177,41 +176,36 @@ public class RobotContainer {
                 DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
             }
 
-         */
-        }
 
-        Trajectory trajectoryTemp = TrajectoryGenerator.generateTrajectory(
+
+
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 List.of(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0))
-                        ),
-                // Pass config
+                        new Pose2d(0, 0, new Rotation2d(0)),
+                        new Pose2d(3, 0, new Rotation2d(0))
+                ),
+                // Start at the origin facing the +X directio
                 config
         );
 
-
             // creating a Ramsete command which is used in AutonInit
             RamseteCommand command = new RamseteCommand(
-                    trajectoryTemp,
+                    exampleTrajectory,
                     m_chassis::getPose,
-                    new RamseteController(2.0, 0.7),
+                    new RamseteController(2.0, 0.7), //Working
                     m_chassis.getFeedforward(),
-                    m_chassis.getmKinematics(),
+                    m_chassis.getmKinematics(), //Working
                     m_chassis::getSpeeds,
-                    m_chassis.getleftPIDController(),
-                    m_chassis.getRightPIDController(),
-                    m_chassis::setOutput,
+                    m_chassis.getleftPIDController(), //Working
+                    m_chassis.getRightPIDController(), //Working
+                    m_chassis::setOutput, //Working
                     m_chassis
             );
-            /*
             command.addRequirements(m_chassis);
             commands.add(command);
             command.setName(paths.get(looper));
-             */
-        commands.add(command);
         }
+    }
 
     public ArrayList<RamseteCommand> getAutonomousCommands() {
         return commands;

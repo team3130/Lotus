@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     boolean gettime = true;
     boolean checkif = true;
 
-    // private SendableChooser<Command> chooser = new SendableChooser<>();
+    private SendableChooser<Command> chooser = new SendableChooser<>();
     private Command autoSelection;
 
 
@@ -58,7 +58,6 @@ public class Robot extends TimedRobot {
 
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
-        /*
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
                 chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
@@ -68,10 +67,7 @@ public class Robot extends TimedRobot {
                 DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
             }
         }
-
         SmartDashboard.putData("Auto mode", chooser);
-         */
-
     }
 
     @Override
@@ -116,15 +112,15 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
-//        m_robotContainer.getChassis().setInitPose();
-        autonomousCommand = m_robotContainer.getAutonomousCommands().get(0);
-        if (autonomousCommand == null) {
 
-            /*System.out.println("dashboard is null!");
-            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1); */
+        if (chooser.getSelected() == null) {
+            System.out.println("dashboard is null!");
+            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1);
             DriverStation.reportError("selected path was null", false);
         } else {
-            // System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            autonomousCommand = chooser.getSelected();
+            m_robotContainer.getChassis().setInitPose(autonomousCommand.getName());
+            System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             scheduler.schedule(true, autonomousCommand);
             System.out.println("Found autonomous Command");
         }
@@ -176,7 +172,7 @@ public class Robot extends TimedRobot {
 
     public void outputToShuffleboard() {
         CommandScheduler.getInstance().run();
-//        Navx.GetInstance().outputToShuffleboard();
+        Navx.GetInstance().outputToShuffleboard();
         m_robotContainer.getChassis().outputToShuffleboard();
 
         m_robotContainer.getTurret().outputToShuffleboard();
