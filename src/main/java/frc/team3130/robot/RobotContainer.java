@@ -179,7 +179,7 @@ public class RobotContainer {
 
             // creating a Ramsete command which is used in AutonInit
             RamseteCommand command = new RamseteCommand(
-                    exampleTrajectory,
+                    trajectoryTemp,
                     m_chassis::getPose,
                     new RamseteController(2.0, 0.7), //Working
                     m_chassis.getFeedforward(),
