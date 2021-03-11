@@ -158,13 +158,14 @@ public class RobotContainer {
     }*/
 
     public void generateTrajectories() {
-        paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBRed", "GalacticSearchBBlue", "QuestionMark", "Slalom"));
+        // paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBRed", "GalacticSearchBBlue", "QuestionMark", "Slalom"));
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
 
         config.setKinematics(m_chassis.getmKinematics());
 
+        /*
         for (int looper = 0; looper != paths.size(); looper++) {
             // variably call Json file
             String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths.get(looper) + ".wpilib.json";
@@ -175,6 +176,7 @@ public class RobotContainer {
             } catch (IOException ex) {
                 DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
             }
+         */
 
 
 
@@ -203,8 +205,8 @@ public class RobotContainer {
             );
             command.addRequirements(m_chassis);
             commands.add(command);
-            command.setName(paths.get(looper));
-        }
+            // command.setName(paths.get(looper));
+        // }
     }
 
     public ArrayList<RamseteCommand> getAutonomousCommands() {
