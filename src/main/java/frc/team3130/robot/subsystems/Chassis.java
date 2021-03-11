@@ -200,12 +200,20 @@ public class Chassis extends SubsystemBase {
     public void setInitPose(String commandName) {
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader("/home/lvuser/deploy/paths/" + commandName + ".wpilib.json"));
-            JSONObject jsonObject = (JSONObject) obj;
-            JSONArray x = (JSONArray) jsonObject.get("x");
-            JSONArray y = (JSONArray) jsonObject.get("y");
+            JSONParser parser = new JSONParser();
+            JSONArray obj = (JSONArray) parser.parse(new FileReader("/home/lvuser/deploy/paths/" + commandName + ".wpilib.json"));
 
-            m_position = new Pose2d(x.getDouble(0), y.getDouble(0), new Rotation2d(0.00));
+            JSONObject first = (JSONObject) obj.get(0);
+            JSONObject pose = (JSONObject) first.get("pose");
+            JSONObject translation = (JSONObject) pose.get("translation");
+
+            Double x = (Double) translation.get("x");
+            Double y = (Double) translation.get("y");
+
+            System.out.println(x);
+            System.out.println(y);
+
+            m_position = new Pose2d(x, y, new Rotation2d(0.00));
         }
         catch (Exception e) {
             DriverStation.reportError("Could not generate an initial POSE from the JSON. Using 0,0 as default", false);
