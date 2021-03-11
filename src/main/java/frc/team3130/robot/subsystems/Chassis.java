@@ -177,6 +177,9 @@ public class Chassis extends SubsystemBase {
         m_rightMotorRear.follow(m_rightMotorFront);
     }
 
+    /**
+     * @return the direction in radians that navX thinks we are facing
+     */
     public Rotation2d getHeading() {
         double angle = Navx.getHeading();
         if (angle < 0) {
@@ -190,6 +193,10 @@ public class Chassis extends SubsystemBase {
         m_position = m_odometry.update(getHeading(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters( getDistanceR()));
     }
 
+    /**
+     * @param commandName of the command
+     * sets the initial position based off of the JSON used
+     */
     public void setInitPose(String commandName) {
         JSONParser parser = new JSONParser();
         try {
