@@ -33,7 +33,7 @@ public class RobotMap {
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
 
-    public static double kChassisCodesPerRev = 2048;
+    public static double kChassisCodesPerRev = 4096;
     public static double kLChassisTicksPerInch = 1500;
     public static double kRChassisTicksPerInch = 1500;
 

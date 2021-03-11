@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
 
     public void outputToShuffleboard() {
         CommandScheduler.getInstance().run();
-//        Navx.GetInstance().outputToShuffleboard();
+        Navx.GetInstance().outputToShuffleboard();
         m_robotContainer.getChassis().outputToShuffleboard();
 
         m_robotContainer.getTurret().outputToShuffleboard();
