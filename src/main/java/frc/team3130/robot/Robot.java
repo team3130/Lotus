@@ -13,6 +13,7 @@ import frc.team3130.robot.subsystems.Chassis;
 
 import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.List;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
@@ -28,13 +29,14 @@ public class Robot extends TimedRobot {
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
-    private static double lastTimestamp;
+
+    private int indexOfGalacticSearchA = 0;
+    private int indexOfGalacticSearchB = 0;
 
     boolean gettime = true;
     boolean checkif = true;
 
     private SendableChooser<Command> chooser = new SendableChooser<>();
-    private Command autoSelection;
 
 
     /**
@@ -58,10 +60,30 @@ public class Robot extends TimedRobot {
 
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
+
+        boolean hasHappend = false;
+
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
-                chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
-
+                // to check in if statmenents if a galactic search path is being selected
+                ArrayList<String> GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
+                if (GalacticSearches.contains(m_robotContainer.getPaths().get(loop)) && loop % 2 == 0) {
+                    // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
+                    chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 1 - 4), m_robotContainer.getAutonomousCommands().get(loop));
+                    // checks A or B, this should be triggered for A but not B
+                    if (!hasHappend) {
+                        indexOfGalacticSearchA = loop;
+                    }
+                    else {
+                        indexOfGalacticSearchB = loop - 1;
+                        hasHappend = true;
+                    }
+                }
+                // skips red ones
+                else if (GalacticSearches.contains(m_robotContainer.getPaths().get(loop)) && loop % 2 == 1) {}
+                else {
+                    chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
+                }
             }
             catch (IndexOutOfBoundsException e) {
                 DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
