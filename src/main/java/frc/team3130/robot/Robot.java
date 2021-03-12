@@ -30,8 +30,10 @@ public class Robot extends TimedRobot {
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
 
-    private int indexOfGalacticSearchA = 0;
-    private int indexOfGalacticSearchB = 0;
+    private int indexOfGalacticSearchABlue = 0;
+    private int indexOfGalacticSearchARed = 0;
+    private int indexOfGalacticSearchBBlue = 0;
+    private int indexOfGalacticSearchBRed = 0;
 
     boolean gettime = true;
     boolean checkif = true;
@@ -60,7 +62,7 @@ public class Robot extends TimedRobot {
 
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
-
+        // for differentiating between A and B paths
         boolean hasHappend = false;
 
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
@@ -72,20 +74,30 @@ public class Robot extends TimedRobot {
                     chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 1 - 4), m_robotContainer.getAutonomousCommands().get(loop));
                     // checks A or B, this should be triggered for A but not B
                     if (!hasHappend) {
-                        indexOfGalacticSearchA = loop;
+                        indexOfGalacticSearchABlue = loop;
                     }
                     else {
-                        indexOfGalacticSearchB = loop - 1;
+                        indexOfGalacticSearchBBlue = loop - 1;
                         hasHappend = true;
                     }
                 }
                 // skips red ones
-                else if (GalacticSearches.contains(m_robotContainer.getPaths().get(loop)) && loop % 2 == 1) {}
+                else if (GalacticSearches.contains(m_robotContainer.getPaths().get(loop)) && loop % 2 == 1) {
+                    // checks A or B, this should be triggered for A but not B
+                    if (!hasHappend) {
+                        indexOfGalacticSearchARed = loop;
+                    }
+                    else {
+                        indexOfGalacticSearchBRed = loop - 1;
+                        hasHappend = true;
+                    }
+                }
                 else {
                     chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
                 }
             }
             catch (IndexOutOfBoundsException e) {
+                // just in case my logic is screwy
                 DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
             }
         }
