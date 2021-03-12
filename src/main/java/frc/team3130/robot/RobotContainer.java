@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -181,18 +182,23 @@ public class RobotContainer {
 
 
 
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        Trajectory trajectoryTemp = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                new Pose2d(0, 0, new Rotation2d(0)),
+                // Pass through these two interior waypoints, making an 's' curve path
                 List.of(
-                        new Pose2d(0, 0, new Rotation2d(0)),
-                        new Pose2d(3, 0, new Rotation2d(0))
+                        new Translation2d(1, 1),
+                        new Translation2d(2, -1)
                 ),
-                // Start at the origin facing the +X directio
+                // End 3 meters straight ahead of where we started, facing forward
+                new Pose2d(3, 0, new Rotation2d(0)),
+                // Pass config
                 config
         );
 
             // creating a Ramsete command which is used in AutonInit
             RamseteCommand command = new RamseteCommand(
-                    exampleTrajectory,
+                    trajectoryTemp,
                     m_chassis::getPose,
                     new RamseteController(2.0, 0.7), //Working
                     m_chassis.getFeedforward(),
