@@ -198,7 +198,6 @@ public class Chassis extends SubsystemBase {
      * sets the initial position based off of the JSON used
      */
     public void setInitPose(String commandName) {
-        JSONParser parser = new JSONParser();
         try {
             JSONParser parser = new JSONParser();
             JSONArray obj = (JSONArray) parser.parse(new FileReader("/home/lvuser/deploy/paths/" + commandName + ".wpilib.json"));
