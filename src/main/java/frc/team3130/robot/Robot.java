@@ -62,38 +62,26 @@ public class Robot extends TimedRobot {
 
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
-        // for differentiating between A and B paths
-        boolean hasHappendBlue = false;
-        boolean hasHappendRed = false;
 
+        // for loop that iterates through all the paths
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
                 // to check in if statmenents if a galactic search path is being selected
                 ArrayList<String> GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
-                if (GalacticSearches.contains(m_robotContainer.getPaths().get(loop)) && loop % 2 == 0) {
-                    // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                    chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 1 - 4), m_robotContainer.getAutonomousCommands().get(loop));
-                    // checks A or B, this should be triggered for A but not B
-                    if (!hasHappendBlue) {
-                        indexOfGalacticSearchABlue = loop;
-                        hasHappendBlue = true;
-                    }
-                    else {
-                        indexOfGalacticSearchBBlue = loop - 1;
-                    }
-                }
-                // skips red ones
-                else if (GalacticSearches.contains(m_robotContainer.getPaths().get(loop)) && loop % 2 == 1) {
-                    // checks A or B, this should be triggered for A but not B
-                    if (!hasHappendRed) {
-                        indexOfGalacticSearchARed = loop;
-                        hasHappendRed = true;
-                    }
-                    else {
-                        indexOfGalacticSearchBRed = loop - 1;
-                    }
+
+                // getting the indexes of these values for pixi logic
+                indexOfGalacticSearchABlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(0));
+                indexOfGalacticSearchARed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(1));
+                indexOfGalacticSearchBBlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(2));
+                indexOfGalacticSearchBRed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(3));
+
+                // checking if it is a blue path
+                if (m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(0)) || m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(2))) {
+                        // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
+                        chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 5), m_robotContainer.getAutonomousCommands().get(loop));
                 }
                 else {
+                    // adds every other path to chooser
                     chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
                 }
             }
@@ -102,6 +90,7 @@ public class Robot extends TimedRobot {
                 DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
             }
         }
+        //gives chooser to smart dashboard
         SmartDashboard.putData("Auto mode", chooser);
     }
 
