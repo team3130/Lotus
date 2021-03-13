@@ -53,7 +53,6 @@ public class Shoot extends CommandBase {
             m_hood.setAngle(60);
         }else {
             double x = Limelight.GetInstance().getDistanceToTarget();
-            m_hood.changeHoodState(x);
             if (71.0 <= x) {
                 //Hood.setPistons(false);
                 double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);

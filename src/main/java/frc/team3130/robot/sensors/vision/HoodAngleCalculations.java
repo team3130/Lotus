@@ -17,10 +17,10 @@ import java.util.Comparator;
 
 public class HoodAngleCalculations {
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
-
-    private NetworkTableEntry calcAngle =
-            tab.add("Calculated angle", 0.0).getEntry();
+//    private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
+//
+//    private NetworkTableEntry calcAngle =
+//            tab.add("Calculated angle", 0.0).getEntry();
 
     private static Comparator<DataPoint> compPoint = new Comparator<DataPoint>() {
         @Override
@@ -149,7 +149,7 @@ public class HoodAngleCalculations {
     }
 
     public void outputToShuffleboard() {
-        SmartDashboard.putNumber("", HoodAngleCalculations.GetInstance().getAngle(calcAngle.getDouble(0)));
+//        SmartDashboard.putNumber("", HoodAngleCalculations.GetInstance().getAngle(calcAngle.getDouble(0)));
     }
 }
 

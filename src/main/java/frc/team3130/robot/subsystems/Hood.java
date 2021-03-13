@@ -31,6 +31,12 @@ public class Hood extends SubsystemBase {
 	private NetworkTableEntry hoodAngle =
 			tab.add("Set angle", 0.0).getEntry();
 
+	private NetworkTableEntry hoodPvalue =
+			tab.add("Set Hood P value", 0.8).getEntry();
+	private NetworkTableEntry hoodDvalue =
+			tab.add("Set Hood D value", 168.0).getEntry();
+
+
 
 	/**
 	 * Creates a new Hood.
@@ -55,10 +61,10 @@ public class Hood extends SubsystemBase {
 		m_hood.set(ControlMode.PercentOutput, 0.0);
 
 		Utils.configPIDF(m_hood,
-				RobotMap.kTurretP,
-				RobotMap.kTurretI,
-				RobotMap.kTurretD,
-				RobotMap.kTurretF);
+				RobotMap.kHoodP,
+				RobotMap.kHoodI,
+				RobotMap.kHoodD,
+				RobotMap.kHoodF);
 		Utils.configMotionMagic(m_hood,RobotMap.kTurretMaxAcc,RobotMap.kTurretMaxVel);
 
 		//intialization value for hoodstate. Currently arbitrary number, should change later
@@ -72,7 +78,11 @@ public class Hood extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		SmartDashboard.putNumber("Hood Position", m_hood.getSelectedSensorPosition());
+		Utils.configPIDF(m_hood,
+				hoodPvalue.getDouble(.8),
+				RobotMap.kTurretI,
+				hoodDvalue.getDouble(168),
+				RobotMap.kTurretF);
 	}
 
 

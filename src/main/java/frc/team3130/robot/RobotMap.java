@@ -114,6 +114,10 @@ public class RobotMap {
     public static int kHoodForward = 17669;//TODO: FIND Real Number
     public static double kHoodTicksPerDegree = (1.0 / 360.0) * 4096 * (2211.0 / 145.0); //= (kUseCompbot ? *put comp gear ratio here* : *put practice ratio here* ;)
     public static double kAngleChange = 0;
+    public static double kHoodP = 13.0;
+    public static double kHoodI = 0.0;
+    public static double kHoodD = 1.5;
+    public static double kHoodF = 0;
 
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
