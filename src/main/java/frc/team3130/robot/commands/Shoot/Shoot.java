@@ -3,6 +3,7 @@ package frc.team3130.robot.commands.Shoot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.sensors.vision.HoodAngleCalculations;
 import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Hopper;
@@ -49,14 +50,19 @@ public class Shoot extends CommandBase {
         // Find the flywheel speed
         if (!Limelight.GetInstance().hasTrack()){
             m_flywheel.setSpeed(3500.0);
+            m_hood.setAngle(60);
         }else {
             double x = Limelight.GetInstance().getDistanceToTarget();
+            m_hood.changeHoodState(x);
             if (71.0 <= x) {
                 //Hood.setPistons(false);
                 double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
+                double angle = HoodAngleCalculations.GetInstance().getAngle(x);
                 m_flywheel.setSpeed(speed);
+                m_hood.setAngle(angle);
             } else{
                 m_flywheel.setSpeed(3500);
+                m_hood.setAngle(60);
             }
         }
     }

@@ -31,7 +31,7 @@ public class LinearInterp {
     public double getY(double x) {
         int distSize = dist.size() - 1;
         int interval_begin = 0;
-        System.out.println(distSize);
+//        System.out.println(distSize);
         for(int i = 0; i < distSize; i++) {
             if(dist.get(i) <= x && x < dist.get(i + 1)){
                 interval_begin = i;

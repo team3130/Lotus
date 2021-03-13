@@ -147,7 +147,6 @@ public class WheelOfFortune extends SubsystemBase {
             } else if (deg < 250) {
                 return "Blue";
             } else {
-                //System.out.println("bruh what color is this");
                 return "Bruh";
             }
         }
@@ -158,7 +157,7 @@ public class WheelOfFortune extends SubsystemBase {
      * Method for toggling wheel of fortune manipulator
      */
     public void toggleWheel() {
-        System.out.println("Wheel has toggled");
+//        System.out.println("Wheel has toggled");
         m_wheelArm.set(!m_wheelArm.get());
     }
 
@@ -166,7 +165,7 @@ public class WheelOfFortune extends SubsystemBase {
      * method for retracting wheel to be called in a command
      */
     public void retractWheel() {
-        System.out.println("Wheel has retracted");
+//        System.out.println("Wheel has retracted");
         m_wheelArm.set(false);
     }
 

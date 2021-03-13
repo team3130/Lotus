@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.vision.Limelight;
+import frc.team3130.robot.util.Utils;
 
 
 public class Hood extends SubsystemBase {
@@ -28,8 +29,7 @@ public class Hood extends SubsystemBase {
 	private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
 
 	private NetworkTableEntry hoodAngle =
-			tab.add("angle", 0.0)
-					.getEntry();
+			tab.add("Set angle", 0.0).getEntry();
 
 
 	/**
@@ -38,14 +38,28 @@ public class Hood extends SubsystemBase {
 	public Hood() {
 		m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD);
 		m_hood.configFactoryDefault();
+
+		m_hood.setInverted(false);
+		m_hood.setSensorPhase(true);
+
 		m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		m_hood.setSelectedSensorPosition(0,0,10);
-		m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodForward);
+
+		m_hood.configForwardSoftLimitThreshold(14000);
 		m_hood.configReverseSoftLimitThreshold(0);
-		m_hood.configForwardSoftLimitEnable(false);
-		m_hood.configReverseSoftLimitEnable(false);
+		m_hood.configForwardSoftLimitEnable(true);
+		m_hood.configReverseSoftLimitEnable(true);
 
+		m_hood.clearStickyFaults();
 
+		m_hood.set(ControlMode.PercentOutput, 0.0);
+
+		Utils.configPIDF(m_hood,
+				RobotMap.kTurretP,
+				RobotMap.kTurretI,
+				RobotMap.kTurretD,
+				RobotMap.kTurretF);
+		Utils.configMotionMagic(m_hood,RobotMap.kTurretMaxAcc,RobotMap.kTurretMaxVel);
 
 		//intialization value for hoodstate. Currently arbitrary number, should change later
 		m_hoodControlState = HoodState.MAX_65;
@@ -79,7 +93,7 @@ public class Hood extends SubsystemBase {
 
 	public synchronized void setAngle(double angle_deg) {
 		// In Position mode, outputValue set is in rotations of the motor
-		m_hood.set(ControlMode.Position, angle_deg * RobotMap.kHoodTicksPerDegree);
+		m_hood.set(ControlMode.MotionMagic, angle_deg * RobotMap.kHoodTicksPerDegree);
 	}
 
 	public void changeHoodState(double distance){
@@ -90,31 +104,47 @@ public class Hood extends SubsystemBase {
 		else if (distance <= 210){m_hoodControlState = HoodState.ZONE5_54;}//blue
 
 		else if (distance <= 270 ){m_hoodControlState = HoodState.ZONE7_48;}//red
+
+		changeHoodAngle();
+	}
+
+	public double getSetAngle(){
+		return hoodAngle.getDouble(0);
 	}
 
 
 	public void changeHoodAngle(){
 		switch (m_hoodControlState) {
 			case ZONE1_66:
-				setAngle(5);
-			case ZONE2_63:
-				setAngle(63);
+				setAngle(32);
+				break;
+//			case ZONE2_63:
+//				setAngle(63);
+//				break;
 			case ZONE3_60:
-				setAngle(60);
-			case ZONE4_57:
-				setAngle(57);
+				setAngle(13);
+				break;
+//			case ZONE4_57:
+//				setAngle(57);
+//				break;
 			case ZONE5_54:
-				setAngle(54);
-			case ZONE6_51:
-				setAngle(51);
+				setAngle(8);
+				break;
+//			case ZONE6_51:
+//				setAngle(51);
+//				break;
 			case ZONE7_48:
-				setAngle(48);
-			case ZONE8_45:
-				setAngle(45);
-			case MIN_25:
-				setAngle(25);
-			case MAX_65:
-				setAngle(65);
+				setAngle(3);
+				break;
+//			case ZONE8_45:
+//				setAngle(45);
+//				break;
+//			case MIN_25:
+//				setAngle(25);
+//				break;
+//			case MAX_65:
+//				setAngle(65);
+//				break;
 		}
 	}
 
@@ -126,7 +156,7 @@ public class Hood extends SubsystemBase {
 	public void outputToShuffleboard(){
 
 		SmartDashboard.putNumber("Hood Angle", getRelativeHoodAngle());
-		SmartDashboard.putNumber("Encoder value", m_hood.getSelectedSensorPosition());
+		SmartDashboard.putNumber("Hood Encoder value", m_hood.getSelectedSensorPosition());
 	}
 
 

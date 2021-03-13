@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.sensors.Navx;
+import frc.team3130.robot.sensors.vision.HoodAngleCalculations;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
@@ -174,7 +175,7 @@ public class Robot extends TimedRobot {
 //        Hopper.outputToShuffleboard();
         Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
         m_robotContainer.getFlywheel().outputToShuffleboard();
-        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
+        HoodAngleCalculations.GetInstance().outputToShuffleboard();
         m_robotContainer.getHood().outputToShuffleboard();
 
         //TODO: move this somewhere logical

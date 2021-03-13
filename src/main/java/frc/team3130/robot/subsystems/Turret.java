@@ -236,7 +236,8 @@ public class Turret extends SubsystemBase {
 
             default:
                 // Set the system to Stow in case it is moving and loses track of state.
-                m_turretControlState = TurretState.STOWED;
+                m_turretControlState = TurretState.
+                        STOWED;
 
         }
 

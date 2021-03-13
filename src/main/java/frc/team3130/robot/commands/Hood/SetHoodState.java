@@ -14,12 +14,11 @@ import java.util.Set;
 public class SetHoodState extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Hood m_hood;
-    int angle;
+    double angle;
 
-    public SetHoodState(int angle, Hood subsystem) {
+    public SetHoodState(Hood subsystem) {
         //mapping to object passed through parameter
         m_hood = subsystem;
-        this.angle = angle;
     }
 
     /**
@@ -27,8 +26,8 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public void initialize() {
-//        System.out.println("RAN SETHOODSTATE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        m_hood.setAngle(angle);
+//        System.out.println(m_hood.getSetAngle()+ "  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        m_hood.setAngle(m_hood.getSetAngle());
 
 
 
@@ -40,7 +39,6 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public void execute() {
-        m_hood.setAngle(angle);
     }
 
     /**
@@ -59,8 +57,7 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return Math.abs(Hood.getRelativeHoodAngle() - angle) < 1.0;
-
+        return true;
     }
 
     /**
@@ -73,6 +70,7 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
+//        System.out.println("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
 
     }
 }
