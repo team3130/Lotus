@@ -1,24 +1,22 @@
 package frc.team3130.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.team3130.robot.Auton.AutoChooser;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -38,7 +36,12 @@ import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
 
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -64,11 +67,8 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
-    private final AutoChooser m_chooser;
-
-    public AutoChooser getAutoChooser() {
-        return m_chooser;
-    }
+    private ArrayList<String> paths;
+    private ArrayList<RamseteCommand> commands = new ArrayList<>();
 
 
     public static double getSkywalker() {
@@ -87,7 +87,7 @@ public class RobotContainer {
 
     // Binding the buttons and triggers that are defined above to respective commands
     public RobotContainer() {
-        m_chooser = new AutoChooser(false); //TODO: write conditional above to change this to depend on if there is a ball @Dev
+        generateTrajectories();
         configureButtonBindings();
         m_chassis.setDefaultCommand(
                 new DefaultDrive(
@@ -148,16 +148,62 @@ public class RobotContainer {
 
     }
 
-    public Command getAutonomousCommand() {
-        return m_chooser.getCommand();
+/*    private void setDefaultCommand() {
+        //TODO: fix this I have no frickin clue what is going on here
+        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis, () -> driverGamepad.getY(GenericHID.Hand.kLeft), () -> driverGamepad.getX(GenericHID.Hand.kRight)));
+        m_climber.setDefaultCommand(new Climber(m_climber, () -> driverGamepad.));
+        m_turret.setDefaultCommand(//I DONT KNOW WHATS GOIN OOOOONNNNNNNNNNNNNNNN SETTING DEFAULT COMMANDS ARE WWWWWEEEEEIIIIRRRRDDDD );
+    }*/
+
+    public void generateTrajectories() {
+        paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"));
+
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
+                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
+
+        config.setKinematics(m_chassis.getmKinematics());
+
+        for (int looper = 0; looper != paths.size(); looper++) {
+            // variably call Json file
+            String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths.get(looper) + ".wpilib.json";
+            Trajectory trajectoryTemp = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectoryTemp = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+
+
+            // creating a Ramsete command which is used in AutonInit
+            RamseteCommand command = new RamseteCommand(
+                    trajectoryTemp,
+                    m_chassis::getPose,
+                    new RamseteController(2.0, 0.7), //Working
+                    m_chassis.getFeedforward(),
+                    m_chassis.getmKinematics(), //Working
+                    m_chassis::getSpeeds,
+                    m_chassis.getleftPIDController(), //Working
+                    m_chassis.getRightPIDController(), //Working
+                    m_chassis::setOutput, //Working
+                    m_chassis
+            );
+            command.addRequirements(m_chassis);
+            commands.add(command);
+            command.setName(paths.get(looper));
+        }
+    }
+
+    public ArrayList<RamseteCommand> getAutonomousCommands() {
+        return commands;
+    }
+
+    public ArrayList<String> getPaths() {
+        return paths;
     }
 
     public void reset(){
         m_chassis.reset();
-    }
-
-    public void setAutonCommand() {
-        m_chooser.setAutonCommand(m_chassis);
     }
 
 }

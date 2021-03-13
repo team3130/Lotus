@@ -1,16 +1,19 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 import frc.team3130.robot.subsystems.Chassis;
+
+import java.sql.Driver;
+import java.util.ArrayList;
+import java.util.List;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
@@ -26,10 +29,16 @@ public class Robot extends TimedRobot {
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
-    private static double lastTimestamp;
+
+    private int indexOfGalacticSearchABlue = 0;
+    private int indexOfGalacticSearchARed = 0;
+    private int indexOfGalacticSearchBBlue = 0;
+    private int indexOfGalacticSearchBRed = 0;
 
     boolean gettime = true;
     boolean checkif = true;
+
+    private SendableChooser<Command> chooser = new SendableChooser<>();
 
 
     /**
@@ -41,8 +50,6 @@ public class Robot extends TimedRobot {
 
         //Instantiate operator interface
         m_robotContainer = new RobotContainer();
-
-        m_robotContainer.setAutonCommand();
 
         //Instantiate Limelight interface
         Limelight.GetInstance();
@@ -56,6 +63,35 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
+        // for loop that iterates through all the paths
+        for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
+            try {
+                // to check in if statmenents if a galactic search path is being selected
+                ArrayList<String> GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
+
+                // getting the indexes of these values for pixi logic
+                indexOfGalacticSearchABlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(0));
+                indexOfGalacticSearchARed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(1));
+                indexOfGalacticSearchBBlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(2));
+                indexOfGalacticSearchBRed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(3));
+
+                // checking if it is a blue path
+                if (m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(0)) || m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(2))) {
+                        // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
+                        chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 5), m_robotContainer.getAutonomousCommands().get(loop));
+                }
+                else {
+                    // adds every other path to chooser
+                    chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
+                }
+            }
+            catch (IndexOutOfBoundsException e) {
+                // just in case my logic is screwy
+                DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
+            }
+        }
+        //gives chooser to smart dashboard
+        SmartDashboard.putData("Auto mode", chooser);
     }
 
     @Override
@@ -66,7 +102,6 @@ public class Robot extends TimedRobot {
         m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
-        m_robotContainer.getChassis().reset();
     }
 
     @Override
@@ -84,7 +119,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        // outputToShuffleboard();
+         outputToShuffleboard();
     }
 
     /**
@@ -101,10 +136,15 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
-        autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-        // Schedule autonomous command if it exists
-        if (autonomousCommand != null) {
+        if (chooser.getSelected() == null) {
+            System.out.println("dashboard is null!");
+            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1);
+            DriverStation.reportError("selected path was null", false);
+        } else {
+            autonomousCommand = chooser.getSelected();
+            m_robotContainer.getChassis().setInitPose(autonomousCommand.getName());
+            System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             scheduler.schedule(true, autonomousCommand);
             System.out.println("Found autonomous Command");
         }
@@ -156,11 +196,10 @@ public class Robot extends TimedRobot {
 
     public void outputToShuffleboard() {
         CommandScheduler.getInstance().run();
-//        Navx.GetInstance().outputToShuffleboard();
-//        m_robotContainer.getChassis().outputToShuffleboard();
-//        m_chassis.outputToShuffleboard();
+        Navx.GetInstance().outputToShuffleboard();
+        m_robotContainer.getChassis().outputToShuffleboard();
 
-//        m_robotContainer.getTurret().outputToShuffleboard();
+        m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
 //        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
 //        m_robotContainer.getFlywheel().outputToShuffleboard();

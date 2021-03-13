@@ -3,7 +3,9 @@ package frc.team3130.robot.sensors;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.team3130.robot.RobotMap;
 
 //TODO: make not static
@@ -35,6 +37,11 @@ public class Navx {
             DriverStation.reportError(str_error, true);
             m_bNavXPresent = false;
         }
+    }
+
+    public static void resetNavX(){
+        m_navX.reset();
+        m_navX.zeroYaw();
     }
 
     /**
@@ -71,13 +78,14 @@ public class Navx {
         return Math.IEEEremainder(getAngle(), 360);
     }
 
+    public static Rotation2d getHeadingTwoElectricBogoloo(){return Rotation2d.fromDegrees(Math.IEEEremainder(getAngle(), 360));}
+
     public static boolean getNavxPresent() {
         return m_bNavXPresent;
     }
 
     public static void outputToShuffleboard() {
-        SmartDashboard.putNumber("Navx Heading", getHeading());
-        SmartDashboard.putNumber("Navx Angle", getAngle());
+        SmartDashboard.putNumber("NavX angle", getHeadingTwoElectricBogoloo().getDegrees());
     }
 }
 
