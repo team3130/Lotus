@@ -63,7 +63,8 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
         // for differentiating between A and B paths
-        boolean hasHappend = false;
+        boolean hasHappendBlue = false;
+        boolean hasHappendRed = false;
 
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
@@ -73,23 +74,23 @@ public class Robot extends TimedRobot {
                     // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
                     chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 1 - 4), m_robotContainer.getAutonomousCommands().get(loop));
                     // checks A or B, this should be triggered for A but not B
-                    if (!hasHappend) {
+                    if (!hasHappendBlue) {
                         indexOfGalacticSearchABlue = loop;
+                        hasHappendBlue = true;
                     }
                     else {
                         indexOfGalacticSearchBBlue = loop - 1;
-                        hasHappend = true;
                     }
                 }
                 // skips red ones
                 else if (GalacticSearches.contains(m_robotContainer.getPaths().get(loop)) && loop % 2 == 1) {
                     // checks A or B, this should be triggered for A but not B
-                    if (!hasHappend) {
+                    if (!hasHappendRed) {
                         indexOfGalacticSearchARed = loop;
+                        hasHappendRed = true;
                     }
                     else {
                         indexOfGalacticSearchBRed = loop - 1;
-                        hasHappend = true;
                     }
                 }
                 else {
