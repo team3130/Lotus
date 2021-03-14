@@ -28,7 +28,7 @@ public class PixyCam {
         catch (Exception ex) {
             //If connection fails log the error
             String str_error = "Pixy didn't get constructed right. This is a [REDACTED] moment " + ex.getLocalizedMessage();
-            DriverStation.reportError(str_error, true);
+            DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
     }
@@ -42,7 +42,7 @@ public class PixyCam {
         catch (Exception ex) {
             //If connection fails log the error and fall back to encoder based angles.
             String str_error = "Pixy didn't get constructed right. This is a [REDACTED] moment " + ex.getLocalizedMessage();
-            DriverStation.reportError(str_error, true);
+            DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
     }

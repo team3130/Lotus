@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
+import frc.team3130.robot.sensors.vision.PixyCam;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 import frc.team3130.robot.subsystems.Chassis;
+import io.github.pseudoresonance.pixy2api.links.I2CLink;
 
 import java.sql.Driver;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
 
+    private final PixyCam m_pixy = new PixyCam(new I2CLink());
+
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
 
@@ -34,9 +38,6 @@ public class Robot extends TimedRobot {
     private int indexOfGalacticSearchARed = 0;
     private int indexOfGalacticSearchBBlue = 0;
     private int indexOfGalacticSearchBRed = 0;
-
-    boolean gettime = true;
-    boolean checkif = true;
 
     private SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -78,7 +79,7 @@ public class Robot extends TimedRobot {
                 // checking if it is a blue path
                 if (m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(0)) || m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(2))) {
                         // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                        chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 5), m_robotContainer.getAutonomousCommands().get(loop));
+                        chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 4), m_robotContainer.getAutonomousCommands().get(loop));
                 }
                 else {
                     // adds every other path to chooser
@@ -136,6 +137,22 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
+
+        String AorB; 
+
+        if (chooser.getSelected() == m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchABlue)) {
+            AorB = "B";
+        }
+        else {
+            AorB = "A";
+        }
+
+        if (m_pixy.isRedPath(AorB)) {
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchARed));
+        }
+        else {
+            chooser.addOption("GalacticSearchA" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchABlue));
+        }
 
         if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
