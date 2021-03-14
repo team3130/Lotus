@@ -147,8 +147,14 @@ public class Robot extends TimedRobot {
             AorB = "A";
         }
 
-        if (m_pixy.isRedPath(AorB)) {
+        if (m_pixy.isRedPath(AorB) && AorB.equals("A")) {
             chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchARed));
+        }
+        else if (m_pixy.isRedPath(AorB) && AorB.equals("B")) {
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchBRed));
+        }
+        else if (!m_pixy.isRedPath(AorB) && AorB.equals("B")) {
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchBBlue));
         }
         else {
             chooser.addOption("GalacticSearchA" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchABlue));
