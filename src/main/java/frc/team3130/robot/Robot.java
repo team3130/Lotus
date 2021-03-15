@@ -1,18 +1,9 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.RobotState;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.Auton.Shoot6;
-import frc.team3130.robot.sensors.Navx;
-import frc.team3130.robot.sensors.vision.Limelight;
-import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
-
-import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,15 +14,7 @@ import static frc.team3130.robot.RobotContainer.m_driverGamepad;
  */
 public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
-
-    CommandScheduler scheduler = CommandScheduler.getInstance();
-    CommandBase autonomousCommand = null;
-    private SendableChooser<String> chooser = new SendableChooser<String>();
     private static Timer timer;
-    private static double lastTimestamp;
-
-    boolean gettime = true;
-    boolean checkif = true;
 
 
     /**
@@ -46,37 +29,10 @@ public class Robot extends TimedRobot {
 
         //Instantiate operator interface
         m_robotContainer = new RobotContainer();
-
-        //Instantiate Limelight interface
-        Limelight.GetInstance();
-
-        //Instantiate Navx
-        Navx.GetInstance();
-
-        //Instantiate Wheel Speed interpolator
-        WheelSpeedCalculations.GetInstance();
-
-
-        Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
-
-
-        /*
-         chooser = new SendableChooser<>();
-         chooser.setDefaultOption("No Auton", "None");
-         chooser.addOption("3Ball", "3Ball");
-         chooser.addOption("6Ball", "6Ball");
-         SmartDashboard.putData("Auto mode", chooser);
-         */
     }
 
     @Override
     public void disabledInit() {
-        m_robotContainer.getChassis().configBrakeMode(false);
-        m_robotContainer.getIntake().retractIntake();
-        //Hood.setPistons(false);
-        m_robotContainer.getWOF().retractWheel();
-        m_robotContainer.getClimber().retractClimb();
-        Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
     }
 
     @Override
@@ -110,12 +66,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        determineAuto();
-
-        // Schedule autonomous command if it exists
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-        }
     }
 
     /**
@@ -123,22 +73,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
-        scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
-        if (autonomousCommand != null) {
-            autonomousCommand.cancel();
-        }
-
-        m_robotContainer.getChassis().configBrakeMode(true);
     }
 
     /**
@@ -146,9 +84,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
-        scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
@@ -165,50 +100,9 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
-//        Navx.GetInstance().outputToShuffleboard();
-//        WheelOfFortune.outputToShuffleboard();
-//        Chassis.outputToShuffleboard();
-        m_robotContainer.getTurret().outputToShuffleboard();
-//        Hopper.outputToShuffleboard();
-        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
-        m_robotContainer.getFlywheel().outputToShuffleboard();
-        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
-
-        //TODO: move this somewhere logical
-        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
-            if (gettime == true) {
-                lastTimestamp = Timer.getFPGATimestamp();
-                gettime = false;
-            }
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
-                checkif = false;
-            }
-        } else {
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-            gettime = true;
-            if (m_robotContainer.getTurret().isOnTarget() == false) {
-                checkif = true;
-            }
-        }
 
 
     }
 
-    private void determineAuto() {
-//          autonomousCommand = new RendezvousShoot5();
-//        autonomousCommand = new Shoot3();
-//        autonomousCommand = new Shoot5();
-        autonomousCommand = new Shoot6(m_robotContainer.getIntake(), m_robotContainer.getChassis(), m_robotContainer.getTurret(), m_robotContainer.getHopper(), m_robotContainer.getFlywheel(), m_robotContainer.getHood());
-    }
 
-    public void writePeriodicOutputs() {
-        m_robotContainer.getTurret().writePeriodicOutputs();
-    }
-
-    public void resetSubsystems() {
-
-    }
 }

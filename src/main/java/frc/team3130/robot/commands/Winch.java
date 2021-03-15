@@ -1,27 +1,19 @@
-package frc.team3130.robot.commands.Flywheel;
+package frc.team3130.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Flywheel;
+import frc.team3130.robot.subsystems.WinchSub;
 
-import java.util.Set;
+public class Winch extends CommandBase {
+    // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
+    private final WinchSub m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private double m_volts;
 
-public class TuneFlywheelRPM extends CommandBase {
-    private final Flywheel m_flywheel;
-    private ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
+    public Winch(WinchSub subsystem, double volts) {
+        //mapping to object passed through parameter
+        m_subsystem = subsystem;
+        this.addRequirements(subsystem);
+        m_volts = volts;
 
-    private NetworkTableEntry flywheelRPM =
-            tab.add("RPM", 7500.0)
-                    .getEntry();
-
-
-    public TuneFlywheelRPM(Flywheel subsystem) {
-        m_flywheel = subsystem;
-        m_requirements.add(m_flywheel);
     }
 
     /**
@@ -29,7 +21,7 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
+        m_subsystem.spin(m_volts);
     }
 
     /**
@@ -38,6 +30,7 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
+
     }
 
     /**
@@ -56,6 +49,7 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
+        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -69,6 +63,6 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_flywheel.stop();
+
     }
 }
