@@ -1,6 +1,7 @@
 package frc.team3130.robot.sensors.vision;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC.Block;
@@ -137,7 +138,10 @@ public class PixyCam {
             return null;
         }
     }
+    public void outputToShuffleboard() {
+        SmartDashboard.putBoolean("Pixy is connected:", this.m_isPixyConnected);
 
+    }
 
 
     public Pixy2 getPixy(){return m_pixy;}
