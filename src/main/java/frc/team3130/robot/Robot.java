@@ -12,7 +12,6 @@ import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.PixyCam;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 import frc.team3130.robot.subsystems.Chassis;
-import io.github.pseudoresonance.pixy2api.links.I2CLink;
 
 import java.sql.Driver;
 import java.util.ArrayList;
@@ -30,8 +29,6 @@ import static frc.team3130.robot.RobotContainer.m_driverGamepad;
  */
 public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
-
-    private final PixyCam m_pixy = new PixyCam(new I2CLink());
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
