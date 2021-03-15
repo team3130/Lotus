@@ -34,12 +34,8 @@ public class Robot extends TimedRobot {
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
 
-    private int indexOfGalacticSearchABlue = 0;
-    private int indexOfGalacticSearchARed = 0;
-    private int indexOfGalacticSearchBBlue = 0;
-    private int indexOfGalacticSearchBRed = 0;
-
     private SendableChooser<Command> chooser = new SendableChooser<>();
+    ArrayList<String> GalacticSearches;
 
 
     /**
@@ -68,7 +64,7 @@ public class Robot extends TimedRobot {
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
                 // to check in if statements if a galactic search path is being selected
-                ArrayList<String> GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
+                GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
 
                 // getting the indexes of these values for pixi logic
 /*                indexOfGalacticSearchABlue = m_robotContainer.getPaths().get(GalacticSearches.get(0));
@@ -148,21 +144,21 @@ public class Robot extends TimedRobot {
         }
 
         if (m_pixy.isRedPath(AorB) && AorB.equals("A")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchARed));
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(1)));
         }
         else if (m_pixy.isRedPath(AorB) && AorB.equals("B")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchBRed));
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(3)));
         }
         else if (!m_pixy.isRedPath(AorB) && AorB.equals("B")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchBBlue));
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(2)));
         }
         else {
-            chooser.addOption("GalacticSearchA" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchABlue));
+            chooser.addOption("GalacticSearchA" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(0)));
         }
 
         if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
-            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1);
+            autonomousCommand = m_robotContainer.getAutonomousCommands().get("DriveStraight");
             DriverStation.reportError("selected path was null", false);
         } else {
             autonomousCommand = chooser.getSelected();
