@@ -71,14 +71,6 @@ public class RobotContainer {
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     private HashMap<String, RamseteCommand> commands = new HashMap<>();
 
-
-    public static double getSkywalker() {
-        double spin = 0;
-        spin += m_driverGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER);
-        spin -= m_driverGamepad.getRawAxis(RobotMap.LST_AXS_LTRIGGER);
-        return spin;
-    }
-
     //Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
