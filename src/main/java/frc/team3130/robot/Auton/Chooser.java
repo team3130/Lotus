@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.vision.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -71,16 +73,13 @@ public class Chooser {
         }
     }
 
-    private LinkedHashMap<String, RamseteCommand> getAutonomousCommands() {
-        return commands;
-    }
-
+    @Test
     public void chooserRegistry() {
         // to check in if statements if a galactic search path is being selected
         GalacticSearches = new String[]{"GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"};
 
         // for loop that iterates through all the paths
-        for (Map.Entry map : getAutonomousCommands().entrySet()) {
+        for (Map.Entry map : commands.entrySet()) {
             try {
                 // checking if it is a blue path
                 if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
@@ -100,27 +99,28 @@ public class Chooser {
         }
         //gives chooser to smart dashboard
         SmartDashboard.putData("Auto mode", chooser);
+        Assert.assertEquals(chooser.hashCode(), commands.hashCode());
     }
 
     public RamseteCommand getCommand() {
-        if(chooser.getSelected() == getAutonomousCommands().get("GalacticSearchABlue")) {
+        if(chooser.getSelected() == commands.get("GalacticSearchABlue")) {
             if (m_pixy.isRedPath("A")) {
-                chooser.addOption("GalacticSearchA", getAutonomousCommands().get("GalacticSearchARed"));
+                chooser.addOption("GalacticSearchA", commands.get("GalacticSearchARed"));
             } else {
-               getAutonomousCommands().get("GalacticSearchABlue");
+               commands.get("GalacticSearchABlue");
             }
         }
-        if(chooser.getSelected() == getAutonomousCommands().get("GalacticSearchBBlue")) {
+        if(chooser.getSelected() == commands.get("GalacticSearchBBlue")) {
             if (m_pixy.isRedPath("B")) {
-                chooser.addOption("GalacticSearchB",getAutonomousCommands().get("GalacticSearchBRed"));
+                chooser.addOption("GalacticSearchB",commands.get("GalacticSearchBRed"));
             } else {
-                getAutonomousCommands().get("GalacticSearchBBlue");
+                commands.get("GalacticSearchBBlue");
             }
         }
 
         if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
-            autonomousCommand = getAutonomousCommands().get("DriveStraight");
+            autonomousCommand = commands.get("DriveStraight");
             DriverStation.reportError("selected path was null", false);
         } else {
             autonomousCommand = (RamseteCommand) chooser.getSelected();
