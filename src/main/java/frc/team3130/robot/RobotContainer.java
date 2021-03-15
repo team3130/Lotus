@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -67,8 +68,8 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
-    private ArrayList<String> paths;
-    private ArrayList<RamseteCommand> commands = new ArrayList<>();
+    private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+    private HashMap<String, RamseteCommand> commands = new HashMap<>();
 
 
     public static double getSkywalker() {
@@ -96,8 +97,6 @@ public class RobotContainer {
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
-
-        //TODO: complete when you have made auton commands
 
         /*
         // Add commands to the autonomous command chooser
@@ -158,16 +157,15 @@ public class RobotContainer {
     }*/
 
     public void generateTrajectories() {
-        paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"));
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
 
         config.setKinematics(m_chassis.getmKinematics());
 
-        for (int looper = 0; looper != paths.size(); looper++) {
+        for (int looper = 0; looper != paths.length; looper++) {
             // variably call Json file
-            String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths.get(looper) + ".wpilib.json";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths[looper] + ".wpilib.json";
             Trajectory trajectoryTemp = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -191,16 +189,16 @@ public class RobotContainer {
                     m_chassis
             );
             command.addRequirements(m_chassis);
-            commands.add(command);
-            command.setName(paths.get(looper));
+            command.setName(paths[looper]);
+            commands.put(paths[looper], command);
         }
     }
 
-    public ArrayList<RamseteCommand> getAutonomousCommands() {
+    public HashMap<String, RamseteCommand> getAutonomousCommands() {
         return commands;
     }
 
-    public ArrayList<String> getPaths() {
+    public String[] getPaths() {
         return paths;
     }
 
