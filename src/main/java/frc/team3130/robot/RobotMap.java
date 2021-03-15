@@ -102,12 +102,12 @@ public class RobotMap {
     public static int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static double kLimelightPitch = (kUseCompbot ? -39.025 : -31.625);   // Facing up is negative Checked: 2/21
-    public static double kLimelightYaw = (kUseCompbot ? 1.8 : 3.1);        // Aiming bias, facing left is positive
+    public static double kLimelightPitch =  -35.648;   // Facing up is negative Checked: 2/21
+    public static double kLimelightYaw = 2;        // Aiming bias, facing left is positive
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
-    public static double kLimelightHeight = 22.5;     // Height of camera aperture from the ground
+    public static double kLimelightHeight = 21.5;     // Height of camera aperture from the ground
     public static double kLimelightLength = 9.5;    // Distance to the turret's rotation axis
-    public static double kLimelightOffset = 0;      // Side offset from the turret's plane of symmetry (left+)
+    public static double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
     public static double kLimelightCalibrationDist = 120.0; // Exact horizontal distance between target and lens
 
     //Hood
@@ -116,7 +116,7 @@ public class RobotMap {
     public static double kAngleChange = 0;
     public static double kHoodP = 13.0;
     public static double kHoodI = 0.0;
-    public static double kHoodD = 1.5;
+    public static double kHoodD = 2.5;
     public static double kHoodF = 0;
 
     //Flywheel

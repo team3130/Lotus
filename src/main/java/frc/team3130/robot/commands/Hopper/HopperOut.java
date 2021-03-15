@@ -21,9 +21,9 @@ public class HopperOut extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_hopper.runHopperLeft(-0.15);
-        m_hopper.runHopperRight(0.15);
-        m_hopper.runHopperTop(-0.2);
+        m_hopper.runHopperLeft(-0.2);
+        m_hopper.runHopperRight(0.2);
+        m_hopper.runHopperTop(-0.4);
     }
 
     /**

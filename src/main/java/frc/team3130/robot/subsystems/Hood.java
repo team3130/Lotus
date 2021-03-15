@@ -36,6 +36,9 @@ public class Hood extends SubsystemBase {
 	private NetworkTableEntry hoodDvalue =
 			tab.add("Set Hood D value", 168.0).getEntry();
 
+//	private NetworkTableEntry reverseLimitSwitchOn =
+//			tab.addBoolean("Hood reverse limit switch enabled", ).getEntry();
+
 
 
 	/**
@@ -78,11 +81,6 @@ public class Hood extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		Utils.configPIDF(m_hood,
-				hoodPvalue.getDouble(.8),
-				RobotMap.kTurretI,
-				hoodDvalue.getDouble(168),
-				RobotMap.kTurretF);
 	}
 
 
