@@ -136,7 +136,8 @@ public class Robot extends TimedRobot {
 
         String AorB; 
 
-        if (chooser.getSelected() == m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchABlue)) {
+        if (chooser.getSelected() == m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(0)))//TODO: this is awful code it won't work ever
+             {
             AorB = "B";
         }
         else {
