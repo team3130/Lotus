@@ -123,10 +123,10 @@ public class RobotMap {
     public static double kFlywheelMaxVoltage = 12.0;
     public static double kFlywheelOpenRampRate = 1.0; // Minimum amount to time in seconds for Open Loop control output to ramp up
 
-    public static double kFlywheelP = 0.22; //Checked 2/14
+    public static double kFlywheelP = 12;
     public static double kFlywheelI = 0.0;
-    public static double kFlywheelD = 12.0;
-    public static double kFlywheelF = (0.51 * 1023.0) / 10650.0; // Checked 2/11, Optimal speed at 51% power
+    public static double kFlywheelD = .4;
+    public static double kFlywheelF = 0; // Checked 2/11, Optimal speed at 51% power
 
     public static double kRPMChange = 0.0;
 

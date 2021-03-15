@@ -169,6 +169,7 @@ public class Flywheel extends SubsystemBase {
 //        SmartDashboard.putNumber("Flywheel Raw speed", getRawSpeed());
         SmartDashboard.putNumber("Flywheel Error", getRPMError());
 //        SmartDashboard.putBoolean("Flywheel canShoot", canShoot());
+        SmartDashboard.putBoolean("Can shoot", canShoot());
     }
 
 }
