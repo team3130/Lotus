@@ -28,14 +28,10 @@ import static frc.team3130.robot.RobotContainer.m_driverGamepad;
  * project.
  */
 public class Robot extends TimedRobot {
-    public RobotContainer m_robotContainer;
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
-
-    private SendableChooser<Command> chooser = new SendableChooser<>();
-    String[] GalacticSearches;
-
+    public RobotContainer m_robotContainer;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -59,30 +55,6 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
-        // to check in if statements if a galactic search path is being selected
-        GalacticSearches = new String[]{"GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"};
-
-        // for loop that iterates through all the paths
-        for (Map.Entry map : m_robotContainer.getAutonomousCommands().entrySet()) {
-            try {
-                // checking if it is a blue path
-                if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
-                    String tempStr = (String) map.getKey();
-                    // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), null);
-                }
-                else {
-                    // adds every other path to chooser
-                    chooser.addOption((String) map.getKey(), (RamseteCommand) map.getValue());
-                }
-            }
-            catch (IndexOutOfBoundsException e) {
-                // just in case my logic is screwy
-                DriverStation.reportError("Couldn't generate all autonomous commands",  false);
-            }
-        }
-        //gives chooser to smart dashboard
-        SmartDashboard.putData("Auto mode", chooser);
     }
 
     @Override
@@ -128,17 +100,10 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
 
-        if (chooser.getSelected() == null) {
-            System.out.println("dashboard is null!");
-            autonomousCommand = m_robotContainer.getAutonomousCommands().get("DriveStraight");
-            DriverStation.reportError("selected path was null", false);
-        } else {
-            autonomousCommand = chooser.getSelected();
-            m_robotContainer.getChassis().setInitPose(autonomousCommand.getName());
-            System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-            scheduler.schedule(true, autonomousCommand);
-            System.out.println("Found autonomous Command");
-        }
+        autonomousCommand = m_robotContainer.getChooser().getCommand();
+        scheduler.schedule(true, autonomousCommand);
+        System.out.println("Found autonomous Command");
+
     }
 
     /**
