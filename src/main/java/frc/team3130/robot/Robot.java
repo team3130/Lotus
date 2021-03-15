@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
         // for loop that iterates through all the paths
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
-                // to check in if statmenents if a galactic search path is being selected
+                // to check in if statements if a galactic search path is being selected
                 ArrayList<String> GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
 
                 // getting the indexes of these values for pixi logic
