@@ -33,17 +33,23 @@ public class RobotMap {
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
 
-    public static double kChassisCodesPerRev = 2048;
+    public static double kChassisCodesPerRev = 4096;
     public static double kLChassisTicksPerInch = 1500;
     public static double kRChassisTicksPerInch = 1500;
 
     public static double kDriveDeadband = 0.02;
     public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
 
+    public static double kS = (kUseCompbot ? .652 : 0.66);
+    public static double kV = (kUseCompbot ? .0697 : .045);
+    public static double kA = (kUseCompbot ? .00714 : .0067);
+
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
     public static double kChassisMPOutputDeadband = 0.01;
     public static int kChassisMPDefaultFireRate = 20;
+
+    public static double kChassisGearRatio = 6.25;
 
     public static double kMPChassisP = 5.47;
     public static double kMPChassisI = 0.0;
@@ -58,6 +64,9 @@ public class RobotMap {
     public static double kDistanceToEncoder = kChassisCodesPerRev / (Math.PI * 0.5 * (kLWheelDiameter + kRWheelDiameter));
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
+
+    public static double kMaxAccelerationPerSecond = 0.656; //Feet per second squared
+    public static double kMaxVelocityPerSecond = 0.656; //Feet per second
 
 
     //Climber

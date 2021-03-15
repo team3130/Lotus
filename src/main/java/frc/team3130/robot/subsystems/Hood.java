@@ -10,6 +10,7 @@ package frc.team3130.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
@@ -17,7 +18,7 @@ import frc.team3130.robot.RobotMap;
 
 public class Hood extends SubsystemBase {
 	private static WPI_TalonSRX m_hood;
-
+	private static Solenoid m_hoodPistons;
 
 	/**
 	 * Creates a new Hood.
@@ -29,10 +30,21 @@ public class Hood extends SubsystemBase {
 		m_hood.configReverseSoftLimitThreshold(0);
 		m_hood.configForwardSoftLimitEnable(true);
 		m_hood.configReverseSoftLimitEnable(true);
+
+		m_hoodPistons = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_HOODPISTONS);
+		m_hoodPistons.set(false);
 	}
 
 	public void moveHood(double pVBus){
 		m_hood.set(pVBus);		
+	}
+
+	public static void setPistons(boolean state){
+		m_hoodPistons.set(state);
+	}
+
+	public static void toggleHoodPistons() {
+		m_hoodPistons.set(!m_hoodPistons.get());
 	}
 
 	@Override

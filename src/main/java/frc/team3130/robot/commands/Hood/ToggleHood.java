@@ -22,7 +22,7 @@ public class ToggleHood extends CommandBase {
      */
     @Override
     public void initialize() {
-        //Hood.toggleHoodPistons();
+        Hood.toggleHoodPistons();
     }
 
     /**

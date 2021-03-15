@@ -1,18 +1,17 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.Auton.Shoot6;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
-import static frc.team3130.robot.RobotContainer.m_driverGamepad;
+import java.util.Map;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,13 +24,10 @@ public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
-    CommandBase autonomousCommand = null;
-    private SendableChooser<String> chooser = new SendableChooser<String>();
-    private static Timer timer;
-    private static double lastTimestamp;
+    Command autonomousCommand = null;
 
-    boolean gettime = true;
-    boolean checkif = true;
+    private SendableChooser<Command> chooser = new SendableChooser<>();
+    String[] GalacticSearches;
 
 
     /**
@@ -40,9 +36,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        timer = new Timer();
-        timer.reset();
-        timer.start();
 
         //Instantiate operator interface
         m_robotContainer = new RobotContainer();
@@ -59,19 +52,36 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
+        // to check in if statements if a galactic search path is being selected
+        GalacticSearches = new String[]{"GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"};
 
-        /*
-         chooser = new SendableChooser<>();
-         chooser.setDefaultOption("No Auton", "None");
-         chooser.addOption("3Ball", "3Ball");
-         chooser.addOption("6Ball", "6Ball");
-         SmartDashboard.putData("Auto mode", chooser);
-         */
+        // for loop that iterates through all the paths
+        for (Map.Entry map : m_robotContainer.getAutonomousCommands().entrySet()) {
+            try {
+                // checking if it is a blue path
+                if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
+                    String tempStr = (String) map.getKey();
+                    // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
+                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), (RamseteCommand) map.getValue());
+                }
+                else if (map.getKey().equals(GalacticSearches[1]) || map.getKey().equals(GalacticSearches[3])) {}
+                else {
+                    // adds every other path to chooser
+                    chooser.addOption((String) map.getKey(), (RamseteCommand) map.getValue());
+                }
+            }
+            catch (IndexOutOfBoundsException e) {
+                // just in case my logic is screwy
+                DriverStation.reportError("Couldn't generate all autonomous commands",  false);
+            }
+        }
+        //gives chooser to smart dashboard
+        SmartDashboard.putData("Auto mode", chooser);
     }
 
     @Override
     public void disabledInit() {
-        m_robotContainer.getChassis().configBrakeMode(false);
+        m_robotContainer.getChassis().configBrakeMode(true);
         m_robotContainer.getIntake().retractIntake();
         //Hood.setPistons(false);
         m_robotContainer.getWOF().retractWheel();
@@ -94,7 +104,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        outputToShuffleboard();
+         outputToShuffleboard();
     }
 
     /**
@@ -110,11 +120,35 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        determineAuto();
+        m_robotContainer.getChassis().reset();
 
-        // Schedule autonomous command if it exists
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
+
+        if(chooser.getSelected() == m_robotContainer.getAutonomousCommands().get("GalacticSearchABlue")) {
+            if (m_robotContainer.getPixy().isRedPath("A")) {
+                chooser.addOption("GalacticSearchA", m_robotContainer.getAutonomousCommands().get("GalacticSearchARed"));
+            } else {
+                m_robotContainer.getAutonomousCommands().get("GalacticSearchABlue");
+            }
+        }
+        if(chooser.getSelected() == m_robotContainer.getAutonomousCommands().get("GalacticSearchBBlue")) {
+            if (m_robotContainer.getPixy().isRedPath("B")) {
+                chooser.addOption("GalacticSearchB", m_robotContainer.getAutonomousCommands().get("GalacticSearchBRed"));
+            } else {
+                m_robotContainer.getAutonomousCommands().get("GalacticSearchBBlue");
+            }
+        }
+        if (chooser.getSelected() == null) {
+            System.out.println("dashboard is null!");
+            autonomousCommand = m_robotContainer.getAutonomousCommands().get("DriveStraight");
+            DriverStation.reportError("selected path was null", false);
+        }
+
+        else {
+            autonomousCommand = chooser.getSelected();
+            m_robotContainer.getChassis().setInitPose(autonomousCommand.getName());
+            System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            scheduler.schedule(true, autonomousCommand);
+            System.out.println("Found autonomous Command");
         }
     }
 
@@ -123,9 +157,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
+//        Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
@@ -148,7 +181,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
-        writePeriodicOutputs();
     }
 
     @Override
@@ -165,47 +197,42 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
-//        Navx.GetInstance().outputToShuffleboard();
-//        WheelOfFortune.outputToShuffleboard();
-//        Chassis.outputToShuffleboard();
+        CommandScheduler.getInstance().run();
+        Navx.GetInstance().outputToShuffleboard();
+        m_robotContainer.getChassis().outputToShuffleboard();
+
         m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
-        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
-        m_robotContainer.getFlywheel().outputToShuffleboard();
-        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
+//        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
+//        m_robotContainer.getFlywheel().outputToShuffleboard();
+//        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
 
-        //TODO: move this somewhere logical
-        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
-            if (gettime == true) {
-                lastTimestamp = Timer.getFPGATimestamp();
-                gettime = false;
-            }
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
-                checkif = false;
-            }
-        } else {
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-            gettime = true;
-            if (m_robotContainer.getTurret().isOnTarget() == false) {
-                checkif = true;
-            }
-        }
+//        //TODO: move this somewhere logical
+//        if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
+//            if (gettime == true) {
+//                lastTimestamp = Timer.getFPGATimestamp();
+//                gettime = false;
+//            }
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+//            if (Timer.getFPGATimestamp() - lastTimestamp > .3) {
+//                checkif = false;
+//            }
+//        } else {
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+//            m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+//            gettime = true;
+//            if (m_robotContainer.getTurret().isOnTarget() == false) {
+//                checkif = true;
+//            }
+//        }
 
 
     }
 
-    private void determineAuto() {
-//          autonomousCommand = new RendezvousShoot5();
-//        autonomousCommand = new Shoot3();
-//        autonomousCommand = new Shoot5();
-        autonomousCommand = new Shoot6(m_robotContainer.getIntake(), m_robotContainer.getChassis(), m_robotContainer.getTurret(), m_robotContainer.getHopper(), m_robotContainer.getFlywheel(), m_robotContainer.getHood());
-    }
 
     public void writePeriodicOutputs() {
-        m_robotContainer.getTurret().writePeriodicOutputs();
+        
     }
 
     public void resetSubsystems() {

@@ -1,7 +1,20 @@
 package frc.team3130.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
@@ -21,9 +34,18 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
 import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
+import frc.team3130.robot.sensors.vision.PixyCam;
 import frc.team3130.robot.subsystems.*;
+import io.github.pseudoresonance.pixy2api.links.I2CLink;
+
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class RobotContainer {
+    //see here for references if lost: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbottraditional/RobotContainer.java
 
     // define Subsystems
     private final Chassis m_chassis = new Chassis();
@@ -35,6 +57,8 @@ public class RobotContainer {
     private final Turret m_turret = new Turret();
     private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
 
+    private final PixyCam m_pixy = new PixyCam(new I2CLink());
+
     // This section is here IF we need it later
     public Chassis getChassis() {return m_chassis;}
     public Climber getClimber() {return m_climber;}
@@ -45,21 +69,21 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
+    public PixyCam getPixy() {return m_pixy;}
 
-    public static double getSkywalker() {
-        double spin = 0;
-        spin += m_driverGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER);
-        spin -= m_driverGamepad.getRawAxis(RobotMap.LST_AXS_LTRIGGER);
-        return spin;
-    }
+    private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+    private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
 
     //Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
+    // private final Command m_BarrelRacing = new BarrelRacing(60, m_chassis);
+
 
     // Binding the buttons and triggers that are defined above to respective commands
     public RobotContainer() {
+        generateTrajectories();
         configureButtonBindings();
         m_chassis.setDefaultCommand(
                 new DefaultDrive(
@@ -68,6 +92,15 @@ public class RobotContainer {
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
+
+        /*
+        // Add commands to the autonomous command chooser
+        m_chooser.setDefaultOption("Simple Auto", m_simpleAuto);
+        m_chooser.addOption("Complex Auto", m_complexAuto);
+
+        // Put the chooser on the dashboard
+        Shuffleboard.getTab("Autonomous").add(m_chooser);
+         */
 
     }
 
@@ -104,15 +137,70 @@ public class RobotContainer {
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new SpinWOFLeft(m_wheelOfFortune));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinWOFRight(m_wheelOfFortune));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenPressed(new ColorAlignment(m_wheelOfFortune));
+
+
+
+
+
     }
 
 /*    private void setDefaultCommand() {
-        *//*
-        //TODO: fix this I have no fricking clue what is going on here
+        //TODO: fix this I have no frickin clue what is going on here
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis, () -> driverGamepad.getY(GenericHID.Hand.kLeft), () -> driverGamepad.getX(GenericHID.Hand.kRight)));
         m_climber.setDefaultCommand(new Climber(m_climber, () -> driverGamepad.));
         m_turret.setDefaultCommand(//I DONT KNOW WHATS GOIN OOOOONNNNNNNNNNNNNNNN SETTING DEFAULT COMMANDS ARE WWWWWEEEEEIIIIRRRRDDDD );
-         *//*
     }*/
+
+    public void generateTrajectories() {
+        paths = new String[] {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
+                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
+
+        config.setKinematics(m_chassis.getmKinematics());
+
+        for (int looper = 0; looper != paths.length; looper++) {
+            // variably call Json file
+            String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths[looper] + ".wpilib.json";
+            Trajectory trajectoryTemp = new Trajectory();
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                trajectoryTemp = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException ex) {
+                DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            }
+
+
+            // creating a Ramsete command which is used in AutonInit
+            RamseteCommand command = new RamseteCommand(
+                    trajectoryTemp,
+                    m_chassis::getPose,
+                    new RamseteController(2.0, 0.7), //Working
+                    m_chassis.getFeedforward(),
+                    m_chassis.getmKinematics(), //Working
+                    m_chassis::getSpeeds,
+                    m_chassis.getleftPIDController(), //Working
+                    m_chassis.getRightPIDController(), //Working
+                    m_chassis::setOutput, //Working
+                    m_chassis
+            );
+            command.addRequirements(m_chassis);
+            commands.put(paths[looper], command);
+            command.setName(paths[looper]);
+        }
+    }
+
+    public LinkedHashMap<String, RamseteCommand> getAutonomousCommands() {
+        return commands;
+    }
+
+    public String[] getPaths() {
+        return paths;
+    }
+
+    public void reset(){
+        m_chassis.reset();
+    }
+
 }
 
