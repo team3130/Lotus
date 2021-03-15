@@ -1,7 +1,7 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,17 +9,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
-import frc.team3130.robot.sensors.vision.PixyCam;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
-import frc.team3130.robot.subsystems.Chassis;
-import io.github.pseudoresonance.pixy2api.links.I2CLink;
 
-import java.sql.Driver;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,8 +22,6 @@ import static frc.team3130.robot.RobotContainer.m_driverGamepad;
  */
 public class Robot extends TimedRobot {
     public RobotContainer m_robotContainer;
-
-    private final PixyCam m_pixy = new PixyCam(new I2CLink());
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
@@ -72,8 +62,9 @@ public class Robot extends TimedRobot {
                 if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
                     String tempStr = (String) map.getKey();
                     // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), null);
+                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), (RamseteCommand) map.getValue());
                 }
+                else if (map.getKey().equals(GalacticSearches[1]) || map.getKey().equals(GalacticSearches[3])) {}
                 else {
                     // adds every other path to chooser
                     chooser.addOption((String) map.getKey(), (RamseteCommand) map.getValue());
@@ -131,11 +122,28 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
 
+
+        if(chooser.getSelected() == m_robotContainer.getAutonomousCommands().get("GalacticSearchABlue")) {
+            if (m_robotContainer.getPixy().isRedPath("A")) {
+                chooser.addOption("GalacticSearchA", m_robotContainer.getAutonomousCommands().get("GalacticSearchARed"));
+            } else {
+                m_robotContainer.getAutonomousCommands().get("GalacticSearchABlue");
+            }
+        }
+        if(chooser.getSelected() == m_robotContainer.getAutonomousCommands().get("GalacticSearchBBlue")) {
+            if (m_robotContainer.getPixy().isRedPath("B")) {
+                chooser.addOption("GalacticSearchB", m_robotContainer.getAutonomousCommands().get("GalacticSearchBRed"));
+            } else {
+                m_robotContainer.getAutonomousCommands().get("GalacticSearchBBlue");
+            }
+        }
         if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
             autonomousCommand = m_robotContainer.getAutonomousCommands().get("DriveStraight");
             DriverStation.reportError("selected path was null", false);
-        } else {
+        }
+
+        else {
             autonomousCommand = chooser.getSelected();
             m_robotContainer.getChassis().setInitPose(autonomousCommand.getName());
             System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");

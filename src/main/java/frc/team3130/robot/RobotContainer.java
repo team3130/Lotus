@@ -34,7 +34,9 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
 import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
+import frc.team3130.robot.sensors.vision.PixyCam;
 import frc.team3130.robot.subsystems.*;
+import io.github.pseudoresonance.pixy2api.links.I2CLink;
 
 
 import java.io.IOException;
@@ -55,6 +57,8 @@ public class RobotContainer {
     private final Turret m_turret = new Turret();
     private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
 
+    private final PixyCam m_pixy = new PixyCam(new I2CLink());
+
     // This section is here IF we need it later
     public Chassis getChassis() {return m_chassis;}
     public Climber getClimber() {return m_climber;}
@@ -64,6 +68,8 @@ public class RobotContainer {
     public Intake getIntake() {return m_intake;}
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
+
+    public PixyCam getPixy() {return m_pixy;}
 
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
@@ -146,16 +152,16 @@ public class RobotContainer {
     }*/
 
     public void generateTrajectories() {
-        paths = new ArrayList<>(Arrays.asList("B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"));
+        paths = new String[] {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
 
         config.setKinematics(m_chassis.getmKinematics());
 
-        for (int looper = 0; looper != paths.size(); looper++) {
+        for (int looper = 0; looper != paths.length; looper++) {
             // variably call Json file
-            String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths.get(looper) + ".wpilib.json";
+            String trajectoryJSON = "/home/lvuser/deploy/paths/" + paths[looper] + ".wpilib.json";
             Trajectory trajectoryTemp = new Trajectory();
             try {
                 Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -179,8 +185,8 @@ public class RobotContainer {
                     m_chassis
             );
             command.addRequirements(m_chassis);
-            commands.add(command);
-            command.setName(paths.get(looper));
+            commands.put(paths[looper], command);
+            command.setName(paths[looper]);
         }
     }
 
@@ -188,7 +194,7 @@ public class RobotContainer {
         return commands;
     }
 
-    public ArrayList<String> getPaths() {
+    public String[] getPaths() {
         return paths;
     }
 
