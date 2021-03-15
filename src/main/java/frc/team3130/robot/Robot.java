@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     Command autonomousCommand = null;
 
     private SendableChooser<Command> chooser = new SendableChooser<>();
-    ArrayList<String> GalacticSearches;
+    String[] GalacticSearches;
 
 
     /**
@@ -64,16 +64,10 @@ public class Robot extends TimedRobot {
         for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
             try {
                 // to check in if statements if a galactic search path is being selected
-                GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
-
-                // getting the indexes of these values for pixi logic
-/*                indexOfGalacticSearchABlue = m_robotContainer.getPaths().get(GalacticSearches.get(0));
-                indexOfGalacticSearchARed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(1));
-                indexOfGalacticSearchBBlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(2));
-                indexOfGalacticSearchBRed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(3));*/
+                GalacticSearches = new String[]{"GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"};
 
                 // checking if it is a blue path
-                if (m_robotContainer.getPaths()[loop].equals(GalacticSearches.get(0)) || m_robotContainer.getPaths()[loop].equals(GalacticSearches.get(2))) {
+                if (m_robotContainer.getPaths()[loop].equals(GalacticSearches[0]) || m_robotContainer.getPaths()[loop].equals(GalacticSearches[2])) {
                         // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
                         chooser.addOption(m_robotContainer.getPaths()[loop].substring(0, m_robotContainer.getPaths()[loop].length() - 4), m_robotContainer.getAutonomousCommands().get(m_robotContainer.getPaths()[loop]));
                 }
@@ -136,7 +130,7 @@ public class Robot extends TimedRobot {
 
         String AorB; 
 
-        if (chooser.getSelected() == m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(0)))//TODO: this is awful code it won't work ever
+        if (chooser.getSelected() == m_robotContainer.getAutonomousCommands().get(GalacticSearches[0]))//TODO: this is awful code it won't work ever
              {
             AorB = "B";
         }
@@ -145,16 +139,16 @@ public class Robot extends TimedRobot {
         }
 
         if (m_pixy.isRedPath(AorB) && AorB.equals("A")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(1)));
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches[1]));
         }
         else if (m_pixy.isRedPath(AorB) && AorB.equals("B")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(3)));
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches[3]));
         }
         else if (!m_pixy.isRedPath(AorB) && AorB.equals("B")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(2)));
+            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches[2]));
         }
         else {
-            chooser.addOption("GalacticSearchA" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches.get(0)));
+            chooser.addOption("GalacticSearchA" + AorB, m_robotContainer.getAutonomousCommands().get(GalacticSearches[0]));
         }
 
         if (chooser.getSelected() == null) {
