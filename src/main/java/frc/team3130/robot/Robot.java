@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.sensors.Navx;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.PixyCam;
@@ -16,6 +17,7 @@ import io.github.pseudoresonance.pixy2api.links.I2CLink;
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
@@ -34,12 +36,8 @@ public class Robot extends TimedRobot {
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command autonomousCommand = null;
 
-    private int indexOfGalacticSearchABlue = 0;
-    private int indexOfGalacticSearchARed = 0;
-    private int indexOfGalacticSearchBBlue = 0;
-    private int indexOfGalacticSearchBRed = 0;
-
     private SendableChooser<Command> chooser = new SendableChooser<>();
+    String[] GalacticSearches;
 
 
     /**
@@ -64,31 +62,26 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
+        // to check in if statements if a galactic search path is being selected
+        GalacticSearches = new String[]{"GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"};
+
         // for loop that iterates through all the paths
-        for (int loop = 0; loop < m_robotContainer.getAutonomousCommands().size(); loop++) {
+        for (Map.Entry map : m_robotContainer.getAutonomousCommands().entrySet()) {
             try {
-                // to check in if statmenents if a galactic search path is being selected
-                ArrayList<String> GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
-
-                // getting the indexes of these values for pixi logic
-                indexOfGalacticSearchABlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(0));
-                indexOfGalacticSearchARed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(1));
-                indexOfGalacticSearchBBlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(2));
-                indexOfGalacticSearchBRed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(3));
-
                 // checking if it is a blue path
-                if (m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(0)) || m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(2))) {
-                        // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                        chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 4), m_robotContainer.getAutonomousCommands().get(loop));
+                if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
+                    String tempStr = (String) map.getKey();
+                    // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
+                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), null);
                 }
                 else {
                     // adds every other path to chooser
-                    chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
+                    chooser.addOption((String) map.getKey(), (RamseteCommand) map.getValue());
                 }
             }
             catch (IndexOutOfBoundsException e) {
                 // just in case my logic is screwy
-                DriverStation.reportError("Couldn't generate all autonomous commands, generated through path number: " + (loop - 1)  + " before receiving an index out of bounds at: " + loop, false);
+                DriverStation.reportError("Couldn't generate all autonomous commands",  false);
             }
         }
         //gives chooser to smart dashboard
@@ -138,31 +131,9 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         m_robotContainer.getChassis().reset();
 
-        String AorB; 
-
-        if (chooser.getSelected() == m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchABlue)) {
-            AorB = "B";
-        }
-        else {
-            AorB = "A";
-        }
-
-        if (m_pixy.isRedPath(AorB) && AorB.equals("A")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchARed));
-        }
-        else if (m_pixy.isRedPath(AorB) && AorB.equals("B")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchBRed));
-        }
-        else if (!m_pixy.isRedPath(AorB) && AorB.equals("B")) {
-            chooser.addOption("GalacticSearch" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchBBlue));
-        }
-        else {
-            chooser.addOption("GalacticSearchA" + AorB, m_robotContainer.getAutonomousCommands().get(indexOfGalacticSearchABlue));
-        }
-
         if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
-            autonomousCommand = m_robotContainer.getAutonomousCommands().get(1);
+            autonomousCommand = m_robotContainer.getAutonomousCommands().get("DriveStraight");
             DriverStation.reportError("selected path was null", false);
         } else {
             autonomousCommand = chooser.getSelected();

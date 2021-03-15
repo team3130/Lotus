@@ -39,9 +39,7 @@ import frc.team3130.robot.subsystems.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -67,16 +65,8 @@ public class RobotContainer {
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
-    private ArrayList<String> paths;
-    private ArrayList<RamseteCommand> commands = new ArrayList<>();
-
-
-    public static double getSkywalker() {
-        double spin = 0;
-        spin += m_driverGamepad.getRawAxis(RobotMap.LST_AXS_RTRIGGER);
-        spin -= m_driverGamepad.getRawAxis(RobotMap.LST_AXS_LTRIGGER);
-        return spin;
-    }
+    private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
+    private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
 
     //Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
@@ -194,7 +184,7 @@ public class RobotContainer {
         }
     }
 
-    public ArrayList<RamseteCommand> getAutonomousCommands() {
+    public LinkedHashMap<String, RamseteCommand> getAutonomousCommands() {
         return commands;
     }
 
