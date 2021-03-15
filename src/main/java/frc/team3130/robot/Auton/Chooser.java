@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.vision.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
+import io.github.pseudoresonance.pixy2api.links.I2CLink;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,9 +35,9 @@ public class Chooser {
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
 
-    public Chooser(Chassis m_chassis, PixyCam m_pixy) {
-        this.m_chassis = m_chassis;
-        this.m_pixy = m_pixy;
+    public Chooser(/*Chassis m_chassis, PixyCam m_pixy*/) {
+        this.m_chassis = new Chassis();
+        this.m_pixy = new PixyCam(new I2CLink());
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
                 Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
