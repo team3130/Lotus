@@ -42,9 +42,9 @@ public class RobotContainer {
     private final Intake m_intake = new Intake();
     private final Turret m_turret = new Turret();
     private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
-    private final Chooser m_chooser = new Chooser(m_chassis);
-
     private final PixyCam m_pixy = new PixyCam(new I2CLink());
+    private final Chooser m_chooser = new Chooser(m_chassis, m_pixy);
+
 
     // This section is here IF we need it later
     public Chassis getChassis() {return m_chassis;}

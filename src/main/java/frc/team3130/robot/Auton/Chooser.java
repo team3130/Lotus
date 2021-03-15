@@ -104,14 +104,14 @@ public class Chooser {
 
     public RamseteCommand getCommand() {
         if(chooser.getSelected() == getAutonomousCommands().get("GalacticSearchABlue")) {
-            if (m_pixy().isRedPath("A")) {
+            if (m_pixy.isRedPath("A")) {
                 chooser.addOption("GalacticSearchA", getAutonomousCommands().get("GalacticSearchARed"));
             } else {
                getAutonomousCommands().get("GalacticSearchABlue");
             }
         }
         if(chooser.getSelected() == getAutonomousCommands().get("GalacticSearchBBlue")) {
-            if (m_pixy().isRedPath("B")) {
+            if (m_pixy.isRedPath("B")) {
                 chooser.addOption("GalacticSearchB",getAutonomousCommands().get("GalacticSearchBRed"));
             } else {
                 getAutonomousCommands().get("GalacticSearchBBlue");
