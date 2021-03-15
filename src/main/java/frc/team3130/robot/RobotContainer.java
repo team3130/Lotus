@@ -39,10 +39,7 @@ import frc.team3130.robot.subsystems.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class RobotContainer {
@@ -69,7 +66,7 @@ public class RobotContainer {
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
-    private HashMap<String, RamseteCommand> commands = new HashMap<>();
+    private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
 
     //Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
@@ -186,7 +183,7 @@ public class RobotContainer {
         }
     }
 
-    public HashMap<String, RamseteCommand> getAutonomousCommands() {
+    public LinkedHashMap<String, RamseteCommand> getAutonomousCommands() {
         return commands;
     }
 
