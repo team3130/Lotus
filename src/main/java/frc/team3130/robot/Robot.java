@@ -71,19 +71,19 @@ public class Robot extends TimedRobot {
                 ArrayList<String> GalacticSearches = new ArrayList<>(List.of("GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"));
 
                 // getting the indexes of these values for pixi logic
-/*                indexOfGalacticSearchABlue = m_robotContainer.getPaths().get(GalacticSearches.get(0));
+                indexOfGalacticSearchABlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(0));
                 indexOfGalacticSearchARed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(1));
                 indexOfGalacticSearchBBlue = m_robotContainer.getPaths().indexOf(GalacticSearches.get(2));
-                indexOfGalacticSearchBRed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(3));*/
+                indexOfGalacticSearchBRed = m_robotContainer.getPaths().indexOf(GalacticSearches.get(3));
 
                 // checking if it is a blue path
-                if (m_robotContainer.getPaths()[loop].equals(GalacticSearches.get(0)) || m_robotContainer.getPaths()[loop].equals(GalacticSearches.get(2))) {
+                if (m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(0)) || m_robotContainer.getPaths().get(loop).equals(GalacticSearches.get(2))) {
                         // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                        chooser.addOption(m_robotContainer.getPaths()[loop].substring(0, m_robotContainer.getPaths()[loop].length() - 4), m_robotContainer.getAutonomousCommands().get(m_robotContainer.getPaths()[loop]));
+                        chooser.addOption(m_robotContainer.getPaths().get(loop).substring(0, m_robotContainer.getPaths().get(loop).length() - 4), m_robotContainer.getAutonomousCommands().get(loop));
                 }
                 else {
                     // adds every other path to chooser
-                    chooser.addOption(m_robotContainer.getPaths()[loop], m_robotContainer.getAutonomousCommands().get(m_robotContainer.getPaths()[loop]));
+                    chooser.addOption(m_robotContainer.getPaths().get(loop), m_robotContainer.getAutonomousCommands().get(loop));
                 }
             }
             catch (IndexOutOfBoundsException e) {
