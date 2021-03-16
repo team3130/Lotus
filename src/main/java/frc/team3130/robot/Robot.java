@@ -171,6 +171,7 @@ public class Robot extends TimedRobot {
 //        Navx.GetInstance().outputToShuffleboard();
 //        WheelOfFortune.outputToShuffleboard();
 //        Chassis.outputToShuffleboard();
+        m_robotContainer.getHopper().outputToShuffleboard();
         m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
         Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());

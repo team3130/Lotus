@@ -47,6 +47,8 @@ public class Shoot extends CommandBase {
         // Tell turret to hold angle
         m_turret.hold();
 
+        lastIndexTime = Timer.getFPGATimestamp();
+
         // Find the flywheel speed
         if (!Limelight.GetInstance().hasTrack()){
             m_flywheel.setSpeed(3500.0);
@@ -72,41 +74,57 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        if (justShot) {
-            if (changedState) {
-                lastIndexTime = Timer.getFPGATimestamp();
-                changedState = false;
-            }
-            if (m_hopper.isEmpty()) {
-                lastIndexTime = Timer.getFPGATimestamp();
-                m_hopper.runHopperTop(0.20);
-                m_hopper.runHopperLeft(-0.5);
-                m_hopper.runHopperRight(-0.6);
-            } else {
-                m_hopper.runHopperTop(0.0);
-                m_hopper.runHopperLeft(0.0);
-                m_hopper.runHopperRight(0.0);
-                if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
-                    justShot = false;
-                    changedState = true;
-                }
-            }
-        } else {
-            if (changedState && m_flywheel.canShoot()) {
-                m_hopper.runHopperTop(0.6);
-                isShooting = true;
-                changedState = false;
-            } else if(!changedState) {
-                if (isShooting) {
-                    if (!m_flywheel.canShoot()) {
-                        isShooting = false;
-                    }
-                } else {
-                    m_hopper.runHopperTop(0.0);
-                    justShot = true;
-                    changedState = true;
-                }
-            }
+//        if (justShot) {
+//            if (changedState) {
+//                lastIndexTime = Timer.getFPGATimestamp();
+//                changedState = false;
+//            }
+//            if (m_hopper.isEmpty()) {
+//                lastIndexTime = Timer.getFPGATimestamp();
+//                m_hopper.runHopperTop(0.20);
+//                m_hopper.runHopperLeft(-0.5);
+//                m_hopper.runHopperRight(-0.6);
+//            } else {
+//                m_hopper.runHopperTop(0.0);
+//                m_hopper.runHopperLeft(0.0);
+//                m_hopper.runHopperRight(0.0);
+//                if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
+//                    justShot = false;
+//                    changedState = true;
+//                }
+//            }
+//        } else {
+//            if (changedState && m_flywheel.canShoot()) {
+//                m_hopper.runHopperTop(0.6);
+//                isShooting = true;
+//                changedState = false;
+//            } else if(!changedState) {
+//                if (isShooting) {
+//                    if (!m_flywheel.canShoot()) {
+//                        isShooting = false;
+//                    }
+//                } else {
+//                    m_hopper.runHopperTop(0.0);
+//                    justShot = true;
+//                    changedState = true;
+//                }
+//            }
+//        }
+
+
+
+
+        m_hopper.runHopperLeft(-0.5);
+        m_hopper.runHopperRight(-0.6);
+//        if(m_flywheel.canShoot() && (Timer.getFPGATimestamp() - lastIndexTime) > RobotMap.kHopperChamberPause) {
+//            m_hopper.runHopperTop(.6);
+//            lastIndexTime = Timer.getFPGATimestamp();
+//        }
+//        else
+//            m_hopper.runHopperTop(0);
+
+        if(m_flywheel.canShoot()){
+            m_hopper.runHopperTop(.6);
         }
     }
 

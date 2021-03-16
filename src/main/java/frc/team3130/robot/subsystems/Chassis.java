@@ -115,7 +115,8 @@ public class Chassis extends PIDSubsystem {
      * @param moveThrottle  Base forward and backward speed to move at. Positive is
      *                      forward
      * @param turnThrottle  Turning velocity
-     * @param squaredInputs Whether or not to use squared inputs
+     * @param squaredInputs Wheth][\
+     * er or not to use squared inputs
      */
     public void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
         //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors

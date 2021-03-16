@@ -31,8 +31,8 @@ public class Hood extends SubsystemBase {
 	private NetworkTableEntry hoodAngle =
 			tab.add("Set angle", 0.0).getEntry();
 
-	private NetworkTableEntry hoodPvalue =
-			tab.add("Set Hood P value", 0.8).getEntry();
+//	private NetworkTableEntry hoodPvalue =
+//			tab.add("Set Hood P value", 0.8).getEntry();
 	private NetworkTableEntry hoodDvalue =
 			tab.add("Set Hood D value", 168.0).getEntry();
 
@@ -81,6 +81,8 @@ public class Hood extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+
+
 	}
 
 

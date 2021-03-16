@@ -33,8 +33,11 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if(m_flywheel.canShoot())
+        m_hoppper.runHopperLeft(-0.5);
+        m_hoppper.runHopperRight(-0.6);
+        if(m_flywheel.canShoot()){
             m_hoppper.runHopperTop(.6);
+        }
     }
 
     /**
@@ -67,6 +70,8 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_flywheel.stop();
-        m_hoppper.runHopperTop(0);
+        m_hoppper.runHopperLeft(0.0);
+        m_hoppper.runHopperRight(0.0);
+        m_hoppper.runHopperTop(0.0);
     }
 }

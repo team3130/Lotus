@@ -114,19 +114,19 @@ public class RobotMap {
     public static int kHoodForward = 17669;//TODO: FIND Real Number
     public static double kHoodTicksPerDegree = (1.0 / 360.0) * 4096 * (2211.0 / 145.0); //= (kUseCompbot ? *put comp gear ratio here* : *put practice ratio here* ;)
     public static double kAngleChange = 0;
-    public static double kHoodP = 13.0;
+    public static double kHoodP = 12;
     public static double kHoodI = 0.0;
-    public static double kHoodD = 2.5;
+    public static double kHoodD = 15;
     public static double kHoodF = 0;
 
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
     public static double kFlywheelOpenRampRate = 1.0; // Minimum amount to time in seconds for Open Loop control output to ramp up
 
-    public static double kFlywheelP = 12;
+    public static double kFlywheelP = .22;
     public static double kFlywheelI = 0.0;
-    public static double kFlywheelD = .4;
-    public static double kFlywheelF = 0; // Checked 2/11, Optimal speed at 51% power
+    public static double kFlywheelD = 12;
+    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
 
     public static double kRPMChange = 0.0;
 
