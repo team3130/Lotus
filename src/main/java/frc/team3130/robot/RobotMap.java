@@ -8,6 +8,13 @@ package frc.team3130.robot;
  */
 public class RobotMap {
 
+    public static final double kBigMotorP = 0.35;
+    public static final double kBigMotorI = 0;
+    public static final double kBigMotorD = 0;
+
+    public static int kMotorMaxAcc = 1400;
+    public static int kMotorMaxVel = 3400;
+
     public static final int CAN_BIGMOTOR = 1;
 
     public static final int LST_BTN_LBUMPER = 5;
