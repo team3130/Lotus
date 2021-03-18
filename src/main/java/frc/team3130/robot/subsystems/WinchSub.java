@@ -9,6 +9,7 @@ public class WinchSub extends SubsystemBase {
     private final WPI_TalonSRX m_bigMotor;
     private final static int kWristTicksPerDeg = 12; //TODO: find real number
     private WinchControlState m_winchState;
+    private boolean hold;
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
 
@@ -64,7 +65,14 @@ public class WinchSub extends SubsystemBase {
     }
 
     public synchronized void holdPosWinch() { //for init and end only. If we keep repeatedly calling this is motor will oscillate
+        if(hold){
         setWinchPos(getRelativeEncoderValue());
+        }
+
+    }
+
+    public void setWinchHold(boolean input){
+        hold = input;
     }
 
     private enum WinchControlState{
