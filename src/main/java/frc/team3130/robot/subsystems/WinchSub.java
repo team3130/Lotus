@@ -1,12 +1,14 @@
 package frc.team3130.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
 public class WinchSub extends SubsystemBase {
     private final WPI_TalonSRX m_bigMotor;
-
+    private final static int kWristTicksPerDeg = 12; //TODO: find real number
+    private WinchControlState m_winchState;
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
 
@@ -50,6 +52,19 @@ public class WinchSub extends SubsystemBase {
         _talon.config_kI(0, kI, 0);
         _talon.config_kD(0, kD, 0);
         _talon.config_kF(0, kF, 0);
+    }
+
+    public synchronized double getRelativeEncoderValue(){
+        return m_bigMotor.getSelectedSensorPosition(0);
+    }
+
+    public synchronized void setWinchPos(double value) {
+        m_winchState = WinchControlState.MOTION_MAGIC;
+        m_bigMotor.set(ControlMode.MotionMagic, value);
+    }
+
+    public synchronized void holdPosWinch() { //for init and end only. If we keep repeatedly calling this is motor will oscillate
+        setWinchPos(getRelativeEncoderValue());
     }
 
     private enum WinchControlState{
