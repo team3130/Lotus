@@ -34,8 +34,8 @@ public class WinchSub extends SubsystemBase {
         yoskiTalon.configMotionAcceleration(acceleration, 0);
     }
 
-    public void spin(double rpm) {
-        m_bigMotor.set(rpm);
+    public void spin(double sped) {
+        m_bigMotor.set(sped);
     }
     /**
      * Configure the PIDF values of an arm motor

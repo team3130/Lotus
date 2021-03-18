@@ -12,8 +12,8 @@ public class RobotMap {
     public static final double kBigMotorI = 0;
     public static final double kBigMotorD = 0;
 
-    public static int kMotorMaxAcc = 1400;
-    public static int kMotorMaxVel = 3400;
+    public static int kMotorMaxAcc = 1;
+    public static int kMotorMaxVel = 1;
 
     public static final int CAN_BIGMOTOR = 1;
 
