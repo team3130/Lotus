@@ -24,6 +24,7 @@ public class WinchSub extends SubsystemBase {
                 RobotMap.kBigMotorD,
                 0.0);
         configMotionMagic(m_bigMotor, RobotMap.kMotorMaxAcc, RobotMap.kMotorMaxVel);
+        hold = false;
     }
 
     /**
