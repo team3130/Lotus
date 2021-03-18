@@ -21,9 +21,8 @@ public class Winch extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setWinchHold(true);
-        m_subsystem.spin(m_sped);
         m_subsystem.setWinchHold(false);
+        m_subsystem.spin(m_sped);
     }
 
     /**
@@ -65,6 +64,6 @@ public class Winch extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_subsystem.setWinchHold(true) ;
     }
 }
