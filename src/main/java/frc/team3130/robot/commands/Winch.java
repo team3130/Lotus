@@ -1,6 +1,7 @@
 package frc.team3130.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.WinchSub;
 
 public class Winch extends CommandBase {

@@ -1,5 +1,9 @@
 package frc.team3130.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -7,11 +11,6 @@ package frc.team3130.robot;
  * floating around.
  */
 public class RobotMap {
-
-    public static final double kBigMotorP = 0.35;
-    public static final double kBigMotorI = 0;
-    public static final double kBigMotorD = 0;
-
     public static int kMotorMaxAcc = 1;
     public static int kMotorMaxVel = 1;
 

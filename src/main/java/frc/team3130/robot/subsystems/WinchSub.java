@@ -2,12 +2,22 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
 public class WinchSub extends SubsystemBase {
     private final WPI_TalonSRX m_bigMotor;
     private boolean hold;
+
+    private static ShuffleboardTab tab = Shuffleboard.getTab("Winch");
+
+    public NetworkTableEntry kBigMotorP = tab.add("P", .35).getEntry();
+    public NetworkTableEntry kBigMotorI = tab.add("I", 0).getEntry();
+    public NetworkTableEntry kBigMotorD = tab.add("D", 0).getEntry();
+    public NetworkTableEntry kBigMotorF = tab.add("F", 0).getEntry();
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
 
@@ -16,13 +26,16 @@ public class WinchSub extends SubsystemBase {
     //Create and define all standard data types needed
     public WinchSub() {
         m_bigMotor = new WPI_TalonSRX(RobotMap.CAN_BIGMOTOR);
-        configPIDF(m_bigMotor,
-                RobotMap.kBigMotorP,
-                RobotMap.kBigMotorI,
-                RobotMap.kBigMotorD,
-                0.0);
         configMotionMagic(m_bigMotor, RobotMap.kMotorMaxAcc, RobotMap.kMotorMaxVel);
         hold = false;
+    }
+
+    public void periodic() {
+        configPIDF(m_bigMotor,
+                kBigMotorP.getDouble(0.35),
+                kBigMotorI.getDouble(0),
+                kBigMotorD.getDouble(0),
+                kBigMotorF.getDouble(0));
     }
 
     /**
@@ -64,7 +77,7 @@ public class WinchSub extends SubsystemBase {
 
     public synchronized void holdPosWinch() { //for init and end only. If we keep repeatedly calling this is motor will oscillate
         if(hold){
-        setWinchPos(getRelativeEncoderValue());
+            setWinchPos(getRelativeEncoderValue());
         }
 
     }
