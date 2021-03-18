@@ -6,13 +6,13 @@ import frc.team3130.robot.subsystems.WinchSub;
 public class Winch extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final WinchSub m_subsystem; //TODO: rename this to the subsystem this is assigned to
-    private double m_volts;
+    private double m_rpm;
 
-    public Winch(WinchSub subsystem, double volts) {
+    public Winch(WinchSub subsystem, double rpm) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
         this.addRequirements(subsystem);
-        m_volts = volts;
+        m_rpm = rpm;
 
     }
 
@@ -21,7 +21,7 @@ public class Winch extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.spin(m_volts);
+        m_subsystem.spin(m_rpm);
     }
 
     /**

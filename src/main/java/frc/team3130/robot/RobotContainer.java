@@ -31,4 +31,3 @@ public class RobotContainer {
         new JoystickTrigger(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Winch(m_winch, 5)); // L trigger also deploys intake while active
     }
 }
-
