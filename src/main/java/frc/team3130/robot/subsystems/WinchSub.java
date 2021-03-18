@@ -7,8 +7,6 @@ import frc.team3130.robot.RobotMap;
 
 public class WinchSub extends SubsystemBase {
     private final WPI_TalonSRX m_bigMotor;
-    private final static int kWristTicksPerDeg = 12; //TODO: find real number
-    private WinchControlState m_winchState;
     private boolean hold;
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
@@ -39,7 +37,7 @@ public class WinchSub extends SubsystemBase {
     }
 
     public void spin(double sped) {
-        m_bigMotor.set(sped);
+        m_bigMotor.set(ControlMode.MotionMagic , sped);
     }
     /**
      * Configure the PIDF values of an arm motor
@@ -57,11 +55,10 @@ public class WinchSub extends SubsystemBase {
     }
 
     public synchronized double getRelativeEncoderValue(){
-        return m_bigMotor.getSelectedSensorPosition(0);
+        return m_bigMotor.getSelectedSensorPosition();
     }
 
     public synchronized void setWinchPos(double value) {
-        m_winchState = WinchControlState.MOTION_MAGIC;
         m_bigMotor.set(ControlMode.MotionMagic, value);
     }
 
@@ -74,12 +71,6 @@ public class WinchSub extends SubsystemBase {
 
     public void setWinchHold(boolean input){
         hold = input;
-    }
-
-    private enum WinchControlState{
-        RAW_VBUS,
-        PERCENT_OUTPUT,
-        MOTION_MAGIC
     }
 
 }
