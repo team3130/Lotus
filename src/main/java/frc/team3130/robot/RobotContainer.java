@@ -28,6 +28,6 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         new JoystickTrigger(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Winch(m_winch, -0.25)); //R trigger
-        new JoystickTrigger(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Winch(m_winch, 5)); // L trigger also deploys intake while active
+        new JoystickTrigger(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Winch(m_winch, 0.5)); // L trigger also deploys intake while active
     }
 }
