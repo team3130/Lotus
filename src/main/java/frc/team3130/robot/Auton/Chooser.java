@@ -30,6 +30,10 @@ public class Chooser {
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
 
+    /**
+     * Constructs Chassis
+     * @param m_chassis Chassis subsystem
+     */
     public Chooser(Chassis m_chassis) {
         this.m_chassis = m_chassis;
 
@@ -68,9 +72,18 @@ public class Chooser {
         }
     }
 
+    /**
+     *
+     * @return the LinkedHashMap for our generated trajectories
+     */
+
     public LinkedHashMap<String, RamseteCommand> getAutonomousCommands() {
         return commands;
     }
+
+    /**
+     * Generates Trajectories
+     */
 
     public void chooserRegistry() {
         // to check in if statements if a galactic search path is being selected
@@ -98,6 +111,11 @@ public class Chooser {
         //gives chooser to smart dashboard
         SmartDashboard.putData("Auto mode", chooser);
     }
+
+    /**
+     * To be called on autonInit
+     * @return The autonomous command to be used
+     */
 
     public RamseteCommand getCommand() {
         if (chooser.getSelected() == null) {

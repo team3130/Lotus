@@ -2,7 +2,6 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.Auton.Chooser;
@@ -12,10 +11,10 @@ import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
 import frc.team3130.robot.commands.Hood.MoveHood;
 import frc.team3130.robot.commands.Hopper.HopperOut;
-import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.ToggleIntake;
+import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Shoot.ShootNear;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
@@ -24,9 +23,6 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
-
-
-import java.util.*;
 
 public class RobotContainer {
     //see here for references if lost: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbottraditional/RobotContainer.java
@@ -58,8 +54,6 @@ public class RobotContainer {
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
-    // private final Command m_BarrelRacing = new BarrelRacing(60, m_chassis);
-
 
     // Binding the buttons and triggers that are defined above to respective commands
     public RobotContainer() {
@@ -73,23 +67,12 @@ public class RobotContainer {
                 )
         );
 
-        /*
-        // Add commands to the autonomous command chooser
-        m_chooser.setDefaultOption("Simple Auto", m_simpleAuto);
-        m_chooser.addOption("Complex Auto", m_complexAuto);
-
-        // Put the chooser on the dashboard
-        Shuffleboard.getTab("Autonomous").add(m_chooser);
-         */
-
     }
 
+    /**
+     * adds object listeners at each button
+     */
     private void configureButtonBindings() {
-
-        /*
-         * Definitions for joystick buttons start
-         */
-
         /*
          * Drivers
          */
@@ -107,7 +90,6 @@ public class RobotContainer {
         /*
          * Weapons
          */
-
         new POVButton(m_driverGamepad, RobotMap.LST_POV_N).whenHeld(new MoveHood(1, m_hood));
         new POVButton(m_driverGamepad, RobotMap.LST_POV_S).whenHeld(new MoveHood(-1, m_hood));
 
@@ -121,6 +103,11 @@ public class RobotContainer {
 
     }
 
+    /**
+     * to be called at the start of auton
+     * resets odometry
+     * resets encoders
+     */
     public void reset(){
         m_chassis.reset();
     }
