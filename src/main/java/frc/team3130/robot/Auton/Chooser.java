@@ -94,6 +94,7 @@ public class Chooser {
             try {
                 // checking if it is a blue path
                 if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
+                    // this is only here because the compiler didn't like me using one of the String methods in getKey
                     String tempStr = (String) map.getKey();
                     // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
                     chooser.addOption(tempStr.substring(0, tempStr.length() - 4), null);
