@@ -23,6 +23,8 @@ public class Flywheel extends SubsystemBase {
 
     //Create and define all standard data types needed
     private static ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
+
+    private static NetworkTableEntry goalWheeelSpeed = tab.add("Fly Wheeel Speed", 0).getEntry();
 //    private static NetworkTableEntry testP =
 //            tab.add("Flywheel P", RobotMap.kFlywheelP)
 //                    .getEntry();
@@ -99,6 +101,10 @@ public class Flywheel extends SubsystemBase {
         setOpenLoop(0.0);
     }
 
+    public double getgoalFlyWheelSpeed(){
+        return goalWheeelSpeed.getDouble(0);
+    }
+
     /**
      * Returns the current speed of the flywheel motor in native units
      *
@@ -151,7 +157,7 @@ public class Flywheel extends SubsystemBase {
         // Check the velocity and return true when it is within the
         // velocity target.
         if (m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
-            return Math.abs(getRPMError()) < RobotMap.kFlywheelReadyTolerance;
+            return Math.abs(getRPMError()) < (RobotMap.kFlywheelReadyTolerance+Hood.getRelativeHoodAngle()/1.3);
         } else {
             return false;
         }
@@ -163,7 +169,7 @@ public class Flywheel extends SubsystemBase {
 //        SmartDashboard.putNumber("Flywheel Raw speed", getRawSpeed());
         SmartDashboard.putNumber("Flywheel Error", getRPMError());
 //        SmartDashboard.putBoolean("Flywheel canShoot", canShoot());
-        SmartDashboard.putBoolean("Can Shoot",canShoot());
+        SmartDashboard.putBoolean("Can shoot", canShoot());
     }
 
 }

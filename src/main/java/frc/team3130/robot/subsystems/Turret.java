@@ -26,7 +26,7 @@ public class Turret extends SubsystemBase {
 //            tab.add("Turret D", 0.0)
 //                    .getEntry();
 
-    private TurretState m_controlState;
+    private TurretState m_turretControlState;
     private TurretState m_lastState;
 
     // Output value. This will be in various units depending on the control state
@@ -65,7 +65,7 @@ public class Turret extends SubsystemBase {
         m_turret.configForwardSoftLimitEnable(true);
         m_turret.configReverseSoftLimitEnable(true);
 
-        m_controlState = TurretState.STOWED; // Initialize turret state to STOWED
+        m_turretControlState = TurretState.STOWED; // Initialize turret state to STOWED
         // Reset output to stowing position
         output = RobotMap.kTurretStowingAngle;
         m_lastState = TurretState.HOLD;
@@ -81,7 +81,7 @@ public class Turret extends SubsystemBase {
      * @param speed Input range -1.0 to 1.0
      */
     public void manualOp(double speed) {
-        m_controlState = TurretState.MANUAL;
+        m_turretControlState = TurretState.MANUAL;
         output = speed;
     }
 
@@ -92,9 +92,9 @@ public class Turret extends SubsystemBase {
      */
     public void aim(boolean usePrediction) {
         if (usePrediction) {
-            m_controlState = TurretState.PREDICT;
+            m_turretControlState = TurretState.PREDICT;
         } else {
-            m_controlState = TurretState.AIMING;
+            m_turretControlState = TurretState.AIMING;
         }
     }
 
@@ -102,10 +102,10 @@ public class Turret extends SubsystemBase {
      * Flip the aiming state of the turret
      */
     public void toggleAimState() {
-        if (m_controlState == TurretState.AIMING || m_controlState == TurretState.HOLD
-                || m_controlState == TurretState.SETPOINT || m_controlState == TurretState.PREDICT) {
+        if (m_turretControlState == TurretState.AIMING || m_turretControlState == TurretState.HOLD
+                || m_turretControlState == TurretState.SETPOINT || m_turretControlState == TurretState.PREDICT) {
             stow();
-        } else if (m_controlState == TurretState.STOWED) {
+        } else if (m_turretControlState == TurretState.STOWED) {
             aim(true);
         } else {
             aim(false);
@@ -119,7 +119,7 @@ public class Turret extends SubsystemBase {
         // Reset output to stowing position
         output = RobotMap.kTurretStowingAngle;
 
-        m_controlState = TurretState.STOWED;
+        m_turretControlState = TurretState.STOWED;
     }
 
     /**
@@ -129,7 +129,7 @@ public class Turret extends SubsystemBase {
         // Track the initial chassis angle for holding state
         initialChassisHoldAngle = Navx.GetInstance().getHeading();
 
-        m_controlState = TurretState.HOLD;
+        m_turretControlState = TurretState.HOLD;
     }
 
     /**
@@ -141,7 +141,7 @@ public class Turret extends SubsystemBase {
         // Set the output to the desired turret frame-relative angle
         output = angle;
 
-        m_controlState = TurretState.SETPOINT;
+        m_turretControlState = TurretState.SETPOINT;
     }
 
     /**
@@ -150,7 +150,7 @@ public class Turret extends SubsystemBase {
     public void nearShot() {
         output = 0.0;
 
-        m_controlState = TurretState.NEAR_SHOOT;
+        m_turretControlState = TurretState.NEAR_SHOOT;
     }
 
     /**
@@ -172,7 +172,7 @@ public class Turret extends SubsystemBase {
     public synchronized void writePeriodicOutputs() {
         // Determine if this state is new
         boolean isNewState = false;
-        if (m_controlState != m_lastState) {
+        if (m_turretControlState != m_lastState) {
             isNewState = true;
         }
 
@@ -195,10 +195,10 @@ public class Turret extends SubsystemBase {
         }
 
         // Cache current state locally
-        TurretState currentState = m_controlState;
+        TurretState currentState = m_turretControlState;
 
         /* Handle states */
-        switch (m_controlState) {
+        switch (m_turretControlState) {
             case STOWED:
                 // Handle the stow state
                 handleStowed(isNewState);
@@ -236,7 +236,8 @@ public class Turret extends SubsystemBase {
 
             default:
                 // Set the system to Stow in case it is moving and loses track of state.
-                m_controlState = TurretState.STOWED;
+                m_turretControlState = TurretState.
+                        STOWED;
 
         }
 
@@ -314,7 +315,7 @@ public class Turret extends SubsystemBase {
             }
             if (isFinished()) {
                 // Transition into Limelight aim state
-                m_controlState = TurretState.AIMING;
+                m_turretControlState = TurretState.AIMING;
             }
         }
     }
@@ -350,7 +351,7 @@ public class Turret extends SubsystemBase {
 //                    initialChassisHoldAngle = Navx.GetInstance().getHeading();
 //
 //                    // Transition to Hold state
-//                    m_controlState = TurretState.HOLD;
+//                    m_turretControlState = TurretState.HOLD;
 //
 //                    // Break from method to immediately go to Hold state
 //                    return;
@@ -373,7 +374,7 @@ public class Turret extends SubsystemBase {
                     // Reset output to stowing position
                     output = RobotMap.kTurretStowingAngle;
 
-                    m_controlState = TurretState.STOWED;
+                    m_turretControlState = TurretState.STOWED;
                 }
             }
         }
@@ -401,7 +402,7 @@ public class Turret extends SubsystemBase {
         } else {
             if (isFinished()) {
                 // Transition into Limelight aim state
-                m_controlState = TurretState.AIMING;
+                m_turretControlState = TurretState.AIMING;
             }
         }
     }
@@ -559,12 +560,12 @@ public class Turret extends SubsystemBase {
      * @return TurretState enum
      */
     public TurretState getState() {
-        return m_controlState;
+        return m_turretControlState;
     }
 
     public boolean isFinished() { //TODO: needs other isFinished checks for other states
-        if (m_controlState != m_lastState) return false;
-        if ((m_controlState == TurretState.STOWED || m_controlState == TurretState.PREDICT || m_controlState == TurretState.SETPOINT)
+        if (m_turretControlState != m_lastState) return false;
+        if ((m_turretControlState == TurretState.STOWED || m_turretControlState == TurretState.PREDICT || m_turretControlState == TurretState.SETPOINT)
                 && (Math.abs(output - getAngleDegrees()) < RobotMap.kTurretReadyToAimTolerance))
             return true;
         else return false;
@@ -578,7 +579,7 @@ public class Turret extends SubsystemBase {
      * @return If the turret is aimed on target and in correct mode
      */
     public boolean isOnTarget() {
-        if ((m_controlState == TurretState.AIMING && Limelight.GetInstance().hasTrack()) || m_controlState == TurretState.HOLD) {
+        if ((m_turretControlState == TurretState.AIMING && Limelight.GetInstance().hasTrack()) || m_turretControlState == TurretState.HOLD) {
             return Math.abs(output - getAngleDegrees()) < RobotMap.kTurretOnTargetTolerance;
         } else {
             return false;
@@ -591,7 +592,7 @@ public class Turret extends SubsystemBase {
      * @return
      */
     public boolean isTracking() {
-        return (m_controlState == TurretState.PREDICT || m_controlState == TurretState.AIMING || m_controlState == TurretState.HOLD);
+        return (m_turretControlState == TurretState.PREDICT || m_turretControlState == TurretState.AIMING || m_turretControlState == TurretState.HOLD);
     }
 
 

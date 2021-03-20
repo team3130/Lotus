@@ -5,13 +5,17 @@ import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
+import frc.team3130.robot.subsystems.Hopper;
 
 public class SetFlywheelRPM extends CommandBase {
     private final Flywheel m_flywheel;
+    private final Hopper m_hoppper;
 
-    public SetFlywheelRPM(Flywheel subsystem1) {
+    public SetFlywheelRPM(Flywheel subsystem1, Hopper subsystem2) {
         m_flywheel = subsystem1;
+        m_hoppper = subsystem2;
         m_requirements.add(m_flywheel);
+        m_requirements.add(m_hoppper);
     }
 
     /**
@@ -19,18 +23,8 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        if (!Limelight.GetInstance().hasTrack()){
-            m_flywheel.setSpeed(3500.0);
-        }else {
-            double x = Limelight.GetInstance().getDistanceToTarget();
-            if (71.0 <= x) {
-                //Hood.setPistons(false);
-                double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
-                m_flywheel.setSpeed(speed);
-            } else{
-                m_flywheel.setSpeed(3500);
-            }
-        }
+
+            m_flywheel.setSpeed(m_flywheel.getgoalFlyWheelSpeed());
     }
 
     /**
@@ -39,6 +33,11 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
+        m_hoppper.runHopperLeft(-0.5);
+        m_hoppper.runHopperRight(-0.6);
+        if(m_flywheel.canShoot()){
+            m_hoppper.runHopperTop(.6);
+        }
     }
 
     /**
@@ -71,5 +70,8 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_flywheel.stop();
+        m_hoppper.runHopperLeft(0.0);
+        m_hoppper.runHopperRight(0.0);
+        m_hoppper.runHopperTop(0.0);
     }
 }

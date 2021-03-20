@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.sensors.Navx;
+import frc.team3130.robot.sensors.vision.HoodAngleCalculations;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
+
 
 import static frc.team3130.robot.RobotContainer.m_driverGamepad;
 
@@ -77,6 +79,7 @@ public class Robot extends TimedRobot {
         m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
+        m_robotContainer.getHood().setAngle(0);
     }
 
     @Override
@@ -168,11 +171,13 @@ public class Robot extends TimedRobot {
 //        Navx.GetInstance().outputToShuffleboard();
 //        WheelOfFortune.outputToShuffleboard();
 //        Chassis.outputToShuffleboard();
+        m_robotContainer.getHopper().outputToShuffleboard();
         m_robotContainer.getTurret().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
         Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
         m_robotContainer.getFlywheel().outputToShuffleboard();
-        WheelSpeedCalculations.GetInstance().outputToShuffleboard();
+//        HoodAngleCalculations.GetInstance().outputToShuffleboard();
+        m_robotContainer.getHood().outputToShuffleboard();
 
         //TODO: move this somewhere logical
         if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {

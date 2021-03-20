@@ -7,12 +7,16 @@
 
 package frc.team3130.robot.commands.Hood;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Hood;
 
 public class MoveHood extends CommandBase {
 	private final Hood m_hood;
 	private double speed;
+
 
 	/**
 	 * Creates a new MoveHood.

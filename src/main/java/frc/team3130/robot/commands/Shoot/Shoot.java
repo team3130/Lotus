@@ -3,6 +3,7 @@ package frc.team3130.robot.commands.Shoot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.sensors.vision.HoodAngleCalculations;
 import frc.team3130.robot.subsystems.Flywheel;
 import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Hopper;
@@ -46,17 +47,23 @@ public class Shoot extends CommandBase {
         // Tell turret to hold angle
         m_turret.hold();
 
+        lastIndexTime = Timer.getFPGATimestamp();
+
         // Find the flywheel speed
         if (!Limelight.GetInstance().hasTrack()){
             m_flywheel.setSpeed(3500.0);
+            m_hood.setAngle(60);
         }else {
             double x = Limelight.GetInstance().getDistanceToTarget();
             if (71.0 <= x) {
                 //Hood.setPistons(false);
                 double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
+                double angle = HoodAngleCalculations.GetInstance().getAngle(x);
                 m_flywheel.setSpeed(speed);
+                m_hood.setAngle(angle);
             } else{
                 m_flywheel.setSpeed(3500);
+                m_hood.setAngle(60);
             }
         }
     }
@@ -67,41 +74,57 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        if (justShot) {
-            if (changedState) {
-                lastIndexTime = Timer.getFPGATimestamp();
-                changedState = false;
-            }
-            if (m_hopper.isEmpty()) {
-                lastIndexTime = Timer.getFPGATimestamp();
-                m_hopper.runHopperTop(0.20);
-                m_hopper.runHopperLeft(-0.5);
-                m_hopper.runHopperRight(-0.6);
-            } else {
-                m_hopper.runHopperTop(0.0);
-                m_hopper.runHopperLeft(0.0);
-                m_hopper.runHopperRight(0.0);
-                if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
-                    justShot = false;
-                    changedState = true;
-                }
-            }
-        } else {
-            if (changedState && m_flywheel.canShoot()) {
-                m_hopper.runHopperTop(0.6);
-                isShooting = true;
-                changedState = false;
-            } else if(!changedState) {
-                if (isShooting) {
-                    if (!m_flywheel.canShoot()) {
-                        isShooting = false;
-                    }
-                } else {
-                    m_hopper.runHopperTop(0.0);
-                    justShot = true;
-                    changedState = true;
-                }
-            }
+//        if (justShot) {
+//            if (changedState) {
+//                lastIndexTime = Timer.getFPGATimestamp();
+//                changedState = false;
+//            }
+//            if (m_hopper.isEmpty()) {
+//                lastIndexTime = Timer.getFPGATimestamp();
+//                m_hopper.runHopperTop(0.20);
+//                m_hopper.runHopperLeft(-0.5);
+//                m_hopper.runHopperRight(-0.6);
+//            } else {
+//                m_hopper.runHopperTop(0.0);
+//                m_hopper.runHopperLeft(0.0);
+//                m_hopper.runHopperRight(0.0);
+//                if (Timer.getFPGATimestamp() - lastIndexTime > RobotMap.kHopperChamberPause) {
+//                    justShot = false;
+//                    changedState = true;
+//                }
+//            }
+//        } else {
+//            if (changedState && m_flywheel.canShoot()) {
+//                m_hopper.runHopperTop(0.6);
+//                isShooting = true;
+//                changedState = false;
+//            } else if(!changedState) {
+//                if (isShooting) {
+//                    if (!m_flywheel.canShoot()) {
+//                        isShooting = false;
+//                    }
+//                } else {
+//                    m_hopper.runHopperTop(0.0);
+//                    justShot = true;
+//                    changedState = true;
+//                }
+//            }
+//        }
+
+
+
+
+        m_hopper.runHopperLeft(-0.5);
+        m_hopper.runHopperRight(-0.6);
+//        if(m_flywheel.canShoot() && (Timer.getFPGATimestamp() - lastIndexTime) > RobotMap.kHopperChamberPause) {
+//            m_hopper.runHopperTop(.6);
+//            lastIndexTime = Timer.getFPGATimestamp();
+//        }
+//        else
+//            m_hopper.runHopperTop(0);
+
+        if(m_flywheel.canShoot()){
+            m_hopper.runHopperTop(.6);
         }
     }
 

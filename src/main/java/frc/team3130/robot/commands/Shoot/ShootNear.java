@@ -138,5 +138,6 @@ public class ShootNear extends CommandBase {
 
         // Tell turret to stow
         m_turret.stow();
+        m_hood.setAngle(0);
     }
 }

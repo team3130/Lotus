@@ -3,16 +3,21 @@ package frc.team3130.robot.commands.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.subsystems.Hood;
+import frc.team3130.robot.subsystems.Hopper;
 import frc.team3130.robot.subsystems.Turret;
 
 import java.util.Set;
 
 public class ToggleTurretAim extends CommandBase {
     private final Turret m_turret;
+    private final Hood m_hood;
 
-    public ToggleTurretAim(Turret subsystem) {
-        m_turret = subsystem;
+    public ToggleTurretAim(Turret subsystemT, Hood subsystemH) {
+        m_turret = subsystemT;
+        m_hood = subsystemH;
         m_requirements.add(m_turret);
+        m_requirements.add(m_hood);
     }
 
     /**
@@ -21,6 +26,7 @@ public class ToggleTurretAim extends CommandBase {
     @Override
     public void initialize() {
         m_turret.toggleAimState();
+        m_hood.setAngle(0);
     }
 
     /**

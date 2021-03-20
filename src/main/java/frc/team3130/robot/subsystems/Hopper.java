@@ -53,8 +53,13 @@ public class Hopper extends SubsystemBase {
         m_hopperMotorTop.set(speed);
     }
 
+    public double  getHopperTopOutput(){
+        return m_hopperMotorTop.getMotorOutputPercent();
+    }
+
     public void outputToShuffleboard() {
-        SmartDashboard.putBoolean("Loader Empty", isEmpty());
+
+        SmartDashboard.putNumber("Indexer percent output",getHopperTopOutput());
     }
 }
 

@@ -1,19 +1,24 @@
-package frc.team3130.robot.commands.Hopper;
+package frc.team3130.robot.commands.Hood;
+
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.subsystems.ExampleSubsystem;
 import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.subsystems.Hopper;
+import frc.team3130.robot.sensors.vision.Limelight;
 
 import java.util.Set;
 
-public class HopperOut extends CommandBase {
-    private final Hopper m_hopper;
+public class SetHoodState extends CommandBase {
+    // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
+    private final Hood m_hood;
+    double angle;
 
-    public HopperOut(Hopper subsystem) {
-        m_hopper = subsystem;
-        m_requirements.add(m_hopper);
+    public SetHoodState(Hood subsystem) {
+        //mapping to object passed through parameter
+        m_hood = subsystem;
     }
 
     /**
@@ -21,9 +26,11 @@ public class HopperOut extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_hopper.runHopperLeft(-0.2);
-        m_hopper.runHopperRight(0.2);
-        m_hopper.runHopperTop(-0.4);
+//        System.out.println(m_hood.getSetAngle()+ "  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        m_hood.setAngle(m_hood.getSetAngle());
+
+
+
     }
 
     /**
@@ -33,6 +40,7 @@ public class HopperOut extends CommandBase {
     @Override
     public void execute() {
     }
+
     /**
      * <p>
      * Returns whether this command has finished. Once a command finishes -- indicated by
@@ -49,11 +57,8 @@ public class HopperOut extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-            return false;
-
-
+        return true;
     }
-
 
     /**
      * The action to take when the command ends. Called when either the command
@@ -64,7 +69,8 @@ public class HopperOut extends CommandBase {
      * @param interrupted whether the command was interrupted/canceled
      */
     @Override
-    public void end(boolean interrupted) { m_hopper.runHopperLeft(0.0);
-        m_hopper.runHopperRight(0.0);
-        m_hopper.runHopperTop(0.0);}
+    public void end(boolean interrupted) {
+//        System.out.println("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+
+    }
 }
