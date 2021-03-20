@@ -35,11 +35,17 @@ public class Chassis extends PIDSubsystem {
     private static Solenoid m_shifter;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
-    private NetworkTableEntry leftOutput =
-            tab.add("Left Output", 0.5)
+    private NetworkTableEntry leftOutputLead =
+            tab.add("Left Output Lead", 0.5)
                     .getEntry();
-    private NetworkTableEntry rightOutput =
-            tab.add("Right Output", 0.5)
+    private NetworkTableEntry leftOutputDrag =
+            tab.add("Left Output Drag", 0.5)
+                    .getEntry();
+    private NetworkTableEntry rightOutputLead =
+            tab.add("Right Output Lead", 0.5)
+                    .getEntry();
+    private NetworkTableEntry rightOutputDrag =
+            tab.add("Right Output Drag", 0.5)
                     .getEntry();
 
     private NetworkTableEntry turnSensitivity =
@@ -180,8 +186,11 @@ public class Chassis extends PIDSubsystem {
         return !m_shifter.get();
     }
 
-    public double getSetLeftOutput(){return leftOutput.getDouble(0);}
-    public double getSetRightOutput(){return rightOutput.getDouble(0);}
+    public double getSetLeftOutputLead(){return leftOutputLead.getDouble(0);}
+    public double getSetLeftOutputDrag(){return leftOutputDrag.getDouble(0);}
+
+    public double getSetRightOutputLead(){return rightOutputLead.getDouble(0);}
+    public double getSetRightOutputDrag(){return rightOutputDrag.getDouble(0);}
 
     public double getTurnSensitivity(){return turnSensitivity.getDouble(1);}
 
