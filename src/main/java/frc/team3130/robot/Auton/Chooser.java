@@ -3,6 +3,7 @@ package frc.team3130.robot.Auton;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
@@ -19,6 +20,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -33,13 +36,14 @@ public class Chooser {
 
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
+    private ArrayList<Pose2d> initialPoses = new ArrayList<>();
 
     public Chooser(Chassis m_chassis, PixyCam m_pixy) {
         this.m_chassis = m_chassis;
         this.m_pixy = m_pixy;
 
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(RobotMap.kMaxVelocityPerSecond)/3,
-                Units.feetToMeters(RobotMap.kMaxAccelerationPerSecond)/3);
+        TrajectoryConfig config = new TrajectoryConfig(3,
+                3);
 
         config.setKinematics(m_chassis.getmKinematics());
 
@@ -70,6 +74,7 @@ public class Chooser {
             command.addRequirements(m_chassis);
             command.setName(paths[looper]);
             commands.put(paths[looper], command);
+            initialPoses.add(trajectoryTemp.getInitialPose());
         }
     }
 
@@ -124,9 +129,13 @@ public class Chooser {
             DriverStation.reportError("selected path was null", false);
         } else {
             autonomousCommand = (RamseteCommand) chooser.getSelected();
-            m_chassis.setInitPose(autonomousCommand.getName());
             System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         }
         return autonomousCommand;
     }
+
+    public Pose2d getInitialPose(){
+        return initialPoses.get(Arrays.asList(paths).indexOf(chooser.getSelected()));
+    }
+
 }

@@ -2,7 +2,6 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.fasterxml.jackson.core.JsonParser;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -39,31 +38,12 @@ public class Chassis extends SubsystemBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
-    private NetworkTableEntry LeftP =
-            tab.add("Left P", .3).getEntry();
-//    private NetworkTableEntry LeftI =
-//            tab.add("Left I", 0)
-//                    .withWidget(BuiltInWidgets.kNumberSlider)
-//                    .withProperties(Map.of("min", 0, "max", 1))
-//                    .getEntry();
-//    private NetworkTableEntry LeftD =
-//            tab.add("Left D", 0)
-//                    .withWidget(BuiltInWidgets.kNumberSlider)
-//                    .withProperties(Map.of("min", 0, "max", 1))
-//                    .getEntry();
-//
-    private NetworkTableEntry RightP =
-            tab.add("Right P", .3).getEntry();
-//    private NetworkTableEntry RightI =
-//            tab.add("Right I", 0)
-//                    .withWidget(BuiltInWidgets.kNumberSlider)
-//                    .withProperties(Map.of("min", 0, "max", 1))
-//                    .getEntry();
-//    private NetworkTableEntry RightD =
-//            tab.add("Right D", 0)
-//                    .withWidget(BuiltInWidgets.kNumberSlider)
-//                    .withProperties(Map.of("min", 0, "max", 1))
-//                    .getEntry();
+    private NetworkTableEntry P =
+            tab.add("Chassis P", .5).getEntry();
+    private NetworkTableEntry I =
+            tab.add("Chassis I", 0).getEntry();
+    private NetworkTableEntry D =
+            tab.add("Chassis D", 0).getEntry();
 
     private double moveSpeed;
 
@@ -81,7 +61,6 @@ public class Chassis extends SubsystemBase {
     private SpeedControllerGroup m_left;
     private SpeedControllerGroup m_right;
 
-    private Pose2d m_position;
 
     //Create and define all standard data types needed
 
@@ -157,21 +136,14 @@ public class Chassis extends SubsystemBase {
         moveSpeed=0;
 
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
-        m_position = new Pose2d(0, 0, new Rotation2d(0.00));
-        m_odometry = new DifferentialDriveOdometry(Navx.getHeadingTwoElectricBogoloo(), m_position);
+        m_odometry = new DifferentialDriveOdometry(Navx.getRotation());
 
-        double LP = LeftP.getDouble(.3);
-//        double LI = LeftI.getDouble(0);
-//        double LD = LeftD.getDouble(0);
-//
-        double RP = RightP.getDouble(.3);
-//        double RI = RightI.getDouble(0);
-//        double RD = RightD.getDouble(0);
+
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
-        m_leftPIDController = new PIDController(.32, 0, 0);
-        m_rightPIDConttroller = new PIDController(.32, 0, 0);
+        m_leftPIDController = new PIDController(2.1, .1, 0);
+        m_rightPIDConttroller = new PIDController(2.1, .1, 0);
 
         m_leftMotorRear.follow(m_leftMotorFront);
         m_rightMotorRear.follow(m_rightMotorFront);
@@ -190,33 +162,15 @@ public class Chassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_position = m_odometry.update(Navx.getHeadingTwoElectricBogoloo(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters(getDistanceR()));
+        m_odometry.update(Navx.getRotation(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters(getDistanceR()));
     }
 
     /**
-     * @param commandName of the command
-     * sets the initial position based off of the JSON used
+     * @param pose the starting pose of the robot in the trajectory
+     * sets the initial position based off the trajectory generated
      */
-    public void setInitPose(String commandName) {
-        try {
-            JSONParser parser = new JSONParser();
-            JSONArray obj = (JSONArray) parser.parse(new FileReader("/home/lvuser/deploy/paths/" + commandName + ".wpilib.json"));
-
-            JSONObject first = (JSONObject) obj.get(0);
-            JSONObject pose = (JSONObject) first.get("pose");
-            JSONObject translation = (JSONObject) pose.get("translation");
-
-            Double x = (Double) translation.get("x");
-            Double y = (Double) translation.get("y");
-
-            System.out.println(x);
-            System.out.println(y);
-
-            m_position = new Pose2d(x, y, new Rotation2d(0.00));
-        }
-        catch (Exception e) {
-            DriverStation.reportError("Could not generate an initial POSE from the JSON. Using 0,0 as default", false);
-        }
+    public void setInitPose(Pose2d pose) {
+        m_odometry.resetPosition(pose, Navx.getRotation());
     }
 
     /**
@@ -271,7 +225,7 @@ public class Chassis extends SubsystemBase {
         m_leftMotorRear.setSelectedSensorPosition(0);
         m_rightMotorRear.setSelectedSensorPosition(0);
         Navx.resetNavX();
-        m_odometry.resetPosition(new Pose2d(), Navx.getHeadingTwoElectricBogoloo());
+        m_odometry.resetPosition(new Pose2d(), Navx.getRotation());
     }
 
     /**
@@ -522,7 +476,7 @@ public class Chassis extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return m_position;
+        return m_odometry.getPoseMeters();
     }
 
     public void setOutput(double leftVolts, double rightVolts) {
@@ -539,7 +493,7 @@ public class Chassis extends SubsystemBase {
     }
 
     public void setPosition(Pose2d position){
-        this.m_position = position;
+        m_odometry.resetPosition(position,Navx.getRotation());
     }
 
 //    private void setPIDValues(boolean smallAngleTurn){//TOD2O: Tune Pid
@@ -589,9 +543,9 @@ public class Chassis extends SubsystemBase {
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
-        SmartDashboard.putNumber("Robot position X", m_position.getX());
-        SmartDashboard.putNumber("Robot position Y", m_position.getY());
-        SmartDashboard.putNumber("Robot rotation", m_position.getRotation().getDegrees());
+        SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Robot position Y", m_odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("Robot rotation", m_odometry.getPoseMeters().getRotation().getDegrees());
 
     }
 

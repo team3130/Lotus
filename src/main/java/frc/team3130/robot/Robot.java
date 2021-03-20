@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
         m_robotContainer.getChassis().reset();
 
         autonomousCommand = m_robotContainer.getChooser().getCommand();
+        m_robotContainer.getChassis().setInitPose(m_robotContainer.getChooser().getInitialPose());
         scheduler.schedule(true, autonomousCommand);
         System.out.println("Found autonomous Command");
 

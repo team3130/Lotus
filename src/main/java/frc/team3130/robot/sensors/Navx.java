@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.team3130.robot.RobotMap;
 
 //TODO: make not static
@@ -78,14 +77,28 @@ public class Navx {
         return Math.IEEEremainder(getAngle(), 360);
     }
 
-    public static Rotation2d getHeadingTwoElectricBogoloo(){return Rotation2d.fromDegrees(Math.IEEEremainder(getAngle(), 360));}
+
+    /**
+     * This will return angle in degrees and will return values higher than 360 so after one full rotation
+     * and a degree it would return 361
+     * @return rotation in degrees
+     */
+    public static Rotation2d getRotation(){
+        try {
+            return Rotation2d.fromDegrees(Math.IEEEremainder(getAngle(),360));
+        }
+        catch (NullPointerException L){
+            DriverStation.reportError("Unable to get Robot Rotation", L.getStackTrace());
+            return new Rotation2d();
+        }
+    }
 
     public static boolean getNavxPresent() {
         return m_bNavXPresent;
     }
 
     public static void outputToShuffleboard() {
-        SmartDashboard.putNumber("NavX angle", getHeadingTwoElectricBogoloo().getDegrees());
+        SmartDashboard.putNumber("NavX angle", getRotation().getDegrees());
     }
 }
 
