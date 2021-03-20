@@ -134,7 +134,7 @@ public class Chooser {
     }
 
     public Pose2d getInitialPose(){
-        return initialPoses.get(Arrays.asList(paths).indexOf(chooser.getSelected()));
+        return initialPoses.get(Arrays.asList(paths).indexOf(chooser.getSelected().getName()));
     }
 
 }
