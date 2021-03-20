@@ -78,7 +78,6 @@ public class Chooser {
         }
     }
 
-    @Test
     public void chooserRegistry() {
         // to check in if statements if a galactic search path is being selected
         GalacticSearches = new String[]{"GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"};
@@ -104,7 +103,7 @@ public class Chooser {
         }
         //gives chooser to smart dashboard
         SmartDashboard.putData("Auto mode", chooser);
-        Assert.assertEquals(chooser.hashCode(), commands.hashCode());
+        // Assert.assertEquals(chooser.hashCode(), commands.hashCode());
     }
 
     public RamseteCommand getCommand() {
