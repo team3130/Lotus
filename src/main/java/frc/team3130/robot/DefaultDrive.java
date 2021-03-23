@@ -1,27 +1,15 @@
-package frc.team3130.robot.commands.Flywheel;
+package frc.team3130.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.Flywheel;
 
-import java.util.Set;
+import java.util.function.DoubleSupplier;
 
-public class TuneFlywheelRPM extends CommandBase {
-    private final Flywheel m_flywheel;
-    private ShuffleboardTab tab = Shuffleboard.getTab("Flywheel");
+public class DefaultDrive extends CommandBase {
+    private final frc.team3130.robot.DriveSubsystem m_chassis;
 
-    private NetworkTableEntry flywheelRPM =
-            tab.add("RPM", 7500.0)
-                    .getEntry();
-
-
-    public TuneFlywheelRPM(Flywheel subsystem) {
-        m_flywheel = subsystem;
-        m_requirements.add(m_flywheel);
+    public DefaultDrive(frc.team3130.   robot.DriveSubsystem subsystem, DoubleSupplier  forward, DoubleSupplier rotation) {
+        m_chassis = subsystem;
+        m_requirements.add(m_chassis);
     }
 
     /**
@@ -29,7 +17,7 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_flywheel.setSpeed(flywheelRPM.getDouble(7600.0));
+
     }
 
     /**
@@ -38,6 +26,10 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
+        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
+        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
+
+        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -69,6 +61,6 @@ public class TuneFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_flywheel.stop();
+
     }
 }

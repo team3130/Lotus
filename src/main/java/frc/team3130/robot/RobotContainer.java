@@ -1,116 +1,158 @@
 package frc.team3130.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.team3130.robot.Auton.Chooser;
-import frc.team3130.robot.commands.Chassis.DefaultDrive;
-import frc.team3130.robot.commands.Chassis.ShiftToggle;
-import frc.team3130.robot.commands.Climber.DeployBigClimber;
-import frc.team3130.robot.commands.Climber.DeploySmallClimber;
-import frc.team3130.robot.commands.Hood.MoveHood;
-import frc.team3130.robot.commands.Hopper.HopperOut;
-import frc.team3130.robot.commands.Intake.IntakeIn;
-import frc.team3130.robot.commands.Intake.IntakeOut;
-import frc.team3130.robot.commands.Intake.ToggleIntake;
-import frc.team3130.robot.commands.Shoot.Shoot;
-import frc.team3130.robot.commands.Shoot.ShootNear;
-import frc.team3130.robot.commands.Turret.ToggleTurretAim;
-import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
-import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
-import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
-import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
-import frc.team3130.robot.controls.JoystickTrigger;
-import frc.team3130.robot.subsystems.*;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link frc.team3130.robot.Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and button mappings) should be declared here.
+ */
 public class RobotContainer {
-    //see here for references if lost: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbottraditional/RobotContainer.java
-
-    // define Subsystems
-    private final Chassis m_chassis = new Chassis();
-    private final Climber m_climber = new Climber();
-    private final Flywheel m_flyWheel = new Flywheel();
-    private final Hood m_hood = new Hood();
-    private final Hopper m_hoppper = new Hopper();
-    private final Intake m_intake = new Intake();
-    private final Turret m_turret = new Turret();
-    private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
-    private final Chooser m_chooser = new Chooser(m_chassis);
-
-    // This section is here IF we need it later
-    public Chassis getChassis() {return m_chassis;}
-    public Climber getClimber() {return m_climber;}
-    public Flywheel getFlywheel() {return m_flyWheel;}
-    public Hood getHood() {return m_hood;}
-    public Hopper getHopper() {return m_hoppper;}
-    public Intake getIntake() {return m_intake;}
-    public Turret getTurret() {return m_turret;}
-    public WheelOfFortune getWOF() {return m_wheelOfFortune;}
-    public Chooser getChooser() {return m_chooser;}
 
 
-    //Joysticks
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+
+    private NetworkTableEntry Distance =
+            tab.add("Setpoint meters", 3).getEntry();
+
+    private NetworkTableEntry P =
+            tab.add("Chassis P", 2.1).getEntry();
+    private NetworkTableEntry I =
+            tab.add("Chassis I", 0).getEntry();
+    private NetworkTableEntry D =
+            tab.add("Chassis D", 0).getEntry();
+
+    // The robot's subsystems
+    private final frc.team3130.robot.DriveSubsystem m_robotDrive = new frc.team3130.robot.DriveSubsystem();
+
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
+    // The driver's controller
+//    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-    // Binding the buttons and triggers that are defined above to respective commands
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        m_chooser.chooserRegistry();
+        // Configure the button bindings
         configureButtonBindings();
-        m_chassis.setDefaultCommand(
-                new DefaultDrive(
-                        m_chassis,
+
+        configureButtonBindings();
+        m_robotDrive.setDefaultCommand(
+                new frc.team3130.robot.DefaultDrive(
+                        m_robotDrive,
                         () -> m_driverGamepad.getY(GenericHID.Hand.kLeft),
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
-
     }
 
     /**
-     * adds object listeners at each button
+     * Use this method to define your button->command mappings. Buttons can be created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * Joystick} or {@link XboxController}), and then calling passing it to a
+     * {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-        /*
-         * Drivers
-         */
-        new JoystickTrigger(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new IntakeIn(m_intake)); //R trigger
-        new JoystickTrigger(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new IntakeOut(m_intake)); // L trigger also deploys intake while active
-
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Shoot(m_turret, m_hoppper, m_flyWheel, m_hood)); //R bumper
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new HopperOut(m_hoppper)); //L bumper
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(new ToggleTurretAim(m_turret)); //R joystick press
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new ToggleIntake(m_intake));; //Menu button
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new ShootNear(m_turret, m_hoppper, m_flyWheel, m_hood)); //Button A
-
-
-        /*
-         * Weapons
-         */
-        new POVButton(m_driverGamepad, RobotMap.LST_POV_N).whenHeld(new MoveHood(1, m_hood));
-        new POVButton(m_driverGamepad, RobotMap.LST_POV_S).whenHeld(new MoveHood(-1, m_hood));
-
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeploySmallClimber(m_climber));; //Menu button
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(new DeployBigClimber(m_climber));; //Windows button
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleWOF(m_wheelOfFortune, m_intake));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new SpinWOFLeft(m_wheelOfFortune));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinWOFRight(m_wheelOfFortune));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenPressed(new ColorAlignment(m_wheelOfFortune));
-
-
+//        // Drive at half speed when the right bumper is held
+//        new JoystickButton(m_driverController, Button.kBumperRight.value)
+//                .whenPressed(() -> m_robotDrive.setMaxOutput(0.5))
+//                .whenReleased(() -> m_robotDrive.setMaxOutput(1));
     }
 
     /**
-     * to be called at the start of auton
-     * resets odometry
-     * resets encoders
+     * Use this to pass the autonomous command to the main  class.
+     *
+     * @return the command to run in autonomous
      */
-    public void reset(){
-        m_chassis.reset();
+    public Command getAutonomousCommand() {
+
+        // Create a voltage constraint to ensure we don't accelerate too fast
+        var autoVoltageConstraint =
+                new DifferentialDriveVoltageConstraint(
+                        new SimpleMotorFeedforward(
+                                frc.team3130.robot.RobotMap.kS,
+                                frc.team3130.robot.RobotMap.kV,
+                                frc.team3130.robot.RobotMap.kA),
+                        m_robotDrive.getM_kinematics(),
+                        10);
+
+        // Create config for trajectory
+        TrajectoryConfig config =
+                new TrajectoryConfig(
+                        3,
+                        3)
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(m_robotDrive.getM_kinematics())
+                        // Apply the voltage constraint
+                        .addConstraint(autoVoltageConstraint);
+
+        // An example trajectory to follow.  All units in meters.
+//        Trajectory exampleTrajectory =
+//                TrajectoryGenerator.generateTrajectory(
+//                        // Start at the origin facing the +X direction
+//                        new Pose2d(0, 0, new Rotation2d(0)),
+//                        // Pass through these two interior waypoints, making an 's' curve path
+//                        List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
+//                        // End 3 meters straight ahead of where we started, facing forward
+//                        new Pose2d(3, 0, new Rotation2d(0)),
+//                        // Pass config
+//
+//                        config);
+
+        String trajectoryJSON = "/home/lvuser/deploy/" + "Slalom" + ".wpilib.json";
+        Trajectory exampleTrajectory = new Trajectory();
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            exampleTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        }
+        m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+
+        RamseteCommand ramseteCommand =
+                new RamseteCommand(
+                        exampleTrajectory,
+                        m_robotDrive::getPose,
+                        new RamseteController(2.0, .7),
+                        new SimpleMotorFeedforward(
+                                frc.team3130.robot.RobotMap.kS,
+                                frc.team3130.robot.RobotMap.kV,
+                                frc.team3130.robot.RobotMap.kA),
+                        m_robotDrive.getM_kinematics(),
+                        m_robotDrive::getWheelSpeeds,
+                        new PIDController(2.05,0,0),
+                        new PIDController(2.05,0,0),
+                        // RamseteCommand passes volts to the callback
+                        m_robotDrive::tankDriveVolts,
+                        m_robotDrive);
+
+        // Reset odometry to the starting pose of the trajectory.
+
+
+        // Run path following command, then stop at the end.
+        return ramseteCommand.andThen(() -> m_robotDrive.configBrakeMode(true));
     }
 
-}
 
+    public frc.team3130.robot.DriveSubsystem getM_robotDrive() {
+        return m_robotDrive;
+    }
+}

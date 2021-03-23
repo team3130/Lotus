@@ -2,6 +2,7 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -25,24 +26,24 @@ public class RobotMap {
 
     public static double kChassisMaxVoltage = 12.0;
 
-    public static double kChassisWidth = 28.0; //FIXME: check
+    public static double kChassisWidth = Units.inchesToMeters(28.0); //FIXME: check
     public static double kChassisLengthBumpers = 39.0; //FIXME
-    public static double kLWheelDiameter = 6.0; // Center wheel
-    public static double kRWheelDiameter = 6.0; // Center wheel
+    public static double kLWheelDiameter = Units.inchesToMeters(6); // Center wheel
+    public static double kRWheelDiameter = Units.inchesToMeters(6); // Center wheel
 
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
 
-    public static double kChassisCodesPerRev = 4096;
+    public static double kEncoderResolution = (kUseCompbot?4096 : 2048);
     public static double kLChassisTicksPerInch = 1500;
     public static double kRChassisTicksPerInch = 1500;
 
     public static double kDriveDeadband = 0.02;
     public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
 
-    public static double kS = (kUseCompbot ? .652 : 0.66);
-    public static double kV = (kUseCompbot ? .0697 : .045);
-    public static double kA = (kUseCompbot ? .00714 : .0067);
+    public static double kS = (kUseCompbot ? .643 : .615);
+    public static double kV = (kUseCompbot ? .0706: .0402);
+    public static double kA = (kUseCompbot ? .00648 : .0117);
 
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
@@ -61,12 +62,12 @@ public class RobotMap {
     public static double kMPMaxAcc = 60.0; ///maximum achievable acceleration of the drivetrain in in/s^2 NOTE: the actual motion profile should be generated at 80% of this
 
 
-    public static double kDistanceToEncoder = kChassisCodesPerRev / (Math.PI * 0.5 * (kLWheelDiameter + kRWheelDiameter));
+    public static double kDistanceToEncoder = kLChassisTicksPerInch / (Math.PI * 0.5 * (kLWheelDiameter + kRWheelDiameter));
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
-    public static double kMaxAccelerationPerSecond = 0.656; //Feet per second squared
-    public static double kMaxVelocityPerSecond = 0.656; //Feet per second
+    public static double kMaxAccelerationPerSecond = 518 / 12; //Feet per second squared
+    public static double kMaxVelocityPerSecond = 129 / 12; //Feet per second
 
 
     //Climber
