@@ -32,7 +32,7 @@ public class PixyCam {
             DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
-
+        System.out.println("Pixy block is real???!?!!?!? " + this.largestBlock().getX() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ ");
         System.out.println("Pixy = " + m_isPixyConnected + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
     }
 
@@ -48,6 +48,7 @@ public class PixyCam {
             DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
+        System.out.println("Pixy block is real???!?!!?!? " + this.largestBlock().getX() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ ");
         System.out.println("Pixy = " + m_isPixyConnected + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
     }
 
