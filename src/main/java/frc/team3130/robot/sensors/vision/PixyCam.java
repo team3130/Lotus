@@ -32,6 +32,8 @@ public class PixyCam {
             DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
+
+        System.out.println("Pixy = " + m_isPixyConnected + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
     }
 
     public PixyCam(Link link, int arg){
@@ -46,6 +48,7 @@ public class PixyCam {
             DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
+        System.out.println("Pixy = " + m_isPixyConnected + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
     }
 
     private boolean isBallHere(Block targetBlock, int xTarget, int yTarget){
