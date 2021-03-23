@@ -143,7 +143,7 @@ public class PixyCam {
     }
     public void outputToShuffleboard() {
         SmartDashboard.putBoolean("Pixy is connected:", this.m_isPixyConnected);
-
+        SmartDashboard.putNumber("Pixy block x", this.largestBlock().getX());
     }
 
 
