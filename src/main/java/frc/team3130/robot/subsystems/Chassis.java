@@ -3,8 +3,10 @@ package frc.team3130.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.fasterxml.jackson.core.JsonParser;
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -32,10 +34,10 @@ import java.io.FileReader;
 public class Chassis extends SubsystemBase {
 
     //Create necessary objects
-    private WPI_TalonFX m_leftMotorFront;
-    private WPI_TalonFX m_leftMotorRear;
-    private WPI_TalonFX m_rightMotorFront;
-    private WPI_TalonFX m_rightMotorRear;
+    private WPI_TalonFX m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
+    private WPI_TalonFX m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
+    private WPI_TalonFX m_rightMotorFront = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORFRONT);
+    private WPI_TalonFX m_rightMotorRear = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORREAR);
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
@@ -67,8 +69,6 @@ public class Chassis extends SubsystemBase {
 
     private double moveSpeed;
 
-    private DifferentialDrive m_drive;
-
     private DifferentialDriveKinematics m_kinematics;
     private DifferentialDriveOdometry m_odometry;
 
@@ -82,6 +82,24 @@ public class Chassis extends SubsystemBase {
     private SpeedControllerGroup m_right;
 
     private Pose2d m_position;
+
+    // The motors on the left side of the drive.
+    private final SpeedControllerGroup m_leftMotors =
+            new SpeedControllerGroup(
+                    m_leftMotorFront,
+                    m_leftMotorRear);
+
+    // The motors on the right side of the drive.
+    private final SpeedControllerGroup m_rightMotors =
+            new SpeedControllerGroup(
+                    m_rightMotorFront,
+                    m_rightMotorRear);
+
+    // The robot's drive
+    private DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
+
+    // The gyro sensor
+    private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
     //Create and define all standard data types needed
 
@@ -104,11 +122,6 @@ public class Chassis extends SubsystemBase {
 //                            0,
 //                            // The motion profile constraints
 //                            new TrapezoidProfile.Constraints(0, 0)));
-
-        m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
-        m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
-        m_rightMotorFront = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORFRONT);
-        m_rightMotorRear = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORREAR);
 
         m_leftMotorFront.configFactoryDefault();
         m_leftMotorRear.configFactoryDefault();
@@ -149,7 +162,6 @@ public class Chassis extends SubsystemBase {
         m_left = new SpeedControllerGroup(m_leftMotorFront, m_leftMotorRear);
         m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
 
-        m_drive = new DifferentialDrive(m_left, m_right);
         m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
         m_drive.setDeadband(RobotMap.kDriveDeadband);
         m_drive.setSafetyEnabled(false); //feed() must be called to prevent motor disable TODO: check at GF
@@ -158,7 +170,8 @@ public class Chassis extends SubsystemBase {
 
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
         m_position = new Pose2d(0, 0, new Rotation2d(0.00));
-        m_odometry = new DifferentialDriveOdometry(Navx.getHeadingTwoElectricBogoloo(), m_position);
+
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
         double LP = LeftP.getDouble(.3);
 //        double LI = LeftI.getDouble(0);
@@ -170,8 +183,8 @@ public class Chassis extends SubsystemBase {
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
-        m_leftPIDController = new PIDController(.32, 0, 0);
-        m_rightPIDConttroller = new PIDController(.32, 0, 0);
+        m_leftPIDController = new PIDController(2.05, 0, 0);
+        m_rightPIDConttroller = new PIDController(2.05, 0, 0);
 
         m_leftMotorRear.follow(m_leftMotorFront);
         m_rightMotorRear.follow(m_rightMotorFront);
@@ -190,33 +203,8 @@ public class Chassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_position = m_odometry.update(Navx.getHeadingTwoElectricBogoloo(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters(getDistanceR()));
-    }
-
-    /**
-     * @param commandName of the command
-     * sets the initial position based off of the JSON used
-     */
-    public void setInitPose(String commandName) {
-        try {
-            JSONParser parser = new JSONParser();
-            JSONArray obj = (JSONArray) parser.parse(new FileReader("/home/lvuser/deploy/paths/" + commandName + ".wpilib.json"));
-
-            JSONObject first = (JSONObject) obj.get(0);
-            JSONObject pose = (JSONObject) first.get("pose");
-            JSONObject translation = (JSONObject) pose.get("translation");
-
-            Double x = (Double) translation.get("x");
-            Double y = (Double) translation.get("y");
-
-            System.out.println(x);
-            System.out.println(y);
-
-            m_position = new Pose2d(x, y, new Rotation2d(0.00));
-        }
-        catch (Exception e) {
-            DriverStation.reportError("Could not generate an initial POSE from the JSON. Using 0,0 as default", false);
-        }
+        m_odometry.update(
+                m_gyro.getRotation2d(), getDistanceL(), getDistanceR());
     }
 
     /**
@@ -306,7 +294,7 @@ public class Chassis extends SubsystemBase {
      * @return The absolute distance of the left side in inches
      */
     public double getDistanceL() {
-        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
+        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
     }
 
     /**
@@ -315,7 +303,7 @@ public class Chassis extends SubsystemBase {
      * @return The absolute distance of the right side in inches
      */
     public double getDistanceR() {
-        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kRWheelDiameter)* Math.PI);
+        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kRWheelDiameter)* Math.PI);
     }
 
     /**
@@ -352,7 +340,7 @@ public class Chassis extends SubsystemBase {
      */
     public double getSpeedL() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kLWheelDiameter)))  * 10);
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kLWheelDiameter)))  * 10);
     }
 
     /**
@@ -361,7 +349,7 @@ public class Chassis extends SubsystemBase {
      * @return Current speed of the front right motor (inches per second)
      */
     public double getSpeedR() {
-        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kRWheelDiameter))  * 10);
+        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kRWheelDiameter))  * 10);
     }
 
     /**
@@ -420,6 +408,16 @@ public class Chassis extends SubsystemBase {
             m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
             m_rightMotorRear.setNeutralMode(NeutralMode.Coast);
         }
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+    }
+
+    public void resetEncoders() {
+        m_leftMotorFront.setSelectedSensorPosition(0);
+        m_rightMotorFront.setSelectedSensorPosition(0);
     }
 
     /**
@@ -533,8 +531,8 @@ public class Chassis extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kLWheelDiameter))))  * 10),
-                ((m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kRWheelDiameter))))  * 10)
+                ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kLWheelDiameter))))  * 10),
+                ((m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kRWheelDiameter))))  * 10)
         );
     }
 

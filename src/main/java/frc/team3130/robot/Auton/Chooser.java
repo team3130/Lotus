@@ -66,6 +66,7 @@ public class Chooser {
                     m_chassis::setOutput, //Working
                     m_chassis
             );
+            m_chassis.resetOdometry(trajectoryTemp.getInitialPose());
             command.addRequirements(m_chassis);
             command.setName(paths[looper]);
             commands.put(paths[looper], command);
