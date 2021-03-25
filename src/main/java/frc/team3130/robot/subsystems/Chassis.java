@@ -35,22 +35,22 @@ public class Chassis extends PIDSubsystem {
     private static Solenoid m_shifter;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
-    private NetworkTableEntry leftOutputLead =
-            tab.add("Left Output Lead", 0.5)
-                    .getEntry();
-    private NetworkTableEntry leftOutputDrag =
-            tab.add("Left Output Drag", 0.5)
-                    .getEntry();
-    private NetworkTableEntry rightOutputLead =
-            tab.add("Right Output Lead", 0.5)
-                    .getEntry();
-    private NetworkTableEntry rightOutputDrag =
-            tab.add("Right Output Drag", 0.5)
-                    .getEntry();
+    // private NetworkTableEntry leftOutputLead =
+    //         tab.add("Left Output Lead", 0.5)
+    //                 .getEntry();
+    // private NetworkTableEntry leftOutputDrag =
+    //         tab.add("Left Output Drag", 0.5)
+    //                 .getEntry();
+    // private NetworkTableEntry rightOutputLead =
+    //         tab.add("Right Output Lead", 0.5)
+    //                 .getEntry();
+    // private NetworkTableEntry rightOutputDrag =
+    //         tab.add("Right Output Drag", 0.5)
+    //                 .getEntry();
 
-    private NetworkTableEntry turnSensitivity =
-            tab.add("Turning Sensitivity", 1.0)
-                    .getEntry();
+    // private NetworkTableEntry turnSensitivity =
+    //         tab.add("Turning Sensitivity", 1.0)
+    //                 .getEntry();
 
     //Create and define all standard data types needed
 
@@ -186,13 +186,13 @@ public class Chassis extends PIDSubsystem {
         return !m_shifter.get();
     }
 
-    public double getSetLeftOutputLead(){return leftOutputLead.getDouble(0);}
-    public double getSetLeftOutputDrag(){return leftOutputDrag.getDouble(0);}
+    // public double getSetLeftOutputLead(){return leftOutputLead.getDouble(0);}
+    // public double getSetLeftOutputDrag(){return leftOutputDrag.getDouble(0);}
 
-    public double getSetRightOutputLead(){return rightOutputLead.getDouble(0);}
-    public double getSetRightOutputDrag(){return rightOutputDrag.getDouble(0);}
+    // public double getSetRightOutputLead(){return rightOutputLead.getDouble(0);}
+    // public double getSetRightOutputDrag(){return rightOutputDrag.getDouble(0);}
 
-    public double getTurnSensitivity(){return turnSensitivity.getDouble(1);}
+    // public double getTurnSensitivity(){return turnSensitivity.getDouble(1);}
 
 
     /**

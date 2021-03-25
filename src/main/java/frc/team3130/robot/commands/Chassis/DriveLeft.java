@@ -28,7 +28,7 @@ public class DriveLeft extends CommandBase {
      */
     @Override
     public void execute() {
-        m_chassis.driveTank( m_chassis.getSetLeftOutputDrag(),m_chassis.getSetRightOutputLead(),false);
+        m_chassis.driveTank(.15,.45,false);
 
     }
 
