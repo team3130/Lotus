@@ -92,6 +92,9 @@ public class Robot extends TimedRobot {
         scheduler.schedule(true, autonomousCommand);
         System.out.println("Found autonomous Command");
 
+        System.out.println("Pixy block is real???!?!!?!? " + m_robotContainer.getPixy().largestBlock().getX() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ ");
+        System.out.println("Pixy = " + m_robotContainer.getPixy().getIsConnected() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
+
     }
 
     /**
@@ -145,7 +148,7 @@ public class Robot extends TimedRobot {
 
         m_robotContainer.getTurret().outputToShuffleboard();
 
-        m_robotContainer.getPixy().outputToShuffleboard();
+       // m_robotContainer.getPixy().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
 //        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
 //        m_robotContainer.getFlywheel().outputToShuffleboard();

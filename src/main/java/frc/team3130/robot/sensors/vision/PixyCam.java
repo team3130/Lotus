@@ -32,8 +32,7 @@ public class PixyCam {
             DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
-        System.out.println("Pixy block is real???!?!!?!? " + this.largestBlock().getX() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ ");
-        System.out.println("Pixy = " + m_isPixyConnected + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
+
     }
 
     public PixyCam(Link link, int arg){
@@ -48,8 +47,7 @@ public class PixyCam {
             DriverStation.reportError(str_error, false);
             m_isPixyConnected = false;
         }
-        System.out.println("Pixy block is real???!?!!?!? " + this.largestBlock().getX() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ ");
-        System.out.println("Pixy = " + m_isPixyConnected + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
+
     }
 
     private boolean isBallHere(Block targetBlock, int xTarget, int yTarget){
@@ -115,7 +113,7 @@ public class PixyCam {
 
     }
 
-    private Block largestBlock() {
+    public Block largestBlock() {
 
         if (m_isPixyConnected){
             // System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
@@ -149,6 +147,8 @@ public class PixyCam {
 
 
     public Pixy2 getPixy(){return m_pixy;}
+
+    public boolean getIsConnected(){return m_isPixyConnected;}
 
 }
 
