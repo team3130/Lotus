@@ -30,15 +30,7 @@ public class RobotContainer {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
-    private NetworkTableEntry Distance =
-            tab.add("Setpoint meters", 3).getEntry();
 
-    private NetworkTableEntry P =
-            tab.add("Chassis P", 2.1).getEntry();
-    private NetworkTableEntry I =
-            tab.add("Chassis I", 0).getEntry();
-    private NetworkTableEntry D =
-            tab.add("Chassis D", 0).getEntry();
 
     // The robot's subsystems
     private final frc.team3130.robot.DriveSubsystem m_robotDrive = new frc.team3130.robot.DriveSubsystem();
@@ -117,7 +109,7 @@ public class RobotContainer {
 //
 //                        config);
 
-        String trajectoryJSON = "/home/lvuser/deploy/" + "Slalom" + ".wpilib.json";
+        String trajectoryJSON = "/home/lvuser/deploy/output/" + "tester" + ".wpilib.json";
         Trajectory exampleTrajectory = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
