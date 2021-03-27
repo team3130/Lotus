@@ -20,13 +20,12 @@ public class PixyCam {
     private final int yD5 = 0;
     //pixy cam res is 315 x 207 (horizontal x vertical)
 
-    public PixyCam(Link link){
-        try{
-        m_pixy = Pixy2.createInstance(link);
-        m_pixy.init();
-        m_isPixyConnected = true;
-        }
-        catch (Exception ex) {
+    public PixyCam(Link link) {
+        try {
+            m_pixy = Pixy2.createInstance(link);
+            m_pixy.init();
+            m_isPixyConnected = true;
+        } catch (Exception ex) {
             //If connection fails log the error
             String str_error = "Pixy didn't get constructed right. This is a [REDACTED] moment " + ex.getLocalizedMessage();
             DriverStation.reportError(str_error, false);
@@ -35,13 +34,12 @@ public class PixyCam {
 
     }
 
-    public PixyCam(Link link, int arg){
-        try{
+    public PixyCam(Link link, int arg) {
+        try {
             m_pixy = Pixy2.createInstance(link);
             m_pixy.init(arg);
             m_isPixyConnected = true;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             //If connection fails log the error and fall back to encoder based angles.
             String str_error = "Pixy didn't get constructed right. This is a [REDACTED] moment " + ex.getLocalizedMessage();
             DriverStation.reportError(str_error, false);
@@ -50,35 +48,35 @@ public class PixyCam {
 
     }
 
-    private boolean isBallHere(Block targetBlock, int xTarget, int yTarget){
-       if(m_isPixyConnected) {
-           if (targetBlock.getX() >= xTarget - m_targetError && targetBlock.getX() <= xTarget + m_targetError) {
-               if (targetBlock.getY() >= yTarget - m_targetError && targetBlock.getY() <= yTarget + m_targetError) {
-                   return true;
+    private boolean isBallHere(Block targetBlock, int xTarget, int yTarget) {
+        if (m_isPixyConnected) {
+            if (targetBlock.getX() >= xTarget - m_targetError && targetBlock.getX() <= xTarget + m_targetError) {
+                if (targetBlock.getY() >= yTarget - m_targetError && targetBlock.getY() <= yTarget + m_targetError) {
+                    return true;
 
-               }
-           }
-           return false;
-       }
-       String str_err = "Pixy isn't connected. Returning false(isBallHere()) This is a [REDACTED] moment";
+                }
+            }
+            return false;
+        }
+        String str_err = "Pixy isn't connected. Returning false(isBallHere()) This is a [REDACTED] moment";
         DriverStation.reportError(str_err, false);
-       return false;
+        return false;
     }
     //path should be either "A" or "B" depending on the path
     //Block largestBlock = largestBlock();
 
-    public boolean isRedPath(String path){
-        if(m_isPixyConnected) {
-           try{
-               int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 3);
-               ArrayList<Block> blocks = m_pixy.getCCC().getBlockCache();
+    public boolean isRedPath(String path) {
+        if (m_isPixyConnected) {
+            try {
+                int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 3);
+                ArrayList<Block> blocks = m_pixy.getCCC().getBlockCache();
 
-            if(blockCount <= 0){
-                String str_error = "Pixy didn't detect any blocks returning false (blue path)";
-                DriverStation.reportError(str_error, false);
-            }
+                if (blockCount <= 0) {
+                    String str_error = "Pixy didn't detect any blocks returning false (blue path)";
+                    DriverStation.reportError(str_error, false);
+                }
 
-               for (Block block: blocks) {
+                for (Block block : blocks) {
 
                     if (path.equals("A")) {
                         if (isBallHere(block, xD5, yD5)) {
@@ -95,17 +93,14 @@ public class PixyCam {
 
 
                 }
-                    } catch (Exception ex) {
-                    String str_error = "Pixy or one of its objects was null. Returning false (blue path). " + ex.getLocalizedMessage();
-                    DriverStation.reportError(str_error, false);
-                    return false;
-                }
+            } catch (Exception ex) {
+                String str_error = "Pixy or one of its objects was null. Returning false (blue path). " + ex.getLocalizedMessage();
+                DriverStation.reportError(str_error, false);
+                return false;
             }
-
-
-        else{
-           String str_err = "Pixy isn't connected. Returning false(isRedPath()) (blue has been set to path). This is a [REDACTED] moment";
-           DriverStation.reportError(str_err, false);
+        } else {
+            String str_err = "Pixy isn't connected. Returning false(isRedPath()) (blue has been set to path). This is a [REDACTED] moment";
+            DriverStation.reportError(str_err, false);
             return false;
         }
 
@@ -113,36 +108,45 @@ public class PixyCam {
 
     }
 
-    public Block largestBlock() {
-
-        if (m_isPixyConnected){
-            // System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
-
-            int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 12);
-        if (blockCount <= 0) {
-            return null; // If blocks were not found, stop processing
+    public void largestBlock() {
+        int blocks = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 10);
+        try {
+            System.out.println(blocks + "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
+            System.out.println(m_pixy.getCCC().getBlockCache() + " 5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555");
         }
-        ArrayList<Block> blocks = m_pixy.getCCC().getBlockCache(); // Gets a list of all blocks found by the Pixy2
-        Block largestBlock = null;
-        for (Block block : blocks) { // Loops through all blocks and finds the widest one
-            if (largestBlock == null) {
-                largestBlock = block;
-            } else if (block.getWidth() > largestBlock.getWidth()) {
-                largestBlock = block;
-            }
+        catch (Exception e) {
+            System.out.println("did not work");
         }
-        return largestBlock;
-    }
-        else {
-            String str_err = "Pixy isn't connected. Returning null (largestBlock()). This is a [REDACTED] moment";
-            DriverStation.reportError(str_err, false);
 
-            return null;
-        }
+//        if (m_isPixyConnected){
+//            // System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
+//
+//            int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 12);
+//        if (blockCount <= 0) {
+//            return null; // If blocks were not found, stop processing
+//        }
+//        ArrayList<Block> blocks = m_pixy.getCCC().getBlockCache(); // Gets a list of all blocks found by the Pixy2
+//        Block largestBlock = null;
+//        for (Block block : blocks) { // Loops through all blocks and finds the widest one
+//            if (largestBlock == null) {
+//                largestBlock = block;
+//            } else if (block.getWidth() > largestBlock.getWidth()) {
+//                largestBlock = block;
+//            }
+//        }
+//        return largestBlock;
+//    }
+//        else {
+//            String str_err = "Pixy isn't connected. Returning null (largestBlock()). This is a [REDACTED] moment";
+//            DriverStation.reportError(str_err, false);
+//
+//            return null;
+//        }
+//    }
     }
     public void outputToShuffleboard() {
         //SmartDashboard.putBoolean("Pixy is connected:", this.m_isPixyConnected);
-        SmartDashboard.putNumber("Pixy block x", (double) this.largestBlock().getX());
+        // SmartDashboard.putNumber("Pixy block x", (double) this.largestBlock().getX());
     }
 
 

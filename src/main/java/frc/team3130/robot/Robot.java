@@ -91,10 +91,6 @@ public class Robot extends TimedRobot {
         m_robotContainer.getChassis().setInitPose(m_robotContainer.getChooser().getInitialPose());
         scheduler.schedule(true, autonomousCommand);
         System.out.println("Found autonomous Command");
-
-        System.out.println("Pixy block is real???!?!!?!? " + m_robotContainer.getPixy().largestBlock().getX() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ ");
-        System.out.println("Pixy = " + m_robotContainer.getPixy().getIsConnected() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
-
     }
 
     /**
@@ -124,6 +120,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        m_robotContainer.getPixy().largestBlock();
+        // System.out.println("Pixy = " + m_robotContainer.getPixy().getIsConnected() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
         Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
     }
