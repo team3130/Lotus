@@ -52,6 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     private TalonSRX m_turret;
 
+
     // Odometry class for tracking robot pose
     private final DifferentialDriveOdometry m_odometry;
 
@@ -74,7 +75,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_turret = new TalonSRX(RobotMap.CAN_TURRETANGLE);
         m_turret.setNeutralMode(NeutralMode.Brake);
 
-        m_shifter.set(false);
+
         m_intake.set(false);
 
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
@@ -88,6 +89,10 @@ public class DriveSubsystem extends SubsystemBase {
         m_odometry.update(
                 m_gyro.getRotation2d(), getDistanceL(), getDistanceR());
 
+    }
+
+    public void shift(boolean shift){
+        m_shifter.set(shift);
     }
 
     /**
