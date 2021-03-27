@@ -1,10 +1,12 @@
 package frc.team3130.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -48,6 +50,8 @@ public class DriveSubsystem extends SubsystemBase {
     // The gyro sensor
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
+    private TalonSRX m_turret;
+
     // Odometry class for tracking robot pose
     private final DifferentialDriveOdometry m_odometry;
 
@@ -55,12 +59,23 @@ public class DriveSubsystem extends SubsystemBase {
         return m_kinematics;
     }
 
+    private Solenoid m_shifter;
+    private Solenoid m_intake;
+
     private final DifferentialDriveKinematics m_kinematics =
       new DifferentialDriveKinematics(RobotMap.kChassisWidth);
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
         // Sets the distance per pulse for the encoders
+        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
+        m_intake = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
+
+        m_turret = new TalonSRX(RobotMap.CAN_TURRETANGLE);
+        m_turret.setNeutralMode(NeutralMode.Brake);
+
+        m_shifter.set(false);
+        m_intake.set(false);
 
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
