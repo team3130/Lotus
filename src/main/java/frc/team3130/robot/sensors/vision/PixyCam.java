@@ -108,41 +108,35 @@ public class PixyCam {
 
     }
 
-    public void largestBlock() {
-        int blocks = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 10);
+    public Block largestBlock() {
         try {
-            System.out.println(blocks + "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
-            System.out.println(m_pixy.getCCC().getBlockCache() + " 5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555");
-        }
-        catch (Exception e) {
-            System.out.println("did not work");
-        }
+            if (m_isPixyConnected) {
+                // System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
 
-//        if (m_isPixyConnected){
-//            // System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
-//
-//            int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 12);
-//        if (blockCount <= 0) {
-//            return null; // If blocks were not found, stop processing
-//        }
-//        ArrayList<Block> blocks = m_pixy.getCCC().getBlockCache(); // Gets a list of all blocks found by the Pixy2
-//        Block largestBlock = null;
-//        for (Block block : blocks) { // Loops through all blocks and finds the widest one
-//            if (largestBlock == null) {
-//                largestBlock = block;
-//            } else if (block.getWidth() > largestBlock.getWidth()) {
-//                largestBlock = block;
-//            }
-//        }
-//        return largestBlock;
-//    }
-//        else {
-//            String str_err = "Pixy isn't connected. Returning null (largestBlock()). This is a [REDACTED] moment";
-//            DriverStation.reportError(str_err, false);
-//
-//            return null;
-//        }
-//    }
+                int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 12);
+                if (blockCount <= 0) {
+                    return null; // If blocks were not found, stop processing
+                }
+                ArrayList<Block> blocks = m_pixy.getCCC().getBlockCache(); // Gets a list of all blocks found by the Pixy2
+                Block largestBlock = null;
+                for (Block block : blocks) { // Loops through all blocks and finds the widest one
+                    if (largestBlock == null) {
+                        largestBlock = block;
+                    } else if (block.getWidth() > largestBlock.getWidth()) {
+                        largestBlock = block;
+                    }
+                }
+                return largestBlock;
+            } else {
+                String str_err = "Pixy isn't connected. Returning null (largestBlock()). This is a [REDACTED] moment";
+                DriverStation.reportError(str_err, false);
+
+                return null;
+            }
+        }
+        catch(NullPointerException e) {
+            return new Block(1, -1, -1, -1 ,-1, -1, 5, -1);
+        }
     }
     public void outputToShuffleboard() {
         //SmartDashboard.putBoolean("Pixy is connected:", this.m_isPixyConnected);
