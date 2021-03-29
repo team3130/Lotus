@@ -195,16 +195,35 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getDistanceL() {
-        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
+        if(m_shifter.get() != true)
+            return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisTicksPerMeterLowGear;
+        else
+            return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisTicksPerMeterHighGear;
     }
 
     public double getDistanceR() {
-        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI) * -1;
-    }
+        if(m_shifter.get() != true)
+            return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisTicksPerMeterLowGear *-1;
+        else
+            return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisTicksPerMeterHighGear *-1;    }
 
+    /**
+     * Returns the current speed of the front left motor
+     *
+     * @return Current speed of the front left motor (meters per second)
+     */
     public double getSpeedL() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10 * wheelMulti.getDouble(1));
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatioLowGear) * (Math.PI * RobotMap.kLWheelDiameter))  * 10);
+    }
+
+    /**
+     * Returns the current speed of the front right motor
+     *
+     * @return Current speed of the front right motor (meters per second)
+     */
+    public double getSpeedR() {
+        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatioLowGear) * (Math.PI * RobotMap.kLWheelDiameter)  * 10) *-1 * wheelMulti.getDouble(1);
     }
 
     public void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
@@ -212,14 +231,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_drive.arcadeDrive(moveThrottle, turnThrottle, squaredInputs);
     }
 
-    /**
-     * Returns the current speed of the front right motor
-     *
-     * @return Current speed of the front right motor (inches per second)
-     */
-    public double getSpeedR() {
-        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kLWheelDiameter)  * 10) *-1 * wheelMulti.getDouble(1);
-    }
+
 
       public void configBrakeMode(boolean brake) {
     if (brake) {
