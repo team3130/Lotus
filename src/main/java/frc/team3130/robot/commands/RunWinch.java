@@ -1,19 +1,19 @@
 package frc.team3130.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.WinchSub;
+import frc.team3130.robot.subsystems.Winch;
 
-public class Winch extends CommandBase {
+public class RunWinch extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final WinchSub m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Winch m_subsystem; //TODO: rename this to the subsystem this is assigned to
     private double m_sped;
 
-    public Winch(WinchSub subsystem, double sped) {
+    public RunWinch(Winch subsystem, double sped) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
-        this.addRequirements(subsystem);
+        this.addRequirements(m_subsystem);
         m_sped = sped;
+        System.out.println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
 
     }
 
@@ -22,7 +22,7 @@ public class Winch extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setWinchHold(false);
+        System.out.println("BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH \n \n \n \n \n " + m_sped + "\n\n\n\n\n\n");
         m_subsystem.spin(m_sped);
     }
 
@@ -32,7 +32,6 @@ public class Winch extends CommandBase {
      */
     @Override
     public void execute() {
-        m_subsystem.holdPosWinch();
     }
 
     /**
@@ -65,6 +64,6 @@ public class Winch extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.setWinchHold(true) ;
+        m_subsystem.spin(0);
     }
 }

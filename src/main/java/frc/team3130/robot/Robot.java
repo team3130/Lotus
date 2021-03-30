@@ -2,9 +2,12 @@ package frc.team3130.robot;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team3130.robot.commands.RunWinch;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,10 +27,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        timer = new Timer();
-        timer.reset();
-        timer.start();
-
+        System.out.println(CommandScheduler.getInstance());
         //Instantiate operator interface
         m_robotContainer = new RobotContainer();
     }
@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        CommandScheduler.getInstance().run();
     }
 
     @Override
@@ -101,8 +102,6 @@ public class Robot extends TimedRobot {
     }
 
     public void outputToShuffleboard() {
-
-
     }
 
 
