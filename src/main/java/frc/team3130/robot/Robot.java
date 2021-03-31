@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.getM_robotDrive().shift(false);
+    m_robotContainer.getM_robotDrive().shift(true);
   }
 
   /**
