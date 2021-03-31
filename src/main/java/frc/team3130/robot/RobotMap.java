@@ -2,6 +2,7 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -27,8 +28,8 @@ public class RobotMap {
 
     public static double kChassisWidth = 28.0; //FIXME: check
     public static double kChassisLengthBumpers = 39.0; //FIXME
-    public static double kLWheelDiameter = 6.0; // Center wheel
-    public static double kRWheelDiameter = 6.0; // Center wheel
+    public static double kLWheelDiameter = Units.inchesToMeters(6.0); // Center wheel
+    public static double kRWheelDiameter = Units.inchesToMeters(6.0); // Center wheel
 
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed

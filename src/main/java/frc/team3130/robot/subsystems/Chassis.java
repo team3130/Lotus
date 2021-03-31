@@ -50,7 +50,8 @@ public class Chassis extends SubsystemBase {
     private DifferentialDrive m_drive;
 
     private DifferentialDriveKinematics m_kinematics;
-    private DifferentialDriveOdometry m_odometry;
+    private final DifferentialDriveOdometry m_odometry;
+
 
     private static Solenoid m_shifter;
 
@@ -142,8 +143,8 @@ public class Chassis extends SubsystemBase {
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
-        m_leftPIDController = new PIDController(2.1, .1, 0);
-        m_rightPIDConttroller = new PIDController(2.1, .1, 0);
+        m_leftPIDController = new PIDController(2.05, 0, 0);
+        m_rightPIDConttroller = new PIDController(2.05, 0, 0);
 
         m_leftMotorRear.follow(m_leftMotorFront);
         m_rightMotorRear.follow(m_rightMotorFront);
@@ -162,7 +163,7 @@ public class Chassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_odometry.update(Navx.getRotation(), Units.inchesToMeters(getDistanceL()),Units.inchesToMeters(getDistanceR()));
+        m_odometry.update(Navx.getRotation(), getDistanceL(),getDistanceR());
     }
 
     /**
@@ -257,7 +258,7 @@ public class Chassis extends SubsystemBase {
     /**
      * Gets absolute distance traveled by the left side of the robot
      *
-     * @return The absolute distance of the left side in inches
+     * @return The absolute distance of the left side in meters
      */
     public double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
@@ -266,16 +267,16 @@ public class Chassis extends SubsystemBase {
     /**
      * Gets absolute distance traveled by the right side of the robot
      *
-     * @return The absolute distance of the right side in inches
+     * @return The absolute distance of the right side in meters
      */
     public double getDistanceR() {
-        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kRWheelDiameter)* Math.PI);
+        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kRWheelDiameter)* Math.PI) * -1;
     }
 
     /**
      * Gets the absolute distance traveled by the robot
      *
-     * @return The absolute distance traveled of robot in inches
+     * @return The absolute distance traveled of robot in meters
      */
     public double getDistance() {
         return (getDistanceL() + getDistanceR()) / 2.0; //the average of the left and right distances
@@ -302,20 +303,21 @@ public class Chassis extends SubsystemBase {
     /**
      * Returns the current speed of the front left motor
      *
-     * @return Current speed of the front left motor (inches per second)
+     * @return Current speed of the front left motor (meters per second)
      */
     public double getSpeedL() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kLWheelDiameter)))  * 10);
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10);
     }
 
     /**
      * Returns the current speed of the front right motor
      *
-     * @return Current speed of the front right motor (inches per second)
+     * @return Current speed of the front right motor (meters per second)
      */
     public double getSpeedR() {
-        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (RobotMap.kRWheelDiameter))  * 10);
+        // The raw speed units will be in the sensor's native ticks per 100ms.
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10);
     }
 
     /**
@@ -482,13 +484,13 @@ public class Chassis extends SubsystemBase {
     public void setOutput(double leftVolts, double rightVolts) {
         m_leftMotorFront.setVoltage(leftVolts);
         m_rightMotorFront.setVoltage(rightVolts);
-//        m_drive.feed();
+        m_drive.feed();
     }
 
     public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kLWheelDiameter))))  * 10),
-                ((m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kChassisCodesPerRev * (1/RobotMap.kChassisGearRatio) * (Math.PI * (Units.inchesToMeters(RobotMap.kRWheelDiameter))))  * 10)
+                (getSpeedL()/10),
+                (getSpeedR()/10)
         );
     }
 
@@ -524,21 +526,21 @@ public class Chassis extends SubsystemBase {
 
 
     public void outputToShuffleboard() {
-        SmartDashboard.putNumber("Chassis Right Velocity", getSpeedR());
-        SmartDashboard.putNumber("Chassis Left Velocity", getSpeedL());
+        SmartDashboard.putNumber("Chassis Right Velocity", Units.inchesToMeters(getSpeedR()));
+        SmartDashboard.putNumber("Chassis Left Velocity", Units.inchesToMeters(getSpeedL()));
 
 //        SmartDashboard.putNumber("Chassis Right Vel Traj", m_rightMotorFront.getActiveTrajectoryVelocity(0));
 //        SmartDashboard.putNumber("Chassis Left Vel Traj", m_leftMotorFront.getActiveTrajectoryVelocity(0));
 
 
-        SmartDashboard.putNumber("Chassis Distance", getDistance());
+//        SmartDashboard.putNumber("Chassis Distance", getDistance());
 //        SmartDashboard.putNumber("NavX angle", getHeading().getDegrees());
 
         SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
         SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
-        SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
-        SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
+//        SmartDashboard.putNumber("Chassis Right Sensor Value", getRawR());
+//        SmartDashboard.putNumber("Chassis Left Sensor Value", getRawL());
 
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());

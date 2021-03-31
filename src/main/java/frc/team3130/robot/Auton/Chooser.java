@@ -62,13 +62,13 @@ public class Chooser {
             RamseteCommand command = new RamseteCommand(
                     trajectoryTemp,
                     m_chassis::getPose,
-                    new RamseteController(2.0, 0.7), //Working
+                    new RamseteController(2.0, 0.7),
                     m_chassis.getFeedforward(),
-                    m_chassis.getmKinematics(), //Working
+                    m_chassis.getmKinematics(),
                     m_chassis::getSpeeds,
-                    m_chassis.getleftPIDController(), //Working
-                    m_chassis.getRightPIDController(), //Working
-                    m_chassis::setOutput, //Working
+                    m_chassis.getleftPIDController(),
+                    m_chassis.getRightPIDController(),
+                    m_chassis::setOutput,
                     m_chassis
             );
             command.addRequirements(m_chassis);
