@@ -91,7 +91,6 @@ public class Robot extends TimedRobot {
         m_robotContainer.getChassis().setInitPose(m_robotContainer.getChooser().getInitialPose());
         scheduler.schedule(true, autonomousCommand);
         System.out.println("Found autonomous Command");
-
     }
 
     /**
@@ -121,6 +120,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        m_robotContainer.getPixy().largestBlock();
+        // System.out.println("Pixy = " + m_robotContainer.getPixy().getIsConnected() + "XYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZXYZ");
         Limelight.GetInstance().updateData(m_robotContainer.getTurret());
         scheduler.run();
     }
@@ -145,7 +146,7 @@ public class Robot extends TimedRobot {
 
         m_robotContainer.getTurret().outputToShuffleboard();
 
-        m_robotContainer.getPixy().outputToShuffleboard();
+       // m_robotContainer.getPixy().outputToShuffleboard();
 //        Hopper.outputToShuffleboard();
 //        Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getTurret());
 //        m_robotContainer.getFlywheel().outputToShuffleboard();
