@@ -13,8 +13,8 @@ public class PixyCam {
     private Pixy2 m_pixy;
     private boolean m_isPixyConnected;
     private final int m_targetError = 10; //10 pixels of lenience for checking where ball is
-    private final int xB3 = 215; //x-value of point B3 (ball we look at for Path B red)
-    private final int yB3 = 167;  //y-val of B3
+    private final int xB3 = 111; //x-value of point B3 (ball we look at for Path B red)
+    private final int yB3 = 161;  //y-val of B3
     private final int xD5 = 158; //TODO: find real values
     private final int yD5 = 104;
     //pixy cam res is 315 x 207 (horizontal x vertical)
