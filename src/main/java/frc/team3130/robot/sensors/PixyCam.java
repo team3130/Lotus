@@ -1,4 +1,4 @@
-package frc.team3130.robot.sensors.vision;
+package frc.team3130.robot.sensors;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import io.github.pseudoresonance.pixy2api.Pixy2;

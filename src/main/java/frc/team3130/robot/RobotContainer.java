@@ -2,7 +2,6 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.Auton.Chooser;
@@ -23,12 +22,9 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
 import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
-import frc.team3130.robot.sensors.vision.PixyCam;
+import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.*;
 import io.github.pseudoresonance.pixy2api.links.I2CLink;
-
-
-import java.util.*;
 
 public class RobotContainer {
     //see here for references if lost: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbottraditional/RobotContainer.java
