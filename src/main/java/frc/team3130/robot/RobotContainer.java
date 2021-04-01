@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team3130.robot.IntakeCommand.IntakeIn;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,6 +35,7 @@ public class RobotContainer {
 
     // The robot's subsystems
     private final frc.team3130.robot.DriveSubsystem m_robotDrive = new frc.team3130.robot.DriveSubsystem();
+    private final Intake m_intake = new Intake();
 
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
@@ -54,6 +56,10 @@ public class RobotContainer {
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
+        m_intake.setDefaultCommand(
+                new IntakeIn(m_intake)
+        );
+
     }
 
     /**
