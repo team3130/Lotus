@@ -61,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     private Solenoid m_shifter;
-    private Solenoid m_intake;
+
 
     private final DifferentialDriveKinematics m_kinematics =
       new DifferentialDriveKinematics(RobotMap.kChassisWidth);
@@ -70,13 +70,11 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem() {
         // Sets the distance per pulse for the encoders
         m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
-        m_intake = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_INTAKE);
 
         m_turret = new TalonSRX(RobotMap.CAN_TURRETANGLE);
         m_turret.setNeutralMode(NeutralMode.Brake);
 
 
-        m_intake.set(false);
 
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
