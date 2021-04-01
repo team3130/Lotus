@@ -18,10 +18,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Chooser {
     RamseteCommand autonomousCommand = null;
@@ -33,8 +30,7 @@ public class Chooser {
     private PixyCam m_pixy;
 
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
-    private LinkedHashMap<String, RamseteCommand> commands = new LinkedHashMap<>();
-    private ArrayList<Pose2d> initialPoses = new ArrayList<>();
+    private HashMap<String, Commands> commands = new HashMap<>();
 
     public Chooser(Chassis m_chassis, PixyCam m_pixy) {
         this.m_chassis = m_chassis;
@@ -71,8 +67,7 @@ public class Chooser {
             );
             command.addRequirements(m_chassis);
             command.setName(paths[looper]);
-            commands.put(paths[looper], command);
-            initialPoses.add(trajectoryTemp.getInitialPose());
+            commands.put(paths[looper], new Commands(trajectoryTemp.getInitialPose(), command));
         }
     }
 
@@ -87,7 +82,7 @@ public class Chooser {
                 if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
                     String tempStr = (String) map.getKey();
                     // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), null);
+                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), (RamseteCommand) map.getValue());
                 }
                 else {
                     // adds every other path to chooser
@@ -105,25 +100,24 @@ public class Chooser {
     }
 
     public RamseteCommand getCommand() {
-        if(chooser.getSelected() == commands.get("GalacticSearchABlue")) {
+        if(chooser.getSelected() == commands.get("GalacticSearchABlue").getCommand()) {
             if (m_pixy.isRedPath("A")) {
-                chooser.addOption("GalacticSearchA", commands.get("GalacticSearchARed"));
+                chooser.addOption("GalacticSearchA", commands.get("GalacticSearchARed").getCommand());
             } else {
-               commands.get("GalacticSearchABlue");
+               return commands.get("GalacticSearchABlue").getCommand();
             }
         }
-        if(chooser.getSelected() == commands.get("GalacticSearchBBlue")) {
+        else if(chooser.getSelected() == commands.get("GalacticSearchBBlue").getCommand()) {
             if (m_pixy.isRedPath("B")) {
-                chooser.addOption("GalacticSearchB",commands.get("GalacticSearchBRed"));
+                chooser.addOption("GalacticSearchB",commands.get("GalacticSearchBRed").getCommand());
             } else {
-                commands.get("GalacticSearchBBlue");
+                return commands.get("GalacticSearchBBlue").getCommand();
             }
         }
-
-        if (chooser.getSelected() == null) {
+        else if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
-            autonomousCommand = commands.get("DriveStraight");
             DriverStation.reportError("selected path was null", false);
+            return commands.get("DriveStraight").getCommand();
         } else {
             autonomousCommand = (RamseteCommand) chooser.getSelected();
             System.out.println(autonomousCommand.getName() + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
@@ -132,7 +126,7 @@ public class Chooser {
     }
 
     public Pose2d getInitialPose(){
-        return initialPoses.get(Arrays.asList(paths).indexOf(chooser.getSelected().getName()));
+        return commands.get(getCommand().getName()).getInitPose();
     }
 
 }
