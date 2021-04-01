@@ -1,7 +1,6 @@
 package frc.team3130.robot.sensors.vision;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC.Block;
@@ -16,8 +15,8 @@ public class PixyCam {
     private final int m_targetError = 10; //10 pixels of lenience for checking where ball is
     private final int xB3 = 215; //x-value of point B3 (ball we look at for Path B red)
     private final int yB3 = 167;  //y-val of B3
-    private final int xD5 = 0; //TODO: find real values
-    private final int yD5 = 0;
+    private final int xD5 = 158; //TODO: find real values
+    private final int yD5 = 104;
     //pixy cam res is 315 x 207 (horizontal x vertical)
 
     public PixyCam(Link link) {
@@ -113,7 +112,7 @@ public class PixyCam {
             if (m_isPixyConnected) {
                 // System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
 
-                int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 12);
+                int blockCount = m_pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 3);
                 if (blockCount <= 0) {
                     return null; // If blocks were not found, stop processing
                 }
