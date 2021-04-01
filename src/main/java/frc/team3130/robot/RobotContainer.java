@@ -56,9 +56,9 @@ public class RobotContainer {
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
-        m_intake.setDefaultCommand(
-                new IntakeIn(m_intake)
-        );
+//        m_intake.setDefaultCommand(
+//                new IntakeIn(m_intake)
+//        );
 
     }
 
@@ -115,7 +115,7 @@ public class RobotContainer {
 //
 //                        config);
 
-        String trajectoryJSON = "/home/lvuser/deploy/output/" + "Bounce" + ".wpilib.json";
+        String trajectoryJSON = "/home/lvuser/deploy/output/" + "GalacticSearchARed" + ".wpilib.json";
         Trajectory exampleTrajectory = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);

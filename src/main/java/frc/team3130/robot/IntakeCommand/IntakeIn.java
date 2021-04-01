@@ -16,7 +16,7 @@ public class IntakeIn extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_intake.runIntake(.7);
+        m_intake.runIntake(1);
         m_intake.deployIntake();
     }
 
