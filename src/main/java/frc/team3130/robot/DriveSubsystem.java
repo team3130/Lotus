@@ -176,6 +176,14 @@ public class DriveSubsystem extends SubsystemBase {
         m_gyro.reset();
     }
 
+
+    public double getGearRatio(){
+        if(m_shifter.get() == false)
+            return RobotMap.kChassisGearRatio;
+        else
+            return (60/17);
+    }
+
     /**
      * Returns the heading of the robot.
      *

@@ -41,9 +41,13 @@ public class RobotMap {
     public static double kDriveDeadband = 0.02;
     public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
 
-    public static double kS = (kUseCompbot ? .643 : .615);
-    public static double kV = (kUseCompbot ? .0706: .0402);
-    public static double kA = (kUseCompbot ? .00648 : .0117);
+    public static double lowGearkS = (kUseCompbot ? .643 : .615);
+    public static double lowGearkV = (kUseCompbot ? .0706: .0402);
+    public static double LowGearkA = (kUseCompbot ? .00648 : .0117);
+
+    public static double highGearkS = (kUseCompbot ? 0.819 : .615); //Low Gear .643
+    public static double highGearkV = (kUseCompbot ? 0.0343: .0402); //Low Gear .0706
+    public static double highGearkA = (kUseCompbot ? 0.00437 : .0117);
 
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
