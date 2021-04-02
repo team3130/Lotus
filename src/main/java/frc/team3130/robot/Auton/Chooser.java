@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
-import org.junit.Assert;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -30,7 +28,7 @@ public class Chooser {
     private PixyCam m_pixy;
 
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
-    private HashMap<String, Commands> commands = new HashMap<>();
+    private HashMap<String, CommandsAndPoses> commands = new HashMap<>();
 
     public Chooser(Chassis m_chassis, PixyCam m_pixy) {
         this.m_chassis = m_chassis;
@@ -67,7 +65,7 @@ public class Chooser {
             );
             command.addRequirements(m_chassis);
             command.setName(paths[looper]);
-            commands.put(paths[looper], new Commands(trajectoryTemp.getInitialPose(), command));
+            commands.put(paths[looper], new CommandsAndPoses(trajectoryTemp.getInitialPose(), command));
         }
     }
 
@@ -82,11 +80,11 @@ public class Chooser {
                 if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
                     String tempStr = (String) map.getKey();
                     // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), (RamseteCommand) map.getValue());
+                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), ((CommandsAndPoses) map.getValue()).getCommand());
                 }
                 else {
                     // adds every other path to chooser
-                    chooser.addOption((String) map.getKey(), (RamseteCommand) map.getValue());
+                    chooser.addOption((String) map.getKey(), ((CommandsAndPoses) map.getValue()).getCommand());
                 }
             }
             catch (IndexOutOfBoundsException e) {
@@ -97,7 +95,7 @@ public class Chooser {
         //gives chooser to smart dashboard
         SmartDashboard.putData("Auto mode", chooser);
         // Assert.assertEquals(chooser.hashCode(), commands.hashCode());
-    }
+      }
 
     public RamseteCommand getCommand() {
         if(chooser.getSelected() == commands.get("GalacticSearchABlue").getCommand()) {
