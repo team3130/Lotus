@@ -5,19 +5,27 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.IntakeCommand.IntakeIn;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,8 +36,14 @@ import java.nio.file.Path;
 public class RobotContainer {
 
 
+    RamseteCommand bounceRamseteCommandOne, bounceRamseteCommandTwo, bounceRamseteCommandThree, bounceRamseteCommandFour;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
+
+    private SendableChooser f = new SendableChooser();
+
+    private ArrayList<Trajectory> m_bounceTrajectories= new ArrayList();
+    private ArrayList<RamseteCommand> m_ramseteCommands = new ArrayList(Arrays.asList(bounceRamseteCommandOne,bounceRamseteCommandTwo,bounceRamseteCommandThree,bounceRamseteCommandFour));
 
 
 
@@ -92,6 +106,7 @@ public class RobotContainer {
                         m_robotDrive.getM_kinematics(),
                         10);
 
+
         // Create config for trajectory
         TrajectoryConfig config =
                 new TrajectoryConfig(
@@ -101,52 +116,83 @@ public class RobotContainer {
                         .setKinematics(m_robotDrive.getM_kinematics())
                         // Apply the voltage constraint
                         .addConstraint(autoVoltageConstraint);
+        config.setReversed(true);
 
-        // An example trajectory to follow.  All units in meters.
-//        Trajectory exampleTrajectory =
-//                TrajectoryGenerator.generateTrajectory(
-//                        // Start at the origin facing the +X direction
-//                        new Pose2d(0, 0, new Rotation2d(0)),
-//                        // Pass through these two interior waypoints, making an 's' curve path
-//                        List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
-//                        // End 3 meters straight ahead of where we started, facing forward
-//                        new Pose2d(3, 0, new Rotation2d(0)),
-//                        // Pass config
-//
-//                        config);
 
-        String trajectoryJSON = "/home/lvuser/deploy/output/" + "GalacticSearchARed" + ".wpilib.json";
-        Trajectory exampleTrajectory = new Trajectory();
+        String trajectoryJSON = "/home/lvuser/deploy/output/" + "Bounce1" + ".wpilib.json";
+        Trajectory firstTrajectory = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            exampleTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            firstTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-        m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+        m_robotDrive.resetOdometry(firstTrajectory.getInitialPose());
+        m_bounceTrajectories.add(firstTrajectory);
 
-        RamseteCommand ramseteCommand =
-                new RamseteCommand(
-                        exampleTrajectory,
-                        m_robotDrive::getPose,
-                        new RamseteController(2.0, .7),
-                        new SimpleMotorFeedforward(
-                                frc.team3130.robot.RobotMap.kS,
-                                frc.team3130.robot.RobotMap.kV,
-                                frc.team3130.robot.RobotMap.kA),
-                        m_robotDrive.getM_kinematics(),
-                        m_robotDrive::getWheelSpeeds,
-                        new PIDController(2.05,0,0),
-                        new PIDController(2.05,0,0),
-                        // RamseteCommand passes volts to the callback
-                        m_robotDrive::tankDriveVolts,
-                        m_robotDrive);
 
-        // Reset odometry to the starting pose of the trajectory.
+        Trajectory secondTrajectory =
+                TrajectoryGenerator.generateTrajectory(
+                        // Start at the origin facing the +X direction
+                        new Pose2d(2.26, 3.768, new Rotation2d(2)),
+                        // Pass through these two interior waypoints, making an 's' curve path
+                        List.of(new Translation2d(2.89, 1.326), new Translation2d(3.7687, 0.644), new Translation2d(4.5, .6)),
+                        // End 3 meters straight ahead of where we started, facing forward
+                        new Pose2d(5.3, 3.9, new Rotation2d(Math.toRadians(280))),
+                        // Pass config
+
+                        config);
+        m_bounceTrajectories.add(secondTrajectory);
+
+
+        trajectoryJSON = "/home/lvuser/deploy/output/" + "Bounce2" + ".wpilib.json";
+        Trajectory thirdTrajectory = new Trajectory();
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            thirdTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        }
+        m_bounceTrajectories.add(thirdTrajectory);
+
+
+        Trajectory fourthTrajectory =
+                TrajectoryGenerator.generateTrajectory(
+                                new Pose2d(6.88, 3.81, new Rotation2d(Math.toRadians(461))),
+                        List.of(new Translation2d(7,3)),
+                                new Pose2d(7.5, 2.4, new Rotation2d(Math.toRadians(560))),
+                        config);
+
+        m_bounceTrajectories.add(fourthTrajectory);
+
+
+        for(int x=0; x<4;x++) {
+            m_ramseteCommands.set(x,
+                    new RamseteCommand(
+                            m_bounceTrajectories.get(x),
+                            m_robotDrive::getPose,
+                            new RamseteController(2.0, .7),
+                            new SimpleMotorFeedforward(
+                                    frc.team3130.robot.RobotMap.kS,
+                                    frc.team3130.robot.RobotMap.kV,
+                                    frc.team3130.robot.RobotMap.kA),
+                            m_robotDrive.getM_kinematics(),
+                            m_robotDrive::getWheelSpeeds,
+                            new PIDController(2.05, 0, 0),
+                            new PIDController(2.05, 0, 0),
+                            // RamseteCommand passes volts to the callback
+                            m_robotDrive::tankDriveVolts,
+                            m_robotDrive)
+            );
+        }
+//
+        SequentialCommandGroup m_commandGroup = new SequentialCommandGroup(m_ramseteCommands.get(0),m_ramseteCommands.get(1),m_ramseteCommands.get(2),m_ramseteCommands.get(3),m_ramseteCommands.get(4));
 
 
         // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> m_robotDrive.configBrakeMode(true));
+        return m_commandGroup.andThen(() -> m_robotDrive.configBrakeMode(true));
+
+//        return ramseteCommand.andThen(() -> m_robotDrive.configBrakeMode(true));
     }
 
 

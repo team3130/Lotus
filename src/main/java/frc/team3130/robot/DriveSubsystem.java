@@ -28,6 +28,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
+
+
     private NetworkTableEntry wheelMulti =
             tab.add("multi speed", 1).getEntry();
 
@@ -242,6 +244,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Odemetry X", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Odemetry Y", m_odometry.getPoseMeters().getY());
+//          System.out.println("Odemetry X: " + m_odometry.getPoseMeters().getX() );
+//          System.out.println("Odemetry Y: " + m_odometry.getPoseMeters().getY() );
+//          System.out.println("Heading: " + getHeading());
+//
+    SmartDashboard.putNumber("Heading", getHeading());
 
       }
 
