@@ -7,6 +7,7 @@ package frc.team3130.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team3130.robot.IntakeCommand.IntakeIn;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -65,6 +66,7 @@ public class Robot extends TimedRobot {
      * autonomousCommand = new ExampleCommand(); break; }
      */
 
+    new IntakeIn(m_robotContainer.getM_intake());
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team3130.robot.IntakeCommand.IntakeIn;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -117,15 +119,16 @@ public class RobotContainer {
 
 
         //NON BOUNCE PATH
-//        String trajectoryJSON = "/home/lvuser/deploy/output/" + "Slalom" + ".wpilib.json";
-//        Trajectory trajectory = new Trajectory();
-//        try {
-//            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-//            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-//        } catch (IOException ex) {
-//            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-//        }
+        String trajectoryJSON = "/home/lvuser/deploy/output/" + "GalacticSearchBRed" + ".wpilib.json";
+        Trajectory trajectory = new Trajectory();
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        }
 
+        m_robotDrive.resetOdometry(trajectory.getInitialPose());
 
 
         //BOUNCE PATH
@@ -197,35 +200,43 @@ public class RobotContainer {
 //            );
 //        }
 
-//        RamseteCommand ramseteCommand =
-//                new RamseteCommand(
-//                        trajectory,
-//                        m_robotDrive::getPose,
-//                        new RamseteController(2.0, .7),
-//                        new SimpleMotorFeedforward(
-//                                frc.team3130.robot.RobotMap.lowGearkS,
-//                                frc.team3130.robot.RobotMap.lowGearkV,
-//                                frc.team3130.robot.RobotMap.LowGearkA),
-//                        m_robotDrive.getM_kinematics(),
-//                        m_robotDrive::getWheelSpeeds,
-//                        new PIDController(, 0, 0),
-//                        new PIDController(2.05, 0, 0),
-//                        // RamseteCommand passes volts to the callback
-//                        m_robotDrive::tankDriveVolts,
-//                        m_robotDrive);
+        RamseteCommand ramseteCommand =
+                new RamseteCommand(
+                        trajectory,
+                        m_robotDrive::getPose,
+                        new RamseteController(2.0, .7),
+                        new SimpleMotorFeedforward(
+                                frc.team3130.robot.RobotMap.lowGearkS,
+                                frc.team3130.robot.RobotMap.lowGearkV,
+                                frc.team3130.robot.RobotMap.LowGearkA),
+                        m_robotDrive.getM_kinematics(),
+                        m_robotDrive::getWheelSpeeds,
+                        new PIDController(2.05, 0, 0),
+                        new PIDController(2.05, 0, 0),
+                        // RamseteCommand passes volts to the callback
+                        m_robotDrive::tankDriveVolts,
+                        m_robotDrive);
 //
 //
-        SequentialCommandGroup m_commandGroup = new SequentialCommandGroup(m_ramseteCommands.get(0),m_ramseteCommands.get(1),m_ramseteCommands.get(2),m_ramseteCommands.get(3));
+//        SequentialCommandGroup m_commandGroup = new SequentialCommandGroup(m_ramseteCommands.get(0),m_ramseteCommands.get(1),m_ramseteCommands.get(2),m_ramseteCommands.get(3));
 
 
         // Run path following command, then stop at the end.
-        return m_commandGroup.andThen(() -> m_robotDrive.configBrakeMode(true));
+//        return m_commandGroup.andThen(() -> m_robotDrive.configBrakeMode(true));
 
-//        return ramseteCommand.andThen(() -> m_robotDrive.configBrakeMode(true));
+        IntakeIn runIntake =new IntakeIn(m_intake);
+
+        ParallelCommandGroup m_parallelCommandGroup = new ParallelCommandGroup(ramseteCommand,runIntake);
+
+        return m_parallelCommandGroup.andThen(() -> m_robotDrive.configBrakeMode(true));
     }
 
 
     public frc.team3130.robot.DriveSubsystem getM_robotDrive() {
         return m_robotDrive;
+    }
+
+    public Intake getM_intake(){
+        return m_intake;
     }
 }
