@@ -116,7 +116,7 @@ public class RobotMap {
     public static double kAngleChange = 0;
     public static double kHoodP = 12;
     public static double kHoodI = 0.0;
-    public static double kHoodD = 22;
+    public static double kHoodD = 168;
     public static double kHoodF = 0;
 
     public static double kHoodTolerance = 2; //The tolerance for error in angles on the hood for shooting
