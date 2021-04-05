@@ -1,15 +1,8 @@
 package frc.team3130.robot.commands.Hood;
 
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
 import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.sensors.vision.Limelight;
-
-import java.util.Set;
 
 public class SetHoodState extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
@@ -27,7 +20,7 @@ public class SetHoodState extends CommandBase {
     @Override
     public void initialize() {
 //        System.out.println(m_hood.getSetAngle()+ "  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        m_hood.setAngle(m_hood.getSetAngle());
+        m_hood.setAngle(m_hood.getShuffleBoardSetAngle());
 
 
 

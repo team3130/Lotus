@@ -119,6 +119,8 @@ public class RobotMap {
     public static double kHoodD = 22;
     public static double kHoodF = 0;
 
+    public static double kHoodTolerance = 2; //The tolerance for error in angles on the hood for shooting
+
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
     public static double kFlywheelOpenRampRate = 1.0; // Minimum amount to time in seconds for Open Loop control output to ramp up

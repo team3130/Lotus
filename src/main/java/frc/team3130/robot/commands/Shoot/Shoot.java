@@ -123,7 +123,7 @@ public class Shoot extends CommandBase {
 //        else
 //            m_hopper.runHopperTop(0);
 
-        if(m_flywheel.canShoot()){
+        if(m_flywheel.canShoot() && m_hood.canShoot()){
             m_hopper.runHopperTop(.6);
         }
     }

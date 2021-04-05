@@ -8,7 +8,6 @@
 package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.util.Utils;
 
 
@@ -118,8 +116,12 @@ public class Hood extends SubsystemBase {
 		changeHoodAngle();
 	}
 
-	public double getSetAngle(){
+	public double getShuffleBoardSetAngle(){
 		return hoodAngle.getDouble(0);
+	}
+
+	public double getAngleSetpoiny(){
+		return m_hood.getClosedLoopTarget() / RobotMap.kHoodTicksPerDegree;
 	}
 
 
@@ -156,6 +158,14 @@ public class Hood extends SubsystemBase {
 //				setAngle(65);
 //				break;
 		}
+	}
+
+
+	public boolean canShoot(){
+		if(getAngleSetpoiny() - getRelativeHoodAngle() <= 2 )
+			return true;
+		else
+			return false;
 	}
 
 
