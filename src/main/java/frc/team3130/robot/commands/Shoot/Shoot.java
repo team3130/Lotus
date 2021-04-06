@@ -20,7 +20,9 @@ public class Shoot extends CommandBase {
     private boolean justShot;
     private boolean changedState;
     private boolean isShooting;
+    private boolean justStarted;
     private double lastIndexTime;
+    private double pause;
 
     public Shoot(Turret subsystemT, Hopper subsystemHop, Flywheel subsystemF, Hood subsystemHood) {
         m_turret = subsystemT;
@@ -39,10 +41,12 @@ public class Shoot extends CommandBase {
     @Override
     public void initialize() {
         // Reset data trackers
-        justShot = true;
+        justShot = false;
         changedState = true;
         isShooting = false;
+        justStarted = true;
         lastIndexTime = Timer.getFPGATimestamp();
+
 
         // Tell turret to hold angle
         m_turret.hold();
@@ -123,8 +127,20 @@ public class Shoot extends CommandBase {
 //        else
 //            m_hopper.runHopperTop(0);
 
-        if(m_flywheel.canShoot() && m_hood.canShoot()){
+        if(m_flywheel.canShoot() && m_hood.canShoot() && Timer.getFPGATimestamp() - lastIndexTime >= .75 || justShot == true){
+            justStarted = false;
+            if(justShot == false){
+                justShot = true;
+                pause = Timer.getFPGATimestamp();
+            }
             m_hopper.runHopperTop(.6);
+            if(Timer.getFPGATimestamp() - pause >=  .2){
+                lastIndexTime = Timer.getFPGATimestamp();
+                justShot = false;
+            }
+        }
+        else {
+            m_hopper.runHopperTop(0);
         }
     }
 
