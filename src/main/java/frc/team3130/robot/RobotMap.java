@@ -45,16 +45,18 @@ public class RobotMap {
     public static double lowGearkV = (kUseCompbot ? .0706: .0402);
     public static double LowGearkA = (kUseCompbot ? .00648 : .0117);
 
-    public static double highGearkS = (kUseCompbot ? 0.819 : .615); //Low Gear .643
-    public static double highGearkV = (kUseCompbot ? 0.0343: .0402); //Low Gear .0706
-    public static double highGearkA = (kUseCompbot ? 0.00437 : .0117);
+    public static double highGearkS = (0.819); //Low Gear .643
+    public static double highGearkV = ( 0.0343); //Low Gear .0706
+    public static double highGearkA = ( 0.00437 );
 
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
     public static double kChassisMPOutputDeadband = 0.01;
     public static int kChassisMPDefaultFireRate = 20;
 
-    public static double kChassisGearRatio = 6.25;
+    public static double kChassisLowGearRatio = 6.25;
+    public static double kChassisHighGearRatio = (60/17);
+
 
     public static double kMPChassisP = 5.47;
     public static double kMPChassisI = 0.0;

@@ -5,14 +5,20 @@
 package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.IntakeCommand.IntakeIn;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private Command m_autonomousCommandTwo;
 
   private RobotContainer m_robotContainer;
+
+  private double m_autonCommandOneTimer;
+
+  private boolean m_timerCheck;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -24,7 +30,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.getM_robotDrive().shift(false);
+    m_autonomousCommandTwo = m_robotContainer.getSecondAutonomousCommand();
+    m_robotContainer.getM_robotDrive().configBrakeMode(true);
+    m_timerCheck = false;
   }
 
   /**
@@ -57,7 +65,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-
+    m_autonCommandOneTimer = Timer.getFPGATimestamp();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -75,7 +83,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if(Timer.getFPGATimestamp() - m_autonCommandOneTimer >= 9.3 && m_timerCheck ==false){
+//      m_autonomousCommand.cancel();
+//      m_autonomousCommandTwo.schedule();
+////      System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "+m_robotContainer.getM_robotDrive().getPose().getX() +" "+ m_robotContainer.getM_robotDrive().getPose().getY() + " " + m_robotContainer.getM_robotDrive().getPose().getRotation().getRadians());
+//      m_robotContainer.getM_robotDrive().shift(true);
+      m_timerCheck = true;
+    }
+  }
 
   @Override
   public void teleopInit() {
@@ -86,7 +102,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.getM_robotDrive().configBrakeMode(false);
+    if (m_autonomousCommand != null) {
+      m_autonomousCommandTwo.cancel();
+    }
+    m_robotContainer.getM_robotDrive().configBrakeMode(true);
   }
 
   /** This function is called periodically during operator control. */

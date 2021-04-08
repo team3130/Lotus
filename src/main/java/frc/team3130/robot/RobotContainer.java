@@ -16,15 +16,15 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.team3130.robot.IntakeCommand.IntakeIn;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+
+import static edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -75,6 +75,17 @@ public class RobotContainer {
 
     }
 
+    public static Trajectory getTrajectoryTwo(){
+        String trajectoryTwoJSON = "/home/lvuser/deploy/output/" + "BarrelRacingTwo" + ".wpilib.json";
+        Trajectory trajectoryTwo = new Trajectory();
+        try {
+            Path trajectoryPathTwo = Filesystem.getDeployDirectory().toPath().resolve(trajectoryTwoJSON);
+            trajectoryTwo = TrajectoryUtil.fromPathweaverJson(trajectoryPathTwo);
+        } catch (IOException ex) {
+        }
+        return trajectoryTwo;
+    }
+
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -103,23 +114,23 @@ public class RobotContainer {
                                 frc.team3130.robot.RobotMap.lowGearkV,
                                 frc.team3130.robot.RobotMap.LowGearkA),
                         m_robotDrive.getM_kinematics(),
-                        10);
+                        12);
 
 
         // Create config for trajectory
         TrajectoryConfig config =
                 new TrajectoryConfig(
-                        3,
-                        3)
+                        4,
+                        4)
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(m_robotDrive.getM_kinematics())
                         // Apply the voltage constraint
                         .addConstraint(autoVoltageConstraint);
-        config.setReversed(true);
+        config.setReversed(false);
 
 
         //NON BOUNCE PATH
-        String trajectoryJSON = "/home/lvuser/deploy/output/" + "GalacticSearchBRed" + ".wpilib.json";
+        String trajectoryJSON = "/home/lvuser/deploy/output/" + "BarrelRacing" + ".wpilib.json";
         Trajectory trajectory = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -127,6 +138,8 @@ public class RobotContainer {
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
+
+
 
         m_robotDrive.resetOdometry(trajectory.getInitialPose());
 
@@ -200,6 +213,17 @@ public class RobotContainer {
 //            );
 //        }
 
+                Trajectory TrajectoryTwo =
+                generateTrajectory(
+                        // Start at the origin facing the +X direction
+                        List.of(new Pose2d(7, 2.56, new Rotation2d(Math.toRadians(167))),
+                        // Pass through these two interior waypoints, making an 's' curve path
+                        // End 3 meters straight ahead of where we started, facing forward
+                        new Pose2d(0, 2, new Rotation2d(Math.toRadians(160)))),
+
+
+                        config);
+
         RamseteCommand ramseteCommand =
                 new RamseteCommand(
                         trajectory,
@@ -210,12 +234,30 @@ public class RobotContainer {
                                 frc.team3130.robot.RobotMap.lowGearkV,
                                 frc.team3130.robot.RobotMap.LowGearkA),
                         m_robotDrive.getM_kinematics(),
-                        m_robotDrive::getWheelSpeeds,
+                        m_robotDrive::getWheelSpeedsLowGear,
                         new PIDController(2.05, 0, 0),
                         new PIDController(2.05, 0, 0),
                         // RamseteCommand passes volts to the callback
                         m_robotDrive::tankDriveVolts,
                         m_robotDrive);
+
+        RamseteCommand ramseteCommandTwo =
+                new RamseteCommand(
+                        TrajectoryTwo,
+                        m_robotDrive::getPose,
+                        new RamseteController(2.0, .7),
+                        new SimpleMotorFeedforward(
+                                frc.team3130.robot.RobotMap.highGearkS,
+                                frc.team3130.robot.RobotMap.highGearkV,
+                                frc.team3130.robot.RobotMap.highGearkA),
+                        m_robotDrive.getM_kinematics(),
+                        m_robotDrive::getWheelSpeedsHighGear,
+                        new PIDController(.69, 0, 0),
+                        new PIDController(.69, 0, 0),
+                        // RamseteCommand passes volts to the callback
+                        m_robotDrive::tankDriveVolts,
+                        m_robotDrive);
+
 //
 //
 //        SequentialCommandGroup m_commandGroup = new SequentialCommandGroup(m_ramseteCommands.get(0),m_ramseteCommands.get(1),m_ramseteCommands.get(2),m_ramseteCommands.get(3));
@@ -224,13 +266,74 @@ public class RobotContainer {
         // Run path following command, then stop at the end.
 //        return m_commandGroup.andThen(() -> m_robotDrive.configBrakeMode(true));
 
-        IntakeIn runIntake =new IntakeIn(m_intake);
+//        IntakeIn runIntake =new IntakeIn(m_intake);
+        Shift shift = new Shift(m_robotDrive);
+        ResetOdometry resetOdometry = new ResetOdometry(m_robotDrive);
 
-        ParallelCommandGroup m_parallelCommandGroup = new ParallelCommandGroup(ramseteCommand,runIntake);
 
-        return m_parallelCommandGroup.andThen(() -> m_robotDrive.configBrakeMode(true));
+
+        SequentialCommandGroup m_sequntialCommandGroup = new SequentialCommandGroup(ramseteCommand);
+
+        return m_sequntialCommandGroup; //.andThen(() -> m_robotDrive.configBrakeMode(true));
     }
 
+
+    public Command getSecondAutonomousCommand(){
+        var autoVoltageConstraint =
+                new DifferentialDriveVoltageConstraint(
+                        new SimpleMotorFeedforward(
+                                frc.team3130.robot.RobotMap.lowGearkS,
+                                frc.team3130.robot.RobotMap.lowGearkV,
+                                frc.team3130.robot.RobotMap.LowGearkA),
+                        m_robotDrive.getM_kinematics(),
+                        12);
+
+
+        // Create config for trajectory
+        TrajectoryConfig config =
+                new TrajectoryConfig(
+                        4,
+                        4)
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(m_robotDrive.getM_kinematics())
+                        // Apply the voltage constraint
+                        .addConstraint(autoVoltageConstraint);
+        config.setReversed(false);
+
+        Trajectory TrajectoryTwo =
+                generateTrajectory(
+                        // Start at the origin facing the +X direction
+                        List.of(new Pose2d(7.537, 2.384, new Rotation2d(2.955)),
+                                // Pass through these two interior waypoints, making an 's' curve path
+                                // End 3 meters straight ahead of where we started, facing forward
+                                new Pose2d(0, 3.7, new Rotation2d(Math.toRadians(180)))),
+
+
+                        config);
+        RamseteCommand ramseteCommandTwo =
+                new RamseteCommand(
+                        TrajectoryTwo,
+                        m_robotDrive::getPose,
+                        new RamseteController(2.0, .7),
+                        new SimpleMotorFeedforward(
+                                frc.team3130.robot.RobotMap.highGearkS,
+                                frc.team3130.robot.RobotMap.highGearkV,
+                                frc.team3130.robot.RobotMap.highGearkA),
+                        m_robotDrive.getM_kinematics(),
+                        m_robotDrive::getWheelSpeedsHighGear,
+                        new PIDController(.69, 0, 0),
+                        new PIDController(.69, 0, 0),
+                        // RamseteCommand passes volts to the callback
+                        m_robotDrive::tankDriveVolts,
+                        m_robotDrive);
+
+        Shift shift = new Shift(m_robotDrive);
+        ResetOdometry resetOdometry = new ResetOdometry(m_robotDrive);
+
+        SequentialCommandGroup m_sequntialCommandGroup = new SequentialCommandGroup(shift,resetOdometry, ramseteCommandTwo);
+
+        return m_sequntialCommandGroup.andThen(() -> m_robotDrive.configBrakeMode(true));
+    }
 
     public frc.team3130.robot.DriveSubsystem getM_robotDrive() {
         return m_robotDrive;

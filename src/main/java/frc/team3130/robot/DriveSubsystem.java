@@ -86,8 +86,10 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Update the odometry in the periodic block
-        m_odometry.update(
-                m_gyro.getRotation2d(), getDistanceL(), getDistanceR());
+        if(!m_shifter.get())
+        m_odometry.update(m_gyro.getRotation2d(), getDistanceLowGearL(), getDistanceLowGearR());
+        else
+            m_odometry.update(m_gyro.getRotation2d(), getDistanceHighGearL(), getDistanceHighGearR());
 
     }
 
@@ -104,13 +106,19 @@ public class DriveSubsystem extends SubsystemBase {
         return m_odometry.getPoseMeters();
     }
 
+
+
     /**
      * Returns the current wheel speeds of the robot.
      *
      * @return The current wheel speeds.
      */
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds((getSpeedL()/10), (getSpeedR()/10));
+    public DifferentialDriveWheelSpeeds getWheelSpeedsLowGear() {
+        return new DifferentialDriveWheelSpeeds((getSpeedLowGearL()/10), (getSpeedLowGearR()/10));
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeedsHighGear() {
+        return new DifferentialDriveWheelSpeeds((getSpeedHighGearL()/10), (getSpeedHighGearR()/10));
     }
 
     /**
@@ -156,9 +164,11 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @return the average of the two encoder readings
      */
-    public double getAverageEncoderDistance() {
-        return (getDistanceL() + getDistanceR()) / 2.0;
+    public double getAverageEncoderDistanceLowGear() {
+        return (getDistanceLowGearL() + getDistanceLowGearR()) / 2.0;
     }
+
+
 
 
 
@@ -177,12 +187,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
 
-    public double getGearRatio(){
-        if(m_shifter.get() == false)
-            return RobotMap.kChassisGearRatio;
-        else
-            return (60/17);
-    }
+
 
     /**
      * Returns the heading of the robot.
@@ -202,17 +207,38 @@ public class DriveSubsystem extends SubsystemBase {
         return -m_gyro.getRate();
     }
 
-    public double getDistanceL() {
-        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
+    public double getDistanceLowGearL() {
+        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
     }
 
-    public double getDistanceR() {
-        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI) * -1;
+    public double getDistanceLowGearR() {
+        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI) * -1;
     }
 
-    public double getSpeedL() {
+    public double getSpeedLowGearL() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10 * wheelMulti.getDouble(1));
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10 * wheelMulti.getDouble(1));
+    }
+
+    public double getSpeedLowGearR() {
+        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kLWheelDiameter)  * 10) *-1 * wheelMulti.getDouble(1);
+    }
+
+    public double getDistanceHighGearL() {
+        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
+    }
+
+    public double getDistanceHighGearR() {
+        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI) * -1;
+    }
+
+    public double getSpeedHighGearL() {
+        // The raw speed units will be in the sensor's native ticks per 100ms.
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10);
+    }
+
+    public double getSpeedHighGearR() {
+        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * (Math.PI * RobotMap.kLWheelDiameter)  * 10) *-1;
     }
 
     public void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
@@ -220,16 +246,8 @@ public class DriveSubsystem extends SubsystemBase {
         m_drive.arcadeDrive(moveThrottle, turnThrottle, squaredInputs);
     }
 
-    /**
-     * Returns the current speed of the front right motor
-     *
-     * @return Current speed of the front right motor (inches per second)
-     */
-    public double getSpeedR() {
-        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kLWheelDiameter)  * 10) *-1 * wheelMulti.getDouble(1);
-    }
 
-      public void configBrakeMode(boolean brake) {
+    public void configBrakeMode(boolean brake) {
     if (brake) {
       m_leftMotorFront.setNeutralMode(NeutralMode.Brake);
       m_leftMotorRear.setNeutralMode(NeutralMode.Brake);
@@ -244,11 +262,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
       public void outputToShuffleBoard(){
-    SmartDashboard.putNumber("Chassis Distance R", Units.metersToInches(getDistanceR()));
-    SmartDashboard.putNumber("Chassis Distance L", Units.metersToInches(getDistanceL()));
+    SmartDashboard.putNumber("Chassis Distance R", Units.metersToInches(getDistanceLowGearR()));
+    SmartDashboard.putNumber("Chassis Distance L", Units.metersToInches(getDistanceLowGearL()));
 
-    SmartDashboard.putNumber("Chassis Right Velocity", getSpeedR());
-    SmartDashboard.putNumber("Chassis Left Velocity", getSpeedL());
+    SmartDashboard.putNumber("Chassis Right Velocity", getSpeedLowGearR());
+    SmartDashboard.putNumber("Chassis Left Velocity", getSpeedLowGearL());
 
     SmartDashboard.putNumber("Odemetry X", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Odemetry Y", m_odometry.getPoseMeters().getY());
