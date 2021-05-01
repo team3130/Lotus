@@ -103,7 +103,7 @@ public class RobotMap {
     public static double kLimelightLatencyMs = 11.0; // Image capture latency
 
     public static double kLimelightPitch =  -35.648;   // Facing up is negative Checked: 2/21
-    public static double kLimelightYaw = 2;        // Aiming bias, facing left is positive
+    public static double kLimelightYaw = 0;        // Aiming bias, facing left is positive TODO:make it change with distance, regular value is 2
     public static double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static double kLimelightHeight = 21.5;     // Height of camera aperture from the ground
     public static double kLimelightLength = 9.5;    // Distance to the turret's rotation axis
