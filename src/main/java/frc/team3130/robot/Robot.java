@@ -7,9 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.Auton.Shoot6;
 import frc.team3130.robot.sensors.Navx;
-import frc.team3130.robot.sensors.vision.HoodAngleCalculations;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 
@@ -61,14 +59,6 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
-
-        /*
-         chooser = new SendableChooser<>();
-         chooser.setDefaultOption("No Auton", "None");
-         chooser.addOption("3Ball", "3Ball");
-         chooser.addOption("6Ball", "6Ball");
-         SmartDashboard.putData("Auto mode", chooser);
-         */
     }
 
     @Override
@@ -133,10 +123,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
+        /*
+        This makes sure that the autonomous stops running when
+         teleop starts running. If you want the autonomous to
+         continue until interrupted by another command, remove
+         this line or comment it out.
+         */
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
@@ -167,6 +159,10 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
     }
 
+    /**
+     * Updates shuffleboard periodically
+     * WARNING: outputting to many things to shuffleboard overloads Rio and causes robot latency
+     */
     public void outputToShuffleboard() {
 //        Navx.GetInstance().outputToShuffleboard();
 //        WheelOfFortune.outputToShuffleboard();
@@ -203,10 +199,7 @@ public class Robot extends TimedRobot {
     }
 
     private void determineAuto() {
-//          autonomousCommand = new RendezvousShoot5();
-//        autonomousCommand = new Shoot3();
-//        autonomousCommand = new Shoot5();
-        autonomousCommand = new Shoot6(m_robotContainer.getIntake(), m_robotContainer.getChassis(), m_robotContainer.getTurret(), m_robotContainer.getHopper(), m_robotContainer.getFlywheel(), m_robotContainer.getHood());
+
     }
 
     public void writePeriodicOutputs() {

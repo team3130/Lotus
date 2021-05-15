@@ -9,8 +9,7 @@ import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
-import frc.team3130.robot.commands.Hood.MoveHood;
-import frc.team3130.robot.commands.Hood.SetHoodState;
+import frc.team3130.robot.commands.Hood.SetHoodAngle;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Intake.IntakeIn;
@@ -92,20 +91,17 @@ public class RobotContainer {
 
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Shoot(m_turret, m_hoppper, m_flyWheel, m_hood)); //R bumper
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new HopperOut(m_hoppper)); //L bumper
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_N).whenHeld(new MoveHood(.05,m_hood)); //R bumper
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_S).whenHeld(new MoveHood(-.05,m_hood)); //L bumper
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(new ToggleTurretAim(m_turret, m_hood)); //R joystick press
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new ToggleIntake(m_intake)); //Menu button
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodState(m_hood));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodAngle(m_hood));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
 
         /*
          * Weapons
          */
 
-        new POVButton(m_driverGamepad, RobotMap.LST_POV_N).whenHeld(new MoveHood(1, m_hood));
-        new POVButton(m_driverGamepad, RobotMap.LST_POV_S).whenHeld(new MoveHood(-1, m_hood));
+
 
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeploySmallClimber(m_climber)); //Menu button
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(new DeployBigClimber(m_climber)); //Windows button
@@ -122,6 +118,7 @@ public class RobotContainer {
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis, () -> driverGamepad.getY(GenericHID.Hand.kLeft), () -> driverGamepad.getX(GenericHID.Hand.kRight)));
         m_climber.setDefaultCommand(new Climber(m_climber, () -> driverGamepad.));
         m_turret.setDefaultCommand(//I DONT KNOW WHATS GOIN OOOOONNNNNNNNNNNNNNNN SETTING DEFAULT COMMANDS ARE WWWWWEEEEEIIIIRRRRDDDD );
+        TODO: get Caleb some xanax
          *//*
     }*/
 }

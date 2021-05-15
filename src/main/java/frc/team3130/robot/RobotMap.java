@@ -14,7 +14,8 @@ public class RobotMap {
     /**
      * Constants
      */
-    //Which Robot
+    //Which Robot is currently in use
+    //Changes values in RobotMap
     public static boolean kUseCompbot = true;
 
     //NavX
@@ -25,10 +26,10 @@ public class RobotMap {
 
     public static double kChassisMaxVoltage = 12.0;
 
-    public static double kChassisWidth = 28.0; //FIXME: check
+    public static double kChassisWidth = 28.0; //Chassis with from edge to edge in inches
     public static double kChassisLengthBumpers = 39.0; //FIXME
-    public static double kLWheelDiameter = 6.0; // Center wheel
-    public static double kRWheelDiameter = 6.0; // Center wheel
+    public static double kLWheelDiameter = 6.0; // Center wheel diameter in inches
+    public static double kRWheelDiameter = 6.0; // Center wheel diameter in inches
 
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed

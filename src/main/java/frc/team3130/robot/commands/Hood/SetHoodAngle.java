@@ -4,12 +4,12 @@ package frc.team3130.robot.commands.Hood;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Hood;
 
-public class SetHoodState extends CommandBase {
+public class SetHoodAngle extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Hood m_hood;
     double angle;
 
-    public SetHoodState(Hood subsystem) {
+    public SetHoodAngle(Hood subsystem) {
         //mapping to object passed through parameter
         m_hood = subsystem;
     }
@@ -19,11 +19,7 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public void initialize() {
-//        System.out.println(m_hood.getSetAngle()+ "  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         m_hood.setAngle(m_hood.getShuffleBoardSetAngle());
-
-
-
     }
 
     /**
@@ -63,7 +59,6 @@ public class SetHoodState extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-//        System.out.println("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
 
     }
 }
