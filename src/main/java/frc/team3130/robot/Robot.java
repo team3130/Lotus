@@ -149,6 +149,6 @@ public class Robot extends TimedRobot {
 //        HoodAngleCalculations.GetInstance().outputToShuffleboard();
     m_robotContainer.getM_hood().outputToShuffleboard();
     m_robotContainer.getM_turret().outputToShuffleboard();
-    Navx.outputToShuffleboard();
+    Navx.GetInstance().outputToShuffleboard();
   }
 }
