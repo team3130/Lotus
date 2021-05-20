@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.IntakeCommand.IntakeIn;
 import frc.team3130.robot.IntakeCommand.IntakeOut;
+import frc.team3130.robot.vision.Limelight;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -33,6 +35,13 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.getM_robotDrive().configBrakeMode(true);
     m_timerCheck = false;
+
+    //Instantiate Limelight interface
+    Limelight.GetInstance();
+
+
+    //Instantiate Wheel Speed interpolator
+    WheelSpeedCalculations.GetInstance();
   }
 
   /**
