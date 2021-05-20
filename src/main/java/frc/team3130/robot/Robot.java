@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team3130.robot.IntakeCommand.IntakeIn;
+import frc.team3130.robot.IntakeCommand.IntakeOut;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -30,7 +31,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_autonomousCommandTwo = m_robotContainer.getSecondAutonomousCommand();
     m_robotContainer.getM_robotDrive().configBrakeMode(true);
     m_timerCheck = false;
   }
@@ -74,7 +74,6 @@ public class Robot extends TimedRobot {
      * autonomousCommand = new ExampleCommand(); break; }
      */
 
-    new IntakeIn(m_robotContainer.getM_intake());
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -84,13 +83,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    if(Timer.getFPGATimestamp() - m_autonCommandOneTimer >= 9.3 && m_timerCheck ==false){
-//      m_autonomousCommand.cancel();
-//      m_autonomousCommandTwo.schedule();
-////      System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "+m_robotContainer.getM_robotDrive().getPose().getX() +" "+ m_robotContainer.getM_robotDrive().getPose().getY() + " " + m_robotContainer.getM_robotDrive().getPose().getRotation().getRadians());
-//      m_robotContainer.getM_robotDrive().shift(true);
-      m_timerCheck = true;
+    if(Timer.getFPGATimestamp()-m_autonCommandOneTimer > 8){
+      m_robotContainer.getM_intake().retractIntake();
+      m_robotContainer.getM_intake().runIntake(0);
     }
+    else if (Timer.getFPGATimestamp()-m_autonCommandOneTimer > 1.2){
+      m_robotContainer.getM_intake().deployIntake();
+      m_robotContainer.getM_intake().runIntake(.7);
+    }
+
   }
 
   @Override
@@ -102,9 +103,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    if (m_autonomousCommand != null) {
-      m_autonomousCommandTwo.cancel();
-    }
+    m_robotContainer.getM_intake().retractIntake();
+    m_robotContainer.getM_intake().runIntake(0);
     m_robotContainer.getM_robotDrive().configBrakeMode(true);
   }
 

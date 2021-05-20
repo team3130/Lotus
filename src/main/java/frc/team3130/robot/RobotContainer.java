@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team3130.robot.IntakeCommand.IntakeOut;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -130,7 +132,7 @@ public class RobotContainer {
 
 
         //NON BOUNCE PATH
-        String trajectoryJSON = "/home/lvuser/deploy/output/" + "BarrelRacing" + ".wpilib.json";
+        String trajectoryJSON = "/home/lvuser/deploy/output/" + "SnowPlow" + ".wpilib.json";
         Trajectory trajectory = new Trajectory();
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -213,17 +215,17 @@ public class RobotContainer {
 //            );
 //        }
 
-                Trajectory TrajectoryTwo =
-                generateTrajectory(
-                        // Start at the origin facing the +X direction
-                        List.of(new Pose2d(7, 2.56, new Rotation2d(Math.toRadians(167))),
-                        // Pass through these two interior waypoints, making an 's' curve path
-                        // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(0, 2, new Rotation2d(Math.toRadians(160)))),
-
-
-                        config);
-
+//                Trajectory TrajectoryTwo =
+//                generateTrajectory(
+//                        // Start at the origin facing the +X direction
+//                        List.of(new Pose2d(7, 2.56, new Rotation2d(Math.toRadians(167))),
+//                        // Pass through these two interior waypoints, making an 's' curve path
+//                        // End 3 meters straight ahead of where we started, facing forward
+//                        new Pose2d(0, 2, new Rotation2d(Math.toRadians(160)))),
+//
+//
+//                        config);
+//
         RamseteCommand ramseteCommand =
                 new RamseteCommand(
                         trajectory,
@@ -240,23 +242,23 @@ public class RobotContainer {
                         // RamseteCommand passes volts to the callback
                         m_robotDrive::tankDriveVolts,
                         m_robotDrive);
-
-        RamseteCommand ramseteCommandTwo =
-                new RamseteCommand(
-                        TrajectoryTwo,
-                        m_robotDrive::getPose,
-                        new RamseteController(2.0, .7),
-                        new SimpleMotorFeedforward(
-                                frc.team3130.robot.RobotMap.highGearkS,
-                                frc.team3130.robot.RobotMap.highGearkV,
-                                frc.team3130.robot.RobotMap.highGearkA),
-                        m_robotDrive.getM_kinematics(),
-                        m_robotDrive::getWheelSpeedsHighGear,
-                        new PIDController(.69, 0, 0),
-                        new PIDController(.69, 0, 0),
-                        // RamseteCommand passes volts to the callback
-                        m_robotDrive::tankDriveVolts,
-                        m_robotDrive);
+//
+//        RamseteCommand ramseteCommandTwo =
+//                new RamseteCommand(
+//                        TrajectoryTwo,
+//                        m_robotDrive::getPose,
+//                        new RamseteController(2.0, .7),
+//                        new SimpleMotorFeedforward(
+//                                frc.team3130.robot.RobotMap.highGearkS,
+//                                frc.team3130.robot.RobotMap.highGearkV,
+//                                frc.team3130.robot.RobotMap.highGearkA),
+//                        m_robotDrive.getM_kinematics(),
+//                        m_robotDrive::getWheelSpeedsHighGear,
+//                        new PIDController(.69, 0, 0),
+//                        new PIDController(.69, 0, 0),
+//                        // RamseteCommand passes volts to the callback
+//                        m_robotDrive::tankDriveVolts,
+//                        m_robotDrive);
 
 //
 //
