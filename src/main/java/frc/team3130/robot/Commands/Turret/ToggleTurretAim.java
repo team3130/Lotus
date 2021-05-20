@@ -1,8 +1,9 @@
 package frc.team3130.robot.Commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.Hood;
+import frc.team3130.robot.Turret;
+
 
 public class ToggleTurretAim extends CommandBase {
     private final Turret m_turret;

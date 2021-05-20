@@ -50,7 +50,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
     // The gyro sensor
-    private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+    private static final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
     private TalonSRX m_turret;
 
@@ -194,7 +194,7 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @return the robot's heading in degrees, from -180 to 180
      */
-    public double getHeading() {
+    public static double getHeading() {
         return m_gyro.getRotation2d().getDegrees();
     }
 

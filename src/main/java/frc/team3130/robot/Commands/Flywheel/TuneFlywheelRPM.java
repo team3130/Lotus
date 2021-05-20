@@ -1,10 +1,10 @@
-package frc.team3130.robot.Flywheel;
+package frc.team3130.robot.Commands.Flywheel;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.subsystems.Flywheel;
+import frc.team3130.robot.Flywheel;
 
 public class TuneFlywheelRPM extends CommandBase {
     private final Flywheel m_flywheel;

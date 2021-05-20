@@ -6,10 +6,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team3130.robot.sensors.Navx;
-import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.util.Epsilon;
 import frc.team3130.robot.util.Utils;
+import frc.team3130.robot.vision.Limelight;
 
 public class Turret extends SubsystemBase {
 
@@ -126,7 +125,7 @@ public class Turret extends SubsystemBase {
      */
     public void hold() {
         // Track the initial chassis angle for holding state
-        initialChassisHoldAngle = Navx.GetInstance().getHeading();
+        initialChassisHoldAngle = DriveSubsystem.getHeading();
 
         m_turretControlState = TurretState.HOLD;
     }
@@ -300,15 +299,15 @@ public class Turret extends SubsystemBase {
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
             Utils.configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
-            initialChassisHoldAngle = Navx.GetInstance().getHeading();
+            initialChassisHoldAngle = DriveSubsystem.getHeading();
             //TODO: implement actual dead reckoning
             output = -180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
 
             setAngleMM(output);
         } else {
             // New setpoint if Chassis angle has changed by more that the tolerance
-            if (Math.abs(Navx.GetInstance().getHeading() - initialChassisHoldAngle) > RobotMap.kTurretReadyToAimTolerance) {
-                initialChassisHoldAngle = Navx.GetInstance().getHeading();
+            if (Math.abs(DriveSubsystem.getHeading() - initialChassisHoldAngle) > RobotMap.kTurretReadyToAimTolerance) {
+                initialChassisHoldAngle = DriveSubsystem.getHeading();
                 output = -180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
                 setAngleMM(output);
             }
@@ -422,7 +421,7 @@ public class Turret extends SubsystemBase {
             Utils.configMotionMagic(m_turret, 0, 0);
             lastHoldHeading = initialChassisHoldAngle;
         }
-        double currentHeading = Navx.GetInstance().getHeading();
+        double currentHeading = DriveSubsystem.getHeading();
         if (!Epsilon.epsilonEquals(lastHoldHeading, currentHeading, 7.0)) {
             Utils.configPIDF(m_turret,
                     RobotMap.kTurretMMP,

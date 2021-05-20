@@ -2,13 +2,14 @@ package frc.team3130.robot.Commands.Shoot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.sensors.vision.HoodAngleCalculations;
-import frc.team3130.robot.sensors.vision.Limelight;
-import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
-import frc.team3130.robot.subsystems.Flywheel;
-import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.subsystems.Hopper;
-import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.Flywheel;
+import frc.team3130.robot.Hood;
+import frc.team3130.robot.Hopper;
+import frc.team3130.robot.Turret;
+import frc.team3130.robot.vision.HoodAngleCalculations;
+import frc.team3130.robot.vision.Limelight;
+import frc.team3130.robot.vision.WheelSpeedCalculations;
+
 
 public class Shoot extends CommandBase {
     private final Turret m_turret;

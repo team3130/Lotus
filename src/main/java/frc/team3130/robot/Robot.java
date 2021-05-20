@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team3130.robot.IntakeCommand.IntakeIn;
-import frc.team3130.robot.IntakeCommand.IntakeOut;
 import frc.team3130.robot.vision.Limelight;
 import frc.team3130.robot.vision.WheelSpeedCalculations;
 
@@ -42,6 +40,9 @@ public class Robot extends TimedRobot {
 
     //Instantiate Wheel Speed interpolator
     WheelSpeedCalculations.GetInstance();
+
+    Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
+
   }
 
   /**
@@ -66,6 +67,9 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.getM_robotDrive().configBrakeMode(true);
+
+    Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
+    m_robotContainer.getM_hood().setAngle(0);
   }
 
   @Override
@@ -92,6 +96,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    Limelight.GetInstance().updateData( m_robotContainer.getM_turret());
+
     if(Timer.getFPGATimestamp()-m_autonCommandOneTimer > 8){
       m_robotContainer.getM_intake().retractIntake();
       m_robotContainer.getM_intake().runIntake(0);
@@ -119,7 +125,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    Limelight.GetInstance().updateData(m_robotContainer.getM_turret());
+
+  }
 
   @Override
   public void testInit() {
@@ -133,5 +142,9 @@ public class Robot extends TimedRobot {
 
   public void outputToShuffleBoard(){
     m_robotContainer.getM_robotDrive().outputToShuffleBoard();
+    Limelight.GetInstance().outputToShuffleboard(m_robotContainer.getM_turret());
+    m_robotContainer.getM_flyWheel().outputToShuffleboard();
+//        HoodAngleCalculations.GetInstance().outputToShuffleboard();
+    m_robotContainer.getM_hood().outputToShuffleboard();
   }
 }

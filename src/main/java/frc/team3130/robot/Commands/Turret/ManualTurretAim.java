@@ -2,7 +2,8 @@ package frc.team3130.robot.Commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Turret;
+
+import frc.team3130.robot.Turret;
 import frc.team3130.robot.util.Utils;
 
 import static frc.team3130.robot.RobotContainer.m_weaponsGamepad;

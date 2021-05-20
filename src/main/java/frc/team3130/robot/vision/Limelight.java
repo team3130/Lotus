@@ -9,7 +9,7 @@ import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.numbers.N1;
 import edu.wpi.first.wpiutil.math.numbers.N3;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.subsystems.Turret;
+import frc.team3130.robot.Turret;
 
 //TODO: Make this not static and pass turret object as a paraneter to be used here
 

@@ -1,8 +1,7 @@
-package frc.team3130.robot.Hood;
-
+package frc.team3130.robot.Commands.Hood;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.subsystems.Hood;
+import frc.team3130.robot.Hood;
 
 public class SetHoodAngle extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter

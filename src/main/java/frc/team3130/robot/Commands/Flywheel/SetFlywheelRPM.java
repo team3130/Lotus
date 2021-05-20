@@ -1,8 +1,9 @@
-package frc.team3130.robot.Flywheel;
+package frc.team3130.robot.Commands.Flywheel;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.subsystems.Flywheel;
-import frc.team3130.robot.subsystems.Hopper;
+import frc.team3130.robot.Flywheel;
+import frc.team3130.robot.Hopper;
+
 
 public class SetFlywheelRPM extends CommandBase {
     private final Flywheel m_flywheel;

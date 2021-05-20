@@ -20,7 +20,13 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.team3130.robot.IntakeCommand.IntakeOut;
+import frc.team3130.robot.Commands.Flywheel.SetFlywheelRPM;
+import frc.team3130.robot.Commands.Hood.SetHoodAngle;
+import frc.team3130.robot.Commands.Shoot.Shoot;
+import frc.team3130.robot.Commands.Turret.ToggleTurretAim;
+
+
+
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -51,6 +57,11 @@ public class RobotContainer {
     // The robot's subsystems
     private final frc.team3130.robot.DriveSubsystem m_robotDrive = new frc.team3130.robot.DriveSubsystem();
     private final Intake m_intake = new Intake();
+    private final Hood m_hood = new Hood();
+    private final Flywheel m_flyWheel = new Flywheel();
+    private final Turret m_turret = new Turret();
+    private final Hopper m_hoppper = new Hopper();
+
 
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
@@ -71,9 +82,7 @@ public class RobotContainer {
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
                 )
         );
-//        m_intake.setDefaultCommand(
-//                new IntakeIn(m_intake)
-//        );
+
 
     }
 
@@ -99,6 +108,11 @@ public class RobotContainer {
 //        new JoystickButton(m_driverController, Button.kBumperRight.value)
 //                .whenPressed(() -> m_robotDrive.setMaxOutput(0.5))
 //                .whenReleased(() -> m_robotDrive.setMaxOutput(1));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Shoot(m_turret, m_hoppper, m_flyWheel, m_hood)); //R bumper
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(new ToggleTurretAim(m_turret, m_hood)); //R joystick press
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodAngle(m_hood));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
+
     }
 
     /**
@@ -343,5 +357,21 @@ public class RobotContainer {
 
     public Intake getM_intake(){
         return m_intake;
+    }
+
+    public Hood getM_hood() {
+        return m_hood;
+    }
+
+    public Flywheel getM_flyWheel() {
+        return m_flyWheel;
+    }
+
+    public Turret getM_turret() {
+        return m_turret;
+    }
+
+    public Hopper getM_hoppper() {
+        return m_hoppper;
     }
 }
