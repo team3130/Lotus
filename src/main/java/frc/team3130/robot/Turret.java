@@ -125,7 +125,7 @@ public class Turret extends SubsystemBase {
      */
     public void hold() {
         // Track the initial chassis angle for holding state
-        initialChassisHoldAngle = DriveSubsystem.getHeading();
+        initialChassisHoldAngle = Navx.GetInstance().getHeading();
 
         m_turretControlState = TurretState.HOLD;
     }
@@ -299,15 +299,15 @@ public class Turret extends SubsystemBase {
                     RobotMap.kTurretMMD,
                     RobotMap.kTurretMMF);
             Utils.configMotionMagic(m_turret, RobotMap.kTurretMaxAcc, RobotMap.kTurretMaxVel);
-            initialChassisHoldAngle = DriveSubsystem.getHeading();
+            initialChassisHoldAngle = Navx.GetInstance().getHeading();
             //TODO: implement actual dead reckoning
             output = -180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
 
             setAngleMM(output);
         } else {
             // New setpoint if Chassis angle has changed by more that the tolerance
-            if (Math.abs(DriveSubsystem.getHeading() - initialChassisHoldAngle) > RobotMap.kTurretReadyToAimTolerance) {
-                initialChassisHoldAngle = DriveSubsystem.getHeading();
+            if (Math.abs(Navx.GetInstance().getHeading() - initialChassisHoldAngle) > RobotMap.kTurretReadyToAimTolerance) {
+                initialChassisHoldAngle = Navx.GetInstance().getHeading();
                 output = -180.0 - RobotMap.kChassisStartingPose.getRotation().getDegrees() - initialChassisHoldAngle;
                 setAngleMM(output);
             }
@@ -421,7 +421,7 @@ public class Turret extends SubsystemBase {
             Utils.configMotionMagic(m_turret, 0, 0);
             lastHoldHeading = initialChassisHoldAngle;
         }
-        double currentHeading = DriveSubsystem.getHeading();
+        double currentHeading = Navx.GetInstance().getHeading();
         if (!Epsilon.epsilonEquals(lastHoldHeading, currentHeading, 7.0)) {
             Utils.configPIDF(m_turret,
                     RobotMap.kTurretMMP,

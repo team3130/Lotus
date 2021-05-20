@@ -34,6 +34,8 @@ public class Robot extends TimedRobot {
     m_robotContainer.getM_robotDrive().configBrakeMode(true);
     m_timerCheck = false;
 
+    Navx.GetInstance();
+
     //Instantiate Limelight interface
     Limelight.GetInstance();
 
@@ -146,5 +148,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.getM_flyWheel().outputToShuffleboard();
 //        HoodAngleCalculations.GetInstance().outputToShuffleboard();
     m_robotContainer.getM_hood().outputToShuffleboard();
+    m_robotContainer.getM_turret().outputToShuffleboard();
+    Navx.outputToShuffleboard();
   }
 }
