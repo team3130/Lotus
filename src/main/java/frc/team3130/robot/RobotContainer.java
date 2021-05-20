@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.Commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.Commands.Hood.SetHoodAngle;
 import frc.team3130.robot.Commands.Shoot.Shoot;
+import frc.team3130.robot.Commands.Turret.ManualTurretAim;
 import frc.team3130.robot.Commands.Turret.ToggleTurretAim;
 
 
@@ -73,13 +74,16 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
-
-        configureButtonBindings();
         m_robotDrive.setDefaultCommand(
                 new frc.team3130.robot.DefaultDrive(
                         m_robotDrive,
                         () -> m_driverGamepad.getY(GenericHID.Hand.kLeft),
                         () -> m_driverGamepad.getX(GenericHID.Hand.kRight)
+                )
+        );
+        m_turret.setDefaultCommand(
+                new ManualTurretAim(
+                        m_turret
                 )
         );
 
