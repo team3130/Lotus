@@ -15,10 +15,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.Commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.Commands.Hood.SetHoodAngle;
@@ -289,10 +286,12 @@ public class RobotContainer {
 //        IntakeIn runIntake =new IntakeIn(m_intake);
         Shift shift = new Shift(m_robotDrive);
         ResetOdometry resetOdometry = new ResetOdometry(m_robotDrive);
+        ToggleTurretAim aim = new ToggleTurretAim(m_turret,m_hood);
+        Shoot shoot = new Shoot(m_turret,m_hoppper,m_flyWheel,m_hood);
 
 
 
-        SequentialCommandGroup m_sequntialCommandGroup = new SequentialCommandGroup(ramseteCommand);
+        SequentialCommandGroup m_sequntialCommandGroup = new SequentialCommandGroup(ramseteCommand,aim,new WaitCommand(1.5),shoot);
 
         return m_sequntialCommandGroup; //.andThen(() -> m_robotDrive.configBrakeMode(true));
     }

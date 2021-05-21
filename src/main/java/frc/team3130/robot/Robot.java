@@ -108,6 +108,7 @@ public class Robot extends TimedRobot {
       m_robotContainer.getM_intake().deployIntake();
       m_robotContainer.getM_intake().runIntake(.7);
     }
+    writePeriodicOutputs();
 
   }
 
@@ -129,7 +130,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Limelight.GetInstance().updateData(m_robotContainer.getM_turret());
-
+    writePeriodicOutputs();
   }
 
   @Override
@@ -141,6 +142,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  public void writePeriodicOutputs() {
+    m_robotContainer.getM_turret().writePeriodicOutputs();
+  }
+
 
   public void outputToShuffleBoard(){
     m_robotContainer.getM_robotDrive().outputToShuffleBoard();
