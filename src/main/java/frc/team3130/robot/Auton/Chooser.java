@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.team3130.robot.RobotContainer;
+import frc.team3130.robot.commands.Shoot.Shoot;
+import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.io.IOException;
@@ -43,8 +46,13 @@ public class Chooser {
     private ParallelCommandGroup shoot6shootfirst;
     private ParallelCommandGroup shoot6shootsecond;
 
-    public Chooser(Chassis m_chassis) {
+    private ToggleTurretAim toggler;
+    private Shoot shooty;
+
+    public Chooser(Chassis m_chassis, ToggleTurretAim toggler, Shoot shooty) {
         this.m_chassis = m_chassis;
+        this.toggler = toggler;
+        this.shooty = shooty;
 
         TrajectoryConfig config = new TrajectoryConfig(3,
                 3);
@@ -90,6 +98,7 @@ public class Chooser {
                 Command cmd = (Command) map.getValue();
                 if (stepCount == shotCountFirstBegin) {
                     shoot6shootfirst.addCommands(cmd);
+                    shoot6shootfirst.addCommands(new SequentialCommandGroup(toggler ,new WaitCommand(1.5), shooty));
                     cmd = shoot6shootfirst;
                 }
                 stepCount++;
