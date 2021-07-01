@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.io.IOException;
@@ -24,14 +23,28 @@ public class Chooser {
     String[] GalacticSearches;
 
     private Chassis m_chassis;
-    private PixyCam m_pixy;
 
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     private HashMap<String, CommandsAndPoses> commands = new HashMap<>();
 
-    public Chooser(Chassis m_chassis, PixyCam m_pixy) {
+    // steps - 1
+    private int shoot6Steps = 1;
+    private int stepCount = 0;
+    // number of commands before starts shooting
+    private int shotCountFirstBegin = 0;
+    // # cmds before stop
+    private int shotCountFirstEnd = 1;
+    // number of commands before the next shooting
+    private int shotCountSecond = 4;
+
+    // both shooting and drivign
+    private SequentialCommandGroup shoot6;
+    // command group for the first shots
+    private ParallelCommandGroup shoot6shootfirst;
+    private ParallelCommandGroup shoot6shootsecond;
+
+    public Chooser(Chassis m_chassis) {
         this.m_chassis = m_chassis;
-        this.m_pixy = m_pixy;
 
         TrajectoryConfig config = new TrajectoryConfig(3,
                 3);
@@ -69,27 +82,16 @@ public class Chooser {
     }
 
     public void chooserRegistry() {
-        // to check in if statements if a galactic search path is being selected
-        GalacticSearches = new String[]{"GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed"};
-
         // for loop that iterates through all the paths
         for (Map.Entry map : commands.entrySet()) {
-            try {
-                // checking if it is a blue path
-                if (map.getKey().equals(GalacticSearches[0]) || map.getKey().equals(GalacticSearches[2])) {
-                    String tempStr = (String) map.getKey();
-                    // adds the string GalacticSearchA or GalacticSearchB, subtracts one because length is +1 the subtracts the amount of letters in blue, then uses Drive Straight as a default path
-                    chooser.addOption(tempStr.substring(0, tempStr.length() - 4), ((CommandsAndPoses) map.getValue()).getCommand());
+            if (((String) map.getKey()).contains("shoot6")) {
+                shoot6.addCommands((Command) map.getValue());
+                if (stepCount >= shoot6Steps) {
+                    chooser.addOption("shoot6", shoot6);
                 }
-                else {
-                    // adds every other path to chooser
-                    chooser.addOption((String) map.getKey(), ((CommandsAndPoses) map.getValue()).getCommand());
-                }
+                stepCount++;
             }
-            catch (IndexOutOfBoundsException e) {
-                // just in case my logic is screwy
-                DriverStation.reportError("Couldn't generate all autonomous commands",  false);
-            }
+            chooser.addOption((String) map.getKey(), ((CommandsAndPoses) map.getValue()).getCommand());
         }
         //gives chooser to smart dashboard
         SmartDashboard.putData("Auto mode", chooser);
@@ -97,21 +99,7 @@ public class Chooser {
     }
 
     public RamseteCommand getCommand() {
-        if(chooser.getSelected() == commands.get("GalacticSearchABlue").getCommand()) {
-            if (m_pixy.isRedPath("A")) {
-                chooser.addOption("GalacticSearchA", commands.get("GalacticSearchARed").getCommand());
-            } else {
-                return commands.get("GalacticSearchABlue").getCommand();
-            }
-        }
-        else if(chooser.getSelected() == commands.get("GalacticSearchBBlue").getCommand()) {
-            if (m_pixy.isRedPath("B")) {
-                chooser.addOption("GalacticSearchB",commands.get("GalacticSearchBRed").getCommand());
-            } else {
-                return commands.get("GalacticSearchBBlue").getCommand();
-            }
-        }
-        else if (chooser.getSelected() == null) {
+        if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
             DriverStation.reportError("selected path was null", false);
             return commands.get("DriveStraight").getCommand();
