@@ -82,14 +82,18 @@ public class Chooser {
     }
 
     public void chooserRegistry() {
+        // adds shoot 6 (it's all good bc it just stores the reference)
+        chooser.addOption("shoot6", shoot6);
         // for loop that iterates through all the paths
         for (Map.Entry map : commands.entrySet()) {
             if (((String) map.getKey()).contains("shoot6")) {
-                shoot6.addCommands((Command) map.getValue());
-                if (stepCount >= shoot6Steps) {
-                    chooser.addOption("shoot6", shoot6);
+                Command cmd = (Command) map.getValue();
+                if (stepCount == shotCountFirstBegin) {
+                    shoot6shootfirst.addCommands(cmd);
+                    cmd = shoot6shootfirst;
                 }
                 stepCount++;
+                shoot6.addCommands(cmd);
             }
             chooser.addOption((String) map.getKey(), ((CommandsAndPoses) map.getValue()).getCommand());
         }
