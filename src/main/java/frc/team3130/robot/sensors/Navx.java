@@ -3,6 +3,7 @@ package frc.team3130.robot.sensors;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3130.robot.RobotMap;
 
@@ -35,6 +36,11 @@ public class Navx {
             DriverStation.reportError(str_error, true);
             m_bNavXPresent = false;
         }
+    }
+
+    public static void resetNavX(){
+        m_navX.reset();
+        m_navX.zeroYaw();
     }
 
     /**
@@ -71,15 +77,27 @@ public class Navx {
         return Math.IEEEremainder(getAngle(), 360);
     }
 
+
+    /**
+     * This will return angle in degrees and will return values higher than 360 so after one full rotation
+     * and a degree it would return 361
+     * @return rotation in degrees
+     */
+    public static Rotation2d getRotation(){
+        try {
+            return Rotation2d.fromDegrees(Math.IEEEremainder(getAngle(),360));
+        }
+        catch (NullPointerException L){
+            DriverStation.reportError("Unable to get Robot Rotation", L.getStackTrace());
+            return new Rotation2d();
+        }
+    }
+
     public static boolean getNavxPresent() {
         return m_bNavXPresent;
     }
 
     public static void outputToShuffleboard() {
-        SmartDashboard.putNumber("Navx Heading", getHeading());
-        SmartDashboard.putNumber("Navx Angle", getAngle());
+        SmartDashboard.putNumber("NavX angle", getRotation().getDegrees());
     }
 }
-
-
-
