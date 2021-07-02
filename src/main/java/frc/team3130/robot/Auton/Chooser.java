@@ -10,10 +10,9 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.team3130.robot.RobotContainer;
 import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
-import frc.team3130.robot.subsystems.Chassis;
+import frc.team3130.robot.subsystems.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -33,12 +32,10 @@ public class Chooser {
     // steps - 1
     private int shoot6Steps = 1;
     private int stepCount = 0;
-    // number of commands before starts shooting
-    private int shotCountFirstBegin = 0;
-    // # cmds before stop
-    private int shotCountFirstEnd = 1;
-    // number of commands before the next shooting
-    private int shotCountSecond = 4;
+    // number of commands before starts shooting index starts at 0
+    private int shotCountFirst = 0;
+    // number of commands before the next shooting index starts at 0
+    private int shotCountSecond = 3;
 
     // both shooting and drivign
     private SequentialCommandGroup shoot6;
@@ -46,13 +43,17 @@ public class Chooser {
     private ParallelCommandGroup shoot6shootfirst;
     private ParallelCommandGroup shoot6shootsecond;
 
-    private ToggleTurretAim toggler;
-    private Shoot shooty;
+    private Turret turret;
+    private Hood hood;
+    private Flywheel flywheel;
+    private Hopper hopper;
 
-    public Chooser(Chassis m_chassis, ToggleTurretAim toggler, Shoot shooty) {
+    public Chooser(Chassis m_chassis, Turret turret, Hood hood, Flywheel flywheel, Hopper hopper) {
         this.m_chassis = m_chassis;
-        this.toggler = toggler;
-        this.shooty = shooty;
+        this.turret = turret;
+        this.hood = hood;
+        this.flywheel = flywheel;
+        this.hopper = hopper;
 
         TrajectoryConfig config = new TrajectoryConfig(3,
                 3);
@@ -89,6 +90,9 @@ public class Chooser {
         }
     }
 
+    /**
+     * It registers the sendable chooser and stuff
+     */
     public void chooserRegistry() {
         // adds shoot 6 (it's all good bc it just stores the reference)
         chooser.addOption("shoot6", shoot6);
@@ -96,10 +100,15 @@ public class Chooser {
         for (Map.Entry map : commands.entrySet()) {
             if (((String) map.getKey()).contains("shoot6")) {
                 Command cmd = (Command) map.getValue();
-                if (stepCount == shotCountFirstBegin) {
+                if (stepCount == shotCountFirst) {
                     shoot6shootfirst.addCommands(cmd);
-                    shoot6shootfirst.addCommands(new SequentialCommandGroup(toggler ,new WaitCommand(1.5), shooty));
+                    shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood)));
                     cmd = shoot6shootfirst;
+                }
+                if (stepCount == shotCountSecond) {
+                    shoot6shootsecond.addCommands(cmd);
+                    shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood)));
+                    cmd = shoot6shootsecond;
                 }
                 stepCount++;
                 shoot6.addCommands(cmd);
