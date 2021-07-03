@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.team3130.robot.commands.Intake.IntakeIn;
-import frc.team3130.robot.commands.Intake.IntakeInterrupter;
-import frc.team3130.robot.commands.Intake.ToggleIntake;
 import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.subsystems.*;
@@ -53,11 +51,11 @@ public class Chooser {
     // both shooting and drivign
     private SequentialCommandGroup shoot6;
     // command group for the first shots
-    private ParallelCommandGroup shoot6shootfirst;
-    private ParallelCommandGroup shoot6shootsecond;
+    private ParallelDeadlineGroup shoot6shootfirst;
+    private ParallelDeadlineGroup shoot6shootsecond;
 
     // command group for Intakes (shoot6)
-    private ParallelCommandGroup shoot6IntakeFirst;
+    private ParallelDeadlineGroup shoot6IntakeFirst;
 
     private Turret turret;
     private Hood hood;
@@ -128,19 +126,19 @@ public class Chooser {
             if (((String) map.getKey()).contains("shoot6")) {
                 Command cmd = (Command) map.getValue();
                 if (stepCount == shotCountFirst) {
-                    shoot6shootfirst.addCommands(cmd);
+                    shoot6shootfirst = new ParallelDeadlineGroup(cmd);
                     shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new WaitCommand(0.5), new ToggleTurretAim(turret, hood)));
                     cmd = shoot6shootfirst;
                 }
-                if (stepCount == shotCountSecond) {
-                    shoot6shootsecond.addCommands(cmd);
+                else if (stepCount == shotCountSecond) {
+                    shoot6shootsecond = new ParallelDeadlineGroup(cmd);
                     shoot6shootsecond.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new WaitCommand(0.5), new ToggleTurretAim(turret, hood)));
                     cmd = shoot6shootsecond;
                 }
-                if (stepCount == IntakeCountFirst) {
-                    shoot6IntakeFirst.addCommands(cmd);
+                else if (stepCount == IntakeCountFirst) {
+                    shoot6IntakeFirst = new ParallelDeadlineGroup(cmd);
                     IntakeIn intaker = new IntakeIn(intake);
-                    shoot6IntakeFirst.addCommands(new SequentialCommandGroup(intaker, new WaitCommand(1.5), new IntakeInterrupter(intake, intaker)));
+                    shoot6IntakeFirst.addCommands(new SequentialCommandGroup(intaker));
                     cmd = shoot6IntakeFirst;
                 }
                 shoot6.addCommands(cmd);
