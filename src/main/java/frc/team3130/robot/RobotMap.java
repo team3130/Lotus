@@ -41,10 +41,16 @@ public class RobotMap {
     public static double kDriveDeadband = 0.02;
     public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
 
+    public static double kS = (kUseCompbot ? .643 : .615);
+    public static double kV = (kUseCompbot ? .0706: .0402);
+    public static double kA = (kUseCompbot ? .00648 : .0117);
+
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
     public static double kChassisMPOutputDeadband = 0.01;
     public static int kChassisMPDefaultFireRate = 20;
+
+    public static double kChassisGearRatio = 6.25;
 
     public static double kMPChassisP = 5.47;
     public static double kMPChassisI = 0.0;
@@ -60,7 +66,9 @@ public class RobotMap {
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
 
-
+    public static double kMaxAccelerationPerSecond = 0.656; //Feet per second squared
+    public static double kMaxVelocityPerSecond = 0.656; //Feet per second
+    
     //Climber
     public static double kClimberTriggerDeadband = 0.07;
 
