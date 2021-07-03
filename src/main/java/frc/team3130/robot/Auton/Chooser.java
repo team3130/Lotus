@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.team3130.robot.commands.Intake.IntakeIn;
+import frc.team3130.robot.commands.Intake.IntakeInterrupter;
+import frc.team3130.robot.commands.Intake.ToggleIntake;
 import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.subsystems.*;
@@ -18,24 +21,34 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * The chooser class is not a subsystem, command, or sensor.
+ * It does not need to be here, and it merely functions to
+ * clean up the code. Alternate positions for this code can
+ * be in Robot.java or RobotContainer.java
+ */
 public class Chooser {
-    RamseteCommand autonomousCommand = null;
+    private RamseteCommand autonomousCommand = null;
 
     private SendableChooser<Command> chooser = new SendableChooser<>();
-    String[] GalacticSearches;
+    private String[] GalacticSearches;
 
     private Chassis m_chassis;
 
     private String[] paths = {"B1D2Markers", "B1toB8", "BarrelRacing", "Bounce", "DriveInS", "DriveStraight", "GalacticSearchABlue", "GalacticSearchARed", "GalacticSearchBBlue", "GalacticSearchBRed", "QuestionMark", "Slalom"};
     private HashMap<String, CommandsAndPoses> commands = new HashMap<>();
 
-    // steps - 1
-    private int shoot6Steps = 1;
+    // steps - 1 index from 0
+    private int shoot6Steps = 0;
     private int stepCount = 0;
+    //TODO: make it so that auton works if these counters overlap
+
     // number of commands before starts shooting index starts at 0
     private int shotCountFirst = 0;
     // number of commands before the next shooting index starts at 0
     private int shotCountSecond = 3;
+    // number of commands before starts shooting index starts at 0
+    private int IntakeCountFirst = 1;
 
     // both shooting and drivign
     private SequentialCommandGroup shoot6;
@@ -43,17 +56,31 @@ public class Chooser {
     private ParallelCommandGroup shoot6shootfirst;
     private ParallelCommandGroup shoot6shootsecond;
 
+    // command group for Intakes (shoot6)
+    private ParallelCommandGroup shoot6IntakeFirst;
+
     private Turret turret;
     private Hood hood;
     private Flywheel flywheel;
     private Hopper hopper;
+    private Intake intake;
 
-    public Chooser(Chassis m_chassis, Turret turret, Hood hood, Flywheel flywheel, Hopper hopper) {
+    /**
+     * Constructor for Chooser class
+     *
+     * @param m_chassis Chassis subsystem
+     * @param turret Turret subsystem
+     * @param hood Hood subsystem
+     * @param flywheel Flywheel subsystem
+     * @param hopper Hopper subsystem
+     */
+    public Chooser(Chassis m_chassis, Turret turret, Hood hood, Flywheel flywheel, Hopper hopper, Intake intake) {
         this.m_chassis = m_chassis;
         this.turret = turret;
         this.hood = hood;
         this.flywheel = flywheel;
         this.hopper = hopper;
+        this.intake = intake;
 
         TrajectoryConfig config = new TrajectoryConfig(3,
                 3);
@@ -102,24 +129,36 @@ public class Chooser {
                 Command cmd = (Command) map.getValue();
                 if (stepCount == shotCountFirst) {
                     shoot6shootfirst.addCommands(cmd);
-                    shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood)));
+                    shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new WaitCommand(0.5), new ToggleTurretAim(turret, hood)));
                     cmd = shoot6shootfirst;
                 }
                 if (stepCount == shotCountSecond) {
                     shoot6shootsecond.addCommands(cmd);
-                    shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood)));
+                    shoot6shootsecond.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new WaitCommand(0.5), new ToggleTurretAim(turret, hood)));
                     cmd = shoot6shootsecond;
                 }
-                stepCount++;
+                if (stepCount == IntakeCountFirst) {
+                    shoot6IntakeFirst.addCommands(cmd);
+                    IntakeIn intaker = new IntakeIn(intake);
+                    shoot6IntakeFirst.addCommands(new SequentialCommandGroup(intaker, new WaitCommand(1.5), new IntakeInterrupter(intake, intaker)));
+                    cmd = shoot6IntakeFirst;
+                }
                 shoot6.addCommands(cmd);
+                stepCount++;
             }
-            chooser.addOption((String) map.getKey(), ((CommandsAndPoses) map.getValue()).getCommand());
+            else {
+                chooser.addOption((String) map.getKey(), ((CommandsAndPoses) map.getValue()).getCommand());
+            }
         }
         //gives chooser to smart dashboard
         SmartDashboard.putData("Auto mode", chooser);
         // Assert.assertEquals(chooser.hashCode(), commands.hashCode());
     }
 
+    /**
+     * gets selected command by sendable chooser
+     * @return what is selected by sendable chooser
+     */
     public RamseteCommand getCommand() {
         if (chooser.getSelected() == null) {
             System.out.println("dashboard is null!");
@@ -132,6 +171,10 @@ public class Chooser {
         return autonomousCommand;
     }
 
+    /**
+     * Gets the initial pose of the command
+     * @return selected command's initial Pose
+     */
     public Pose2d getInitialPose(){
         return commands.get(getCommand().getName()).getInitPose();
     }
