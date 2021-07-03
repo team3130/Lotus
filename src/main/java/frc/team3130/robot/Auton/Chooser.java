@@ -127,12 +127,12 @@ public class Chooser {
                 Command cmd = (Command) map.getValue();
                 if (stepCount == shotCountFirst) {
                     shoot6shootfirst = new ParallelDeadlineGroup(cmd);
-                    shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new WaitCommand(0.5), new ToggleTurretAim(turret, hood)));
+                    shoot6shootfirst.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new ToggleTurretAim(turret, hood)));
                     cmd = shoot6shootfirst;
                 }
                 else if (stepCount == shotCountSecond) {
                     shoot6shootsecond = new ParallelDeadlineGroup(cmd);
-                    shoot6shootsecond.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new WaitCommand(0.5), new ToggleTurretAim(turret, hood)));
+                    shoot6shootsecond.addCommands(new SequentialCommandGroup(new ToggleTurretAim(turret, hood) , new WaitCommand(0.5), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new Shoot(turret, hopper, flywheel, hood), new ToggleTurretAim(turret, hood)));
                     cmd = shoot6shootsecond;
                 }
                 else if (stepCount == IntakeCountFirst) {
