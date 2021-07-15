@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        m_robotContainer.getChassis().configBrakeMode(false);
+        m_robotContainer.getChassis().configBrakeMode(true);
         m_robotContainer.getIntake().retractIntake();
         //Hood.setPistons(false);
         m_robotContainer.getWOF().retractWheel();
