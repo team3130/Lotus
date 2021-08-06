@@ -19,7 +19,13 @@ public class BalManager implements Comparable<Bal>{
     }
 
     public Bal getClosestBall() {
-        return balPriorityQueue.peek();
+        try {
+            return balPriorityQueue.peek();
+        }
+        catch (Exception e) {
+            System.out.println("No balls can be found ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR");
+            return null;
+        }
     }
 
     public Bal pop() {

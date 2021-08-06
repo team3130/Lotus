@@ -33,30 +33,25 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed, turnSpeed;
+        double moveSpeed = 0, turnSpeed = 0;
 
-        if (m_balManager.getClosestBall().getPositionRel()[0] < 0) {
-            moveSpeed = -(m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kYHeight);
-        }
-
-        else if (m_balManager.getClosestBall().getPositionRel()[0] > 0) {
-            moveSpeed = m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kYHeight;
+        if (m_balManager.getClosestBall() == null) {
+            System.out.println("can't go to non-existent ball");
         }
 
         else {
-            moveSpeed = 0;
-        }
 
-        if (m_balManager.getClosestBall().getPositionRel()[1] < 0) {
-            turnSpeed = -(m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kXWidth);
-        }
+            if (m_balManager.getClosestBall().getPositionRel()[0] < 0) {
+                turnSpeed = -(m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kXWidth);
+            } else if (m_balManager.getClosestBall().getPositionRel()[0] > 0) {
+                turnSpeed = m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kXWidth;
+            }
 
-        else if (m_balManager.getClosestBall().getPositionRel()[1] > 0) {
-            turnSpeed = m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kXWidth;
-        }
-
-        else {
-            turnSpeed = 0;
+            if (m_balManager.getClosestBall().getPositionRel()[1] < 0) {
+                moveSpeed = -(m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kYHeight);
+            } else if (m_balManager.getClosestBall().getPositionRel()[1] > 0) {
+                moveSpeed = m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kYHeight;
+            }
         }
 
         m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
