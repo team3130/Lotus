@@ -1,4 +1,4 @@
-package frc.team3130.robot.Auton;
+package frc.team3130.robot.SupportingClasses.Auton;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;

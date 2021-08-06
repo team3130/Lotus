@@ -1,4 +1,4 @@
-package frc.team3130.robot.Auton;
+package frc.team3130.robot.SupportingClasses.Auton;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
