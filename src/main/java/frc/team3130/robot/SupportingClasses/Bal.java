@@ -36,4 +36,15 @@ public class Bal {
     public double getDistance() {
         return Math.sqrt((positionRel[0] * positionRel[0]) + (positionRel[1] * positionRel[1]));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        try {
+            Bal temp = ((Bal) o);
+            return (temp.positionFix == this.positionFix) || ((temp.positionFix[0] <= this.positionFix[0] + 0.5 && temp.positionFix[0] <= this.positionFix[0] - 0.5) && (temp.positionFix[1] <= this.positionFix[1] + 0.5 && temp.positionFix[1] <= this.positionFix[1] - 0.5));
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
 }

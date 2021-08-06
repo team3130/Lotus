@@ -3,16 +3,20 @@ package frc.team3130.robot.commands.Chassis;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.RobotContainer;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.SupportingClasses.Bal;
+import frc.team3130.robot.SupportingClasses.BalManager;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.function.DoubleSupplier;
 
 public class GoToBal extends CommandBase {
     private final Chassis m_chassis;
+    private final BalManager m_balManager;
 
-    public GoToBal(Chassis subsystem) {
+    public GoToBal(Chassis subsystem, BalManager balManager) {
         m_chassis = subsystem;
         m_requirements.add(m_chassis);
+        m_balManager = balManager;
     }
 
     /**
@@ -31,24 +35,24 @@ public class GoToBal extends CommandBase {
     public void execute() {
         double moveSpeed, turnSpeed;
 
-        if (RobotMap.balRelativePos[1] < 0) {
-            moveSpeed = -(RobotMap.balRelativePos[1] / RobotMap.kYHeight);
+        if (m_balManager.getClosestBall().getPositionRel()[0] < 0) {
+            moveSpeed = -(m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kYHeight);
         }
 
-        else if (RobotMap.balRelativePos[1] > 0) {
-            moveSpeed = RobotMap.balRelativePos[1] / RobotMap.kYHeight;
+        else if (m_balManager.getClosestBall().getPositionRel()[0] > 0) {
+            moveSpeed = m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kYHeight;
         }
 
         else {
             moveSpeed = 0;
         }
 
-        if (RobotMap.balRelativePos[0] < 0) {
-            turnSpeed = -(RobotMap.balRelativePos[0] / RobotMap.kXWidth);
+        if (m_balManager.getClosestBall().getPositionRel()[1] < 0) {
+            turnSpeed = -(m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kXWidth);
         }
 
-        else if (RobotMap.balRelativePos[0] > 0) {
-            turnSpeed = RobotMap.balRelativePos[0] / RobotMap.kXWidth;
+        else if (m_balManager.getClosestBall().getPositionRel()[1] > 0) {
+            turnSpeed = m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kXWidth;
         }
 
         else {
@@ -74,7 +78,7 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        if (RobotMap.balRelativePos[0] == RobotMap.kXWidth + 1 || RobotMap.balRelativePos[1] == RobotMap.kYHeight + 1) {
+        if (m_balManager.getClosestBall().getPositionRel()[0] == RobotMap.kXWidth + 1 || m_balManager.getClosestBall().getPositionRel()[1] == RobotMap.kYHeight + 1) {
             System.out.println("bal does not exist");
             return true;
         }
