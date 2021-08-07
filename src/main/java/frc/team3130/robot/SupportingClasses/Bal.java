@@ -1,5 +1,6 @@
 package frc.team3130.robot.SupportingClasses;
 
+import com.sun.jdi.InconsistentDebugInfoException;
 import frc.team3130.robot.RobotMap;
 
 public class Bal {
@@ -31,6 +32,28 @@ public class Bal {
 
     public double[] getPositionFix() {
         return positionFix;
+    }
+
+    public void setPositionFixX(double positionFixX) {
+        positionFix[0] = positionFixX;
+    }
+
+    public void setPositionFixY(double positionFixY) {
+        positionFix[1] = positionFixY;
+    }
+
+    /**
+     * averages current coordinates with new coordinates for the fixed position
+     * @param temp array that should be of size 2 that holds the new coordinates
+     */
+    public void updatePositionFix(double[] temp) {
+        if (temp.length > 2) {
+            System.out.println("Too many values in update position Fix parameter of Bal");
+        }
+        else {
+            positionFix[0] = (positionFix[0] + temp[0]) / 2;
+            positionFix[1] = (positionFix[1] + temp[1]) / 2;
+        }
     }
 
     public double getDistance() {

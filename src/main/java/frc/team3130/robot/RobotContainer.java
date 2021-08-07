@@ -50,7 +50,9 @@ public class RobotContainer {
     private final BalManager balManager = new BalManager();
     public BalManager getBalManager() {return balManager;}
 
-    public void updateBalls() {}
+    public void updateBalls() {
+
+    }
 
 
     public static double getSkywalker() {
