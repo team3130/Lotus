@@ -1,7 +1,10 @@
 package frc.team3130.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.SupportingClasses.BalManager;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
@@ -47,11 +50,13 @@ public class RobotContainer {
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
     // supporting classes
-    private final BalManager balManager = new BalManager();
-    public BalManager getBalManager() {return balManager;}
+    private final BalManager m_balManager = new BalManager();
+    public BalManager getBalManager() {return m_balManager;}
 
     public void updateBalls() {
+        Thread socketer = new Thread("socketer") {
 
+        m_balManager.updateBalls();
     }
 
 

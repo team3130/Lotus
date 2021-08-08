@@ -1,6 +1,9 @@
 package frc.team3130.robot.SupportingClasses;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class BalManager implements Comparable<Bal>{
     private final PriorityQueue<Bal> balPriorityQueue;
@@ -67,6 +70,12 @@ public class BalManager implements Comparable<Bal>{
         // for each loop to update every ball provided in the collection
         for (Bal bal : bals) {
             updateBall(bal);
+        }
+    }
+
+    public void updateBalls(double[][] pos) {
+        for (double[] poses : pos) {
+            addBall(new Bal(poses));
         }
     }
 
