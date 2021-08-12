@@ -40,7 +40,6 @@ public class GoToBal extends CommandBase {
         }
 
         else {
-
             if (m_balManager.getClosestBall().getPositionRel()[0] < 0) {
                 turnSpeed = -(m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kXWidth);
             } else if (m_balManager.getClosestBall().getPositionRel()[0] > 0) {

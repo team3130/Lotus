@@ -46,7 +46,11 @@ public class Chassis extends SubsystemBase {
     private DifferentialDrive m_drive;
 
     private DifferentialDriveKinematics m_kinematics;
+    // odometry from encoders
     private final DifferentialDriveOdometry m_odometry;
+
+    // computer vision odometry
+    private DifferentialDriveOdometry m_CVodometry;
 
 
     private static Solenoid m_shifter;
@@ -135,7 +139,7 @@ public class Chassis extends SubsystemBase {
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
         m_odometry = new DifferentialDriveOdometry(Navx.getRotation());
 
-
+        m_CVodometry = new DifferentialDriveOdometry(new Rotation2d(0));
 
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
@@ -440,8 +444,7 @@ public class Chassis extends SubsystemBase {
         moveSpeed=move;
     }
 
-    public double getAngle()
-    {
+    public double getAngle() {
         if(Navx.getNavxPresent()){
             return Navx.getAngle(); //TODO: this CCW needs to be positive
         }else{
@@ -519,6 +522,8 @@ public class Chassis extends SubsystemBase {
 //    public TrapezoidProfile.State getSetpoint(){
 //        return getController().getSetpoint();
 //    }
+
+
 
 
     public void outputToShuffleboard() {
