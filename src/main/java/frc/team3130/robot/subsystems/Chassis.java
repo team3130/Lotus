@@ -77,7 +77,7 @@ public class Chassis extends PIDSubsystem {
 
         m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
-        m_rightMotorRear.setInverted(true);
+        m_rightMotorRear.setInverted(false);
         m_leftMotorRear.setInverted(false);
 
         m_rightMotorFront.setSensorPhase(true);
