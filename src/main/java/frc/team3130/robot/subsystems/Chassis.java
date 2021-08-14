@@ -522,7 +522,7 @@ public class Chassis extends PIDSubsystem {
 
     public double getSpeedLowGearL() {
         // The raw speed units will be in the sensor's native ticks per 100ms.
-        return (m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10; //TODO: figure out what WheelMulti was
+        return (m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10; //TODO: figure out what WheelMulti was from auton-re-re-work
     }
 
     public double getSpeedLowGearR() {
