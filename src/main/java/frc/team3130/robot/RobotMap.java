@@ -2,6 +2,7 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -14,8 +15,7 @@ public class RobotMap {
     /**
      * Constants
      */
-    //Which Robot is currently in use
-    //Changes values in RobotMap
+    //Which Robot
     public static boolean kUseCompbot = true;
 
     //NavX
@@ -26,25 +26,37 @@ public class RobotMap {
 
     public static double kChassisMaxVoltage = 12.0;
 
-    public static double kChassisWidth = 28.0; //Chassis with from edge to edge in inches
+    public static double kChassisWidth = Units.inchesToMeters(28.0); //FIXME: check
     public static double kChassisLengthBumpers = 39.0; //FIXME
-    public static double kLWheelDiameter = 6.0; // Center wheel diameter in inches
-    public static double kRWheelDiameter = 6.0; // Center wheel diameter in inches
+    public static double kLWheelDiameter = Units.inchesToMeters(6); // Center wheel
+    public static double kRWheelDiameter = Units.inchesToMeters(6); // Center wheel
 
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
 
-    public static double kChassisCodesPerRev = 2048;
+    public static double kEncoderResolution = (kUseCompbot?4096 : 2048);
     public static double kLChassisTicksPerInch = 1500;
     public static double kRChassisTicksPerInch = 1500;
 
     public static double kDriveDeadband = 0.02;
     public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
 
+    public static double lowGearkS = (kUseCompbot ? .643 : .615);
+    public static double lowGearkV = (kUseCompbot ? .0706: .0402);
+    public static double LowGearkA = (kUseCompbot ? .00648 : .0117);
+
+    public static double highGearkS = (0.819); //Low Gear .643
+    public static double highGearkV = ( 0.0343); //Low Gear .0706
+    public static double highGearkA = ( 0.00437 );
+
     //Motion Profiling
     public static double kChassisMinPointsInBuffer = 5;
     public static double kChassisMPOutputDeadband = 0.01;
     public static int kChassisMPDefaultFireRate = 20;
+
+    public static double kChassisLowGearRatio = 6.25;
+    public static double kChassisHighGearRatio = (60/17);
+
 
     public static double kMPChassisP = 5.47;
     public static double kMPChassisI = 0.0;
@@ -56,9 +68,12 @@ public class RobotMap {
     public static double kMPMaxAcc = 60.0; ///maximum achievable acceleration of the drivetrain in in/s^2 NOTE: the actual motion profile should be generated at 80% of this
 
 
-    public static double kDistanceToEncoder = kChassisCodesPerRev / (Math.PI * 0.5 * (kLWheelDiameter + kRWheelDiameter));
+    public static double kDistanceToEncoder = kLChassisTicksPerInch / (Math.PI * 0.5 * (kLWheelDiameter + kRWheelDiameter));
     public static double kVelocityToEncoder = kDistanceToEncoder / 10.0;        // Per 100ms
     public static double kAccelerationToEncoder = kVelocityToEncoder / 10.0;    // Per 100ms
+
+    public static double kMaxAccelerationPerSecond = 518 / 12; //Feet per second squared
+    public static double kMaxVelocityPerSecond = 129 / 12; //Feet per second
 
 
     //Climber
