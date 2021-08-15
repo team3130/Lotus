@@ -1,16 +1,20 @@
 package frc.team3130.robot.SupportingClasses;
 
+import frc.team3130.robot.subsystems.Chassis;
+
 import java.util.*;
 
 public class BalManager implements Comparable<Bal>{
     private final PriorityQueue<Bal> balPriorityQueue;
+    private final Chassis m_chassis;
 
     /**
      * <h1>Constructs the bal manager with 0 parameters</h1>
      * Constructs the bal priority queue and passes in the overridden compareTo method as a method reference
      */
-    public BalManager() {
+    public BalManager(Chassis chassis) {
         balPriorityQueue = new PriorityQueue<Bal>(Comparator.comparing(this::compareTo));
+        m_chassis = chassis;
     }
 
     /**
@@ -31,14 +35,16 @@ public class BalManager implements Comparable<Bal>{
 
     /**
      *  gets closest ball
+     * @warning Make sure to perform a sanity check and make sure the ball at the position can be tracked before running the ramsete command
      * @return returns null if the list is empty and if not it returns the closest ball without removing it
+     * Time Complexity: Constant
      */
     public Bal getClosestBall() {
         try {
             return balPriorityQueue.peek();
         }
         catch (Exception e) {
-            System.out.println("No balls can be found ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR");
+            System.out.println("No balls can be found ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR, Queue is empty");
             return null;
         }
     }
@@ -46,6 +52,7 @@ public class BalManager implements Comparable<Bal>{
     /**
      * Used to update the values of balls
      * @param bal bal
+     * Time Complexity: O(n)
      */
     public void updateBall(Bal bal) {
         for (Bal baller : balPriorityQueue) {
@@ -62,6 +69,7 @@ public class BalManager implements Comparable<Bal>{
     /**
      * iterates through parameter bals to update each one
      * @param bals collection of balls being compared
+     * Time Complexity: O(n^2) <- includes call to updateBall()
      */
     public void updateBalls(Collection<Bal> bals) {
         // for each loop to update every ball provided in the collection
@@ -84,6 +92,43 @@ public class BalManager implements Comparable<Bal>{
      */
     public void removeBal(Bal bal) {
         balPriorityQueue.remove(bal);
+    }
+
+    /**
+     * checks if each ball in the queue is still there (if it would be able to see it)
+     * should be called every 10-20 iterations of periodic (use a char var and increment it every time until it is a certain value. to be done on call)
+     * sorts the balls in the parameter based on their relative x position
+     * @param balls The current balls in the frame
+     */
+    public void checkIfStillThere(Collection<Bal> balls) {
+        // if there are too little balls to check
+        if (balls.isEmpty() || balls.size() < 2) {
+            return;
+        }
+        Bal furthestLeft = null,
+                furthestRight = null;
+        for (Bal bal : balls) {
+            // if is there return without doing anything
+            if (balPriorityQueue.contains(bal)) {
+                return;
+            }
+
+            // checks if first iteration
+            if (furthestLeft == null) {
+                furthestLeft = bal;
+                furthestRight = bal;
+            }
+            else {
+                if (bal.getPositionRel().get()[0] < furthestLeft.getPositionRel().get()[0]) {furthestLeft = bal;}
+                else if(bal.getPositionRel().get()[0] > furthestRight.getPositionRel().get()[0]) {furthestRight = bal;}
+            }
+        }
+        for (Bal toBeCompared : balPriorityQueue) {
+            // if the ball that is to be compared is in the range of the furthest on the left and the furthest on the right adn is not there, remove it from the queue
+            if (toBeCompared.getPositionRel().get()[0] >= furthestLeft.getPositionRel().get()[0] && toBeCompared.getPositionRel().get()[0] <= furthestRight.getPositionRel().get()[0]) {
+                balPriorityQueue.remove(toBeCompared);
+            }
+        }
     }
 
     /**

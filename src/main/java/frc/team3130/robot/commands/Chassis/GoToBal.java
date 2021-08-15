@@ -1,6 +1,10 @@
 package frc.team3130.robot.commands.Chassis;
 
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotContainer;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.SupportingClasses.Bal;
@@ -33,27 +37,30 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = 0, turnSpeed = 0;
+        // TODO: logic for sanity check
+        // Create config for trajectory
 
-        if (m_balManager.getClosestBall() == null) {
-            System.out.println("can't go to non-existent ball");
-        }
+/*        var autoVoltageConstraint =
+                new DifferentialDriveVoltageConstraint(
+                        new SimpleMotorFeedforward(
+                                frc.team3130.robot.RobotMap.lowGearkS,
+                                frc.team3130.robot.RobotMap.lowGearkV,
+                                frc.team3130.robot.RobotMap.LowGearkA),
+                        m_chassis.getM_kinematics(),
+                        12);
 
-        else {
-            if (m_balManager.getClosestBall().getPositionRel()[0] < 0) {
-                turnSpeed = -(m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kXWidth);
-            } else if (m_balManager.getClosestBall().getPositionRel()[0] > 0) {
-                turnSpeed = m_balManager.getClosestBall().getPositionRel()[0] / RobotMap.kXWidth;
-            }
+        TrajectoryConfig config =
+                new TrajectoryConfig(
+                        4,
+                        4)
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(m_chassis.getM_kinematics())
+                        // Apply the voltage constraint
+                        .addConstraint(autoVoltageConstraint);
+        config.setReversed(false);
+        RamseteCommand cmd = new RamseteCommand(
 
-            if (m_balManager.getClosestBall().getPositionRel()[1] < 0) {
-                moveSpeed = -(m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kYHeight);
-            } else if (m_balManager.getClosestBall().getPositionRel()[1] > 0) {
-                moveSpeed = m_balManager.getClosestBall().getPositionRel()[1] / RobotMap.kYHeight;
-            }
-        }
-
-        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
+        )*/
     }
 
     /**
@@ -72,7 +79,7 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        if (m_balManager.getClosestBall().getPositionRel()[0] == RobotMap.kXWidth + 1 || m_balManager.getClosestBall().getPositionRel()[1] == RobotMap.kYHeight + 1) {
+        if (m_balManager.getClosestBall().getPositionRel().get()[0] == RobotMap.kXWidth + 1 || m_balManager.getClosestBall().getPositionRel().get()[1] == RobotMap.kYHeight + 1) {
             System.out.println("bal does not exist");
             return true;
         }

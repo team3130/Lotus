@@ -47,7 +47,7 @@ public class RobotContainer {
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
     // supporting classes
-    private final BalManager balManager = new BalManager();
+    private final BalManager balManager = new BalManager(m_chassis);
     public BalManager getBalManager() {return balManager;}
 
     public void updateBalls() {
