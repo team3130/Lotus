@@ -47,9 +47,11 @@ public class Chassis extends SubsystemBase {
 
     private DifferentialDriveKinematics m_kinematics;
     // odometry from encoders
+    // use this for angle
     private final DifferentialDriveOdometry m_odometry;
 
     // computer vision odometry
+    // use this for robot position
     private DifferentialDriveOdometry m_CVodometry;
 
 
@@ -156,9 +158,13 @@ public class Chassis extends SubsystemBase {
     public Rotation2d getHeading() {
         double angle = Navx.getHeading();
         if (angle < 0) {
-            angle +=360;
+            angle += 360;
         }
         return Rotation2d.fromDegrees(angle);
+    }
+
+    public Pose2d getPosCV() {
+        return m_CVodometry.getPoseMeters();
     }
 
     @Override
