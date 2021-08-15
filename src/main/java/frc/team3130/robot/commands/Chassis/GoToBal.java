@@ -40,7 +40,7 @@ public class GoToBal extends CommandBase {
         // TODO: logic for sanity check
         // Create config for trajectory
 
-        var autoVoltageConstraint =
+/*        var autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(
                         new SimpleMotorFeedforward(
                                 frc.team3130.robot.RobotMap.lowGearkS,
@@ -60,7 +60,7 @@ public class GoToBal extends CommandBase {
         config.setReversed(false);
         RamseteCommand cmd = new RamseteCommand(
 
-        )
+        )*/
     }
 
     /**

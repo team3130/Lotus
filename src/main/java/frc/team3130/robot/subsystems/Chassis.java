@@ -4,6 +4,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -16,6 +19,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -64,6 +69,9 @@ public class Chassis extends SubsystemBase {
     private SpeedControllerGroup m_left;
     private SpeedControllerGroup m_right;
 
+
+    // The gyro sensor
+    private static final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
     //Create and define all standard data types needed
 
@@ -119,7 +127,7 @@ public class Chassis extends SubsystemBase {
 
         m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
-        m_rightMotorRear.setInverted(true);
+        m_rightMotorRear.setInverted(false);
         m_leftMotorRear.setInverted(false);
 
 //        m_rightMotorFront.setSensorPhase(true);
@@ -139,7 +147,6 @@ public class Chassis extends SubsystemBase {
         moveSpeed=0;
 
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
-        m_odometry = new DifferentialDriveOdometry(Navx.getRotation());
 
         m_CVodometry = new DifferentialDriveOdometry(new Rotation2d(0));
 
@@ -150,26 +157,12 @@ public class Chassis extends SubsystemBase {
 
         m_leftMotorRear.follow(m_leftMotorFront);
         m_rightMotorRear.follow(m_rightMotorFront);
-    }
 
-    /**
-     * @return the direction in radians that navX thinks we are facing
-     */
-    public Rotation2d getHeading() {
-        double angle = Navx.getHeading();
-        if (angle < 0) {
-            angle += 360;
-        }
-        return Rotation2d.fromDegrees(angle);
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
     }
 
     public Pose2d getPosCV() {
         return m_CVodometry.getPoseMeters();
-    }
-
-    @Override
-    public void periodic() {
-        m_odometry.update(Navx.getRotation(), getDistanceL(),getDistanceR());
     }
 
     /**
@@ -192,6 +185,25 @@ public class Chassis extends SubsystemBase {
         m_drive.tankDrive(moveL, moveR, squaredInputs);
     }
 
+    @Override
+    public void periodic() {
+        // Update the odometry in the periodic block
+        if(!m_shifter.get())
+            m_odometry.update(m_gyro.getRotation2d(), getDistanceLowGearL(), getDistanceLowGearR());
+        else
+            m_odometry.update(m_gyro.getRotation2d(), getDistanceHighGearL(), getDistanceHighGearR());
+
+    }
+
+    /**
+     * Returns the currently-estimated pose of the robot.
+     *
+     * @return The pose.
+     */
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
+
     /**
      * Drive the robot using arcade mode
      *
@@ -200,10 +212,6 @@ public class Chassis extends SubsystemBase {
      * @param turnThrottle  Turning velocity
      * @param squaredInputs Whether or not to use squared inputs
      */
-    public void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
-        //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
-        m_drive.arcadeDrive(moveThrottle, turnThrottle, squaredInputs);
-    }
 
     /**
      * Shifts the drivetrain gear box into an absolute gear
@@ -482,10 +490,6 @@ public class Chassis extends SubsystemBase {
         return m_kinematics;
     }
 
-    public Pose2d getPose() {
-        return m_odometry.getPoseMeters();
-    }
-
     public void setOutput(double leftVolts, double rightVolts) {
         m_leftMotorFront.setVoltage(leftVolts);
         m_rightMotorFront.setVoltage(rightVolts);
@@ -556,6 +560,104 @@ public class Chassis extends SubsystemBase {
         SmartDashboard.putNumber("Robot position Y", m_odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Robot rotation", m_odometry.getPoseMeters().getRotation().getDegrees());
 
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+    }
+
+    /** Resets the drive encoders to currently read a position of 0. */
+    public void resetEncoders() {
+        m_leftMotorFront.setSelectedSensorPosition(0);
+        m_rightMotorFront.setSelectedSensorPosition(0);
+    }
+
+    /**
+     * Gets the average distance of the two encoders.
+     *
+     * @return the average of the two encoder readings
+     */
+    public double getAverageEncoderDistanceLowGear() {
+        return (getDistanceLowGearL() + getDistanceLowGearR()) / 2.0;
+    }
+
+
+
+
+
+    /**
+     * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
+     *
+     * @param maxOutput the maximum output to which the drive will be constrained
+     */
+    public void setMaxOutput(double maxOutput) {
+        m_drive.setMaxOutput(maxOutput);
+    }
+
+    /** Zeroes the heading of the robot. */
+    public void zeroHeading() {
+        m_gyro.reset();
+    }
+
+
+
+
+    /**
+     * Returns the heading of the robot.
+     *
+     * @return the robot's heading in degrees, from -180 to 180
+     */
+    public static double getHeading() {
+        return m_gyro.getRotation2d().getDegrees();
+    }
+
+    /**
+     * Returns the turn rate of the robot.
+     *
+     * @return The turn rate of the robot, in degrees per second
+     */
+    public double getTurnRate() {
+        return -m_gyro.getRate();
+    }
+
+    public double getDistanceLowGearL() {
+        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
+    }
+
+    public double getDistanceLowGearR() {
+        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI) * -1;
+    }
+
+    public double getSpeedLowGearL() {
+        // The raw speed units will be in the sensor's native ticks per 100ms.
+        return (m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10; //TODO: figure out what WheelMulti was from auton-re-re-work
+    }
+
+    public double getSpeedLowGearR() {
+        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kLWheelDiameter)  * 10) * -1;
+    }
+
+    public double getDistanceHighGearL() {
+        return m_leftMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI);
+    }
+
+    public double getDistanceHighGearR() {
+        return m_rightMotorFront.getSelectedSensorPosition()/ RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * ((RobotMap.kLWheelDiameter)* Math.PI) * -1;
+    }
+
+    public double getSpeedHighGearL() {
+        // The raw speed units will be in the sensor's native ticks per 100ms.
+        return ((m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * (Math.PI * RobotMap.kLWheelDiameter))  * 10);
+    }
+
+    public double getSpeedHighGearR() {
+        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution * (1/RobotMap.kChassisHighGearRatio) * (Math.PI * RobotMap.kLWheelDiameter)  * 10) *-1;
+    }
+
+    public void driveArcade(double moveThrottle, double turnThrottle, boolean squaredInputs) {
+        //NOTE: DifferentialDrive uses set(), which sets a speed in PercentOutput mode for Talons/Victors
+        m_drive.arcadeDrive(moveThrottle, turnThrottle, squaredInputs);
     }
 
 }

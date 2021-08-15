@@ -33,14 +33,6 @@ public class Bal {
         return positionRel;
     }
 
-    public void setPositionRelX(double positionRelX) {
-        positionRel[0] = positionRelX;
-    }
-
-    public void setPositionRelY(double positionRelY) {
-        positionRel[1] = positionRelY;
-    }
-
     public double[] getPositionFix() {
         return positionFix;
     }
@@ -68,7 +60,8 @@ public class Bal {
     }
 
     public double getDistance() {
-        return Math.sqrt((positionRel[0] * positionRel[0]) + (positionRel[1] * positionRel[1]));
+        double [] temp = positionRel.get();
+        return Math.sqrt((temp[0] * temp[0]) + (temp[1] * temp[1]));
     }
 
     @Override
