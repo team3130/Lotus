@@ -185,6 +185,12 @@ public class Chassis extends SubsystemBase {
         m_drive.tankDrive(moveL, moveR, squaredInputs);
     }
 
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        m_leftMotorFront.setVoltage(leftVolts);
+        m_rightMotorRear.setVoltage(-rightVolts);
+        m_drive.feed();
+    }
+
     @Override
     public void periodic() {
         // Update the odometry in the periodic block
@@ -202,6 +208,19 @@ public class Chassis extends SubsystemBase {
      */
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
+    }
+
+    /**
+     * Returns the current wheel speeds of the robot.
+     *
+     * @return The current wheel speeds.
+     */
+    public DifferentialDriveWheelSpeeds getWheelSpeedsLowGear() {
+        return new DifferentialDriveWheelSpeeds((getSpeedLowGearL()/10), (getSpeedLowGearR()/10));
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeedsHighGear() {
+        return new DifferentialDriveWheelSpeeds((getSpeedHighGearL()/10), (getSpeedHighGearR()/10));
     }
 
     /**

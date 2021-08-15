@@ -1,6 +1,8 @@
 package frc.team3130.robot.SupportingClasses;
 
 import com.sun.jdi.InconsistentDebugInfoException;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Chassis;
 
@@ -62,6 +64,10 @@ public class Bal {
     public double getDistance() {
         double [] temp = positionRel.get();
         return Math.sqrt((temp[0] * temp[0]) + (temp[1] * temp[1]));
+    }
+
+    public Pose2d getPose() {
+        return new Pose2d(positionFix[0], positionFix[1], new Rotation2d(0));
     }
 
     @Override
