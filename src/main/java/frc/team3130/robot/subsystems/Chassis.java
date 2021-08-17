@@ -2,18 +2,16 @@ package frc.team3130.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -21,6 +19,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,19 +52,15 @@ public class Chassis extends SubsystemBase {
 
     private DifferentialDriveKinematics m_kinematics;
     // odometry from encoders
+    // use this for angle
     private final DifferentialDriveOdometry m_odometry;
 
     // computer vision odometry
+    // use this for robot position
     private DifferentialDriveOdometry m_CVodometry;
 
 
     private static Solenoid m_shifter;
-
-    // The gyro sensor
-    private static final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-
-    // Odometry class for tracking robot pose
-    private final DifferentialDriveOdometry m_odometry;
 
     private SimpleMotorFeedforward m_feedforward;
     private PIDController m_leftPIDController;
@@ -73,6 +69,9 @@ public class Chassis extends SubsystemBase {
     private SpeedControllerGroup m_left;
     private SpeedControllerGroup m_right;
 
+
+    // The gyro sensor
+    private static final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
     //Create and define all standard data types needed
 
@@ -147,10 +146,7 @@ public class Chassis extends SubsystemBase {
 
         moveSpeed=0;
 
-        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
-
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
-        m_odometry = new DifferentialDriveOdometry(Navx.getRotation());
 
         m_CVodometry = new DifferentialDriveOdometry(new Rotation2d(0));
 
@@ -161,22 +157,12 @@ public class Chassis extends SubsystemBase {
 
         m_leftMotorRear.follow(m_leftMotorFront);
         m_rightMotorRear.follow(m_rightMotorFront);
+
+        m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
     }
 
-    /**
-     * @return the direction in radians that navX thinks we are facing
-     */
-    public Rotation2d getHeading() {
-        double angle = Navx.getHeading();
-        if (angle < 0) {
-            angle +=360;
-        }
-        return Rotation2d.fromDegrees(angle);
-    }
-
-    @Override
-    public void periodic() {
-        m_odometry.update(Navx.getRotation(), getDistanceL(),getDistanceR());
+    public Pose2d getPosCV() {
+        return m_CVodometry.getPoseMeters();
     }
 
     /**
@@ -199,6 +185,12 @@ public class Chassis extends SubsystemBase {
         m_drive.tankDrive(moveL, moveR, squaredInputs);
     }
 
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        m_leftMotorFront.setVoltage(leftVolts);
+        m_rightMotorRear.setVoltage(-rightVolts);
+        m_drive.feed();
+    }
+
     @Override
     public void periodic() {
         // Update the odometry in the periodic block
@@ -216,6 +208,19 @@ public class Chassis extends SubsystemBase {
      */
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
+    }
+
+    /**
+     * Returns the current wheel speeds of the robot.
+     *
+     * @return The current wheel speeds.
+     */
+    public DifferentialDriveWheelSpeeds getWheelSpeedsLowGear() {
+        return new DifferentialDriveWheelSpeeds((getSpeedLowGearL()/10), (getSpeedLowGearR()/10));
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeedsHighGear() {
+        return new DifferentialDriveWheelSpeeds((getSpeedHighGearL()/10), (getSpeedHighGearR()/10));
     }
 
     /**
@@ -502,10 +507,6 @@ public class Chassis extends SubsystemBase {
 
     public DifferentialDriveKinematics getmKinematics() {
         return m_kinematics;
-    }
-
-    public Pose2d getPose() {
-        return m_odometry.getPoseMeters();
     }
 
     public void setOutput(double leftVolts, double rightVolts) {
