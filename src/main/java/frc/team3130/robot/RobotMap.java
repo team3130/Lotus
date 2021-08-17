@@ -136,6 +136,11 @@ public class RobotMap {
     public static final double kHoodD = 168;
     public static final double kHoodF = 0;
 
+    // low gear values, see auton-into master for highgear values
+    public static double kS = (kUseCompbot ? .643 : .615);
+    public static double kV = (kUseCompbot ? .0706: .0402);
+    public static double kA = (kUseCompbot ? .00648 : .0117);
+
     public static double kHoodTolerance = 2; //The tolerance for error in angles on the hood for shooting
 
     //Flywheel
