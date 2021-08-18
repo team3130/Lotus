@@ -4,7 +4,7 @@ import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.*;
 
-public class BalManager implements Comparable<Bal>{
+public class BalManager implements Comparator<Bal>{
     private final PriorityQueue<Bal> balPriorityQueue;
     private final Chassis m_chassis;
 
@@ -13,7 +13,7 @@ public class BalManager implements Comparable<Bal>{
      * Constructs the bal priority queue and passes in the overridden compareTo method as a method reference
      */
     public BalManager(Chassis chassis) {
-        balPriorityQueue = new PriorityQueue<Bal>(Comparator.comparing(this::compareTo));
+        balPriorityQueue = new PriorityQueue<Bal>(this);
         m_chassis = chassis;
     }
 
@@ -57,9 +57,9 @@ public class BalManager implements Comparable<Bal>{
     public void updateBall(Bal bal) {
         for (Bal baller : balPriorityQueue) {
             // will run if it sees ball and only if they have different fixed positions
-            if (bal.equals(baller) && !Arrays.equals(bal.getPositionFix(), baller.getPositionFix())) {
+            if (bal.equals(baller) && !Arrays.equals(bal.getPositionRel(), baller.getPositionRel())) {
                 // updates the position of the ball
-                baller.updatePositionFix(bal.getPositionFix());
+                baller.updatePositionRel(bal.getPositionRel());
                 // break out to save system resources
                 break;
             }
@@ -119,29 +119,26 @@ public class BalManager implements Comparable<Bal>{
                 furthestRight = bal;
             }
             else {
-                if (bal.getPositionRel().get()[0] < furthestLeft.getPositionRel().get()[0]) {furthestLeft = bal;}
-                else if(bal.getPositionRel().get()[0] > furthestRight.getPositionRel().get()[0]) {furthestRight = bal;}
+                if (bal.getPositionAbs().get()[0] < furthestLeft.getPositionAbs().get()[0]) {furthestLeft = bal;}
+                else if(bal.getPositionAbs().get()[0] > furthestRight.getPositionAbs().get()[0]) {furthestRight = bal;}
             }
         }
         for (Bal toBeCompared : balPriorityQueue) {
             // if the ball that is to be compared is in the range of the furthest on the left and the furthest on the right adn is not there, remove it from the queue
-            if (toBeCompared.getPositionRel().get()[0] >= furthestLeft.getPositionRel().get()[0] && toBeCompared.getPositionRel().get()[0] <= furthestRight.getPositionRel().get()[0]) {
+            if (toBeCompared.getPositionAbs().get()[0] >= furthestLeft.getPositionAbs().get()[0] && toBeCompared.getPositionAbs().get()[0] <= furthestRight.getPositionAbs().get()[0]) {
                 balPriorityQueue.remove(toBeCompared);
             }
         }
     }
 
-    /**
-     * Overridden "compareTo" to compare objects that the queue will use.
-     * The plan for this method is to incorporate more logic to decide whether the ball is in close proximity to other balls\
-     * and return a value that incorporates both the distance to the ball, and the distance from the ball to other balls\
-     * as well as how many balls we have/need to collect
-     * @param o Object that will be compared to
-     * @return an integer value that will be used by the priority heap
-     */
     @Override
-    public int compareTo(Bal o) {
-        //TODO: Make this return a value that incorporates the balls proximity to other balls
-        return (int) o.getDistance();
+    public int compare(Bal bal, Bal t1) {
+        if (bal.getDistance() > t1.getDistance()) {
+            return 1;
+        }
+        if (bal.equals(t1) || bal.getDistance() == t1.getDistance()) {
+            return 0;
+        }
+        else return -1;
     }
 }
