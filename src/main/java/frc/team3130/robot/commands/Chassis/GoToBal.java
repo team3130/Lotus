@@ -3,17 +3,22 @@ package frc.team3130.robot.commands.Chassis;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.team3130.robot.RobotContainer;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.SupportingClasses.Bal;
 import frc.team3130.robot.SupportingClasses.BalManager;
 import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 public class GoToBal extends CommandBase {
     private final Chassis m_chassis;
@@ -71,7 +76,7 @@ public class GoToBal extends CommandBase {
                 m_chassis);
         ramseteCommand.schedule();
     }
-    
+
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
      * (That is, it is called repeatedly until {@link #isFinished()}) returns true.)
@@ -95,7 +100,7 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        if (m_balManager.getClosestBall().getPositionAbs().get()[0] == RobotMap.kXWidth + 1 || m_balManager.getClosestBall().getPositionAbs().get()[1] == RobotMap.kYHeight + 1) {
+        if (m_balManager.getClosestBall().getPositionRel().get()[0] == RobotMap.kXWidth + 1 || m_balManager.getClosestBall().getPositionRel().get()[1] == RobotMap.kYHeight + 1) {
             System.out.println("bal does not exist");
             return true;
         }
