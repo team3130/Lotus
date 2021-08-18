@@ -3,7 +3,7 @@ package frc.team3130.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.team3130.robot.SupportingClasses.BalManager;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -36,7 +36,7 @@ public class RobotContainer {
     private final Turret m_turret = new Turret();
     private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
 
-    // This section is here IF we need it later (Update: we needed it)
+    // This section is here IF we need it later
     public Chassis getChassis() {return m_chassis;}
     public Climber getClimber() {return m_climber;}
     public Flywheel getFlywheel() {return m_flyWheel;}
@@ -45,6 +45,14 @@ public class RobotContainer {
     public Intake getIntake() {return m_intake;}
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
+
+    // supporting classes
+    private final BalManager balManager = new BalManager(m_chassis);
+    public BalManager getBalManager() {return balManager;}
+
+    public void updateBalls() {
+
+    }
 
 
     public static double getSkywalker() {
