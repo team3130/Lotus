@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
 
-        m_robotContainer.getChassis().configBrakeMode(true);
+        m_robotContainer.getChassis().configBrakeMode(false);
     }
 
     /**
