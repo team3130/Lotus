@@ -76,7 +76,7 @@ public class GoToBal extends CommandBase {
                 m_chassis);
         ramseteCommand.schedule();
     }
-    
+
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
      * (That is, it is called repeatedly until {@link #isFinished()}) returns true.)

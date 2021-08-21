@@ -4,7 +4,7 @@ import frc.team3130.robot.subsystems.Chassis;
 
 import java.util.*;
 
-public class BalManager implements Comparable<Bal>{
+public class BalManager implements Comparator<Bal>{
     private final PriorityQueue<Bal> balPriorityQueue;
     private final Chassis m_chassis;
 
@@ -13,7 +13,7 @@ public class BalManager implements Comparable<Bal>{
      * Constructs the bal priority queue and passes in the overridden compareTo method as a method reference
      */
     public BalManager(Chassis chassis) {
-        balPriorityQueue = new PriorityQueue<Bal>(Comparator.comparing(this::compareTo));
+        balPriorityQueue = new PriorityQueue<>(this);
         m_chassis = chassis;
     }
 
@@ -136,12 +136,18 @@ public class BalManager implements Comparable<Bal>{
      * The plan for this method is to incorporate more logic to decide whether the ball is in close proximity to other balls\
      * and return a value that incorporates both the distance to the ball, and the distance from the ball to other balls\
      * as well as how many balls we have/need to collect
-     * @param o Object that will be compared to
+     * @param t1 Object that will be compared to bal
+     * @param bal Object that will be compared to t1
      * @return an integer value that will be used by the priority heap
      */
     @Override
-    public int compareTo(Bal o) {
-        //TODO: Make this return a value that incorporates the balls proximity to other balls
-        return (int) o.getDistance();
+    public int compare(Bal bal, Bal t1) {
+        if (bal.getDistance() > t1.getDistance()) {
+            return 1;
+        }
+        if (bal.equals(t1) || bal.getDistance() == t1.getDistance()) {
+            return 0;
+        }
+        else return -1;
     }
 }
