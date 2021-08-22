@@ -86,9 +86,11 @@ public class BalManager implements Comparator<Bal>{
         }
     }
 
-    public void predict(double[] pixel) {
-        pixel[0] = ((pixel[0] * rotation[0][0]) + (pixel[1] * rotation[0][1])) + translation[0];
-        pixel[1] = ((pixel[0] * rotation[1][0]) + (pixel[1] * rotation[1][1])) + translation[1];
+    public double[] predict(double[] pixel) {
+        double[] coords = new double[2];
+        coords[0] = ((pixel[0] * rotation[0][0]) + (pixel[1] * rotation[0][1])) + translation[0];
+        coords[1] = ((pixel[0] * rotation[1][0]) + (pixel[1] * rotation[1][1])) + translation[1];
+        return coords;
     }
 
     public void addBalls(Collection<Pixy2CCC.Block> bals) {
