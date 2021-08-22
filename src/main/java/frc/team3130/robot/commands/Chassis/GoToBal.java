@@ -35,7 +35,6 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_balManager.notify();
         m_balManager.makeCmd(blocks);
         try {
             m_balManager.getCmd();
