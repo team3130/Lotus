@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.SupportingClasses.BalManager;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
+import frc.team3130.robot.commands.Chassis.GoToBal;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
@@ -22,7 +23,9 @@ import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
 import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
 import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
+import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.*;
+import io.github.pseudoresonance.pixy2api.links.I2CLink;
 
 public class RobotContainer {
 
@@ -48,7 +51,10 @@ public class RobotContainer {
 
     // supporting classes
     private final BalManager balManager = new BalManager(m_chassis);
+    private final PixyCam pixy = new PixyCam(new I2CLink());
+
     public BalManager getBalManager() {return balManager;}
+    public PixyCam getPixy() {return pixy;}
 
     public void updateBalls() {
 
@@ -104,6 +110,9 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodAngle(m_hood));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
+
+        // needs testing
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new GoToBal(m_chassis, balManager, pixy.getBlocks()));
 
         /*
          * Weapons

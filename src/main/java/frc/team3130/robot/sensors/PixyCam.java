@@ -45,9 +45,10 @@ public class PixyCam {
     }
 
 
-    public Block largestBlock(BalManager balManager) {
-        balManager.addBalls(m_pixy.getCCC().getBlockCache());
+    public ArrayList<Block> getBlocks() {
+        return m_pixy.getCCC().getBlockCache();
     }
+
     public void outputToShuffleboard() {
         //SmartDashboard.putBoolean("Pixy is connected:", this.m_isPixyConnected);
         // SmartDashboard.putNumber("Pixy block x", (double) this.largestBlock().getX());
