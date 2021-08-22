@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.SupportingClasses.Bal;
 import frc.team3130.robot.sensors.Navx;
 
 import java.io.FileReader;
@@ -160,8 +159,6 @@ public class Chassis extends SubsystemBase {
         m_rightMotorRear.follow(m_rightMotorFront);
 
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
-
-        Bal.m_chassis = this;
     }
 
     public Pose2d getPosCV() {

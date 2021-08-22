@@ -47,6 +47,7 @@ public class JoystickTrigger extends Trigger {
      * but does not start it again if it ends or is otherwise interrupted.
      *
      * @param command       the command to start
+     * @param interruptible whether the command is interruptible
      * @return this button, so calls can be chained
     */
     public JoystickTrigger whenHeld(final Command command) {

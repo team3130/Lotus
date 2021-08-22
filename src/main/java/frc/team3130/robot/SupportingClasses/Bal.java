@@ -16,13 +16,9 @@ public class Bal {
 
     private double[] positionFix = new double[2];
 
-    public static Chassis m_chassis;
+    private Chassis m_chassis;
 
     private Supplier<double[]> positionRel;
-
-    public Bal(double[] positionFix) {
-        this(positionFix, m_chassis);
-    }
 
     public Bal(double[] positionFix, Chassis chassis) {
         this(positionFix[0], positionFix[1], chassis);
