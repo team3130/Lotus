@@ -1,12 +1,20 @@
 package frc.team3130.robot.SupportingClasses;
 
 import frc.team3130.robot.subsystems.Chassis;
+import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
 import java.util.*;
 
 public class BalManager implements Comparator<Bal>{
     private final PriorityQueue<Bal> balPriorityQueue;
     private final Chassis m_chassis;
+
+    private double[][] rotation = {
+            {-0.06815984, -0.87361327},
+            {-0.38507791,  0.14232387}
+    };
+
+    private double[] translation = {216.85726298,  63.07897139};
 
     /**
      * <h1>Constructs the bal manager with 0 parameters</h1>
@@ -75,6 +83,19 @@ public class BalManager implements Comparator<Bal>{
         // for each loop to update every ball provided in the collection
         for (Bal bal : bals) {
             updateBall(bal);
+        }
+    }
+
+    public void predict(double[] pixel) {
+
+    }
+
+    public void addBalls(Collection<Pixy2CCC.Block> bals) {
+        // for each loop to add every ball provided in the collection
+        for (Pixy2CCC.Block bal : bals) {
+            double[] coords = {bal.getX(), bal.getY()};
+            predict(coords);
+            balPriorityQueue.add(new Bal(coords));
         }
     }
 
