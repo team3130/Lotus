@@ -9,12 +9,12 @@ public class BalManager implements Comparator<Bal>{
     private final PriorityQueue<Bal> balPriorityQueue;
     private final Chassis m_chassis;
 
-    private double[][] rotation = {
+    private final double[][] rotation = {
             {-0.06815984, -0.87361327},
             {-0.38507791,  0.14232387}
     };
 
-    private double[] translation = {216.85726298,  63.07897139};
+    private final double[] translation = {216.85726298,  63.07897139};
 
     /**
      * <h1>Constructs the bal manager with 0 parameters</h1>
@@ -87,7 +87,8 @@ public class BalManager implements Comparator<Bal>{
     }
 
     public void predict(double[] pixel) {
-
+        pixel[0] = ((pixel[0] * rotation[0][0]) + (pixel[1] * rotation[0][1])) + translation[0];
+        pixel[1] = ((pixel[0] * rotation[1][0]) + (pixel[1] * rotation[1][1])) + translation[1];
     }
 
     public void addBalls(Collection<Pixy2CCC.Block> bals) {

@@ -21,17 +21,12 @@ public class Bal {
     private Supplier<double[]> positionRel;
 
     public Bal(double[] positionFix) {
-        this(positionFix, m_chassis);
+        this(positionFix[0], positionFix[1]);
     }
 
-    public Bal(double[] positionFix, Chassis chassis) {
-        this(positionFix[0], positionFix[1], chassis);
-    }
-
-    public Bal(double positionFixX, double positionFixY, Chassis chassis) {
+    public Bal(double positionFixX, double positionFixY) {
         positionFix[0] = positionFixX;
         positionFix[1] = positionFixY;
-        m_chassis = chassis;
         positionRel = () -> new double[] {positionFix[0] - m_chassis.getPosCV().getX(), positionFix[1] - m_chassis.getPosCV().getY()};
     }
 
