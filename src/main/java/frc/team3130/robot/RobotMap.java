@@ -15,6 +15,10 @@ public class RobotMap {
     /**
      * Constants
      */
+
+    //Debug mode (whether to print stackTraces)
+    public static final boolean debug = true;
+
     //Which Robot
     public static boolean kUseCompbot = true;
 

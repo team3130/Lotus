@@ -1,7 +1,9 @@
 package frc.team3130.robot.commands.Chassis;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.SupportingClasses.BalManager;
 import frc.team3130.robot.subsystems.Chassis;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 public class GoToBal extends CommandBase {
     private final Chassis m_chassis;
     private final BalManager m_balManager;
-    private final ArrayList<Pixy2CCC.Block> blocks;
     private RamseteCommand cmd;
     Thread thread;
 
@@ -19,7 +20,6 @@ public class GoToBal extends CommandBase {
         m_chassis = subsystem;
         m_requirements.add(m_chassis);
         m_balManager = new BalManager(m_chassis, blocks);
-        this.blocks = blocks;
         thread = new Thread(m_balManager);
     }
 
@@ -29,6 +29,11 @@ public class GoToBal extends CommandBase {
     @Override
     public void initialize() {
         thread.start();
+        try {
+            thread.wait();
+        } catch (InterruptedException e) {
+            DriverStation.reportError("Interrupted exception", RobotMap.debug);
+        }
     }
 
     /**
@@ -38,9 +43,13 @@ public class GoToBal extends CommandBase {
     @Override
     public void execute() {
         try {
+            thread.notify();
             cmd = m_balManager.getCmd();
         } catch (InterruptedException e) {
-            System.out.println("An Interruption occurred on the bal manager thread FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFf");
+            DriverStation.reportError("Interrupted exception", RobotMap.debug);
+        }
+        catch (Exception e) {
+            DriverStation.reportError("Unknown exception", RobotMap.debug);
         }
     }
 
