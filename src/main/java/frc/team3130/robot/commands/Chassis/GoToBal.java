@@ -1,33 +1,26 @@
 package frc.team3130.robot.commands.Chassis;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.SupportingClasses.BalManager;
 import frc.team3130.robot.subsystems.Chassis;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GoToBal extends CommandBase {
     private final Chassis m_chassis;
     private final BalManager m_balManager;
     private final ArrayList<Pixy2CCC.Block> blocks;
+    private RamseteCommand cmd;
+    Thread thread;
 
-    public GoToBal(Chassis subsystem, BalManager balManager, ArrayList<Pixy2CCC.Block> blocks) {
+    public GoToBal(Chassis subsystem, ArrayList<Pixy2CCC.Block> blocks) {
         m_chassis = subsystem;
         m_requirements.add(m_chassis);
-        m_balManager = balManager;
+        m_balManager = new BalManager(m_chassis, blocks);
         this.blocks = blocks;
+        thread = new Thread(m_balManager);
     }
 
     /**
@@ -35,12 +28,7 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_balManager.makeCmd(blocks);
-        try {
-            m_balManager.getCmd();
-        } catch (InterruptedException e) {
-            System.out.println("An Interruption occurred on the bal manager thread FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFf");
-        }
+        thread.start();
     }
 
     /**
@@ -49,6 +37,11 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void execute() {
+        try {
+            cmd = m_balManager.getCmd();
+        } catch (InterruptedException e) {
+            System.out.println("An Interruption occurred on the bal manager thread FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFf");
+        }
     }
 
     /**
@@ -67,12 +60,12 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return cmd != null;
     }
 
     /**
      * The action to take when the command ends. Called when either the command
-     * finishes normally -- that is it is called when {@link #isFinished()} returns
+     * finishes normally -- that it is called when {@link #isFinished()} returns
      * true -- or when  it is interrupted/canceled. This is where you may want to
      * wrap up loose ends, like shutting off a motor that was being used in the command.
      *
@@ -81,10 +74,7 @@ public class GoToBal extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_chassis.configRampRate(0);
-        try {
-            m_balManager.wait();
-        } catch (InterruptedException e) {
-            System.out.println("BalManager interrupted on GoToBal end");
-        }
+        thread.interrupt();
+        cmd.schedule();
     }
 }

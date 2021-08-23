@@ -15,10 +15,10 @@ import frc.team3130.robot.subsystems.Chassis;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class BalManager {
+public class BalManager implements Runnable{
     private final Chassis m_chassis;
+    private ArrayList<Pixy2CCC.Block> blocks;
     private RamseteCommand cmd;
 
     private final double[][] rotation = {
@@ -28,8 +28,9 @@ public class BalManager {
 
     private final double[] translation = {216.85726298,  63.07897139};
 
-    public BalManager(Chassis m_chassis) {
+    public BalManager(Chassis m_chassis, ArrayList<Pixy2CCC.Block> blocks) {
         this.m_chassis = m_chassis;
+        this.blocks = blocks;
     }
 
 
@@ -73,7 +74,7 @@ public class BalManager {
 
         for (Pixy2CCC.Block block : blocks) {
             coords = predict(new double[]{block.getX(), block.getY()});
-            route.add(new Pose2d(coords[0], coords[1], new Rotation2d()));
+            route.add(new Pose2d(coords[0] + m_chassis.getPose().getX(), coords[1] + m_chassis.getPose().getY(), new Rotation2d()));
         }
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(route, config);
@@ -92,7 +93,6 @@ public class BalManager {
                 new PIDController(2.05, 0, 0),
                 m_chassis::tankDriveVolts,
                 m_chassis);
-        cmd.schedule();
     }
 
     public RamseteCommand getCmd() throws InterruptedException {
@@ -101,5 +101,10 @@ public class BalManager {
             this.wait();
         }
         return cmd;
+    }
+
+    @Override
+    public void run() {
+        makeCmd(blocks);
     }
 }

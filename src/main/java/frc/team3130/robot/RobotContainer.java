@@ -50,15 +50,8 @@ public class RobotContainer {
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
 
     // supporting classes
-    private final BalManager balManager = new BalManager(m_chassis);
     private final PixyCam pixy = new PixyCam(new I2CLink());
-
-    public BalManager getBalManager() {return balManager;}
     public PixyCam getPixy() {return pixy;}
-
-    public void updateBalls() {
-
-    }
 
 
     public static double getSkywalker() {
@@ -88,7 +81,6 @@ public class RobotContainer {
                         m_turret
                 )
         );
-
     }
 
     private void configureButtonBindings() {
@@ -112,7 +104,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
 
         // needs testing
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new GoToBal(m_chassis, balManager, pixy.getBlocks()));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new GoToBal(m_chassis, pixy.getBlocks()));
 
         /*
          * Weapons
