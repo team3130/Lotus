@@ -42,7 +42,10 @@ public class BallPathMaker implements Runnable{
         return coords;
     }
 
-    public void makeCmd(ArrayList<Pixy2CCC.Block> blocks) {
+    public void makeCmd() {
+
+        ArrayList<Pixy2CCC.Block> blocks = pixy.getBlocks();
+
         m_chassis.configRampRate(RobotMap.kDriveMaxRampRate);
 
         // TODO: logic for sanity check
@@ -103,6 +106,6 @@ public class BallPathMaker implements Runnable{
 
     @Override
     public void run() {
-        makeCmd(pixy.getBlocks());
+        makeCmd();
     }
 }
