@@ -30,7 +30,7 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_balManager = new BalManager(m_chassis, pixy.getBlocks());
+        m_balManager = new BalManager(m_chassis, pixy);
         thread = new Thread(m_balManager);
         thread.start();
     }

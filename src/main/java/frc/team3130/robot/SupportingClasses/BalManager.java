@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotMap;
+import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class BalManager implements Runnable{
     private final Chassis m_chassis;
-    private ArrayList<Pixy2CCC.Block> blocks;
+    private PixyCam pixy;
     private RamseteCommand cmd;
 
     private final double[][] rotation = {
@@ -28,9 +29,9 @@ public class BalManager implements Runnable{
 
     private final double[] translation = {216.85726298,  63.07897139};
 
-    public BalManager(Chassis m_chassis, ArrayList<Pixy2CCC.Block> blocks) {
+    public BalManager(Chassis m_chassis, PixyCam pixy) {
         this.m_chassis = m_chassis;
-        this.blocks = blocks;
+        this.pixy = pixy;
     }
 
 
@@ -102,6 +103,6 @@ public class BalManager implements Runnable{
 
     @Override
     public void run() {
-        makeCmd(blocks);
+        makeCmd(pixy.getBlocks());
     }
 }
