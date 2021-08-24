@@ -95,11 +95,8 @@ public class BalManager implements Runnable{
                 m_chassis);
     }
 
-    public RamseteCommand getCmd() throws InterruptedException {
-        while (cmd == null) {
-            System.out.println("Ramsete command is still null");
-            this.wait();
-        }
+    public RamseteCommand getCmd() {
+        System.out.println("Ramsete command is still null");
         return cmd;
     }
 

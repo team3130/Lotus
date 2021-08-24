@@ -29,27 +29,16 @@ public class GoToBal extends CommandBase {
     @Override
     public void initialize() {
         thread.start();
-        try {
-            thread.wait();
-        } catch (InterruptedException e) {
-            DriverStation.reportError("Interrupted exception", RobotMap.debug);
-        }
     }
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
-     * (That is, it is called repeatedly until {@link #isFinished()}) returns true.)
+     * (That is, it is called repeatedly until {@link #isFinished()}) returns true)
      */
     @Override
     public void execute() {
-        try {
-            thread.notify();
+        if (!thread.isAlive()) {
             cmd = m_balManager.getCmd();
-        } catch (InterruptedException e) {
-            DriverStation.reportError("Interrupted exception", RobotMap.debug);
-        }
-        catch (Exception e) {
-            DriverStation.reportError("Unknown exception", RobotMap.debug);
         }
     }
 
