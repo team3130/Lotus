@@ -1,9 +1,7 @@
 package frc.team3130.robot.sensors;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.team3130.robot.SupportingClasses.BalManager;
 import io.github.pseudoresonance.pixy2api.Pixy2;
-import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC.Block;
 import io.github.pseudoresonance.pixy2api.links.Link;
 

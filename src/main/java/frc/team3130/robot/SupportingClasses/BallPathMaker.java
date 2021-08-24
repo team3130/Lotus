@@ -17,7 +17,7 @@ import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
 import java.util.ArrayList;
 
-public class BalManager implements Runnable{
+public class BallPathMaker implements Runnable{
     private final Chassis m_chassis;
     private PixyCam pixy;
     private RamseteCommand cmd;
@@ -29,7 +29,7 @@ public class BalManager implements Runnable{
 
     private final double[] translation = {216.85726298,  63.07897139};
 
-    public BalManager(Chassis m_chassis, PixyCam pixy) {
+    public BallPathMaker(Chassis m_chassis, PixyCam pixy) {
         this.m_chassis = m_chassis;
         this.pixy = pixy;
     }

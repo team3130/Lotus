@@ -4,17 +4,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotMap;
-import frc.team3130.robot.SupportingClasses.BalManager;
+import frc.team3130.robot.SupportingClasses.BallPathMaker;
 import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
-import io.github.pseudoresonance.pixy2api.Pixy2CCC;
-
-import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class GoToBal extends CommandBase {
     private final Chassis m_chassis;
-    private BalManager m_balManager;
+    private BallPathMaker m_ballPathMaker;
     private RamseteCommand cmd;
     private Thread thread;
     private PixyCam pixy;
@@ -30,8 +26,8 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_balManager = new BalManager(m_chassis, pixy);
-        thread = new Thread(m_balManager);
+        m_ballPathMaker = new BallPathMaker(m_chassis, pixy);
+        thread = new Thread(m_ballPathMaker);
         thread.start();
     }
 
@@ -42,7 +38,7 @@ public class GoToBal extends CommandBase {
     @Override
     public void execute() {
         if (!thread.isAlive()) {
-            cmd = m_balManager.getCmd();
+            cmd = m_ballPathMaker.getCmd();
         }
     }
 
@@ -82,7 +78,7 @@ public class GoToBal extends CommandBase {
         } catch (InterruptedException e) {
             DriverStation.reportError("Interrupted Exception", RobotMap.debug);
         }
-        m_balManager = null;
+        m_ballPathMaker = null;
         cmd.schedule();
     }
 }
