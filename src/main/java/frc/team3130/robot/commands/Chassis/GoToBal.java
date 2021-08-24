@@ -77,6 +77,12 @@ public class GoToBal extends CommandBase {
     public void end(boolean interrupted) {
         m_chassis.configRampRate(0);
         thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            DriverStation.reportError("Interrupted Exception", RobotMap.debug);
+        }
+        m_balManager = null;
         cmd.schedule();
     }
 }
