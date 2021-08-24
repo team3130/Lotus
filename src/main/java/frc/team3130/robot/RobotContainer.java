@@ -104,7 +104,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
 
         // needs testing
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new GoToBal(m_chassis, pixy.getBlocks()));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new GoToBal(m_chassis, pixy));
 
         /*
          * Weapons

@@ -5,22 +5,24 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.SupportingClasses.BalManager;
+import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 public class GoToBal extends CommandBase {
     private final Chassis m_chassis;
-    private final BalManager m_balManager;
+    private BalManager m_balManager;
     private RamseteCommand cmd;
-    Thread thread;
+    private Thread thread;
+    private PixyCam pixy;
 
-    public GoToBal(Chassis subsystem, ArrayList<Pixy2CCC.Block> blocks) {
+    public GoToBal(Chassis subsystem, PixyCam pixy) {
         m_chassis = subsystem;
+        this.pixy = pixy;
         m_requirements.add(m_chassis);
-        m_balManager = new BalManager(m_chassis, blocks);
-        thread = new Thread(m_balManager);
     }
 
     /**
@@ -28,6 +30,8 @@ public class GoToBal extends CommandBase {
      */
     @Override
     public void initialize() {
+        m_balManager = new BalManager(m_chassis, pixy.getBlocks());
+        thread = new Thread(m_balManager);
         thread.start();
     }
 
