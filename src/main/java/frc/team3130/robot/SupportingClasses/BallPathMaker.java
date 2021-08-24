@@ -17,29 +17,22 @@ import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
 import java.util.ArrayList;
 
-public class BallPathMaker implements Runnable{
+public class BallPathMaker extends ComputerVision implements Runnable{
     private final Chassis m_chassis;
     private PixyCam pixy;
     private RamseteCommand cmd;
 
-    private final double[][] rotation = {
-            {-0.06815984, -0.87361327},
-            {-0.38507791,  0.14232387}
-    };
-
-    private final double[] translation = {216.85726298,  63.07897139};
-
     public BallPathMaker(Chassis m_chassis, PixyCam pixy) {
         this.m_chassis = m_chassis;
         this.pixy = pixy;
-    }
 
+        //TODO: find the real values
+        rotation = new double[][]{
+                {-0.06815984, -0.87361327},
+                {-0.38507791, 0.14232387}
+        };
 
-    public double[] predict(double[] pixel) {
-        double[] coords = new double[2];
-        coords[0] = ((pixel[0] * rotation[0][0]) + (pixel[1] * rotation[0][1])) + translation[0];
-        coords[1] = ((pixel[0] * rotation[1][0]) + (pixel[1] * rotation[1][1])) + translation[1];
-        return coords;
+        translation = new double[]{216.85726298, 63.07897139};
     }
 
     public void makeCmd() {
