@@ -79,7 +79,7 @@ public class WheelSpeedCalculations {
 
 
     public WheelSpeedCalculations() {
-        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "shooter_data_comp_fresh_balls.csv";
+        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "shooter_data_comp_used_balls.csv";
 
 
         RPMOffset = RobotMap.kRPMChange;

@@ -90,7 +90,7 @@ public class HoodAngleCalculations {
 
 
     public HoodAngleCalculations() {
-        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "hood_angle_data_fresh_balls.csv";
+        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "hood_angle_data_used_balls.csv";
 
 
         AngleOffset = RobotMap.kAngleChange;
