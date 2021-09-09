@@ -146,7 +146,7 @@ public class Shoot extends CommandBase {
 //        }
 
 
-
+        System.out.println(m_hopper.getHopperTopOutput() + " VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
 
         m_hopper.runHopperLeft(-0.5);
         m_hopper.runHopperRight(-0.6);
@@ -157,7 +157,9 @@ public class Shoot extends CommandBase {
 //        else
 //            m_hopper.runHopperTop(0);
 
-        if(m_flywheel.canShoot() && m_hood.canShoot() && Timer.getFPGATimestamp() - lastIndexTime >= .75 || justShot == true){
+
+
+        if((m_flywheel.canShoot() && m_hood.canShoot()) && (Timer.getFPGATimestamp() - lastIndexTime >= .75 || justShot)){
             //TODO: figure out how to change m_hood.canShoot() without being an idiot
             justStarted = false;
             if(justShot == false){
@@ -171,7 +173,7 @@ public class Shoot extends CommandBase {
             }
         }
         else {
-            m_hopper.runHopperTop(0);
+           m_hopper.runHopperTop(0);
         }
     }
 
