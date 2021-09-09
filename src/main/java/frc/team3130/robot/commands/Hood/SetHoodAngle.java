@@ -16,6 +16,8 @@ public class SetHoodAngle extends CommandBase {
         //mapping to object passed through parameter
         m_hood = subsystem;
         m_pnHood = p;
+        m_requirements.add(m_hood);
+        m_requirements.add(m_pnHood);
     }
 
     /**
