@@ -23,11 +23,12 @@ public class Shoot extends CommandBase {
     private double pause;
 
 
-    public Shoot(Turret subsystemT, Hopper subsystemHop, Flywheel subsystemF, Hood subsystemHood) {
+    public Shoot(Turret subsystemT, Hopper subsystemHop, Flywheel subsystemF, Hood subsystemHood, PneuHood subsystemP) {
         m_turret = subsystemT;
         m_hopper = subsystemHop;
         m_flywheel = subsystemF;
         m_hood = subsystemHood;
+        m_pnHood = subsystemP;
 
         justShot = true;
         isShooting = false;

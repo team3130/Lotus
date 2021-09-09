@@ -8,7 +8,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3130.robot.RobotMap;
 
@@ -158,6 +157,7 @@ public class Flywheel extends SubsystemBase {
         // velocity target.
         if (m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
             return Math.abs(getRPMError()) < (RobotMap.kFlywheelReadyTolerance+Hood.getRelativeHoodAngle()/1.3);
+            //TODO: Pneumatic Hood haha funny et's go
         } else {
             return false;
         }

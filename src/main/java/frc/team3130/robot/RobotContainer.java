@@ -34,6 +34,7 @@ public class RobotContainer {
     private final Intake m_intake = new Intake();
     private final Turret m_turret = new Turret();
     private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
+    private final PneuHood m_pnHood = new PneuHood();
 
     // This section is here IF we need it later (Update: we needed it)
     public Chassis getChassis() {return m_chassis;}
@@ -88,12 +89,12 @@ public class RobotContainer {
         new JoystickTrigger(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new IntakeIn(m_intake)); //R trigger
         new JoystickTrigger(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new IntakeOut(m_intake)); // L trigger also deploys intake while active
 
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Shoot(m_turret, m_hoppper, m_flyWheel, m_hood)); //R bumper
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Shoot(m_turret, m_hoppper, m_flyWheel, m_hood, m_pnHood)); //R bumper
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new HopperOut(m_hoppper)); //L bumper
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(new ToggleTurretAim(m_turret, m_hood)); //R joystick press
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new ToggleIntake(m_intake)); //Menu button
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodAngle(m_hood));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new SetHoodAngle(m_hood, m_pnHood));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
 
         /*
