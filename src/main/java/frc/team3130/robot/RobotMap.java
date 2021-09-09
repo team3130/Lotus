@@ -122,6 +122,8 @@ public class RobotMap {
 
     public static double kHoodTolerance = 2; //The tolerance for error in angles on the hood for shooting
 
+    public static boolean kUseVarHood = false;
+
     //Flywheel
     public static double kFlywheelMaxVoltage = 12.0;
     public static double kFlywheelOpenRampRate = 1.0; // Minimum amount to time in seconds for Open Loop control output to ramp up
@@ -185,10 +187,10 @@ public class RobotMap {
      */
     public static final int PNM_SHIFT = 0;
     public static final int PNM_INTAKE = 1;
-    public static final int PNM_DEPLOYER = 2;
+    public static final int PNM_DEPLOYER = 2; //small climber
     public static final int PNM_WHEELARM = 3;
     public static final int PNM_HOODPISTONS = 4;
-    public static final int PNM_ACTUATOR = 5;
+    public static final int PNM_ACTUATOR = 5; //big climber
 
 
     /**

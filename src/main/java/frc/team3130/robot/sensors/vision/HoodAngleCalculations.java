@@ -1,10 +1,6 @@
 package frc.team3130.robot.sensors.vision;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.util.LinearInterp;
 
@@ -147,6 +143,8 @@ public class HoodAngleCalculations {
         double speed = speedCurve.getY(dist);
         return (speed + speed * getRPMOffset());
     }
+
+
 
     public void outputToShuffleboard() {
 //        SmartDashboard.putNumber("", HoodAngleCalculations.GetInstance().getAngle(calcAngle.getDouble(0)));

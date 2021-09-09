@@ -3,7 +3,6 @@ package frc.team3130.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
@@ -11,10 +10,10 @@ import frc.team3130.robot.commands.Climber.DeploySmallClimber;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Hood.SetHoodAngle;
 import frc.team3130.robot.commands.Hopper.HopperOut;
-import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.ToggleIntake;
+import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
@@ -98,6 +97,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
 
         /*
+
          * Weapons
          */
 

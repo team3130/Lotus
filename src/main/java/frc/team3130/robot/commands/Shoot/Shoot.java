@@ -4,18 +4,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.sensors.vision.HoodAngleCalculations;
-import frc.team3130.robot.subsystems.Flywheel;
-import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.subsystems.Hopper;
-import frc.team3130.robot.subsystems.Turret;
 import frc.team3130.robot.sensors.vision.Limelight;
 import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
+import frc.team3130.robot.subsystems.*;
 
 public class Shoot extends CommandBase {
     private final Turret m_turret;
     private final Hopper m_hopper;
     private final Flywheel m_flywheel;
     private final Hood m_hood;
+    private final PneuHood m_pnHood;
 
     private boolean justShot;
     private boolean changedState;
@@ -23,6 +21,7 @@ public class Shoot extends CommandBase {
     private boolean justStarted;
     private double lastIndexTime;
     private double pause;
+
 
     public Shoot(Turret subsystemT, Hopper subsystemHop, Flywheel subsystemF, Hood subsystemHood) {
         m_turret = subsystemT;
@@ -35,6 +34,16 @@ public class Shoot extends CommandBase {
         changedState = true;
     }
 
+    public Shoot(Turret subsystemT, Hopper subsystemHop, Flywheel subsystemF, PneuHood subsystemHood) {
+        m_turret = subsystemT;
+        m_hopper = subsystemHop;
+        m_flywheel = subsystemF;
+        m_pnHood = subsystemHood;
+
+        justShot = true;
+        isShooting = false;
+        changedState = true;
+    }
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
@@ -56,7 +65,15 @@ public class Shoot extends CommandBase {
         // Find the flywheel speed
         if (!Limelight.GetInstance().hasTrack()){
             m_flywheel.setSpeed(3500.0);
-            m_hood.setAngle(60);
+
+            if(RobotMap.kUseVarHood){
+                 m_hood.setAngle(60);
+            }
+            else{
+                m_pnHood.acuateHood();
+            }
+
+
         }else {
             double x = Limelight.GetInstance().getDistanceToTarget();
             if (5 <= x) {
@@ -64,10 +81,22 @@ public class Shoot extends CommandBase {
                 double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
                 double angle = HoodAngleCalculations.GetInstance().getAngle(x);
                 m_flywheel.setSpeed(speed);
-                m_hood.setAngle(angle);
+                if(RobotMap.kUseVarHood){
+                    m_hood.setAngle(angle);
+                }
+                else{
+                    m_pnHood.setHoodCalc(angle);
+                }
+
             } else{
                 m_flywheel.setSpeed(3500);
-                m_hood.setAngle(60);
+
+                if(RobotMap.kUseVarHood){
+                    m_hood.setAngle(60);
+                }
+                else{
+                    m_pnHood.acuateHood();
+                }
             }
         }
     }
@@ -128,6 +157,7 @@ public class Shoot extends CommandBase {
 //            m_hopper.runHopperTop(0);
 
         if(m_flywheel.canShoot() && m_hood.canShoot() && Timer.getFPGATimestamp() - lastIndexTime >= .75 || justShot == true){
+            //TODO: figure out how to change m_hood.canShoot() without being an idiot
             justStarted = false;
             if(justShot == false){
                 justShot = true;
