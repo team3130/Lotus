@@ -11,7 +11,6 @@ public class PneuHood extends SubsystemBase {
 
     public PneuHood(){
         m_hood = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_HOODPISTONS);
-
     }
 
     public void toggleHood(){
@@ -19,16 +18,10 @@ public class PneuHood extends SubsystemBase {
     }
 
     public void acuateHood(){
-    if(m_hood.get() == false)
         m_hood.set(true);
-    }
 
     public void retractHood(){
-    if(m_hood.get()){
         m_hood.set(false);
-    }
-
-
     }
 
     public void setHoodCalc(Double dist){
