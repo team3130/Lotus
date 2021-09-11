@@ -1,15 +1,7 @@
 package frc.team3130.robot.commands.Hopper;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.team3130.robot.subsystems.ExampleSubsystem;
-import frc.team3130.robot.subsystems.Hood;
 import frc.team3130.robot.subsystems.Hopper;
-
-import java.util.Set;
 
 
 public class Spindexer extends CommandBase {

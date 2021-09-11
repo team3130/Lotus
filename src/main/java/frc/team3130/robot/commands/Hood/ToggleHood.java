@@ -2,22 +2,17 @@ package frc.team3130.robot.commands.Hood;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.subsystems.PneuHood;
 
-public class SetHoodAngle extends CommandBase {
+public class ToggleHood extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Hood m_hood;
-    private final PneuHood m_pnHood;
     double angle;
 
-    public SetHoodAngle(Hood subsystem, PneuHood p) {
+    public ToggleHood(Hood subsystem) {
         //mapping to object passed through parameter
         m_hood = subsystem;
-        m_pnHood = p;
         m_requirements.add(m_hood);
-        m_requirements.add(m_pnHood);
     }
 
     /**
@@ -25,14 +20,7 @@ public class SetHoodAngle extends CommandBase {
      */
     @Override
     public void initialize() {
-
-        if(RobotMap.kUseVarHood){
-            m_hood.setAngle(m_hood.getShuffleBoardSetAngle());
-        }
-        else{
-            m_pnHood.toggleHood();
-        }
-
+        m_hood.toggleHood();
     }
 
     /**

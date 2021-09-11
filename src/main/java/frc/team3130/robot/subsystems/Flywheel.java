@@ -156,9 +156,8 @@ public class Flywheel extends SubsystemBase {
         // Check the velocity and return true when it is within the
         // velocity target.
         if (m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
-            return Math.abs(getRPMError()) < (RobotMap.kFlywheelReadyTolerance+Hood.getRelativeHoodAngle()/1.3);
-            //TODO: Pneumatic Hood haha funny et's go
-        } else {
+            return true;
+            } else {
             return false;
         }
     }

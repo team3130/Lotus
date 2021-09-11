@@ -2,9 +2,6 @@ package frc.team3130.robot.commands.Flywheel;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3130.robot.subsystems.Flywheel;
-import frc.team3130.robot.subsystems.Hood;
-import frc.team3130.robot.sensors.vision.Limelight;
-import frc.team3130.robot.sensors.vision.WheelSpeedCalculations;
 import frc.team3130.robot.subsystems.Hopper;
 
 public class SetFlywheelRPM extends CommandBase {

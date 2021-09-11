@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
         m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables
-        m_robotContainer.getHood().setAngle(0);
+        m_robotContainer.getHood().setPiston(false);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class Robot extends TimedRobot {
 
         //TODO: move this somewhere logical
         if (RobotState.isEnabled() && m_robotContainer.getTurret().isOnTarget() && checkif) {
-            if (gettime == true) {
+            if (gettime) {
                 lastTimestamp = Timer.getFPGATimestamp();
                 gettime = false;
             }
@@ -190,7 +190,7 @@ public class Robot extends TimedRobot {
             m_driverGamepad.setRumble(GenericHID.RumbleType.kRightRumble, 0);
             m_driverGamepad.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
             gettime = true;
-            if (m_robotContainer.getTurret().isOnTarget() == false) {
+            if (!m_robotContainer.getTurret().isOnTarget()) {
                 checkif = true;
             }
         }
