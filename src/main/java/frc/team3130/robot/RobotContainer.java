@@ -8,6 +8,7 @@ import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
+import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperOut;
 
 import frc.team3130.robot.commands.Hopper.Spindexer;
@@ -97,6 +98,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new ToggleIntake(m_intake)); //Menu button
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new ShiftToggle(m_chassis)); //L joystick press
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new SetFlywheelRPM(m_flyWheel, m_hoppper));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new ToggleHood(m_hood));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Spindexer(m_hoppper));
 
         /*
