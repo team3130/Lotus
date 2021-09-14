@@ -59,15 +59,13 @@ public class Robot extends TimedRobot {
 
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot boots up
 
-        m_robotContainer.getPneuHood().retractHood();
-
     }
 
     @Override
     public void disabledInit() {
         m_robotContainer.getChassis().configBrakeMode(true);
         m_robotContainer.getIntake().retractIntake();
-        m_robotContainer.getPneuHood().retractHood();
+        //Hood.setPistons(false);
         m_robotContainer.getWOF().retractWheel();
         m_robotContainer.getClimber().retractClimb();
         Limelight.GetInstance().setLedState(false); //Turn vision tracking off when robot disables

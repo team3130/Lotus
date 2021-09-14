@@ -48,7 +48,6 @@ public class RobotContainer {
     public Intake getIntake() {return m_intake;}
     public Turret getTurret() {return m_turret;}
     public WheelOfFortune getWOF() {return m_wheelOfFortune;}
-    public PneuHood getPneuHood(){return m_pnHood;}
 
 
     public static double getSkywalker() {
