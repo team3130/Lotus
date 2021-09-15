@@ -155,11 +155,7 @@ public class Flywheel extends SubsystemBase {
     public boolean canShoot() {
         // Check the velocity and return true when it is within the
         // velocity target.
-        if (m_flywheelMaster.getControlMode() == ControlMode.Velocity) {
-            return true;
-            } else {
-            return false;
-        }
+        return getRPMError() == 100;
     }
 
     public void outputToShuffleboard() {

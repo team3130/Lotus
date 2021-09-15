@@ -37,7 +37,6 @@ public class RobotContainer {
     private final Intake m_intake = new Intake();
     private final Turret m_turret = new Turret();
     private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
-    private final Hood m_pnHood = new Hood();
 
     // This section is here IF we need it later (Update: we needed it)
     public Chassis getChassis() {return m_chassis;}
