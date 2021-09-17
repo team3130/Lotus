@@ -1,6 +1,7 @@
 package frc.team3130.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.team3130.robot.Robot;
 import frc.team3130.robot.RobotContainer;
 import frc.team3130.robot.RobotMap;
 import frc.team3130.robot.subsystems.Climber;
@@ -17,11 +18,7 @@ public class SpinWinches extends CommandBase {
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
-    public void initialize() {
-
-
-
-    }
+    public void initialize() {}
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
