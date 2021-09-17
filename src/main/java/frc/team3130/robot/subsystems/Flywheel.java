@@ -155,7 +155,7 @@ public class Flywheel extends SubsystemBase {
     public boolean canShoot() {
         // Check the velocity and return true when it is within the
         // velocity target.
-        return getRPMError() == 100;
+        return getRPMError() <= 100 && getRPMError() >= - 100 && getRPM() > 300;
     }
 
     public void outputToShuffleboard() {
