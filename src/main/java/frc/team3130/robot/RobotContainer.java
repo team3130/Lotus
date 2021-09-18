@@ -10,22 +10,18 @@ import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
 import frc.team3130.robot.commands.Climber.DeployBigClimber;
 import frc.team3130.robot.commands.Climber.DeploySmallClimber;
+import frc.team3130.robot.commands.Climber.SpinWinches;
 import frc.team3130.robot.commands.Flywheel.SetFlywheelRPM;
 import frc.team3130.robot.commands.Hood.ToggleHood;
 import frc.team3130.robot.commands.Hopper.HopperOut;
-
 import frc.team3130.robot.commands.Hopper.Spindexer;
-import frc.team3130.robot.commands.Shoot.Shoot;
-
 import frc.team3130.robot.commands.Intake.IntakeIn;
 import frc.team3130.robot.commands.Intake.IntakeOut;
 import frc.team3130.robot.commands.Intake.ToggleIntake;
+import frc.team3130.robot.commands.Shoot.Shoot;
 import frc.team3130.robot.commands.Turret.ManualTurretAim;
 import frc.team3130.robot.commands.Turret.ToggleTurretAim;
 import frc.team3130.robot.commands.WheelOfFortune.ColorAlignment;
-import frc.team3130.robot.commands.WheelOfFortune.SpinWOFLeft;
-import frc.team3130.robot.commands.WheelOfFortune.SpinWOFRight;
-import frc.team3130.robot.commands.WheelOfFortune.ToggleWOF;
 import frc.team3130.robot.controls.JoystickTrigger;
 import frc.team3130.robot.subsystems.*;
 
@@ -81,6 +77,8 @@ public class RobotContainer {
         );
 
         CommandScheduler.getInstance().schedule(new ToggleHood(m_hood));
+        m_climber.setDefaultCommand(new SpinWinches(m_climber));
+
     }
 
     private void configureButtonBindings() {
@@ -113,9 +111,9 @@ public class RobotContainer {
 
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeploySmallClimber(m_climber)); //Menu button
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(new DeployBigClimber(m_climber)); //Windows button
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleWOF(m_wheelOfFortune, m_intake));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new SpinWOFLeft(m_wheelOfFortune));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinWOFRight(m_wheelOfFortune));
+        // new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleWOF(m_wheelOfFortune, m_intake));
+        // new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new SpinWOFLeft(m_wheelOfFortune));
+        // new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinWOFRight(m_wheelOfFortune));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenPressed(new ColorAlignment(m_wheelOfFortune));
 
     }
