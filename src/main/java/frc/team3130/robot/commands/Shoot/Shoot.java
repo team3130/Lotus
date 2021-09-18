@@ -47,6 +47,9 @@ public class Shoot extends CommandBase {
         // Tell turret to hold angle
         m_turret.hold();
 
+        // Make sure hood is actuated
+        m_hood.setPiston(true);
+
         lastIndexTime = Timer.getFPGATimestamp();
 
         // Find the flywheel speed
@@ -63,7 +66,6 @@ public class Shoot extends CommandBase {
                 //Hood.setPistons(false);
                 double speed = WheelSpeedCalculations.GetInstance().getSpeed(x);
                 m_flywheel.setSpeed(speed);
-                m_hood.setHoodCalc(x);
             } else{
                 m_flywheel.setSpeed(3500);
                 m_hood.setPiston(true);

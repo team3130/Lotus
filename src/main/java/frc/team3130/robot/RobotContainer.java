@@ -2,6 +2,9 @@ package frc.team3130.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team3130.robot.commands.Chassis.DefaultDrive;
 import frc.team3130.robot.commands.Chassis.ShiftToggle;
@@ -77,6 +80,7 @@ public class RobotContainer {
                 )
         );
 
+        CommandScheduler.getInstance().schedule(new ToggleHood(m_hood));
     }
 
     private void configureButtonBindings() {

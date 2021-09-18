@@ -9,7 +9,6 @@ public class Hood extends SubsystemBase {
 
     private Solenoid m_hood;
 
-
     public Hood(){
         m_hood = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_HOODPISTONS);
         m_hood.set(false);
@@ -21,10 +20,6 @@ public class Hood extends SubsystemBase {
 
     public void setPiston(boolean state) {
         m_hood.set(state);
-    }
-
-    public void setHoodCalc(Double dist){
-        this.setPiston(dist > 45);
     }
 
     public void outputToShuffleboard(){
