@@ -17,7 +17,13 @@ public class Intake extends SubsystemBase {
 
     //Create and define all standard data types needed
 
-    public Intake() {
+    private static final Intake instance = new Intake();
+
+    public static Intake getInstance() {
+        return instance;
+    }
+
+    private Intake() {
         m_intakeMotor = new WPI_VictorSPX(RobotMap.CAN_INTAKE);
 
         m_intakeMotor.configFactoryDefault();

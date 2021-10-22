@@ -18,13 +18,19 @@ public class Climber extends SubsystemBase {
     private Solenoid m_smallClimberPnuematic;
     private Solenoid m_bigClimberPnuematic;
 
+    private static final Climber instance = new Climber();
+
+    public static Climber getInstance() {
+        return instance;
+    }
+
     //Create and define all standard data types needed
 
     /**
      * used to be a singelton please use the public constructor/object defined in robotContainer
      */
 
-    public Climber() {
+    private Climber() {
         m_climberWinchLeft = new WPI_TalonSRX(RobotMap.CAN_CLIMBER1);
         m_climberWinchRight = new WPI_TalonSRX(RobotMap.CAN_CLIMBER2);
 

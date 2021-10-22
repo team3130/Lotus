@@ -69,7 +69,13 @@ public class WheelOfFortune extends SubsystemBase {
 		}
 	}
 
-    public WheelOfFortune() {
+    private static final WheelOfFortune instance = new WheelOfFortune();
+
+    public static WheelOfFortune getInstance() {
+        return instance;
+    }
+
+    private WheelOfFortune() {
         m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
         m_spinWheel = new WPI_VictorSPX(RobotMap.CAN_WHEELOFFORTUNE);

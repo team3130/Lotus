@@ -9,7 +9,13 @@ public class Hood extends SubsystemBase {
 
     private Solenoid m_hood;
 
-    public Hood(){
+    private static final Hood instance = new Hood();
+
+    public static Hood getInstance() {
+        return instance;
+    }
+
+    private Hood(){
         m_hood = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_HOODPISTONS);
         m_hood.set(false);
     }
