@@ -28,6 +28,12 @@ public class Chassis extends PIDSubsystem {
 
     private static Solenoid m_shifter;
 
+    private static final Chassis instance = new Chassis();
+
+    public static Chassis getInstance() {
+        return instance;
+    }
+
     //Create and define all standard data types needed
 
     /**
@@ -40,7 +46,7 @@ public class Chassis extends PIDSubsystem {
      * the constructor to get the instance of this class.
      */
 
-    public Chassis() {
+    private Chassis() {
         super(new PIDController(1, 0, 0));//TODO: Set Turn PID
 
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);

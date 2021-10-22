@@ -28,14 +28,14 @@ import frc.team3130.robot.subsystems.*;
 public class RobotContainer {
 
     // define Subsystems
-    private final Chassis m_chassis = new Chassis();
-    private final Climber m_climber = new Climber();
-    private final Flywheel m_flyWheel = new Flywheel();
-    private final Hood m_hood = new Hood();
-    private final Hopper m_hoppper = new Hopper();
-    private final Intake m_intake = new Intake();
-    private final Turret m_turret = new Turret();
-    private final WheelOfFortune m_wheelOfFortune = new WheelOfFortune();
+    private final Chassis m_chassis = Chassis.getInstance();
+    private final Climber m_climber = Climber.getInstance();
+    private final Flywheel m_flyWheel = Flywheel.getInstance();
+    private final Hood m_hood = Hood.getInstance();
+    private final Hopper m_hoppper = Hopper.getInstance();
+    private final Intake m_intake = Intake.getInstance();
+    private final Turret m_turret = Turret.getInstance();
+    private final WheelOfFortune m_wheelOfFortune = WheelOfFortune.getInstance();
 
     // This section is here IF we need it later (Update: we needed it)
     public Chassis getChassis() {return m_chassis;}
