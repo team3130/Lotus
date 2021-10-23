@@ -8,6 +8,11 @@ import frc.team3130.robot.SupportingClasses.BallPathMaker;
 import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
 
+/**
+ * <p>Command to have the robot go to the ball</p>
+ * //TODO: Research whether or not DefaultDrive needs to be interrupted
+ *
+ */
 public class GoToBal extends CommandBase {
     private final Chassis m_chassis;
     private BallPathMaker m_ballPathMaker;
@@ -15,6 +20,11 @@ public class GoToBal extends CommandBase {
     private Thread thread;
     private PixyCam pixy;
 
+    /**
+     * <p>Instantiates GoToBal command with {@link Chassis} and with an object from {@link PixyCam}</p>
+     * @param subsystem Chassis
+     * @param pixy PixyCam object
+     */
     public GoToBal(Chassis subsystem, PixyCam pixy) {
         m_chassis = subsystem;
         this.pixy = pixy;
