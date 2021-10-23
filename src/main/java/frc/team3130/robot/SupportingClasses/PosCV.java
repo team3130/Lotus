@@ -23,6 +23,9 @@ import java.util.List;
  * <p>
  *     Extends the ComputerVision class
  *      This class is intended to be ran in it's own thread
+ *
+ *      OBSELETE this class is no longer used
+ *      for the newest implementation look at {@link BallPathMaker}
  * </p>
  */
 public class PosCV extends ComputerVision implements Runnable{
@@ -54,7 +57,8 @@ public class PosCV extends ComputerVision implements Runnable{
      */
     public Pose2d getPos() {
         double[] pos = {pixy.getBlocks().get(0).getX(), pixy.getBlocks().get(0).getY()};
-        position = new Pose2d(new Translation2d(predict(pos)), new Rotation2d(pixy.getBlocks().get(0).getAngle()));
+        double[] prediction = predict(pos);
+        position = new Pose2d(new Translation2d(prediction[0], prediction[1]), new Rotation2d());
         return position;
     }
 
