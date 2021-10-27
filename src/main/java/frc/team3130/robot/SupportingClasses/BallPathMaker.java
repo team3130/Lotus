@@ -28,7 +28,7 @@ public class BallPathMaker extends ComputerVision implements Runnable{
     private RamseteCommand cmd;
 
     /**
-     * <p>Constructs a BallPathMaker object and takes in chassis {@link Chassis} object and a Pixy {@link PixyCam} object</p>
+     * <p>Constructs a BallPathMaker object and takes in {@link Chassis} and a {@link PixyCam} object</p>
      * @param m_chassis Chassis object
      * @param pixy PixyCam object
      */
