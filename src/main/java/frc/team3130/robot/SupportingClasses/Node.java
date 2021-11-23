@@ -53,7 +53,7 @@ public class Node {
     }
 
     public double getRelAngle(Node otherNode) {
-        return Math.asin(otherNode.getY_pos() - this.getY_pos() / getDistance(otherNode));
+        return Math.toDegrees(Math.asin(otherNode.getY_pos() - this.getY_pos() / getDistance(otherNode)));
     }
     public double getDistance(Node otherNode) {
         if (this.getTypeOfObject() != PhysicalObject.ball || otherNode.getTypeOfObject() != PhysicalObject.ball) {
