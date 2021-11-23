@@ -67,6 +67,12 @@ public class Chassis extends SubsystemBase {
     // The gyro sensor
     private static final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
+    private static final Chassis instance = new Chassis();
+
+    public static Chassis getInstance() {
+        return instance;
+    }
+
     //Create and define all standard data types needed
 
     /**
@@ -88,6 +94,8 @@ public class Chassis extends SubsystemBase {
 //                            0,
 //                            // The motion profile constraints
 //                            new TrapezoidProfile.Constraints(0, 0)));
+    private Chassis() {
+        super(new PIDController(1, 0, 0));//TODO: Set Turn PID
 
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);

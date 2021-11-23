@@ -35,7 +35,13 @@ public class Turret extends SubsystemBase {
     private double lastHoldHeading = 0.0;
     private int lostTrackCounter = 0;
 
-    public Turret() {
+    private static final Turret instance = new Turret();
+
+    public static Turret getInstance() {
+        return instance;
+    }
+
+    private Turret() {
         // Map CAN devices
         m_turret = new WPI_TalonSRX(RobotMap.CAN_TURRETANGLE);
 

@@ -25,6 +25,11 @@ public class Hood extends SubsystemBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
 
+    private static final Hood instance = new Hood();
+
+    public static Hood getInstance() {
+        return instance;
+    }
     private NetworkTableEntry hoodAngle =
             tab.add("Set angle", 0.0).getEntry();
 

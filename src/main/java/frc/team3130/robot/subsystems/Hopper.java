@@ -16,7 +16,13 @@ public class Hopper extends SubsystemBase {
     private static WPI_VictorSPX m_hopperMotorTop;
     private static DigitalInput m_beam;
 
-    public Hopper() {
+    private static final Hopper instance = new Hopper();
+
+    public static Hopper getInstance() {
+        return instance;
+    }
+
+    private Hopper() {
         m_beam = new DigitalInput(RobotMap.DIO_FEEDERBEAM);
         m_hopperMotorL = new WPI_VictorSPX(RobotMap.CAN_HOPPERL);
         m_hopperMotorR = new WPI_VictorSPX(RobotMap.CAN_HOPPERR);

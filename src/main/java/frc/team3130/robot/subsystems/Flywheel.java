@@ -32,9 +32,15 @@ public class Flywheel extends SubsystemBase {
 //            tab.add("Flywheel D", RobotMap.kFlywheelD)
 //                    .getEntry();
 
+    private static final Flywheel instance = new Flywheel();
+
+    public static Flywheel getInstance() {
+        return instance;
+    }
 
 
-    public Flywheel() {
+
+    private Flywheel() {
         // Map CAN devices
         m_flywheelMaster = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL1);
         m_flywheelSlave = new WPI_TalonFX(RobotMap.CAN_FLYWHEEL2);
