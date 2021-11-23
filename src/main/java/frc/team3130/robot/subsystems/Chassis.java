@@ -85,18 +85,7 @@ public class Chassis extends SubsystemBase {
      * the constructor to get the instance of this class.
      */
 
-    public Chassis() {
-//            super(
-//                    // The ProfiledPIDController used by the subsystem
-//                    new ProfiledPIDController(
-//                            0,
-//                            0,
-//                            0,
-//                            // The motion profile constraints
-//                            new TrapezoidProfile.Constraints(0, 0)));
     private Chassis() {
-        super(new PIDController(1, 0, 0));//TODO: Set Turn PID
-
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
         m_leftMotorRear = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORREAR);
         m_rightMotorFront = new WPI_TalonFX(RobotMap.CAN_RIGHTMOTORFRONT);
