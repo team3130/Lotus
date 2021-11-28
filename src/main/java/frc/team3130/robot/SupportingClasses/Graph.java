@@ -2,19 +2,27 @@ package frc.team3130.robot.SupportingClasses;
 
 import frc.team3130.robot.subsystems.Chassis;
 
+import javax.swing.*;
 import java.util.*;
 
 public class Graph {
     HashMap<Node, Integer> nodeMap;
     private ArrayList<Node> nodes;
-    private Double[][] matrix;
+    private double[][] matrix;
 
     public Graph() {
         nodes = new ArrayList<>();
         nodeMap = new HashMap<>();
-        matrix = new Double[2][2];
+        matrix = new double[3][3];
 
-        nodes.add(new Node(Chassis.getInstance().getPosCV().getX(), Chassis.getInstance().getPosCV().getY(), PhysicalObject.bot));
+        for (int j = 0; j < matrix.length - 1; j++) {
+            for (int k = 0; k < matrix.length - 1; k++) {
+                matrix[j][k] = 0;
+            }
+        }
+
+        nodes.add(new Node(Chassis.getInstance().getPosCV().getX(), Chassis.getInstance().getPosCV().getY()));
+        nodeMap.put(nodes.get(0), 0);
     }
 
     private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
@@ -24,6 +32,7 @@ public class Graph {
 
     public void addNode(Node newNode) {
         nodes.add(newNode);
+        nodeMap.put(newNode, nodes.size() - 1);
         resize();
         ConnectNode(newNode);
     }
@@ -37,28 +46,38 @@ public class Graph {
     }
 
     private void resize() {
-        matrix = Arrays.copyOf(matrix, nodes.size());
+        double[][] newMatrix = new double[nodes.size()][nodes.size()];
+        // iterate through matrix and set the values in newMatrix to the old ones
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                // check if the index is in bounds
+                if (i < newMatrix.length && j < newMatrix.length) {
+                    newMatrix[i][j] = matrix[i][j];
+                }
+            }
+        }
+        matrix = newMatrix;
     }
 
-    public ArrayList<Node> getPath() {
+    public ArrayList<Node> getPath(int steps) {
         GraphPath winner = new GraphPath(Double.MAX_VALUE, new ArrayList<>());
         // for each element of nodes except for the bot which is at index 0
         for (int i = 1; i < nodes.size(); i++) {
-            GraphPath first = Dijkstra(nodes.get(i));
-            if (first.getSteps() == 5 && first.getDistance() < winner.getDistance()) {
+            GraphPath first = Dijkstra(nodes.get(i), steps);
+            if (first.getSteps() == steps && first.getDistance() < winner.getDistance()) {
                 winner = first;
             }
         }
         return winner.getPath();
     }
 
-    private ArrayList<Node> getAdj(Node next, Node goal, GraphPath gpath) {
+    private ArrayList<Node> getAdj(Node next, Node goal, GraphPath gpath, int steps) {
         ArrayList<Node> adjacent = new ArrayList<>();
         int index = nodeMap.get(next);
 
         for (int looper = 0; looper < matrix.length; looper++) {
             if (matrix[index][looper] != 0) {
-                if (gpath.getSteps() == 4) {
+                if (gpath.getSteps() == steps - 1) {
                     adjacent.add(nodes.get(looper));
                 }
                 else {
@@ -71,7 +90,7 @@ public class Graph {
         return adjacent;
     }
 
-    public GraphPath Dijkstra(Node goal) {
+    public GraphPath Dijkstra(Node goal, int steps) {
         ArrayList<Node> path = new ArrayList<>();
         GraphPath data = new GraphPath(0, path);
 
@@ -82,12 +101,7 @@ public class Graph {
 
         distances[0] = 0;
 
-        PriorityQueue<GraphPath> queue = new PriorityQueue<>(new Comparator<GraphPath>() {
-            @Override
-            public int compare(GraphPath o1, GraphPath o2) {
-                return Double.compare(o1.getDistance(), o2.getDistance());
-            }
-        });
+        PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
 
         ArrayList<Node> temp = new ArrayList<>();
         temp.add(nodes.get(0));
@@ -100,11 +114,11 @@ public class Graph {
             visited[nodeMap.get(curr)] = true;
 
             // should ensure that we find a 5-step path if one exists
-            if (goal == curr && tempPath.getSteps() == 5) {
+            if (goal == curr && tempPath.getSteps() == steps) {
                 return tempPath;
             }
 
-            ArrayList<Node> adj = getAdj(curr, goal, tempPath);
+            ArrayList<Node> adj = getAdj(curr, goal, tempPath, steps);
 
             for (int looper = 0; looper < adj.size(); looper++) {
                 if (!visited[nodeMap.get(adj.get(looper))] && tempPath.getDistance() + matrix[nodeMap.get(adj.get(looper))][nodeMap.get(curr)] < distances[nodeMap.get(adj.get(looper))]) {
@@ -114,7 +128,7 @@ public class Graph {
                     queue.add(tempPath);
                 }
             }
-
+            data = tempPath;
         }
         return data;
     }

@@ -1,7 +1,6 @@
 package frc.team3130.robot.SupportingClasses;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class GraphPath {
     private double distance;
