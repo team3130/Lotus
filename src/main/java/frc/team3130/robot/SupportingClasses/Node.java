@@ -1,5 +1,8 @@
 package frc.team3130.robot.SupportingClasses;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+
 public class Node {
     private final double x_pos;
     private final double y_pos;
@@ -9,6 +12,10 @@ public class Node {
         this.x_pos = x_pos;
         this.y_pos = y_pos;
         pos = new Pose2d(x_pos, y_pos, new Rotation2d(0));
+    }
+
+    public Node (double[] poses) {
+        this(poses[0], poses[1]);
     }
 
     public Pose2d getPos() {
@@ -29,7 +36,7 @@ public class Node {
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
         // if its within 0.5 units
-        if (this.x_pos < o.x_pos + 0.5 && this.x_pos > o.x_pos - 0.5 && this.y_pos < o.y_pos + 0.5 && this.y_pos > o.y_pos - 0.5) {return true;}
+        return this.x_pos < node.x_pos + 0.5 && this.x_pos > node.x_pos - 0.5 && this.y_pos < node.y_pos + 0.5 && this.y_pos > node.y_pos - 0.5;
     }
 
     public double getRelAngle(Node otherNode) {

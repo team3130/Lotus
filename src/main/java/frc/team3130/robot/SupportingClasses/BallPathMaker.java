@@ -52,10 +52,10 @@ public class BallPathMaker extends ComputerVision implements Runnable{
 
         ArrayList<Pixy2CCC.Block> blocks = pixy.getBlocks();
 
-        for (Pixy2CCC block : blocks) {
+        for (Pixy2CCC.Block block : blocks) {
             Node temp = new Node(predict(new double[]{block.getX(), block.getY()}));
             // constant lookup time cause it checks the map
-            if (!(Graph.contains(temp))) {
+            if (!(Graph.getInstance().contains(temp))) {
                 Graph.getInstance().addNode(temp);
             }
         }
@@ -89,8 +89,8 @@ public class BallPathMaker extends ComputerVision implements Runnable{
         ArrayList<Node> routeNode = Graph.getInstance().getPath(5);
         ArrayList<Pose2d> route = new ArrayList();
 
-        for (int looper = 0; looper < routeNode.size(); looper++) {
-            route.add(routNode.get(looper).getPos());
+        for (Node node : routeNode) {
+            route.add(node.getPos());
         }
 
         double[] coords;
