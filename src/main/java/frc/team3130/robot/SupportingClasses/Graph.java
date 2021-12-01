@@ -10,7 +10,13 @@ public class Graph {
     private ArrayList<Node> nodes;
     private double[][] matrix;
 
-    public Graph() {
+    private static Graph m_instance = new Graph();
+
+    public static Graph getInstance() {
+        return m_instance;
+    }
+    
+    private Graph() {
         nodes = new ArrayList<>();
         nodeMap = new HashMap<>();
         matrix = new double[3][3];
@@ -35,6 +41,10 @@ public class Graph {
         nodeMap.put(newNode, nodes.size() - 1);
         resize();
         ConnectNode(newNode);
+    }
+
+    public boolean contains(Node comparator) {
+        return nodeMap.containsKey(comparator);
     }
 
     private void ConnectNode(Node newNode) {

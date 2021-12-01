@@ -52,6 +52,14 @@ public class BallPathMaker extends ComputerVision implements Runnable{
 
         ArrayList<Pixy2CCC.Block> blocks = pixy.getBlocks();
 
+        for (Pixy2CCC block : blocks) {
+            Node temp = new Node(predict(new double[]{block.getX(), block.getY()}));
+            // constant lookup time cause it checks the map
+            if (!(Graph.contains(temp))) {
+                Graph.getInstance().addNode(temp);
+            }
+        }
+
         m_chassis.configRampRate(RobotMap.kDriveMaxRampRate);
 
         // TODO: logic for sanity check
@@ -76,9 +84,14 @@ public class BallPathMaker extends ComputerVision implements Runnable{
                         .addConstraint(autoVoltageConstraint);
         config.setReversed(false);
 
-        ArrayList<Pose2d> route = new ArrayList<>();
+        // the 5 is the number of balls that it can still take
+        //TODO: find a way to find out how many more balls we can hold
+        ArrayList<Node> routeNode = Graph.getInstance().getPath(5);
+        ArrayList<Pose2d> route = new ArrayList();
 
-        route.add(m_chassis.getPose());
+        for (int looper = 0; looper < routeNode.size(); looper++) {
+            route.add(routNode.get(looper).getPos());
+        }
 
         double[] coords;
 

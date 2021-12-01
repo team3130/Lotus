@@ -3,10 +3,16 @@ package frc.team3130.robot.SupportingClasses;
 public class Node {
     private final double x_pos;
     private final double y_pos;
+    private final Pose2d pos;
 
     public Node(double x_pos, double y_pos) {
         this.x_pos = x_pos;
         this.y_pos = y_pos;
+        pos = new Pose2d(x_pos, y_pos, new Rotation2d(0));
+    }
+
+    public Pose2d getPos() {
+        return pos;
     }
 
     public double getX_pos() {
@@ -22,7 +28,8 @@ public class Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return Double.compare(node.x_pos, x_pos) == 0 && Double.compare(node.y_pos, y_pos) == 0;
+        // if its within 0.5 units
+        if (this.x_pos < o.x_pos + 0.5 && this.x_pos > o.x_pos - 0.5 && this.y_pos < o.y_pos + 0.5 && this.y_pos > o.y_pos - 0.5) {return true;}
     }
 
     public double getRelAngle(Node otherNode) {
