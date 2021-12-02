@@ -3,6 +3,11 @@ package frc.team3130.robot;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.util.Units;
+import frc.team3130.robot.SupportingClasses.ObjDimensions;
+import frc.team3130.robot.SupportingClasses.PhysicalObject;
+
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -172,12 +177,24 @@ public class RobotMap {
     /**
      * Computer vision
      */
+    // wheel locked positions
+    public static final double wheelX_Pos = 0; //TODO: Find real value (metric system)
+    public static final double wheelY_Pos = 0; //TODO: Find real value (metric system)
+    // bar locked positions
+    public static final double barX_Pos = 0; //TODO: Find real value (metric system)
+    public static final double barY_Pos = 0; //TODO: Find real value (metric system)
 
-    // coordinate max signed value for balRelativePos[0]
-    public static final double kXWidth = 0; //TODO: this must not be 0
-
-    // coordinate max signed value for balRelativePos[1]
-    public static final double kYHeight = 0; //TODO: this must not be 0
+    // making hashmap and adding items to it
+    public static HashMap<PhysicalObject, ObjDimensions> dimensionsHashMap;
+    static {
+        dimensionsHashMap = new HashMap<>();
+        dimensionsHashMap.put(PhysicalObject.ball, new ObjDimensions(5, 5, 5)); //TODO: Find real value (metric system)
+        dimensionsHashMap.put(PhysicalObject.bar, new ObjDimensions(5, 5, 5)); //TODO: Find real value (metric system)
+        dimensionsHashMap.put(PhysicalObject.wheel, new ObjDimensions(5, 5, 5)); //TODO: Find real value (metric system)
+        // loading zone and target are flush against wall
+        dimensionsHashMap.put(PhysicalObject.loadingZone, new ObjDimensions(0, 0, 0));
+        dimensionsHashMap.put(PhysicalObject.target, new ObjDimensions(0, 0, 0));
+    }
 
     /**
      * Field parameters

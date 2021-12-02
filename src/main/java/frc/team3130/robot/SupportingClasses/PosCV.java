@@ -28,7 +28,7 @@ import java.util.List;
  *      for the newest implementation look at {@link BallPathMaker}
  * </p>
  */
-public class PosCV extends ComputerVision implements Runnable{
+public class  PosCV extends ComputerVision implements Runnable{
     private final Chassis m_chassis;
     private PixyCam pixy;
     private Pose2d position;

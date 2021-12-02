@@ -50,8 +50,6 @@ public class BallPathMaker extends ComputerVision implements Runnable{
      */
     public void makeCmd() {
 
-        ArrayList<Pixy2CCC.Block> blocks = pixy.getBlocks();
-
         m_chassis.configRampRate(RobotMap.kDriveMaxRampRate);
 
         // TODO: logic for sanity check
@@ -79,13 +77,6 @@ public class BallPathMaker extends ComputerVision implements Runnable{
         ArrayList<Pose2d> route = new ArrayList<>();
 
         route.add(m_chassis.getPose());
-
-        double[] coords;
-
-        for (Pixy2CCC.Block block : blocks) {
-            coords = predict(new double[]{block.getX(), block.getY()});
-            route.add(new Pose2d(coords[0] + m_chassis.getPose().getX(), coords[1] + m_chassis.getPose().getY(), new Rotation2d()));
-        }
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(route, config);
 

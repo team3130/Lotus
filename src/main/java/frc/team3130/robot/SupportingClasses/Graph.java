@@ -11,7 +11,7 @@ public class Graph {
     private Double[][] matrix;
 
     public Graph() {
-        head = new Node(Chassis.getInstance().getPosCV().getX(), Chassis.getInstance().getPosCV().getY(), PhysicalObject.bot);
+        head = new Node(Chassis.getInstance().getPosCV().getX(), Chassis.getInstance().getPosCV().getY());
         nodes.add(head);
     }
 
@@ -74,13 +74,10 @@ public class Graph {
 
         // iterate through nodes
         for (int nodesLooper = 0; nodesLooper < nodes.size(); nodesLooper++) {
-            // make sure that we are checking a ball
-            if (nodes.get(nodesLooper).getTypeOfObject() == PhysicalObject.ball) {
                 // get the ball closest in the sector and compare it to the previous closer in the sector
-                if (shortest[degreesToIndex(nodes.get(nodesLooper).getRelAngle(start))].getDistance(start) < nodes.get(nodesLooper).getDistance(start)) {
-                    // assign the sector to the new shortest distance node
-                    shortest[degreesToIndex(nodes.get(nodesLooper).getRelAngle(start))] = nodes.get(nodesLooper);
-                }
+            if (shortest[degreesToIndex(nodes.get(nodesLooper).getRelAngle(start))].getDistance(start) < nodes.get(nodesLooper).getDistance(start)) {
+                // assign the sector to the new shortest distance node
+                shortest[degreesToIndex(nodes.get(nodesLooper).getRelAngle(start))] = nodes.get(nodesLooper);
             }
         }
 
@@ -89,7 +86,6 @@ public class Graph {
                 adjacent.add(shortest[shortLooper]);
             }
         }
-
         return adjacent;
     }
 
