@@ -2,123 +2,144 @@ package frc.team3130.robot.SupportingClasses;
 
 import frc.team3130.robot.subsystems.Chassis;
 
+import javax.swing.*;
 import java.util.*;
 
 public class Graph {
     HashMap<Node, Integer> nodeMap;
-    private Node head;
     private ArrayList<Node> nodes;
-    private Double[][] matrix;
+    private double[][] matrix;
 
-    public Graph() {
-        head = new Node(Chassis.getInstance().getPosCV().getX(), Chassis.getInstance().getPosCV().getY());
-        nodes.add(head);
+    private static Graph m_instance = new Graph();
+
+    public static Graph getInstance() {
+        return m_instance;
     }
+    
+    private Graph() {
+        nodes = new ArrayList<>();
+        nodeMap = new HashMap<>();
+        matrix = new double[3][3];
 
-    /**
-     * A method to clump nodes. This will put the clump in an arraylist of clumps.
-     */
-    private void ClumpNodes() {
-        boolean[] visited = new boolean[nodes.size()];
-        Node temp = head;
-        visited[0] = true;
-        while (!filled(visited)) {
-            PriorityQueue<Node> adjacentNodes = adjacent(temp, visited);
-            while (!adjacentNodes.isEmpty()) {
-                Node temp2 = adjacentNodes.poll();
-                putNodeInGraph(temp, temp2, temp.getDistance(temp2));
-                temp = temp2;
-                visited[nodeMap.get(temp)] = true;
+        for (int j = 0; j < matrix.length - 1; j++) {
+            for (int k = 0; k < matrix.length - 1; k++) {
+                matrix[j][k] = 0;
             }
         }
+
+        nodes.add(new Node(Chassis.getInstance().getPosCV().getX(), Chassis.getInstance().getPosCV().getY()));
+        nodeMap.put(nodes.get(0), 0);
     }
 
-    private boolean filled(boolean[] boolArray) {
-        for (boolean item : boolArray) {
-            if (!item) {
-                return false;
-            }
-        }
-        return true;
+    private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
+        matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = toBeAdded.getDistance(ConnectedTo);
+        matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = toBeAdded.getDistance(ConnectedTo);
     }
 
-    private void putNodeInGraph(Node toBeAdded, Node ConnectedTo, double weight) {
-        matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
-        matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
-    }
-
-    private void addNode(Node newNode) {
+    public void addNode(Node newNode) {
         nodes.add(newNode);
+        nodeMap.put(newNode, nodes.size() - 1);
         resize();
-        ClumpNodes();
+        ConnectNode(newNode);
+    }
+
+    public boolean contains(Node comparator) {
+        return nodeMap.containsKey(comparator);
+    }
+
+    private void ConnectNode(Node newNode) {
+        for (int i = 0; i < nodes.size(); i++) {
+            if (nodes.get(i) != newNode) {
+                putNodeInGraph(newNode, nodes.get(i));
+            }
+        }
     }
 
     private void resize() {
-        matrix = Arrays.copyOf(matrix, nodes.size());
-    }
-
-    /**
-     * Returns the adjacent nodes in each sector
-     * @param start start node
-     * @param visited boolean array of visited nodes, index cooresponds to mapped value
-     * @return a priority queue of adjacent nodes
-     */
-    private PriorityQueue<Node> adjacent(Node start, boolean[] visited) {
-        // each index corresponds to a sector, starting facing forward and moving 45 degrees to the right at a time
-        Node[] shortest = new Node[8];
-
-        // fill the array with the maximum integer value at each spot
-        Arrays.fill(shortest, Integer.MAX_VALUE);
-        //TODO: add a comparator that sorts the nodes based off of their distance to start
-        PriorityQueue<Node> adjacent = new PriorityQueue<>();
-
-        // iterate through nodes
-        for (int nodesLooper = 0; nodesLooper < nodes.size(); nodesLooper++) {
-                // get the ball closest in the sector and compare it to the previous closer in the sector
-            if (shortest[degreesToIndex(nodes.get(nodesLooper).getRelAngle(start))].getDistance(start) < nodes.get(nodesLooper).getDistance(start)) {
-                // assign the sector to the new shortest distance node
-                shortest[degreesToIndex(nodes.get(nodesLooper).getRelAngle(start))] = nodes.get(nodesLooper);
+        double[][] newMatrix = new double[nodes.size()][nodes.size()];
+        // iterate through matrix and set the values in newMatrix to the old ones
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                // check if the index is in bounds
+                if (i < newMatrix.length && j < newMatrix.length) {
+                    newMatrix[i][j] = matrix[i][j];
+                }
             }
         }
+        matrix = newMatrix;
+    }
 
-        for (int shortLooper = 0; shortLooper < shortest.length; shortLooper++) {
-            if (shortest[shortLooper].getDistance(start) < Integer.MAX_VALUE && !visited[nodeMap.get(shortest[shortLooper])]) {
-                adjacent.add(shortest[shortLooper]);
+    public ArrayList<Node> getPath(int steps) {
+        GraphPath winner = new GraphPath(Double.MAX_VALUE, new ArrayList<>());
+        // for each element of nodes except for the bot which is at index 0
+        for (int i = 1; i < nodes.size(); i++) {
+            GraphPath first = Dijkstra(nodes.get(i), steps);
+            if (first.getSteps() == steps && first.getDistance() < winner.getDistance()) {
+                winner = first;
+            }
+        }
+        return winner.getPath();
+    }
+
+    private ArrayList<Node> getAdj(Node next, Node goal, GraphPath gpath, int steps) {
+        ArrayList<Node> adjacent = new ArrayList<>();
+        int index = nodeMap.get(next);
+
+        for (int looper = 0; looper < matrix.length; looper++) {
+            if (matrix[index][looper] != 0) {
+                if (gpath.getSteps() == steps - 1) {
+                    adjacent.add(nodes.get(looper));
+                }
+                else {
+                    if (nodes.get(looper) != goal) {
+                        adjacent.add(nodes.get(looper));
+                    }
+                }
             }
         }
         return adjacent;
     }
 
-    /**
-     * Returns the index of the sector based on the angle
-     * @param degrees absolute angle from the object
-     * @return the index for the array shortest in {@link #adjacent(Node, boolean[])}
-     */
-    private int degreesToIndex(double degrees) {
-        if (degrees >= 0 && degrees <= 45) {
-            return 0;
+    public GraphPath Dijkstra(Node goal, int steps) {
+        ArrayList<Node> path = new ArrayList<>();
+        GraphPath data = new GraphPath(0, path);
+
+        boolean[] visited = new boolean[nodes.size()];
+        double[] distances = new double[nodes.size()];
+
+        Arrays.fill(distances, Double.MAX_VALUE);
+
+        distances[0] = 0;
+
+        PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
+
+        ArrayList<Node> temp = new ArrayList<>();
+        temp.add(nodes.get(0));
+        queue.add(new GraphPath(0, temp));
+
+        while (!queue.isEmpty()) {
+            GraphPath tempPath = queue.poll().copy(); // the copy is to prevent modifying only the same object
+            Node curr = tempPath.getPath().get(tempPath.getPath().size() - 1);
+
+            visited[nodeMap.get(curr)] = true;
+
+            // should ensure that we find a 5-step path if one exists
+            if (goal == curr && tempPath.getSteps() == steps) {
+                return tempPath;
+            }
+
+            ArrayList<Node> adj = getAdj(curr, goal, tempPath, steps);
+
+            for (int looper = 0; looper < adj.size(); looper++) {
+                if (!visited[nodeMap.get(adj.get(looper))] && tempPath.getDistance() + matrix[nodeMap.get(adj.get(looper))][nodeMap.get(curr)] < distances[nodeMap.get(adj.get(looper))]) {
+                    distances[nodeMap.get(adj.get(looper))] = tempPath.getDistance() + matrix[nodeMap.get(curr)][nodeMap.get(adj.get(looper))];
+                    tempPath.addDistance(matrix[nodeMap.get(curr)][nodeMap.get(adj.get(looper))]);
+                    tempPath.getPath().add(adj.get(looper));
+                    queue.add(tempPath);
+                }
+            }
+            data = tempPath;
         }
-        else if (degrees > 45 && degrees <= 90) {
-            return 1;
-        }
-        else if (degrees > 90 && degrees <= 135) {
-            return 2;
-        }
-        else if (degrees > 135 && degrees <= 180) {
-            return 3;
-        }
-        else if (degrees > 180 && degrees <= 225) {
-            return 4;
-        }
-        else if (degrees > 225 && degrees <= 270) {
-            return 5;
-        }
-        else if (degrees > 270 && degrees <= 315) {
-            return 6;
-        }
-        else if (degrees > 315 && degrees <= 360) {
-            return 7;
-        }
-        return -1;
+        return data;
     }
 }

@@ -74,9 +74,14 @@ public class BallPathMaker extends ComputerVision implements Runnable{
                         .addConstraint(autoVoltageConstraint);
         config.setReversed(false);
 
-        ArrayList<Pose2d> route = new ArrayList<>();
+        // the 5 is the number of balls that it can still take
+        //TODO: find a way to find out how many more balls we can hold
+        ArrayList<Node> routeNode = Graph.getInstance().getPath(5);
+        ArrayList<Pose2d> route = new ArrayList();
 
-        route.add(m_chassis.getPose());
+        for (Node node : routeNode) {
+            route.add(node.getPos());
+        }
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(route, config);
 
