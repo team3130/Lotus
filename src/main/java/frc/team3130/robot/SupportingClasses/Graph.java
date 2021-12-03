@@ -80,7 +80,7 @@ public class Graph {
         }
         return winner.getPath();
     }
-
+        
     private ArrayList<Node> getAdj(Node next, Node goal, GraphPath gpath, int steps) {
         ArrayList<Node> adjacent = new ArrayList<>();
         int index = nodeMap.get(next);
