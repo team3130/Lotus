@@ -49,11 +49,6 @@ public class Chassis extends SubsystemBase {
     // use this for angle
     private final DifferentialDriveOdometry m_odometry;
 
-    // computer vision odometry
-    // use this for robot position
-    private DifferentialDriveOdometry m_CVodometry;
-
-
     private static Solenoid m_shifter;
 
     private SimpleMotorFeedforward m_feedforward;
@@ -69,21 +64,14 @@ public class Chassis extends SubsystemBase {
 
     private static final Chassis instance = new Chassis();
 
-    public static Chassis getInstance() {
-        return instance;
-    }
-
-    //Create and define all standard data types needed
-
-    /**
-     * This used to be a singelton but per the new system we are now using
-     */
-
     /**
      * Returns the Singleton instance of this Chassis. This static method should be
      * used -- {@code Chassis.getInstance();} -- by external classes, rather than
      * the constructor to get the instance of this class.
      */
+    public static Chassis getInstance() {
+        return instance;
+    }
 
     private Chassis() {
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);
@@ -139,8 +127,6 @@ public class Chassis extends SubsystemBase {
 
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(28));
 
-        m_CVodometry = new DifferentialDriveOdometry(new Rotation2d(0));
-
         //Updated 2/2/2021 TODO tune PID values
         m_feedforward = new SimpleMotorFeedforward(RobotMap.kS,RobotMap.kV,RobotMap.kA);
         m_leftPIDController = new PIDController(2.05, 0, 0);
@@ -150,10 +136,6 @@ public class Chassis extends SubsystemBase {
         m_rightMotorRear.follow(m_rightMotorFront);
 
         m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
-    }
-
-    public Pose2d getPosCV() {
-        return m_CVodometry.getPoseMeters();
     }
 
     /**

@@ -1,9 +1,29 @@
 package frc.team3130.robot.SupportingClasses;
 
-public class Node extends CVObject{
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+
+public class Node {
+    protected final double x_pos;
+    protected final double y_pos;
+
+    protected final Pose2d pos;
 
     public Node(double x_pos, double y_pos) {
-        super(x_pos, y_pos, PhysicalObject.ball);
+        this.x_pos = x_pos;
+        this.y_pos = y_pos;
+        pos = new Pose2d(x_pos, y_pos, new Rotation2d(0));
+    }
+    public double getX_pos() {
+        return x_pos;
+    }
+
+    public double getY_pos() {
+        return y_pos;
+    }
+
+    public Pose2d getPos() {
+        return pos;
     }
 
     @Override

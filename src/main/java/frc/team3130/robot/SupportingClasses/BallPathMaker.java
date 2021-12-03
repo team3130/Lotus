@@ -20,7 +20,6 @@ import java.util.ArrayList;
 /**
  * <p>The latest ComputerVision implementation</p>
  * <p>This class takes advantage of the runnable interface, to run the code inside it's own thread.</p>
- *
  */
 public class BallPathMaker extends ComputerVision implements Runnable{
     private final Chassis m_chassis;
@@ -77,7 +76,7 @@ public class BallPathMaker extends ComputerVision implements Runnable{
         // the 5 is the number of balls that it can still take
         //TODO: find a way to find out how many more balls we can hold
         ArrayList<Node> routeNode = Graph.getInstance().getPath(5);
-        ArrayList<Pose2d> route = new ArrayList();
+        ArrayList<Pose2d> route = new ArrayList<>();
 
         for (Node node : routeNode) {
             route.add(node.getPos());
@@ -87,7 +86,7 @@ public class BallPathMaker extends ComputerVision implements Runnable{
 
         cmd = new RamseteCommand(
                 trajectory,
-                m_chassis::getPosCV,
+                m_chassis::getPose,
                 new RamseteController(2.0, 0.7),
                 new SimpleMotorFeedforward(
                         RobotMap.lowGearkS,

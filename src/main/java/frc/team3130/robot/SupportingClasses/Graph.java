@@ -27,7 +27,7 @@ public class Graph {
             }
         }
 
-        nodes.add(new Node(Chassis.getInstance().getPosCV().getX(), Chassis.getInstance().getPosCV().getY()));
+        nodes.add(new Node(Chassis.getInstance().getPose().getX(), Chassis.getInstance().getPose().getY()));
         nodeMap.put(nodes.get(0), 0);
     }
 
