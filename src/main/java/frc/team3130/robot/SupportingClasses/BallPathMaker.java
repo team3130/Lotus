@@ -51,9 +51,7 @@ public class BallPathMaker extends ComputerVision implements Runnable{
 
         m_chassis.configRampRate(RobotMap.kDriveMaxRampRate);
 
-        // TODO: logic for sanity check
         // Create config for trajectory
-
         var autoVoltageConstraint =
                 new DifferentialDriveVoltageConstraint(
                         new SimpleMotorFeedforward(

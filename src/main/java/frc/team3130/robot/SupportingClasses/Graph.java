@@ -80,25 +80,6 @@ public class Graph {
         }
         return winner.getPath();
     }
-        
-    private ArrayList<Node> getAdj(Node next, Node goal, GraphPath gpath, int steps) {
-        ArrayList<Node> adjacent = new ArrayList<>();
-        int index = nodeMap.get(next);
-
-        for (int looper = 0; looper < matrix.length; looper++) {
-            if (matrix[index][looper] != 0) {
-                if (gpath.getSteps() == steps - 1) {
-                    adjacent.add(nodes.get(looper));
-                }
-                else {
-                    if (nodes.get(looper) != goal) {
-                        adjacent.add(nodes.get(looper));
-                    }
-                }
-            }
-        }
-        return adjacent;
-    }
 
     public GraphPath Dijkstra(Node goal, int steps) {
         ArrayList<Node> path = new ArrayList<>();
@@ -107,6 +88,7 @@ public class Graph {
         boolean[] visited = new boolean[nodes.size()];
         double[] distances = new double[nodes.size()];
 
+        Arrays.fill(visited, false);
         Arrays.fill(distances, Double.MAX_VALUE);
 
         distances[0] = 0;
@@ -128,13 +110,13 @@ public class Graph {
                 return tempPath;
             }
 
-            ArrayList<Node> adj = getAdj(curr, goal, tempPath, steps);
+            double[] adj = matrix[nodeMap.get(curr)];
 
-            for (int looper = 0; looper < adj.size(); looper++) {
-                if (!visited[nodeMap.get(adj.get(looper))] && tempPath.getDistance() + matrix[nodeMap.get(adj.get(looper))][nodeMap.get(curr)] < distances[nodeMap.get(adj.get(looper))]) {
-                    distances[nodeMap.get(adj.get(looper))] = tempPath.getDistance() + matrix[nodeMap.get(curr)][nodeMap.get(adj.get(looper))];
-                    tempPath.addDistance(matrix[nodeMap.get(curr)][nodeMap.get(adj.get(looper))]);
-                    tempPath.getPath().add(adj.get(looper));
+            for (int looper = 0; looper < adj.length; looper++) {
+                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][nodeMap.get(curr)] < distances[looper]) && (matrix[looper][nodeMap.get(curr)] != 0 && (tempPath.getSteps() == steps - 1 || !nodes.get(looper).equals(goal)))) {
+                    distances[looper] = tempPath.getDistance() + matrix[nodeMap.get(curr)][looper];
+                    tempPath.addDistance(matrix[nodeMap.get(curr)][looper]);
+                    tempPath.getPath().add(nodes.get(looper));
                     queue.add(tempPath);
                 }
             }
