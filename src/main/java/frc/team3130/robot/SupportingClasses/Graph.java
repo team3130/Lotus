@@ -41,15 +41,19 @@ public class Graph {
     }
 
     /**
-     *
-     * @param toBeAdded
-     * @param ConnectedTo
+     * To be called by connectNode in a for loop
+     * @param toBeAdded node that will be added
+     * @param ConnectedTo node that it will be connected to
      */
     private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
         matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = toBeAdded.getDistance(ConnectedTo);
         matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = toBeAdded.getDistance(ConnectedTo);
     }
 
+    /**
+     * add newNode to the arrayList, put it, and it's index in a map, resize the matrix, and connect the nodes
+     * @param newNode node that will be added to the graph
+     */
     public void addNode(Node newNode) {
         nodes.add(newNode);
         nodeMap.put(newNode, nodes.size() - 1);
@@ -61,10 +65,16 @@ public class Graph {
         return nodeMap.containsKey(comparator);
     }
 
+    /**
+     * Connects the node to every node in the graph
+     * @param newNode the node to be connected
+     */
     private void ConnectNode(Node newNode) {
-        for (int i = 0; i < nodes.size(); i++) {
-            if (nodes.get(i) != newNode) {
-                putNodeInGraph(newNode, nodes.get(i));
+        for (Node node : nodes) {
+            // checks to make sure it doesn't add itself
+            // we wouldn't need this if we just didn't iterate to the last element however threading issues could occur
+            if (node != newNode) {
+                putNodeInGraph(newNode, node);
             }
         }
     }
@@ -96,35 +106,6 @@ public class Graph {
     }
 
     /**
-     * Gets the adjacent nodes through a linear search
-     * Used in {@link #Dijkstra(Node, int)}
-     * @param next the next node in Dijkstra's algorithm
-     * @param goal the goal node searching for
-     * @param gpath the current path
-     * @param steps the number of desired steps
-     * @return the adjacent nodes
-     */
-
-    private ArrayList<Node> getAdj(Node next, Node goal, GraphPath gpath, int steps) {
-        ArrayList<Node> adjacent = new ArrayList<>();
-        int index = nodeMap.get(next);
-
-        for (int looper = 0; looper < matrix.length; looper++) {
-            if (matrix[index][looper] != 0) {
-                if (gpath.getSteps() == steps - 1) {
-                    adjacent.add(nodes.get(looper));
-                }
-                else {
-                    if (nodes.get(looper) != goal) {
-                        adjacent.add(nodes.get(looper));
-                    }
-                }
-            }
-        }
-        return adjacent;
-    }
-
-    /**
      * An implementation of Dijkstra's algorithm
      * @param goal the Node searching for
      * @param steps the desired amount of balls to collect in the path
@@ -137,9 +118,12 @@ public class Graph {
         boolean[] visited = new boolean[nodes.size()];
         double[] distances = new double[nodes.size()];
 
+        // fills the array with false to show that it has not been visited
         Arrays.fill(visited, false);
+        // sets the distance to the max value so that the first path will be smaller then nothing
         Arrays.fill(distances, Double.MAX_VALUE);
 
+        // sets the distance to the bot to be zero
         distances[0] = 0;
 
         PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
@@ -149,9 +133,12 @@ public class Graph {
         queue.add(new GraphPath(0, temp));
 
         while (!queue.isEmpty()) {
+            // makes a copy of the GraphPath object from the min heap
             GraphPath tempPath = queue.poll().copy(); // the copy is to prevent modifying only the same object
+            // sets the current node to the one that was added to the path most recently
             Node curr = tempPath.getPath().get(tempPath.getPath().size() - 1);
 
+            // lets the algorithm know that we have visited this node
             visited[nodeMap.get(curr)] = true;
 
             // should ensure that we find a 5-step path if one exists
@@ -159,13 +146,15 @@ public class Graph {
                 return tempPath;
             }
 
+            // the row that corresponds to the node
             double[] adj = matrix[nodeMap.get(curr)];
 
+            // for each adjacent node
             for (int looper = 0; looper < adj.length; looper++) {
                 if (!visited[looper] && (tempPath.getDistance() + matrix[looper][nodeMap.get(curr)] < distances[looper]) && (matrix[looper][nodeMap.get(curr)] != 0 && (tempPath.getSteps() == steps - 1 || !nodes.get(looper).equals(goal)))) {
                     distances[looper] = tempPath.getDistance() + matrix[nodeMap.get(curr)][looper];
                     tempPath.addDistance(matrix[nodeMap.get(curr)][looper]);
-                    tempPath.getPath().add(nodes.get(looper));
+                    tempPath.addNodeToPath(nodes.get(looper));
                     queue.add(tempPath);
                 }
             }

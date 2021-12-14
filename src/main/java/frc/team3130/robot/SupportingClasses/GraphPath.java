@@ -5,10 +5,11 @@ import java.util.ArrayList;
 public class GraphPath {
     private double distance;
     private ArrayList<Node> path;
+    private double currentHeading;
 
     public GraphPath(double distance, ArrayList<Node> path) {
         this.distance = distance;
-        this.path = path;
+        this.path = (ArrayList<Node>) path.clone();
     }
 
     public double getDistance() {
@@ -27,13 +28,26 @@ public class GraphPath {
         return path;
     }
 
+    public void addNodeToPath(Node nextNode) {
+        path.add(nextNode);
+        // we can get away with this because there will always be at least two elements in the array: the bot and the added node
+        currentHeading += path.get(path.size() - 2).getRelAngle(path.get(path.size() - 1));
+    }
+
+    public void testHeading() {
+        double temp = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            temp += path.get(i).getRelAngle(path.get(i + 1));
+        }
+        assert temp == currentHeading;
+    }
+
     public int getSteps() {
         return path.size();
     }
 
     public GraphPath copy() {
-        GraphPath newOne = new GraphPath(distance, new ArrayList<>(path));
-        return newOne;
+        return new GraphPath(distance, new ArrayList<>(path));
     }
 
 }
