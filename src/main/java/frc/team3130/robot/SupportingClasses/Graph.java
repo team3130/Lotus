@@ -8,14 +8,23 @@ import java.util.*;
 public class Graph {
     HashMap<Node, Integer> nodeMap;
     private ArrayList<Node> nodes;
+
+    // adjacency matrix
     private double[][] matrix;
 
+    // used for ensuring it's a singleton
     private static Graph m_instance = new Graph();
 
+    /**
+     * @return the single instance for this class
+     */
     public static Graph getInstance() {
         return m_instance;
     }
-    
+
+    /**
+     * The only constructor of graph to be called once on robotInit
+     */
     private Graph() {
         nodes = new ArrayList<>();
         nodeMap = new HashMap<>();
@@ -31,6 +40,11 @@ public class Graph {
         nodeMap.put(nodes.get(0), 0);
     }
 
+    /**
+     *
+     * @param toBeAdded
+     * @param ConnectedTo
+     */
     private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
         matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = toBeAdded.getDistance(ConnectedTo);
         matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = toBeAdded.getDistance(ConnectedTo);
@@ -81,6 +95,41 @@ public class Graph {
         return winner.getPath();
     }
 
+    /**
+     * Gets the adjacent nodes through a linear search
+     * Used in {@link #Dijkstra(Node, int)}
+     * @param next the next node in Dijkstra's algorithm
+     * @param goal the goal node searching for
+     * @param gpath the current path
+     * @param steps the number of desired steps
+     * @return the adjacent nodes
+     */
+
+    private ArrayList<Node> getAdj(Node next, Node goal, GraphPath gpath, int steps) {
+        ArrayList<Node> adjacent = new ArrayList<>();
+        int index = nodeMap.get(next);
+
+        for (int looper = 0; looper < matrix.length; looper++) {
+            if (matrix[index][looper] != 0) {
+                if (gpath.getSteps() == steps - 1) {
+                    adjacent.add(nodes.get(looper));
+                }
+                else {
+                    if (nodes.get(looper) != goal) {
+                        adjacent.add(nodes.get(looper));
+                    }
+                }
+            }
+        }
+        return adjacent;
+    }
+
+    /**
+     * An implementation of Dijkstra's algorithm
+     * @param goal the Node searching for
+     * @param steps the desired amount of balls to collect in the path
+     * @return the path in a {@link GraphPath} object
+     */
     public GraphPath Dijkstra(Node goal, int steps) {
         ArrayList<Node> path = new ArrayList<>();
         GraphPath data = new GraphPath(0, path);
