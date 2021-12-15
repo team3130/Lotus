@@ -36,8 +36,16 @@ public class Graph {
             }
         }
 
-        nodes.add(new Node(Chassis.getInstance().getPose().getX(), Chassis.getInstance().getPose().getY()));
+        nodes.add(new Node(1, 1));
         nodeMap.put(nodes.get(0), 0);
+    }
+
+    public void test() {
+        double[][] testArr = {{1, 3.5}, {1, 4}, {1, 5}, {2.2, 4.5}, {3, 4}, {3.5, 4}, {4.5, 5}};
+        for (double[] doubles : testArr) {
+            addNode(new Node(doubles[0], doubles[1]));
+        }
+        System.out.println(getPath(5));
     }
 
     /**
