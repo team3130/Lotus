@@ -40,14 +40,6 @@ public class Graph {
         nodeMap.put(nodes.get(0), 0);
     }
 
-    public void test() {
-        double[][] testArr = {{1, 3.5}, {1, 4}, {1, 5}, {2.2, 4.5}, {3, 4}, {3.5, 4}, {4.5, 5}};
-        for (double[] doubles : testArr) {
-            addNode(new Node(doubles[0], doubles[1]));
-        }
-        System.out.println(getPath(5));
-    }
-
     /**
      * To be called by connectNode in a for loop
      * @param toBeAdded node that will be added
@@ -146,8 +138,11 @@ public class Graph {
             // sets the current node to the one that was added to the path most recently
             Node curr = tempPath.getPath().get(tempPath.getPath().size() - 1);
 
+            // caching the index
+            int indexOfCurr = nodeMap.get(curr);
+
             // lets the algorithm know that we have visited this node
-            visited[nodeMap.get(curr)] = true;
+            visited[indexOfCurr] = true;
 
             // should ensure that we find a 5-step path if one exists
             if (goal == curr && tempPath.getSteps() == steps) {
@@ -155,13 +150,13 @@ public class Graph {
             }
 
             // the row that corresponds to the node
-            double[] adj = matrix[nodeMap.get(curr)];
+            double[] adj = matrix[indexOfCurr];
 
             // for each adjacent node
             for (int looper = 0; looper < adj.length; looper++) {
-                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][nodeMap.get(curr)] < distances[looper]) && (matrix[looper][nodeMap.get(curr)] != 0 && (tempPath.getSteps() == steps - 1 || !nodes.get(looper).equals(goal)))) {
-                    distances[looper] = tempPath.getDistance() + matrix[nodeMap.get(curr)][looper];
-                    tempPath.addDistance(matrix[nodeMap.get(curr)][looper]);
+                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][indexOfCurr] < distances[looper]) && (matrix[looper][indexOfCurr] != 0 && (tempPath.getSteps() == steps - 1 || !nodes.get(looper).equals(goal)))) {
+                    distances[looper] = tempPath.getDistance() + matrix[indexOfCurr][looper];
+                    tempPath.addDistance(matrix[indexOfCurr][looper]);
                     tempPath.addNodeToPath(nodes.get(looper));
                     queue.add(tempPath);
                 }
