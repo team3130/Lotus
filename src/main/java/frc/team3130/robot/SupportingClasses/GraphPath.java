@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class GraphPath {
     private double distance;
-    private ArrayList<Node> path;
+    private final ArrayList<Node> path;
     private double currentHeading;
 
     public GraphPath(double distance, ArrayList<Node> path) {
         this.distance = distance;
-        this.path = (ArrayList<Node>) path.clone();
+        this.path = new ArrayList<>();
+        this.path.addAll(path);
     }
 
     public double getDistance() {

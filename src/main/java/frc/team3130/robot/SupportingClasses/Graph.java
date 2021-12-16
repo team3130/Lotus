@@ -2,7 +2,6 @@ package frc.team3130.robot.SupportingClasses;
 
 import frc.team3130.robot.subsystems.Chassis;
 
-import javax.swing.*;
 import java.util.*;
 
 public class Graph {
@@ -42,12 +41,14 @@ public class Graph {
 
     /**
      * To be called by connectNode in a for loop
-     * @param toBeAdded node that will be added
+     * @param toBeAdded node that will be added (the one added most recently)
      * @param ConnectedTo node that it will be connected to
      */
     private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
-        matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = toBeAdded.getDistance(ConnectedTo);
-        matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = toBeAdded.getDistance(ConnectedTo);
+        double distance = toBeAdded.getDistance(ConnectedTo);
+        double weight = distance + ((toBeAdded.getRelAngle(ConnectedTo) / 30) * (-1*(1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
+        matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
+        matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
     }
 
     /**
@@ -145,7 +146,8 @@ public class Graph {
             visited[indexOfCurr] = true;
 
             // should ensure that we find a 5-step path if one exists
-            if (goal == curr && tempPath.getSteps() == steps) {
+            if (goal == curr) {
+                System.out.println("Exiting from first if statement !!!!! ");
                 return tempPath;
             }
 
@@ -154,7 +156,7 @@ public class Graph {
 
             // for each adjacent node
             for (int looper = 0; looper < adj.length; looper++) {
-                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][indexOfCurr] < distances[looper]) && (matrix[looper][indexOfCurr] != 0 && (tempPath.getSteps() == steps - 1 || !nodes.get(looper).equals(goal)))) {
+                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][indexOfCurr] < distances[looper]) && (matrix[looper][indexOfCurr] != 0 && (tempPath.getSteps() == steps - 1 || !(nodes.get(looper).equals(goal))))) {
                     distances[looper] = tempPath.getDistance() + matrix[indexOfCurr][looper];
                     tempPath.addDistance(matrix[indexOfCurr][looper]);
                     tempPath.addNodeToPath(nodes.get(looper));
@@ -163,6 +165,8 @@ public class Graph {
             }
             data = tempPath;
         }
+        System.out.println("Exiting because ran out of time !!!!! ");
+        System.out.println("size: " + data.getPath().size());
         return data;
     }
 }

@@ -32,7 +32,7 @@ public class Node {
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
         // if its within 0.5 units
-        return this.x_pos < node.x_pos + 0.5 && this.x_pos > node.x_pos - 0.5 && this.y_pos < node.y_pos + 0.5 && this.y_pos > node.y_pos - 0.5;
+        return this.x_pos < node.x_pos + 0.1 && this.x_pos > node.x_pos - 0.1 && this.y_pos < node.y_pos + 0.1 && this.y_pos > node.y_pos - 0.1;
     }
 
     public double getRelAngle(Node otherNode) {
