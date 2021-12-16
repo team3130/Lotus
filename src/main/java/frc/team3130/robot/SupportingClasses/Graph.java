@@ -12,7 +12,7 @@ public class Graph {
     private double[][] matrix;
 
     // used for ensuring it's a singleton
-    private static Graph m_instance = new Graph();
+    private static final Graph m_instance = new Graph();
 
     /**
      * @return the single instance for this class
@@ -46,7 +46,8 @@ public class Graph {
      */
     private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
         double distance = toBeAdded.getDistance(ConnectedTo);
-        double weight = distance + ((toBeAdded.getRelAngle(ConnectedTo) / 30) * (-1*(1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
+        // logistical equation to care about turning more if the ball is closer
+        double weight = distance + ((toBeAdded.getRelAngle(ConnectedTo) / 35) * (-1*(1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
         matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
         matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
     }
@@ -71,11 +72,13 @@ public class Graph {
      * @param newNode the node to be connected
      */
     private void ConnectNode(Node newNode) {
-        for (Node node : nodes) {
+        for (int i = 1; i < nodes.size(); i++) {
             // checks to make sure it doesn't add itself
             // we wouldn't need this if we just didn't iterate to the last element however threading issues could occur
-            if (node != newNode) {
-                putNodeInGraph(newNode, node);
+            if (nodes.get(i) != newNode) {
+                if (!(newNode.getAngleToFrom(nodes.get(i), nodes.get(0)) < 0)) {
+                    putNodeInGraph(newNode, nodes.get(i));
+                }
             }
         }
     }

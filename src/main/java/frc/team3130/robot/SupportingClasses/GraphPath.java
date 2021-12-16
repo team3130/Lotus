@@ -31,8 +31,13 @@ public class GraphPath {
 
     public void addNodeToPath(Node nextNode) {
         path.add(nextNode);
-        // we can get away with this because there will always be at least two elements in the array: the bot and the added node
-        currentHeading += path.get(path.size() - 2).getRelAngle(path.get(path.size() - 1));
+        // checks if the size of the list is more than one
+        if (path.size() > 2) {
+            currentHeading = path.get(path.size() - 2).getAngleToFrom(path.get(path.size() - 1), path.get(path.size() - 3));
+        }
+        else {
+            currentHeading = path.get(1).getRelAngle(path.get(0));
+        }
     }
 
     public void testHeading() {

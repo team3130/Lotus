@@ -39,6 +39,23 @@ public class Node {
         return Math.toDegrees(Math.asin(otherNode.getY_pos() - this.getY_pos() / getDistance(otherNode)));
     }
 
+    /**
+     * Using the law of cosines this method gets the angle to one node if aproached from another
+     * @param to node going to
+     * @param from node coming to this node from
+     * @return the angle measure
+     */
+    public double getAngleToFrom(Node to, Node from) {
+        // Side a in a triangle
+        double A = from.getDistance(this);
+        // Side b in a triangle
+        double B = this.getDistance(to);
+        // Side c in a triangle
+        double C = to.getDistance(from);
+        // set the heading using law of cosines
+        return 180 - Math.acos((Math.pow(A, 2) + Math.pow(B, 2) - Math.pow(C, 2)) / (2 * A * B));
+    }
+
     public double getDistance(Node otherNode) {
         return Math.sqrt(Math.pow(otherNode.getX_pos() - this.getX_pos(), 2) + Math.pow(otherNode.getY_pos() - this.getY_pos(), 2));
     }
