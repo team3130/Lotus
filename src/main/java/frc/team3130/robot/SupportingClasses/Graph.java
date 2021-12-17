@@ -9,7 +9,7 @@ public class Graph {
     private final ArrayList<Node> nodes;
 
     // adjacency matrix
-    private double[][] matrix;
+    private double[][][] graph;
 
     // used for ensuring it's a singleton
     private static final Graph m_instance = new Graph();
@@ -27,11 +27,14 @@ public class Graph {
     private Graph() {
         nodes = new ArrayList<>();
         nodeMap = new HashMap<>();
-        matrix = new double[3][3];
+        graph = new double[3][3][3];
 
-        for (int j = 0; j < matrix.length - 1; j++) {
-            for (int k = 0; k < matrix.length - 1; k++) {
-                matrix[j][k] = 0;
+        // O(n^3)
+        for (int i = 0; i < graph.length; i++) {
+            for (int j = 0; j < graph.length; j++) {
+                for (int k = 0; k < graph.length; k++) {
+                    graph[i][j][k] = 0;
+                }
             }
         }
 
@@ -46,11 +49,12 @@ public class Graph {
      */
     private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
         double distance = toBeAdded.getDistance(ConnectedTo);
-        // logistical equation to care about turning more if the ball is closer
-        double weight = distance + Math.abs((Math.abs(toBeAdded.getRelAngle(ConnectedTo)) / 35) * (-1*(1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
-
-        matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
-        matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
+        for (int looper = 0; looper < nodes.size(); looper++) {
+            // logistical equation to care about turning more if the ball is closer
+            double weight = distance + Math.abs((Math.abs(toBeAdded.getAngleToFrom(ConnectedTo, nodes.get(looper))) / 35) * (-1 * (1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
+            graph[looper][nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
+            graph[looper][nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
+        }
     }
 
     /**
@@ -90,6 +94,7 @@ public class Graph {
             // checks to make sure it doesn't add itself
             // we wouldn't need this if we just didn't iterate to the last element however threading issues could occur
             if (nodes.get(i) != newNode) {
+                // basically the A* heuristic that says don't go backwards
                 if (!(newNode.getAngleToFrom(nodes.get(i), nodes.get(0)) < 0)) {
                     putNodeInGraph(newNode, nodes.get(i));
                 }
@@ -98,17 +103,19 @@ public class Graph {
     }
 
     private void resize() {
-        double[][] newMatrix = new double[nodes.size()][nodes.size()];
-        // iterate through matrix and set the values in newMatrix to the old ones
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
-                // check if the index is in bounds
-                if (i < newMatrix.length && j < newMatrix.length) {
-                    newMatrix[i][j] = matrix[i][j];
+        double[][][] newMatrix = new double[nodes.size()][nodes.size()][nodes.size()];
+        // iterate through matrix and set the values in newMatrix to the old ones O(n^3)
+        for (int i = 0; i < graph.length; i++) {
+            for (int j = 0; j < graph.length; j++) {
+                for (int k = 0; k < graph.length; k++){
+                    // check if the index is in bounds
+                    if (i < newMatrix.length && j < newMatrix.length && k < newMatrix.length) {
+                        newMatrix[i][j][k] = graph[i][j][k];
+                    }
                 }
             }
         }
-        matrix = newMatrix;
+        graph = newMatrix;
     }
 
     public ArrayList<Node> getPath(int steps) {
@@ -156,6 +163,9 @@ public class Graph {
             // sets the current node to the one that was added to the path most recently
             Node curr = tempPath.getPath().get(tempPath.getPath().size() - 1);
 
+            // selects the matrix with the one from the previous
+            double[][] matrix = graph[nodeMap.get(tempPath.getPath().get(tempPath.getPath().size() - 2))];
+
             // caching the index
             int indexOfCurr = nodeMap.get(curr);
 
@@ -193,11 +203,28 @@ public class Graph {
         }
         System.out.print("\n");
 
-        for (double[] doubles : matrix) {
-            for (double aDouble : doubles) {
-                System.out.print(aDouble + ", ");
+        for (double[][] matrix : graph) {
+            for (double[] doubles : matrix) {
+                for (double aDouble : doubles) {
+                    System.out.print(aDouble + ", ");
+                }
+                System.out.print("\n");
             }
-            System.out.print("\n");
         }
+    }
+
+    public boolean containsNan() {
+        boolean toBeReturned = false;
+        for (double[][] doubles : graph) {
+            for (int j = 0; j < graph.length; j++) {
+                for (int k = 0; k < graph.length; k++) {
+                    if (Double.isNaN(doubles[j][k])) {
+                        toBeReturned = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return toBeReturned;
     }
 }

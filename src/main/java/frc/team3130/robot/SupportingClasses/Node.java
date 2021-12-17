@@ -79,8 +79,45 @@ public class Node {
         double B = this.getDistance(to);
         // Side c in a triangle
         double C = to.getDistance(from);
+
+        // check if A or B or C is 0 which would result in NaN
+        if (A == 0 || B == 0 || C == 0) {
+            return 0;
+        }
+
         // set the heading using law of cosines
-        return 180 - Math.acos((Math.pow(A, 2) + Math.pow(B, 2) - Math.pow(C, 2)) / (2 * A * B));
+        double degrees = 180 - Math.toDegrees(Math.acos((Math.pow(A, 2) + Math.pow(B, 2) - Math.pow(C, 2)) / (2 * A * B)));
+
+        // logic for different quadrants
+        int offset = 0;
+        int sign = 1;
+        if (to.x_pos - this.x_pos < 0 && to.y_pos - this.y_pos > 0) {
+            offset = 90;
+        }
+
+        else if (to.x_pos - this.x_pos < 0 && to.y_pos - this.y_pos < 0) {
+            offset = 90;
+            sign = -1;
+        }
+
+        else if (to.x_pos - this.x_pos > 0 && to.y_pos - this.y_pos < 0) {
+            sign = -1;
+        }
+
+        // applying offsets
+        degrees = sign * (degrees + offset);
+
+        // debugging NaN
+        if (Double.isNaN(degrees)) {
+            System.out.println("\n\nArc cosine: " + Math.acos((Math.pow(A, 2) + Math.pow(B, 2) - Math.pow(C, 2)) / (2 * A * B)));
+            System.out.println("Passed into arc cosine: " + (Math.pow(A, 2) + Math.pow(B, 2) - Math.pow(C, 2)) / (2 * A * B));
+            System.out.println("A: " + A);
+            System.out.println("B: " + B);
+            System.out.println("C: " + C);
+            System.out.println("\n");
+            return 0;
+        }
+        return degrees;
     }
 
     public double getDistance(Node otherNode) {
