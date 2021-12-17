@@ -31,16 +31,43 @@ public class Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        // if its within 0.5 units
+        // if its within 0.1 units, it's the same ball
         return this.x_pos < node.x_pos + 0.1 && this.x_pos > node.x_pos - 0.1 && this.y_pos < node.y_pos + 0.1 && this.y_pos > node.y_pos - 0.1;
     }
 
     public double getRelAngle(Node otherNode) {
-        return Math.toDegrees(Math.asin(otherNode.getY_pos() - this.getY_pos() / getDistance(otherNode)));
+        int offset = 0;
+        int sign = 1;
+        if (otherNode.x_pos - this.x_pos < 0 && otherNode.y_pos - this.y_pos > 0) {
+            offset = 90;
+        }
+
+        else if (otherNode.x_pos - this.x_pos < 0 && otherNode.y_pos - this.y_pos < 0) {
+            offset = 90;
+            sign = -1;
+        }
+
+        else if (otherNode.x_pos - this.x_pos > 0 && otherNode.y_pos - this.y_pos < 0) {
+            sign = -1;
+        }
+
+        double degrees = sign * (Math.toDegrees(Math.acos(Math.abs((otherNode.x_pos - this.x_pos) / getDistance(otherNode)))) + offset);
+
+        if (Double.isNaN(degrees)) {
+            System.out.println("\n\nArc cosine: " + Math.acos(Math.abs((otherNode.x_pos - this.x_pos) / getDistance(otherNode))));
+            System.out.println("Passed into arc cosine: " + Math.abs((otherNode.x_pos - this.x_pos) / getDistance(otherNode)));
+            System.out.println("x - x: " + (otherNode.x_pos - this.x_pos));
+            System.out.println("Distance: " + getDistance(otherNode));
+            System.out.println("offset: " + offset);
+            System.out.println("sign: " + sign);
+            System.out.println("\n");
+            return 0;
+        }
+        return degrees;
     }
 
     /**
-     * Using the law of cosines this method gets the angle to one node if aproached from another
+     * Using the law of cosines this method gets the angle to one node if approached from another
      * @param to node going to
      * @param from node coming to this node from
      * @return the angle measure
@@ -57,6 +84,6 @@ public class Node {
     }
 
     public double getDistance(Node otherNode) {
-        return Math.sqrt(Math.pow(otherNode.getX_pos() - this.getX_pos(), 2) + Math.pow(otherNode.getY_pos() - this.getY_pos(), 2));
+        return Math.sqrt(Math.abs(Math.pow(otherNode.getX_pos() - this.getX_pos(), 2) + Math.pow(otherNode.getY_pos() - this.getY_pos(), 2)));
     }
 }

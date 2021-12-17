@@ -8,7 +8,9 @@ public class GraphTest extends TestCase {
         for (double[] doubles : testArr) {
             Graph.getInstance().addNode(new Node(doubles[0], doubles[1]));
         }
-         System.out.println(Graph.getInstance().getPath(5));
-        assertTrue(Graph.getInstance().getPath(5).size() > 1);
+
+        Graph.getInstance().printGraph();
+
+        assertFalse(Graph.getInstance().containsDuplicates());
     }
 }

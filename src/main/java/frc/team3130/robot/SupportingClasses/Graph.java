@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Graph {
     HashMap<Node, Integer> nodeMap;
-    private ArrayList<Node> nodes;
+    private final ArrayList<Node> nodes;
 
     // adjacency matrix
     private double[][] matrix;
@@ -47,7 +47,8 @@ public class Graph {
     private void putNodeInGraph(Node toBeAdded, Node ConnectedTo) {
         double distance = toBeAdded.getDistance(ConnectedTo);
         // logistical equation to care about turning more if the ball is closer
-        double weight = distance + ((toBeAdded.getRelAngle(ConnectedTo) / 35) * (-1*(1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
+        double weight = distance + Math.abs((Math.abs(toBeAdded.getRelAngle(ConnectedTo)) / 35) * (-1*(1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
+
         matrix[nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
         matrix[nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
     }
@@ -65,6 +66,19 @@ public class Graph {
 
     public boolean contains(Node comparator) {
         return nodeMap.containsKey(comparator);
+    }
+
+    public boolean containsDuplicates() {
+        Set<Node> seen = new HashSet<>();
+        for (Node node : nodes) {
+            if (seen.contains(node)) {
+                return true;
+            }
+            else {
+                seen.add(node);
+            }
+        }
+        return false;
     }
 
     /**
@@ -171,5 +185,19 @@ public class Graph {
         System.out.println("Exiting because ran out of time !!!!! ");
         System.out.println("size: " + data.getPath().size());
         return data;
+    }
+
+    public void printGraph() {
+        for (Node node : nodes) {
+            System.out.print("(" + node.x_pos + ", " + node.y_pos + "), ");
+        }
+        System.out.print("\n");
+
+        for (double[] doubles : matrix) {
+            for (double aDouble : doubles) {
+                System.out.print(aDouble + ", ");
+            }
+            System.out.print("\n");
+        }
     }
 }
