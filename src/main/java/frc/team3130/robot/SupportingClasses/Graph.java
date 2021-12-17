@@ -163,8 +163,15 @@ public class Graph {
             // sets the current node to the one that was added to the path most recently
             Node curr = tempPath.getPath().get(tempPath.getPath().size() - 1);
 
-            // selects the matrix with the one from the previous
-            double[][] matrix = graph[nodeMap.get(tempPath.getPath().get(tempPath.getPath().size() - 2))];
+            double[][] matrix;
+
+            if (tempPath.getPath().size() > 2) {
+                // selects the matrix with the one from the previous
+                 matrix = graph[nodeMap.get(tempPath.getPath().get(tempPath.getPath().size() - 2))];
+            }
+            else {
+                matrix = graph[0];
+            }
 
             // caching the index
             int indexOfCurr = nodeMap.get(curr);

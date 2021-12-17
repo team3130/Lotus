@@ -13,5 +13,8 @@ public class GraphTest extends TestCase {
 
         assertFalse(Graph.getInstance().containsDuplicates());
         assertFalse(Graph.getInstance().containsNan());
+
+        System.out.println("\n\n\n" + Graph.getInstance().getPath(5));
+
     }
 }
