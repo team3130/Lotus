@@ -1,15 +1,19 @@
 package frc.team3130.robot.SupportingClasses;
 
-import frc.team3130.robot.subsystems.Chassis;
+import edu.wpi.first.wpiutil.math.Pair;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 public class Graph {
     HashMap<Node, Integer> nodeMap;
     private final ArrayList<Node> nodes;
 
     // adjacency matrix
-    private double[][][] graph;
+    private double[][][] adjTensor;
+
+    // lambda for logistical equation
+    private final BiFunction<Double, Double, Double> logEquation = (Double angle, Double distance) -> (angle * (-1 * (1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
 
     // used for ensuring it's a singleton
     private static final Graph m_instance = new Graph();
@@ -27,13 +31,13 @@ public class Graph {
     private Graph() {
         nodes = new ArrayList<>();
         nodeMap = new HashMap<>();
-        graph = new double[3][3][3];
+        adjTensor = new double[3][3][3];
 
         // O(n^3)
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph.length; j++) {
-                for (int k = 0; k < graph.length; k++) {
-                    graph[i][j][k] = 0;
+        for (int i = 0; i < adjTensor.length; i++) {
+            for (int j = 0; j < adjTensor.length; j++) {
+                for (int k = 0; k < adjTensor.length; k++) {
+                    adjTensor[i][j][k] = 0;
                 }
             }
         }
@@ -51,9 +55,31 @@ public class Graph {
         double distance = toBeAdded.getDistance(ConnectedTo);
         for (int looper = 0; looper < nodes.size(); looper++) {
             // logistical equation to care about turning more if the ball is closer
-            double weight = distance + Math.abs((Math.abs(toBeAdded.getAngleToFrom(ConnectedTo, nodes.get(looper))) / 35) * (-1 * (1 / (1 + 10 * Math.pow(Math.E, (-0.7 * distance)))) + 1));
-            graph[looper][nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
-            graph[looper][nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
+            double weight = distance + logEquation.apply(Math.abs(toBeAdded.getAngleToFrom(ConnectedTo, nodes.get(looper))) / 35, distance);
+            // add to undirected graph
+            adjTensor[looper][nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
+            adjTensor[looper][nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
+        }
+    }
+
+    /**
+     * Designed to connect nodes in the graph that involve the bot
+     * instead of using getAngleToForm we instead use the
+     * @param botNode the node that corresponds to nodes.get(0) aka the bot
+     * @param ConnectedTo the node connecting to
+     */
+    private void putNodeInGraphConnectedToBot(Node botNode, Node ConnectedTo) {
+        //TODO: replace botAngle with Chassis.getInstance().getHeading()
+        double botAngle = 0;
+        // distance
+        double distance = botNode.getDistance(ConnectedTo);
+        // weight using the logistical equation
+        double weight = distance + logEquation.apply(Math.abs(botNode.getDistance(ConnectedTo) / 35), distance);
+        // add to every matrix in the tensor
+        for (int looper = 0; looper < nodes.size(); looper++) {
+            // add to undirected graph
+            adjTensor[looper][nodeMap.get(ConnectedTo)][nodeMap.get(botNode)] = weight;
+            adjTensor[looper][nodeMap.get(botNode)][nodeMap.get(ConnectedTo)] = weight;
         }
     }
 
@@ -90,14 +116,19 @@ public class Graph {
      * @param newNode the node to be connected
      */
     private void ConnectNode(Node newNode) {
-        for (int i = 1; i < nodes.size(); i++) {
+        for (int i = 0; i < nodes.size(); i++) {
             // checks to make sure it doesn't add itself
             // we wouldn't need this if we just didn't iterate to the last element however threading issues could occur
-            if (nodes.get(i) != newNode) {
+            if (nodes.get(i) != newNode && i != 0) {
                 // basically the A* heuristic that says don't go backwards
                 if (!(newNode.getAngleToFrom(nodes.get(i), nodes.get(0)) < 0)) {
                     putNodeInGraph(newNode, nodes.get(i));
                 }
+            }
+            // will run if new Node is not current and i == 0;
+            else if (nodes.get(i) != newNode && i == 0) {
+                // connect off of distance
+                putNodeInGraph(nodes.get(i), newNode);
             }
         }
     }
@@ -105,17 +136,17 @@ public class Graph {
     private void resize() {
         double[][][] newMatrix = new double[nodes.size()][nodes.size()][nodes.size()];
         // iterate through matrix and set the values in newMatrix to the old ones O(n^3)
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph.length; j++) {
-                for (int k = 0; k < graph.length; k++){
+        for (int i = 0; i < adjTensor.length; i++) {
+            for (int j = 0; j < adjTensor.length; j++) {
+                for (int k = 0; k < adjTensor.length; k++){
                     // check if the index is in bounds
                     if (i < newMatrix.length && j < newMatrix.length && k < newMatrix.length) {
-                        newMatrix[i][j][k] = graph[i][j][k];
+                        newMatrix[i][j][k] = adjTensor[i][j][k];
                     }
                 }
             }
         }
-        graph = newMatrix;
+        adjTensor = newMatrix;
     }
 
     public ArrayList<Node> getPath(int steps) {
@@ -167,10 +198,10 @@ public class Graph {
 
             if (tempPath.getPath().size() > 2) {
                 // selects the matrix with the one from the previous
-                 matrix = graph[nodeMap.get(tempPath.getPath().get(tempPath.getPath().size() - 2))];
+                 matrix = adjTensor[nodeMap.get(tempPath.getPath().get(tempPath.getPath().size() - 2))];
             }
             else {
-                matrix = graph[0];
+                matrix = adjTensor[0];
             }
 
             // caching the index
@@ -210,21 +241,22 @@ public class Graph {
         }
         System.out.print("\n");
 
-        for (double[][] matrix : graph) {
+        for (double[][] matrix : adjTensor) {
             for (double[] doubles : matrix) {
                 for (double aDouble : doubles) {
                     System.out.print(aDouble + ", ");
                 }
                 System.out.print("\n");
             }
+            System.out.print("\n");
         }
     }
 
     public boolean containsNan() {
         boolean toBeReturned = false;
-        for (double[][] doubles : graph) {
-            for (int j = 0; j < graph.length; j++) {
-                for (int k = 0; k < graph.length; k++) {
+        for (double[][] doubles : adjTensor) {
+            for (int j = 0; j < adjTensor.length; j++) {
+                for (int k = 0; k < adjTensor.length; k++) {
                     if (Double.isNaN(doubles[j][k])) {
                         toBeReturned = true;
                         break;
