@@ -9,7 +9,7 @@ public class GraphTest extends TestCase {
             Graph.getInstance().addNode(new Node(doubles[0], doubles[1]));
         }
 
-        Graph.getInstance().printGraph();
+        // Graph.getInstance().printGraph();
 
         assertFalse(Graph.getInstance().containsDuplicates());
         assertFalse(Graph.getInstance().containsNan());

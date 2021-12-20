@@ -123,4 +123,8 @@ public class Node {
     public double getDistance(Node otherNode) {
         return Math.sqrt(Math.abs(Math.pow(otherNode.getX_pos() - this.getX_pos(), 2) + Math.pow(otherNode.getY_pos() - this.getY_pos(), 2)));
     }
+
+    public String toString() {
+        return "(" + x_pos + ", " + y_pos + ")";
+    }
 }

@@ -56,8 +56,7 @@ public class Graph {
         for (int looper = 0; looper < nodes.size(); looper++) {
             // logistical equation to care about turning more if the ball is closer
             double weight = distance + logEquation.apply(Math.abs(toBeAdded.getAngleToFrom(ConnectedTo, nodes.get(looper))) / 35, distance);
-            // add to undirected graph
-            adjTensor[looper][nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
+            // add to directed graph
             adjTensor[looper][nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
         }
     }
@@ -74,7 +73,7 @@ public class Graph {
         // distance
         double distance = botNode.getDistance(ConnectedTo);
         // weight using the logistical equation
-        double weight = distance + logEquation.apply(Math.abs(botNode.getDistance(ConnectedTo) / 35), distance);
+        double weight = distance + logEquation.apply(Math.abs(botNode.getRelAngle(ConnectedTo) / 35), distance);
         // add to every matrix in the tensor
         for (int looper = 0; looper < nodes.size(); looper++) {
             // add to undirected graph
@@ -128,7 +127,7 @@ public class Graph {
             // will run if new Node is not current and i == 0;
             else if (nodes.get(i) != newNode && i == 0) {
                 // connect off of distance
-                putNodeInGraph(nodes.get(i), newNode);
+                putNodeInGraph(newNode, nodes.get(i));
             }
         }
     }
@@ -149,12 +148,17 @@ public class Graph {
         adjTensor = newMatrix;
     }
 
+    /**
+     * Uses Dijkstra's algorithm to determine the best path to take
+     * @param steps the number of nodes that you want the ball to go through
+     * @return the shortest path to a node
+     */
     public ArrayList<Node> getPath(int steps) {
         GraphPath winner = new GraphPath(Double.MAX_VALUE, new ArrayList<>());
         // for each element of nodes except for the bot which is at index 0
         for (int i = 1; i < nodes.size(); i++) {
             GraphPath first = Dijkstra(nodes.get(i), steps);
-            if (first.getSteps() == steps && first.getDistance() < winner.getDistance()) {
+            if (first.getDistance() < winner.getDistance()) {
                 winner = first;
             }
         }
@@ -221,9 +225,10 @@ public class Graph {
 
             // for each adjacent node
             for (int looper = 0; looper < adj.length; looper++) {
-                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][indexOfCurr] < distances[looper]) && (matrix[looper][indexOfCurr] != 0 && (tempPath.getSteps() == steps - 1 || !(nodes.get(looper).equals(goal))))) {
-                    distances[looper] = tempPath.getDistance() + matrix[indexOfCurr][looper];
-                    tempPath.addDistance(matrix[indexOfCurr][looper]);
+                // additional logic: && (tempPath.getSteps() == steps - 1 || !(nodes.get(looper).equals(goal))))
+                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][indexOfCurr] < distances[looper]) && (matrix[looper][indexOfCurr] != 0)) {
+                    distances[looper] = tempPath.getDistance() + matrix[looper][indexOfCurr];
+                    tempPath.addDistance(matrix[looper][indexOfCurr]);
                     tempPath.addNodeToPath(nodes.get(looper));
                     queue.add(tempPath);
                 }
