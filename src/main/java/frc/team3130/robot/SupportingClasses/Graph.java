@@ -1,13 +1,12 @@
 package frc.team3130.robot.SupportingClasses;
 
-import edu.wpi.first.wpiutil.math.Pair;
-
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.BiFunction;
 
 public class Graph {
     HashMap<Node, Integer> nodeMap;
-    private final ArrayList<Node> nodes;
+    public final ArrayList<Node> nodes;
 
     // adjacency matrix
     private double[][][] adjTensor;
@@ -58,6 +57,7 @@ public class Graph {
             double weight = distance + logEquation.apply(Math.abs(toBeAdded.getAngleToFrom(ConnectedTo, nodes.get(looper))) / 35, distance);
             // add to directed graph
             adjTensor[looper][nodeMap.get(toBeAdded)][nodeMap.get(ConnectedTo)] = weight;
+            adjTensor[looper][nodeMap.get(ConnectedTo)][nodeMap.get(toBeAdded)] = weight;
         }
     }
 
@@ -73,12 +73,12 @@ public class Graph {
         // distance
         double distance = botNode.getDistance(ConnectedTo);
         // weight using the logistical equation
-        double weight = distance + logEquation.apply(Math.abs(botNode.getRelAngle(ConnectedTo) / 35), distance);
+        double weight = distance + logEquation.apply(Math.abs(botNode.getRelAngle(ConnectedTo) / 20), distance);
         // add to every matrix in the tensor
         for (int looper = 0; looper < nodes.size(); looper++) {
             // add to undirected graph
-            adjTensor[looper][nodeMap.get(ConnectedTo)][nodeMap.get(botNode)] = weight;
             adjTensor[looper][nodeMap.get(botNode)][nodeMap.get(ConnectedTo)] = weight;
+            adjTensor[looper][nodeMap.get(ConnectedTo)][nodeMap.get(botNode)] = weight;
         }
     }
 
@@ -119,15 +119,12 @@ public class Graph {
             // checks to make sure it doesn't add itself
             // we wouldn't need this if we just didn't iterate to the last element however threading issues could occur
             if (nodes.get(i) != newNode && i != 0) {
-                // basically the A* heuristic that says don't go backwards
-                if (!(newNode.getAngleToFrom(nodes.get(i), nodes.get(0)) < 0)) {
-                    putNodeInGraph(newNode, nodes.get(i));
-                }
+                putNodeInGraph(newNode, nodes.get(i));
             }
             // will run if new Node is not current and i == 0;
             else if (nodes.get(i) != newNode && i == 0) {
                 // connect off of distance
-                putNodeInGraph(newNode, nodes.get(i));
+                putNodeInGraphConnectedToBot(nodes.get(i), newNode);
             }
         }
     }
@@ -204,9 +201,16 @@ public class Graph {
                 // selects the matrix with the one from the previous
                  matrix = adjTensor[nodeMap.get(tempPath.getPath().get(tempPath.getPath().size() - 2))];
             }
+
             else {
                 matrix = adjTensor[0];
             }
+
+            System.out.println("\n\nwile loop");
+            System.out.println("curr: " + curr);
+            System.out.println("goal: " + goal);
+            System.out.println("queue: " + queue);
+            System.out.println("\n");
 
             // caching the index
             int indexOfCurr = nodeMap.get(curr);
@@ -215,7 +219,7 @@ public class Graph {
             visited[indexOfCurr] = true;
 
             // should ensure that we find a 5-step path if one exists
-            if (goal == curr) {
+            if (goal.equals(curr)) {
                 System.out.println("Exiting from first if statement !!!!! ");
                 return tempPath;
             }
@@ -225,18 +229,32 @@ public class Graph {
 
             // for each adjacent node
             for (int looper = 0; looper < adj.length; looper++) {
+                GraphPath tempIteratorPath = tempPath.copy();
                 // additional logic: && (tempPath.getSteps() == steps - 1 || !(nodes.get(looper).equals(goal))))
-                if (!visited[looper] && (tempPath.getDistance() + matrix[looper][indexOfCurr] < distances[looper]) && (matrix[looper][indexOfCurr] != 0)) {
-                    distances[looper] = tempPath.getDistance() + matrix[looper][indexOfCurr];
-                    tempPath.addDistance(matrix[looper][indexOfCurr]);
-                    tempPath.addNodeToPath(nodes.get(looper));
-                    queue.add(tempPath);
+                boolean one = !visited[looper];
+                boolean two = (tempPath.getDistance() + adj[looper] < distances[looper]);
+                boolean three = (adj[looper] != 0);
+                boolean four = tempPath.getSteps() == steps - 1;
+                boolean five = !(nodes.get(looper).equals(goal));
+
+                if (!five) {
+                    System.out.println("goal in sights");
+                }
+
+                if (one && two && three ) {
+                    System.out.println("FOR LOOP ITERATION: " + looper);
+                    distances[looper] = tempIteratorPath.getDistance() + adj[looper];
+                    tempIteratorPath.addDistance(adj[looper]);
+                    tempIteratorPath.addNodeToPath(nodes.get(looper));
+                    queue.add(tempIteratorPath);
                 }
             }
             data = tempPath;
         }
         System.out.println("Exiting because ran out of time !!!!! ");
         System.out.println("size: " + data.getPath().size());
+        System.out.println("goal: " + goal);
+        System.out.println("path: " + data.getPath());
         return data;
     }
 
@@ -249,7 +267,7 @@ public class Graph {
         for (double[][] matrix : adjTensor) {
             for (double[] doubles : matrix) {
                 for (double aDouble : doubles) {
-                    System.out.print(aDouble + ", ");
+                    System.out.print((int) aDouble + ", ");
                 }
                 System.out.print("\n");
             }
