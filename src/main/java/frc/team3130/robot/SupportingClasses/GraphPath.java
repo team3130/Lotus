@@ -29,7 +29,6 @@ public class GraphPath {
     }
 
     public void addNodeToPath(Node nextNode) {
-        System.out.println(nextNode);
         path.add(nextNode);
     }
 

@@ -155,6 +155,8 @@ public class Graph {
         // for each element of nodes except for the bot which is at index 0
         for (int i = 1; i < nodes.size(); i++) {
             GraphPath first = Dijkstra(nodes.get(i), steps);
+            System.out.println("first: " + first);
+            System.out.println("goal: " + nodes.get(i));
             if (first.getDistance() < winner.getDistance()) {
                 winner = first;
             }
@@ -195,6 +197,9 @@ public class Graph {
             // sets the current node to the one that was added to the path most recently
             Node curr = tempPath.getPath().get(tempPath.getPath().size() - 1);
 
+            System.out.println(goal);
+            System.out.println(queue);
+
             double[][] matrix;
 
             if (tempPath.getPath().size() > 2) {
@@ -206,12 +211,6 @@ public class Graph {
                 matrix = adjTensor[0];
             }
 
-            System.out.println("\n\nwile loop");
-            System.out.println("curr: " + curr);
-            System.out.println("goal: " + goal);
-            System.out.println("queue: " + queue);
-            System.out.println("\n");
-
             // caching the index
             int indexOfCurr = nodeMap.get(curr);
 
@@ -220,7 +219,7 @@ public class Graph {
 
             // should ensure that we find a 5-step path if one exists
             if (goal.equals(curr)) {
-                System.out.println("Exiting from first if statement !!!!! ");
+                System.out.println("exiting from thing");
                 return tempPath;
             }
 
@@ -237,12 +236,16 @@ public class Graph {
                 boolean four = tempPath.getSteps() == steps - 1;
                 boolean five = !(nodes.get(looper).equals(goal));
 
-                if (!five) {
-                    System.out.println("goal in sights");
-                }
+                System.out.println("\n\nlooped one: " + nodes.get(looper));
+                System.out.println("goal: " + goal);
+                System.out.println("curr: " + curr);
+                System.out.println("one: " + one);
+                System.out.println("two: " + two);
+                System.out.println("three: " + three);
+                System.out.println("four: " + four);
+                System.out.println("five: " + five + "\n\n");
 
-                if (one && two && three ) {
-                    System.out.println("FOR LOOP ITERATION: " + looper);
+                if (one && two && three && (five || four)) {
                     distances[looper] = tempIteratorPath.getDistance() + adj[looper];
                     tempIteratorPath.addDistance(adj[looper]);
                     tempIteratorPath.addNodeToPath(nodes.get(looper));
@@ -251,10 +254,7 @@ public class Graph {
             }
             data = tempPath;
         }
-        System.out.println("Exiting because ran out of time !!!!! ");
-        System.out.println("size: " + data.getPath().size());
-        System.out.println("goal: " + goal);
-        System.out.println("path: " + data.getPath());
+        System.out.println("ran out of time");
         return data;
     }
 
