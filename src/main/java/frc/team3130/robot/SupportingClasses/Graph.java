@@ -73,7 +73,7 @@ public class Graph {
         // distance
         double distance = botNode.getDistance(ConnectedTo);
         // weight using the logistical equation
-        double weight = distance + logEquation.apply(Math.abs(botNode.getRelAngle(ConnectedTo) / 20), distance);
+        double weight = distance + logEquation.apply(Math.abs((botNode.getRelAngle(ConnectedTo) + botAngle) / 20), distance);
         // add to every matrix in the tensor
         for (int looper = 0; looper < nodes.size(); looper++) {
             // add to undirected graph
