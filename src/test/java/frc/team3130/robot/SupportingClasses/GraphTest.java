@@ -14,6 +14,11 @@ public class GraphTest extends TestCase {
         assertFalse(Graph.getInstance().containsDuplicates());
         assertFalse(Graph.getInstance().containsNan());
 
+        // asserts that the size is 5
+        GraphPath bruteForce = Graph.getInstance().bruteForce(5);
+        System.out.println(bruteForce);
+        assertEquals(5, bruteForce.getPath().size());
+
         System.out.println("\n\n\n" + Graph.getInstance().getPath(5));
 
     }

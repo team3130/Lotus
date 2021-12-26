@@ -1,14 +1,15 @@
 package frc.team3130.robot.SupportingClasses;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-public class GraphPath {
+public class GraphPath implements Comparable<GraphPath>{
     private double distance;
-    private final ArrayList<Node> path;
+    private final ArrayDeque<Node> path;
 
-    public GraphPath(double distance, ArrayList<Node> path) {
+    public GraphPath(double distance, ArrayDeque<Node> path) {
         this.distance = distance;
-        this.path = new ArrayList<>();
+        this.path = new ArrayDeque<>();
         this.path.addAll(path);
     }
 
@@ -24,7 +25,7 @@ public class GraphPath {
         this.distance += distance;
     }
 
-    public ArrayList<Node> getPath() {
+    public ArrayDeque<Node> getPath() {
         return path;
     }
 
@@ -37,11 +38,15 @@ public class GraphPath {
     }
 
     public GraphPath copy() {
-        return new GraphPath(distance, new ArrayList<>(path));
+        return new GraphPath(distance, new ArrayDeque<>(path));
     }
 
     public String toString() {
         return "path: " + path;
     }
 
+    @Override
+    public int compareTo(GraphPath other) {
+        return Double.compare(distance, other.distance);
+    }
 }

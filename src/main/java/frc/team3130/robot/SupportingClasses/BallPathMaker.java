@@ -15,6 +15,7 @@ import frc.team3130.robot.sensors.PixyCam;
 import frc.team3130.robot.subsystems.Chassis;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 /**
@@ -73,7 +74,7 @@ public class BallPathMaker extends ComputerVision implements Runnable{
 
         // the 5 is the number of balls that it can still take
         //TODO: find a way to find out how many more balls we can hold
-        ArrayList<Node> routeNode = Graph.getInstance().getPath(5);
+        ArrayDeque<Node> routeNode = Graph.getInstance().getPath(5);
         ArrayList<Pose2d> route = new ArrayList<>();
 
         for (Node node : routeNode) {
