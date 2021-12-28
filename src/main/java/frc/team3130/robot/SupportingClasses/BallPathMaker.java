@@ -74,7 +74,7 @@ public class BallPathMaker extends ComputerVision implements Runnable{
 
         // the 5 is the number of balls that it can still take
         //TODO: find a way to find out how many more balls we can hold
-        ArrayDeque<Node> routeNode = Graph.getInstance().getPath(5);
+        Node[] routeNode = Graph.getInstance().getPath(5);
         ArrayList<Pose2d> route = new ArrayList<>();
 
         for (Node node : routeNode) {

@@ -155,8 +155,8 @@ public class Graph {
      * @param steps the number of nodes that you want the ball to go through
      * @return the shortest path to a node
      */
-    public ArrayDeque<Node> getPath(int steps) {
-        GraphPath winner = new GraphPath(Double.MAX_VALUE, new ArrayDeque<>());
+    public Node[] getPath(int steps) {
+        GraphPath winner = new GraphPath(Double.MAX_VALUE, new Node[steps]);
         // for each element of nodes except for the bot which is at index 0
         for (int i = 1; i < nodes.size(); i++) {
             GraphPath first = Dijkstra(nodes.get(i), steps);
@@ -184,30 +184,29 @@ public class Graph {
      */
     public GraphPath bruteForce(int steps) {
         if (nodes.isEmpty()) {
-            return new GraphPath(0, new ArrayDeque<>());
+            return new GraphPath(0, new Node[steps]);
         }
         Node[] nodeArray = (Node[]) nodes.toArray();
 
         int amntOfObjects = factorial(nodeArray.length);
         int sample = factorial(nodeArray.length - steps);
-        int combinations = amntOfObjects / sample;
+        int permutations = amntOfObjects / sample;
 
-        GraphPath[] paths = new GraphPath[combinations];
+        GraphPath[] paths = new GraphPath[permutations];
 
         // generate all possible paths
-        for (int bigLooper = 0; bigLooper < combinations; bigLooper++) {
+        for (int bigLooper = 0; bigLooper < permutations; bigLooper++) {
             GraphPath temp;
-            for () {
+            for (int i = 0; i < nodeArray.length; i++)  {
 
             }
-
         }
 
         // temporary variable to hold the current shortest path, set distance to infinity at first
-        GraphPath shortest = new GraphPath(Double.MAX_VALUE, new ArrayDeque<>());
+        GraphPath shortest = new GraphPath(Double.MAX_VALUE, new Node[steps]);
         // sort through all possible paths
         for (int shortestLooper = 0; shortestLooper < paths.length; shortestLooper++) {
-            
+
         }
 
     }
@@ -219,7 +218,7 @@ public class Graph {
      * @return the path in a {@link GraphPath} object
      */
     public GraphPath Dijkstra(Node goal, int steps) {
-        ArrayDeque<Node> path = new ArrayDeque<>();
+        Node[] path = new Node[steps];
         GraphPath data = new GraphPath(0, path);
 
         boolean[] visited = new boolean[nodes.size()];
@@ -235,28 +234,25 @@ public class Graph {
 
         PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
 
-        ArrayDeque<Node> temp = new ArrayDeque<>();
-        temp.add(nodes.get(0));
-        queue.add(new GraphPath(0, temp));
+        Node[] temp = new Node[steps];
+        GraphPath gpath = new GraphPath(0, temp);
+        gpath.addNodeToPath(nodes.get(0));
+        queue.add(gpath);
 
         while (!queue.isEmpty()) {
             // makes a copy of the GraphPath object from the min heap
             GraphPath tempPath = queue.poll().copy(); // the copy is to prevent modifying only the same object
             // sets the current node to the one that was added to the path most recently
-            Node curr = tempPath.getPath().getLast();
+            Node curr = tempPath.getLast();
 
             System.out.println(goal);
             System.out.println(queue);
 
             double[][] matrix;
 
-            if (tempPath.getPath().size() > 2) {
-                // temporary node removed from the back to be added back
-                Node temptemp = tempPath.getPath().pollLast();
+            if (tempPath.getPath().length > 2) {
                 // selects the matrix with the one from the previous
-                matrix = adjTensor[nodeMap.get(tempPath.getPath().getLast())];
-                // add the node back to the back of the deque
-                tempPath.getPath().add(temptemp);
+                matrix = adjTensor[nodeMap.get(tempPath.getSecondLast())];
             }
 
             else {
