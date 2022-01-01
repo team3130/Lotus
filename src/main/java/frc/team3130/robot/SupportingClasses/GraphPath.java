@@ -2,34 +2,19 @@ package frc.team3130.robot.SupportingClasses;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GraphPath implements Comparable<GraphPath>{
     private double distance;
-    private final Node[] path;
-    private int newIndex;
+    private final ArrayDeque<Node> path;
 
-    public GraphPath(double distance, Node[] path) {
+    public GraphPath(double distance, ArrayDeque<Node> path) {
         this.distance = distance;
-        this.path = path.clone();
-        newIndex = getNewestIndex();
+        this.path = new ArrayDeque<>();
+        this.path.addAll(path);
     }
 
-    public int getNewestIndex() {
-        for (int i = 0; i < path.length; i++) {
-            if (path[i] == null) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public Node getLast() {
-        return path[newIndex];
-    }
-
-    public Node getSecondLast() {
-        return path[newIndex - 1];
+    public GraphPath(double distance) {
+        this(distance, new ArrayDeque<>());
     }
 
     public double getDistance() {
@@ -44,24 +29,29 @@ public class GraphPath implements Comparable<GraphPath>{
         this.distance += distance;
     }
 
-    public Node[] getPath() {
+    public ArrayDeque<Node> getPath() {
         return path;
     }
 
     public void addNodeToPath(Node nextNode) {
-        path[newIndex++] = nextNode;
+        path.add(nextNode);
+    }
+
+    public void addNodeToPath(Node nextNode, double distance) {
+        addNodeToPath(nextNode);
+        addDistance(distance);
     }
 
     public int getSteps() {
-        return newIndex;
+        return path.size();
     }
 
     public GraphPath copy() {
-        return new GraphPath(distance, path.clone());
+        return new GraphPath(distance, new ArrayDeque<>(path));
     }
 
     public String toString() {
-        return "path: " + Arrays.toString(path);
+        return "path: " + path;
     }
 
     @Override

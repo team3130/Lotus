@@ -155,8 +155,8 @@ public class Graph {
      * @param steps the number of nodes that you want the ball to go through
      * @return the shortest path to a node
      */
-    public Node[] getPath(int steps) {
-        GraphPath winner = new GraphPath(Double.MAX_VALUE, new Node[steps]);
+    public ArrayDeque<Node> getPath(int steps) {
+        GraphPath winner = new GraphPath(Double.MAX_VALUE, new ArrayDeque<>());
         // for each element of nodes except for the bot which is at index 0
         for (int i = 1; i < nodes.size(); i++) {
             GraphPath first = Dijkstra(nodes.get(i), steps);
@@ -182,33 +182,111 @@ public class Graph {
      * @param steps the size of the path that will be generated
      * @return the fastest path
      */
-    public GraphPath bruteForce(int steps) {
+/*    public GraphPath bruteForce(int steps) {
         if (nodes.isEmpty()) {
-            return new GraphPath(0, new Node[steps]);
+            return new GraphPath(0, new ArrayDeque<>());
         }
-        Node[] nodeArray = (Node[]) nodes.toArray();
+        Node[] nodeArray = new Node[nodes.size() - 1];
 
         int amntOfObjects = factorial(nodeArray.length);
         int sample = factorial(nodeArray.length - steps);
-        int permutations = amntOfObjects / sample;
+        int combinations = amntOfObjects / sample;
 
-        GraphPath[] paths = new GraphPath[permutations];
+        GraphPath shortest = new GraphPath(Double.MAX_VALUE, new ArrayDeque<>());
 
         // generate all possible paths
-        for (int bigLooper = 0; bigLooper < permutations; bigLooper++) {
-            GraphPath temp;
-            for (int i = 0; i < nodeArray.length; i++)  {
-
+        for (int bigLooper = 0; bigLooper < combinations; bigLooper++) {
+            for (int looperSwapper1 = 0; looperSwapper1 < nodeArray.length; looperSwapper1++) {
+                for (int looperSwapper2 = 0; looperSwapper2 < nodeArray.length; looperSwapper2++) {
+                    GraphPath temp = new GraphPath(0, );
+                }
             }
         }
 
-        // temporary variable to hold the current shortest path, set distance to infinity at first
-        GraphPath shortest = new GraphPath(Double.MAX_VALUE, new Node[steps]);
-        // sort through all possible paths
-        for (int shortestLooper = 0; shortestLooper < paths.length; shortestLooper++) {
+    }*/
 
+
+    /**
+     * Initial call for permutation
+     * @return the shortest path
+     */
+    public GraphPath permute() {
+        // nodes without the first node because that is the bot
+        Node[] nodeses = new Node[nodes.size() - 1];
+        // for looper to add every item except for the 0th index in nodes
+        for (int looper = 1; looper < nodes.size(); looper++) {
+            nodeses[looper - 1] = nodes.get(looper);
         }
+        // "Array" of the shortest Graph paths should always be of size one
+        GraphPath[] shortest = new GraphPath[] {new GraphPath(Double.MAX_VALUE)};
+        // initial call to the recursive function
+        Permutation(0, nodeses, shortest);
+        // because of the array we don't need to worry about the method returning anything
+        return shortest[0];
+    }
 
+    /**
+     * Recursive method to permute through all possible ones
+     * @param index1 index used in method, pass in 0 for initial call
+     * @param nodes the array of the sample nodes
+     * @param shortest an array of size one to pass the shortest array by reference, because java sucks
+     */
+    private void Permutation(int index1, Node[] nodes, GraphPath[] shortest) {
+        // base case that checks if we have iterated to the end of the list
+        if (index1 != nodes.length - 1) {
+            // for loop
+            for (int index2 = index1, l = nodes.length; index2 < l; index2++) {
+                // swap two indices to permute through the array using heaps algorithm
+                swap(nodes, index1, index2);
+                // store the distance in a double variable for comparison
+                double tempDistance = determineDistance(nodes);
+                // check if the distance is less than the shortest one seen so far
+                if (tempDistance < shortest[0].getDistance()) {
+                    // temporary graph path that reflects the current node
+                    GraphPath temp = new GraphPath(0);
+                    // iterate to add items to the temporary GraphPath
+                    for (Node node : nodes)  temp.addNodeToPath(node);
+                    // determine the distance that this path takes
+                    temp.setDistance(tempDistance);
+                    shortest[0] = temp;
+                }
+                // re-call the method here
+                Permutation(index1 + 1, nodes, shortest);
+                // un-swap the array at the end of each iteration of the for looper
+                swap(nodes, index1, index2);
+            }
+        }
+    }
+
+    /**
+     * Determines the "distance" traveled
+     * Summation of the weights
+     * @param arr the path combination
+     * @return the distance traveled
+     */
+    private double determineDistance(Node[] arr) {
+        // the first one is going to the first node and the second one is getting to the second node
+        // remember if all of them are wrong by a similar amount then it doesn't matter too much I hope
+        double distanceTemp = adjTensor[0][0][nodeMap.get(arr[0])] + adjTensor[0][nodeMap.get(arr[0])][nodeMap.get(arr[1])];
+        // iterate through array except for the first and last item
+        for (int looper = 2; looper < arr.length; looper++) {
+            // add distance of getting to the looper node from using the past two
+            distanceTemp += adjTensor[nodeMap.get(arr[looper - 2])][nodeMap.get(arr[looper - 1])][nodeMap.get(arr[looper])];
+        }
+        // return the distance
+        return distanceTemp;
+    }
+
+    /**
+     * Swaps items in a given Node Array
+     * @param arr array that the values get swapped in
+     * @param index1 the index of the first element to be swapped
+     * @param index2 the index of the second element to be swapped
+     */
+    private void swap(Node[] arr, int index1, int index2) {
+        Node temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
     }
 
     /**
@@ -218,7 +296,7 @@ public class Graph {
      * @return the path in a {@link GraphPath} object
      */
     public GraphPath Dijkstra(Node goal, int steps) {
-        Node[] path = new Node[steps];
+        ArrayDeque<Node> path = new ArrayDeque<>();
         GraphPath data = new GraphPath(0, path);
 
         boolean[] visited = new boolean[nodes.size()];
@@ -234,25 +312,28 @@ public class Graph {
 
         PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
 
-        Node[] temp = new Node[steps];
-        GraphPath gpath = new GraphPath(0, temp);
-        gpath.addNodeToPath(nodes.get(0));
-        queue.add(gpath);
+        ArrayDeque<Node> temp = new ArrayDeque<>();
+        temp.add(nodes.get(0));
+        queue.add(new GraphPath(0, temp));
 
         while (!queue.isEmpty()) {
             // makes a copy of the GraphPath object from the min heap
             GraphPath tempPath = queue.poll().copy(); // the copy is to prevent modifying only the same object
             // sets the current node to the one that was added to the path most recently
-            Node curr = tempPath.getLast();
+            Node curr = tempPath.getPath().getLast();
 
             System.out.println(goal);
             System.out.println(queue);
 
             double[][] matrix;
 
-            if (tempPath.getPath().length > 2) {
+            if (tempPath.getPath().size() > 2) {
+                // temporary node removed from the back to be added back
+                Node temptemp = tempPath.getPath().pollLast();
                 // selects the matrix with the one from the previous
-                matrix = adjTensor[nodeMap.get(tempPath.getSecondLast())];
+                matrix = adjTensor[nodeMap.get(tempPath.getPath().getLast())];
+                // add the node back to the back of the deque
+                tempPath.getPath().add(temptemp);
             }
 
             else {
