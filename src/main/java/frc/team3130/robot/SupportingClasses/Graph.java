@@ -278,6 +278,101 @@ public class Graph {
     }
 
     /**
+     * Basically Dijkstra but you discount nodes
+     * the discount is the node coming to the one to
+     * This should ensure that you travel the right direction
+     * @return the shortest algorithm to a node
+     */
+    public GraphPath FrugalKugelAlgorithm(Node goal) {
+        ArrayDeque<Node> path = new ArrayDeque<>();
+        GraphPath data = new GraphPath(0, path);
+
+        boolean[] visited = new boolean[nodes.size()];
+        double[] distances = new double[nodes.size()];
+
+        // fills the array with false to show that it has not been visited
+        Arrays.fill(visited, false);
+        // sets the distance to the max value so that the first path will be smaller then nothing
+        Arrays.fill(distances, Double.MAX_VALUE);
+
+        // sets the distance to the bot to be zero
+        distances[0] = 0;
+
+        PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
+
+        ArrayDeque<Node> temp = new ArrayDeque<>();
+        temp.add(nodes.get(0));
+        queue.add(new GraphPath(0, temp));
+
+        while (!queue.isEmpty()) {
+            // makes a copy of the GraphPath object from the min heap
+            GraphPath tempPath = queue.poll().copy(); // the copy is to prevent modifying only the same object
+            // sets the current node to the one that was added to the path most recently
+            Node curr = tempPath.getPath().getLast();
+
+            System.out.println(goal);
+            System.out.println(queue);
+
+            double[][] matrix;
+
+            if (tempPath.getPath().size() > 2) {
+                // temporary node removed from the back to be added back
+                Node temptemp = tempPath.getPath().pollLast();
+                // selects the matrix with the one from the previous
+                matrix = adjTensor[nodeMap.get(tempPath.getPath().getLast())];
+                // add the node back to the back of the deque
+                tempPath.getPath().add(temptemp);
+            }
+
+            else {
+                matrix = adjTensor[0];
+            }
+
+            // caching the index
+            int indexOfCurr = nodeMap.get(curr);
+
+            // lets the algorithm know that we have visited this node
+            visited[indexOfCurr] = true;
+
+            // should ensure that we find a 5-step path if one exists
+            if (goal.equals(curr)) {
+                System.out.println("exiting from thing");
+                return tempPath;
+            }
+
+            // the row that corresponds to the node
+            double[] adj = matrix[indexOfCurr];
+
+            // for each adjacent node
+            for (int looper = 0; looper < adj.length; looper++) {
+                GraphPath tempIteratorPath = tempPath.copy();
+                // additional logic: && (tempPath.getSteps() == steps - 1 || !(nodes.get(looper).equals(goal))))
+                boolean one = !visited[looper];
+                boolean two = (tempPath.getDistance() + adj[looper] < distances[looper]);
+                boolean three = (adj[looper] != 0);
+
+                System.out.println("\n\nlooped one: " + nodes.get(looper));
+                System.out.println("goal: " + goal);
+                System.out.println("curr: " + curr);
+                System.out.println("one: " + one);
+                System.out.println("two: " + two);
+                System.out.println("three: " + three);
+
+                if (one && two && three) {
+                    distances[looper] = tempIteratorPath.getDistance() + adj[looper];
+                    tempIteratorPath.addDistance(adj[looper]);
+                    tempIteratorPath.addNodeToPath(nodes.get(looper));
+                    queue.add(tempIteratorPath);
+                }
+            }
+            data = tempPath;
+        }
+        System.out.println("ran out of time");
+        return data;
+    }
+
+
+    /**
      * Swaps items in a given Node Array
      * @param arr array that the values get swapped in
      * @param index1 the index of the first element to be swapped
