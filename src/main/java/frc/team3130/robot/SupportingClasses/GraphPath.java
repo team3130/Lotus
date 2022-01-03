@@ -2,19 +2,38 @@ package frc.team3130.robot.SupportingClasses;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GraphPath implements Comparable<GraphPath>{
     private double distance;
-    private final ArrayDeque<Node> path;
+    private final Node[] path;
+    private int newIndex;
 
-    public GraphPath(double distance, ArrayDeque<Node> path) {
+    public GraphPath(double distance, Node[] path) {
         this.distance = distance;
-        this.path = new ArrayDeque<>();
-        this.path.addAll(path);
+        this.path = path.clone();
+        newIndex = getNewestIndex();
     }
 
-    public GraphPath(double distance) {
-        this(distance, new ArrayDeque<>());
+    public int getNewestIndex() {
+        for (int i = 0; i < path.length; i++) {
+            if (path[i] == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public Node getLast() {
+        return path[newIndex];
+    }
+
+    public Node getSecondLast() {
+        return path[newIndex - 1];
+    }
+
+    public GraphPath(double distance, int items) {
+        this(distance, new Node[items]);
     }
 
     public double getDistance() {
@@ -29,12 +48,12 @@ public class GraphPath implements Comparable<GraphPath>{
         this.distance += distance;
     }
 
-    public ArrayDeque<Node> getPath() {
+    public Node[] getPath() {
         return path;
     }
 
     public void addNodeToPath(Node nextNode) {
-        path.add(nextNode);
+        path[newIndex++] = nextNode;
     }
 
     public void addNodeToPath(Node nextNode, double distance) {
@@ -43,15 +62,15 @@ public class GraphPath implements Comparable<GraphPath>{
     }
 
     public int getSteps() {
-        return path.size();
+        return newIndex;
     }
 
     public GraphPath copy() {
-        return new GraphPath(distance, new ArrayDeque<>(path));
+        return new GraphPath(distance, path.clone());
     }
 
     public String toString() {
-        return "path: " + path;
+        return "path: " + Arrays.toString(path);
     }
 
     @Override

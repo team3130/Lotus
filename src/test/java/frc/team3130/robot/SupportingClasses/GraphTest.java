@@ -12,7 +12,6 @@ public class GraphTest extends TestCase {
         // Graph.getInstance().printGraph();
 
         assertFalse(Graph.getInstance().containsDuplicates());
-        assertFalse(Graph.getInstance().containsNan());
 
         // test out the permutation
         System.out.println(Graph.getInstance().permute());

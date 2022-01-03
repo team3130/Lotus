@@ -1,10 +1,13 @@
 package frc.team3130.robot.SupportingClasses;
 
+import frc.team3130.robot.subsystems.Chassis;
+
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.BiFunction;
 
 public class Graph {
+    // hashmap to cache the positions in the array that each node is at
     HashMap<Node, Integer> nodeMap;
     public final ArrayList<Node> nodes;
 
@@ -68,7 +71,7 @@ public class Graph {
      * @param ConnectedTo the node connecting to
      */
     private void putNodeInGraphConnectedToBot(Node botNode, Node ConnectedTo) {
-        //TODO: replace botAngle with Chassis.getInstance().getHeading()
+        Chassis.getInstance().getAngle();
         double botAngle = 0;
         // distance
         double distance = botNode.getDistance(ConnectedTo);
@@ -151,74 +154,18 @@ public class Graph {
     }
 
     /**
-     * Uses Dijkstra's algorithm to determine the best path to take
-     * @param steps the number of nodes that you want the ball to go through
-     * @return the shortest path to a node
-     */
-    public ArrayDeque<Node> getPath(int steps) {
-        GraphPath winner = new GraphPath(Double.MAX_VALUE, new ArrayDeque<>());
-        // for each element of nodes except for the bot which is at index 0
-        for (int i = 1; i < nodes.size(); i++) {
-            GraphPath first = Dijkstra(nodes.get(i), steps);
-            System.out.println("first: " + first);
-            System.out.println("goal: " + nodes.get(i));
-            if (first.getDistance() < winner.getDistance()) {
-                winner = first;
-            }
-        }
-        return winner.getPath();
-    }
-
-    public int factorial(int n) {
-        if (n <= 0) {
-            return 1;
-        }
-        return n * factorial(--n);
-    }
-
-    /**
-     * brute force find the best path by generating every possible path of size steps
-     * this is a rather slow solution
-     * @param steps the size of the path that will be generated
-     * @return the fastest path
-     */
-/*    public GraphPath bruteForce(int steps) {
-        if (nodes.isEmpty()) {
-            return new GraphPath(0, new ArrayDeque<>());
-        }
-        Node[] nodeArray = new Node[nodes.size() - 1];
-
-        int amntOfObjects = factorial(nodeArray.length);
-        int sample = factorial(nodeArray.length - steps);
-        int combinations = amntOfObjects / sample;
-
-        GraphPath shortest = new GraphPath(Double.MAX_VALUE, new ArrayDeque<>());
-
-        // generate all possible paths
-        for (int bigLooper = 0; bigLooper < combinations; bigLooper++) {
-            for (int looperSwapper1 = 0; looperSwapper1 < nodeArray.length; looperSwapper1++) {
-                for (int looperSwapper2 = 0; looperSwapper2 < nodeArray.length; looperSwapper2++) {
-                    GraphPath temp = new GraphPath(0, );
-                }
-            }
-        }
-
-    }*/
-
-
-    /**
      * Initial call for permutation
      * @return the shortest path
      */
     public GraphPath permute() {
         // nodes without the first node because that is the bot
-        Node[] nodeses = new Node[nodes.size() - 1];
+        Node[] nodeses = new Node[nodes.size()];
         // for looper to add every item except for the 0th index in nodes
         for (int looper = 1; looper < nodes.size(); looper++) {
             nodeses[looper - 1] = nodes.get(looper);
-        }
+        } 
         // "Array" of the shortest Graph paths should always be of size one
-        GraphPath[] shortest = new GraphPath[] {new GraphPath(Double.MAX_VALUE)};
+        GraphPath[] shortest = new GraphPath[] {new GraphPath(Double.MAX_VALUE, adjTensor.length)};
         // initial call to the recursive function
         Permutation(0, nodeses, shortest);
         // because of the array we don't need to worry about the method returning anything
@@ -243,7 +190,7 @@ public class Graph {
                 // check if the distance is less than the shortest one seen so far
                 if (tempDistance < shortest[0].getDistance()) {
                     // temporary graph path that reflects the current node
-                    GraphPath temp = new GraphPath(0);
+                    GraphPath temp = new GraphPath(0, adjTensor.length);
                     // iterate to add items to the temporary GraphPath
                     for (Node node : nodes)  temp.addNodeToPath(node);
                     // determine the distance that this path takes
@@ -278,101 +225,6 @@ public class Graph {
     }
 
     /**
-     * Basically Dijkstra but you discount nodes
-     * the discount is the node coming to the one to
-     * This should ensure that you travel the right direction
-     * @return the shortest algorithm to a node
-     */
-    public GraphPath FrugalKugelAlgorithm(Node goal) {
-        ArrayDeque<Node> path = new ArrayDeque<>();
-        GraphPath data = new GraphPath(0, path);
-
-        boolean[] visited = new boolean[nodes.size()];
-        double[] distances = new double[nodes.size()];
-
-        // fills the array with false to show that it has not been visited
-        Arrays.fill(visited, false);
-        // sets the distance to the max value so that the first path will be smaller then nothing
-        Arrays.fill(distances, Double.MAX_VALUE);
-
-        // sets the distance to the bot to be zero
-        distances[0] = 0;
-
-        PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
-
-        ArrayDeque<Node> temp = new ArrayDeque<>();
-        temp.add(nodes.get(0));
-        queue.add(new GraphPath(0, temp));
-
-        while (!queue.isEmpty()) {
-            // makes a copy of the GraphPath object from the min heap
-            GraphPath tempPath = queue.poll().copy(); // the copy is to prevent modifying only the same object
-            // sets the current node to the one that was added to the path most recently
-            Node curr = tempPath.getPath().getLast();
-
-            System.out.println(goal);
-            System.out.println(queue);
-
-            double[][] matrix;
-
-            if (tempPath.getPath().size() > 2) {
-                // temporary node removed from the back to be added back
-                Node temptemp = tempPath.getPath().pollLast();
-                // selects the matrix with the one from the previous
-                matrix = adjTensor[nodeMap.get(tempPath.getPath().getLast())];
-                // add the node back to the back of the deque
-                tempPath.getPath().add(temptemp);
-            }
-
-            else {
-                matrix = adjTensor[0];
-            }
-
-            // caching the index
-            int indexOfCurr = nodeMap.get(curr);
-
-            // lets the algorithm know that we have visited this node
-            visited[indexOfCurr] = true;
-
-            // should ensure that we find a 5-step path if one exists
-            if (goal.equals(curr)) {
-                System.out.println("exiting from thing");
-                return tempPath;
-            }
-
-            // the row that corresponds to the node
-            double[] adj = matrix[indexOfCurr];
-
-            // for each adjacent node
-            for (int looper = 0; looper < adj.length; looper++) {
-                GraphPath tempIteratorPath = tempPath.copy();
-                // additional logic: && (tempPath.getSteps() == steps - 1 || !(nodes.get(looper).equals(goal))))
-                boolean one = !visited[looper];
-                boolean two = (tempPath.getDistance() + adj[looper] < distances[looper]);
-                boolean three = (adj[looper] != 0);
-
-                System.out.println("\n\nlooped one: " + nodes.get(looper));
-                System.out.println("goal: " + goal);
-                System.out.println("curr: " + curr);
-                System.out.println("one: " + one);
-                System.out.println("two: " + two);
-                System.out.println("three: " + three);
-
-                if (one && two && three) {
-                    distances[looper] = tempIteratorPath.getDistance() + adj[looper];
-                    tempIteratorPath.addDistance(adj[looper]);
-                    tempIteratorPath.addNodeToPath(nodes.get(looper));
-                    queue.add(tempIteratorPath);
-                }
-            }
-            data = tempPath;
-        }
-        System.out.println("ran out of time");
-        return data;
-    }
-
-
-    /**
      * Swaps items in a given Node Array
      * @param arr array that the values get swapped in
      * @param index1 the index of the first element to be swapped
@@ -382,135 +234,5 @@ public class Graph {
         Node temp = arr[index1];
         arr[index1] = arr[index2];
         arr[index2] = temp;
-    }
-
-    /**
-     * An implementation of Dijkstra's algorithm
-     * @param goal the Node searching for
-     * @param steps the desired amount of balls to collect in the path
-     * @return the path in a {@link GraphPath} object
-     */
-    public GraphPath Dijkstra(Node goal, int steps) {
-        ArrayDeque<Node> path = new ArrayDeque<>();
-        GraphPath data = new GraphPath(0, path);
-
-        boolean[] visited = new boolean[nodes.size()];
-        double[] distances = new double[nodes.size()];
-
-        // fills the array with false to show that it has not been visited
-        Arrays.fill(visited, false);
-        // sets the distance to the max value so that the first path will be smaller then nothing
-        Arrays.fill(distances, Double.MAX_VALUE);
-
-        // sets the distance to the bot to be zero
-        distances[0] = 0;
-
-        PriorityQueue<GraphPath> queue = new PriorityQueue<>(Comparator.comparingDouble(GraphPath::getDistance));
-
-        ArrayDeque<Node> temp = new ArrayDeque<>();
-        temp.add(nodes.get(0));
-        queue.add(new GraphPath(0, temp));
-
-        while (!queue.isEmpty()) {
-            // makes a copy of the GraphPath object from the min heap
-            GraphPath tempPath = queue.poll().copy(); // the copy is to prevent modifying only the same object
-            // sets the current node to the one that was added to the path most recently
-            Node curr = tempPath.getPath().getLast();
-
-            System.out.println(goal);
-            System.out.println(queue);
-
-            double[][] matrix;
-
-            if (tempPath.getPath().size() > 2) {
-                // temporary node removed from the back to be added back
-                Node temptemp = tempPath.getPath().pollLast();
-                // selects the matrix with the one from the previous
-                matrix = adjTensor[nodeMap.get(tempPath.getPath().getLast())];
-                // add the node back to the back of the deque
-                tempPath.getPath().add(temptemp);
-            }
-
-            else {
-                matrix = adjTensor[0];
-            }
-
-            // caching the index
-            int indexOfCurr = nodeMap.get(curr);
-
-            // lets the algorithm know that we have visited this node
-            visited[indexOfCurr] = true;
-
-            // should ensure that we find a 5-step path if one exists
-            if (goal.equals(curr)) {
-                System.out.println("exiting from thing");
-                return tempPath;
-            }
-
-            // the row that corresponds to the node
-            double[] adj = matrix[indexOfCurr];
-
-            // for each adjacent node
-            for (int looper = 0; looper < adj.length; looper++) {
-                GraphPath tempIteratorPath = tempPath.copy();
-                // additional logic: && (tempPath.getSteps() == steps - 1 || !(nodes.get(looper).equals(goal))))
-                boolean one = !visited[looper];
-                boolean two = (tempPath.getDistance() + adj[looper] < distances[looper]);
-                boolean three = (adj[looper] != 0);
-                boolean four = tempPath.getSteps() == steps - 1;
-                boolean five = !(nodes.get(looper).equals(goal));
-
-                System.out.println("\n\nlooped one: " + nodes.get(looper));
-                System.out.println("goal: " + goal);
-                System.out.println("curr: " + curr);
-                System.out.println("one: " + one);
-                System.out.println("two: " + two);
-                System.out.println("three: " + three);
-                System.out.println("four: " + four);
-                System.out.println("five: " + five + "\n\n");
-
-                if (one && two && three && (five || four)) {
-                    distances[looper] = tempIteratorPath.getDistance() + adj[looper];
-                    tempIteratorPath.addDistance(adj[looper]);
-                    tempIteratorPath.addNodeToPath(nodes.get(looper));
-                    queue.add(tempIteratorPath);
-                }
-            }
-            data = tempPath;
-        }
-        System.out.println("ran out of time");
-        return data;
-    }
-
-    public void printGraph() {
-        for (Node node : nodes) {
-            System.out.print("(" + node.x_pos + ", " + node.y_pos + "), ");
-        }
-        System.out.print("\n");
-
-        for (double[][] matrix : adjTensor) {
-            for (double[] doubles : matrix) {
-                for (double aDouble : doubles) {
-                    System.out.print((int) aDouble + ", ");
-                }
-                System.out.print("\n");
-            }
-            System.out.print("\n");
-        }
-    }
-
-    public boolean containsNan() {
-        boolean toBeReturned = false;
-        for (double[][] doubles : adjTensor) {
-            for (int j = 0; j < adjTensor.length; j++) {
-                for (int k = 0; k < adjTensor.length; k++) {
-                    if (Double.isNaN(doubles[j][k])) {
-                        toBeReturned = true;
-                        break;
-                    }
-                }
-            }
-        }
-        return toBeReturned;
     }
 }
